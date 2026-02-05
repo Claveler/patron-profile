@@ -205,20 +205,10 @@
   background: var(--color-surface);
   border-radius: var(--radius-lg);
   padding: var(--space-4);
-  box-shadow: var(--shadow-sm);
-  border: 1px solid var(--color-border-light);
+  border: 1px solid var(--color-border);
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
-  transition: box-shadow var(--transition-fast);
-}
-
-.campaign-card:hover {
-  box-shadow: var(--shadow-md);
-}
-
-.campaign-card--expanded {
-  box-shadow: var(--shadow-md);
 }
 
 /* Card Header */

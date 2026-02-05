@@ -661,7 +661,7 @@ Detailed membership sample data used in mockup:
 | PatronInfoBox | Profile photo, contact info, membership badge, actions dropdown | Done |
 | FinancialSummary | Lifetime value (donations + revenue), donations/revenue split with avg gift, monthly chart, donation attribution (by Fund/Campaign) | Done |
 | RecentActivity | Timeline with filters (donations, events, communications) | Done |
-| EngagementPanel | Visual engagement level (Cold → On Fire), visit stats | Done |
+| EngagementPanel | Visual engagement level (Cold → On Fire), visit stats, prospect pipeline status (stage, ask amount, next action) | Done |
 | WealthInsights | Propensity score, DonorSearch placeholder | Done |
 | SmartTips | AI insights panel with actionable recommendations | Done |
 | RelationshipsSummary | Household/professional/organization connections | Done |
@@ -722,6 +722,21 @@ Detailed membership sample data used in mockup:
 | Profile | Placeholder ("coming soon") |
 | Timeline | Placeholder ("coming soon") |
 | Relationships | Placeholder ("coming soon") |
+
+#### Future Workflow Connections
+
+The following workflows should naturally connect when built:
+
+**Activity Logging → Pipeline Next Action**
+- When a gift officer logs an activity (call, meeting, email) in the Timeline tab or RecentActivity component
+- The system should prompt for the new "Next Action" to update the prospect pipeline
+- This keeps the "Next Action" in EngagementPanel's prospect pipeline section current
+- Data flows: Timeline/RecentActivity → prospect.nextAction → EngagementPanel display
+
+**Pipeline Stage Transitions**
+- When moving a prospect between stages in the Pipeline (Kanban) view
+- The patron's prospect data should update automatically
+- EngagementPanel reflects the new stage in real-time
 
 ---
 

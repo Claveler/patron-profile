@@ -18,10 +18,10 @@ function TabNavigation({ tabs, activeTab, onTabChange, assignedTo }) {
       {assignedTo && (
         <div className="tab-navigation__assigned">
           <span className="tab-navigation__assigned-label">Assigned To:</span>
-          <span className="tab-navigation__assigned-value">{assignedTo}</span>
-          <button className="tab-navigation__assigned-edit" title="Change assignment">
-            <i className="fa-solid fa-pen"></i>
-          </button>
+          <a href="#" className="tab-navigation__assigned-link">
+            {assignedTo}
+            <i className="fa-solid fa-arrow-up-right-from-square"></i>
+          </a>
         </div>
       )}
     </div>

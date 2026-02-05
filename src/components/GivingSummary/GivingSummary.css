@@ -4,7 +4,7 @@
   background-color: var(--color-surface);
   border-radius: var(--radius-md);
   padding: var(--space-4);
-  box-shadow: 0 4px 8px rgba(6, 35, 44, 0.08);
+  border: 1px solid var(--color-border);
 }
 
 /* Header */
@@ -94,11 +94,11 @@
 }
 
 .giving-summary__value-dot--donations {
-  background-color: var(--color-primary);
+  background-color: var(--color-warning);
 }
 
 .giving-summary__value-dot--revenue {
-  background-color: var(--color-primary-200);
+  background-color: var(--color-primary-300);
 }
 
 .giving-summary__value-card-label {
@@ -114,7 +114,11 @@
 }
 
 .giving-summary__value-card--donations .giving-summary__value-card-amount {
-  color: var(--color-primary-700);
+  color: var(--color-warning-700);
+}
+
+.giving-summary__value-card--revenue .giving-summary__value-card-amount {
+  color: var(--color-primary-600);
 }
 
 .giving-summary__value-card-detail {
@@ -124,72 +128,262 @@
 
 /* Chart */
 .giving-summary__chart {
-  height: 160px;
   margin-bottom: var(--space-4);
-  padding: var(--space-2) 0;
 }
 
-.giving-summary__chart-bars {
+/* Chart Header with Toggle */
+.giving-summary__chart-header {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: var(--space-3);
+}
+
+.giving-summary__view-toggle {
+  display: flex;
+  gap: 2px;
+  background-color: var(--color-background);
+  border-radius: var(--radius-md);
+  padding: 2px;
+  border: 1px solid var(--color-border);
+}
+
+.giving-summary__view-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.giving-summary__view-btn:hover {
+  color: var(--color-text-secondary);
+  background-color: var(--color-surface);
+}
+
+.giving-summary__view-btn--active {
+  background-color: var(--color-surface);
+  color: var(--color-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Chart Grid Layout */
+.giving-summary__chart-grid {
+  display: grid;
+  grid-template-columns: 1fr 40px;
+  gap: var(--space-2);
+  align-items: stretch;
+}
+
+/* SVG Container (Area Chart) */
+.giving-summary__svg-container {
+  position: relative;
+  height: 200px;
+}
+
+.giving-summary__area-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+
+/* Bar Chart Container */
+.giving-summary__bars-container {
+  position: relative;
+  height: 200px;
+}
+
+.giving-summary__bars {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
   height: 100%;
-  gap: var(--space-1);
+  gap: var(--space-2);
 }
 
-.giving-summary__chart-bar-group {
+.giving-summary__bar-group {
   flex: 1;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: var(--space-1);
+  justify-content: flex-end;
   position: relative;
-  cursor: pointer;
 }
 
-.giving-summary__chart-bar-stack {
+.giving-summary__bar-stack {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   width: 100%;
-  max-width: 32px;
-  height: 120px;
-  gap: 2px;
+  height: 100%;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  overflow: hidden;
   transition: opacity var(--transition-fast);
 }
 
-.giving-summary__chart-bar-group:not(.giving-summary__chart-bar-group--hovered) .giving-summary__chart-bar-stack {
-  opacity: 0.7;
+.giving-summary__bar-stack--hovered {
+  opacity: 0.85;
 }
 
-.giving-summary__chart-bar-group--hovered .giving-summary__chart-bar-stack {
-  opacity: 1;
+.giving-summary__bar {
+  width: 100%;
+  transition: height var(--transition-fast);
 }
 
-.giving-summary__chart-bar {
-  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
-  transition: height var(--transition-base);
-  min-height: 2px;
+.giving-summary__bar--donations {
+  background-color: #FFDAAC;
 }
 
-.giving-summary__chart-bar--donations {
-  background-color: var(--color-primary);
+.giving-summary__bar--revenue {
+  background-color: #CBE8FF;
 }
 
-.giving-summary__chart-bar--revenue {
-  background-color: var(--color-primary-200);
+/* Bar Tooltip */
+.giving-summary__bar-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: var(--space-2);
+  background-color: var(--color-background-dark);
+  color: var(--color-text-inverse);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-xs);
+  white-space: nowrap;
+  z-index: 20;
+  pointer-events: none;
+}
+
+/* Grid lines */
+.giving-summary__grid-line {
+  stroke: var(--color-border-light);
+  stroke-width: 1;
+}
+
+/* Areas */
+.giving-summary__area {
+  transition: opacity var(--transition-fast);
+  opacity: 0.5;
+}
+
+.giving-summary__area--donations {
+  fill: #FFDAAC;
+}
+
+.giving-summary__area--revenue {
+  fill: #CBE8FF;
+}
+
+/* Lines */
+.giving-summary__area-line {
+  fill: none;
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.giving-summary__area-line--total {
+  stroke: var(--color-warning);
+}
+
+.giving-summary__area-line--revenue {
+  stroke: var(--color-primary);
+}
+
+/* Invisible hover area for lines */
+.giving-summary__area-line-hover {
+  fill: none;
+  stroke: transparent;
+  stroke-width: 12;
+  cursor: pointer;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Data points (HTML elements for perfect circles) */
+.giving-summary__data-point {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--color-surface);
+  border: 1.5px solid;
+  transform: translate(-50%, 50%);
+  cursor: pointer;
+  z-index: 10;
+  transition: width 0.1s ease, height 0.1s ease;
+}
+
+/* Larger hit area for easier hovering */
+.giving-summary__data-point::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+}
+
+.giving-summary__data-point--total {
+  border-color: var(--color-warning);
+}
+
+.giving-summary__data-point--revenue {
+  border-color: var(--color-primary);
+}
+
+.giving-summary__data-point--active {
+  width: 10px;
+  height: 10px;
+}
+
+/* Y-axis */
+.giving-summary__y-axis {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  height: 200px;
+  padding-left: var(--space-2);
+}
+
+.giving-summary__y-axis-label {
+  font-size: 10px;
+  color: var(--color-text-muted);
+  line-height: 1;
+}
+
+.giving-summary__y-axis-unit {
+  font-size: 10px;
+  color: var(--color-text-muted);
+  margin-top: var(--space-1);
+}
+
+/* Month labels */
+.giving-summary__chart-labels {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  margin-top: var(--space-2);
+  margin-right: calc(40px + var(--space-2)); /* Account for Y-axis width + gap */
 }
 
 .giving-summary__chart-label {
-  font-size: var(--font-size-xs);
+  font-size: 10px;
   color: var(--color-text-muted);
+  text-align: center;
 }
 
 /* Tooltip */
 .giving-summary__chart-tooltip {
   position: absolute;
-  bottom: 100%;
-  left: 50%;
+  top: -10px;
   transform: translateX(-50%);
   background-color: var(--color-background-dark);
   color: var(--color-text-inverse);
@@ -198,23 +392,48 @@
   font-size: var(--font-size-xs);
   white-space: nowrap;
   z-index: 10;
-  margin-bottom: var(--space-2);
+  pointer-events: none;
 }
 
-.giving-summary__chart-tooltip::after {
-  content: '';
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  border: 6px solid transparent;
-  border-top-color: var(--color-background-dark);
+.giving-summary__tooltip-header {
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--space-1);
+  padding-bottom: var(--space-1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .giving-summary__chart-tooltip-row {
   display: flex;
-  justify-content: space-between;
-  gap: var(--space-4);
+  align-items: center;
+  gap: var(--space-2);
+  padding: 2px 0;
+}
+
+.giving-summary__chart-tooltip-row span:last-child {
+  margin-left: auto;
+  font-weight: var(--font-weight-semibold);
+}
+
+.giving-summary__tooltip-total {
+  margin-top: var(--space-1);
+  padding-top: var(--space-1);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  font-weight: var(--font-weight-semibold);
+}
+
+.giving-summary__tooltip-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.giving-summary__tooltip-dot--donations {
+  background-color: var(--color-warning);
+}
+
+.giving-summary__tooltip-dot--revenue {
+  background-color: var(--color-primary-300);
 }
 
 /* Transaction Stats */

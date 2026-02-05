@@ -4,7 +4,7 @@
   background: var(--color-white);
   border-radius: var(--radius-lg);
   padding: var(--space-4);
-  box-shadow: 0 4px 8px rgba(6, 35, 44, 0.08);
+  border: 1px solid var(--color-border);
 }
 
 .membership-overview__header {
@@ -44,14 +44,14 @@
 
 /* ===== TWO-COLUMN LAYOUT ===== */
 .membership-overview__two-col {
-  display: flex;
+  display: grid;
+  grid-template-columns: 365px 1fr;
   gap: var(--space-5);
-  align-items: flex-start; /* Keep benefits at top */
+  align-items: start;
 }
 
 /* Column 1 (left): Card + Upgrade + Auto-renewal */
 .membership-overview__card-col {
-  flex: 0 0 40%;
   display: flex;
   flex-direction: column;
   align-items: center;      /* Center card horizontally within column */
@@ -61,8 +61,7 @@
 
 /* Column 2 (right): Benefits */
 .membership-overview__benefits-col {
-  flex: 0 0 calc(60% - var(--space-5));
-  min-width: 0;
+  min-width: 0;             /* Allow content to shrink below intrinsic size */
   display: flex;
   flex-direction: column;
 }
@@ -255,11 +254,13 @@
   margin: 0;
 }
 
-/* Benefit Card */
+/* Benefit Card - Table-like grid layout */
 .membership-overview__benefit-card {
-  display: flex;
+  display: grid;
+  grid-template-columns: 32px 1fr 50px;
   gap: var(--space-3);
   padding: var(--space-2) 0;
+  align-items: start;
 }
 
 .membership-overview__benefit-icon {
@@ -290,16 +291,15 @@
 }
 
 .membership-overview__benefit-content {
-  flex: 1;
   min-width: 0;
-  display: flex;
-  align-items: center;
 }
 
 .membership-overview__benefit-text {
   font-size: var(--font-size-base);
   color: var(--color-text-primary);
   line-height: var(--line-height-normal);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .membership-overview__benefit-text strong {
@@ -313,11 +313,12 @@
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
   white-space: nowrap;
-  flex-shrink: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  justify-self: end;
   min-width: 24px;
+  height: fit-content;
 }
 
 /* Category-colored variants */
@@ -485,18 +486,16 @@
 /* Responsive */
 @media (max-width: 768px) {
   .membership-overview__two-col {
-    flex-direction: column;
+    grid-template-columns: 1fr;
+    justify-items: center;
   }
   
   .membership-overview__card-col {
-    flex: 0 0 100%;
     width: 100%;
     max-width: 365px;
-    align-self: center;
   }
   
   .membership-overview__benefits-col {
-    flex: 0 0 100%;
     width: 100%;
   }
   
@@ -507,9 +506,8 @@
   }
   
   /* Benefits grid columns - reduce usage column width */
-  .membership-overview__benefits-header,
-  .membership-overview__benefit-row {
-    grid-template-columns: 1fr 120px;
+  .membership-overview__benefit-card {
+    grid-template-columns: 32px 1fr 40px;
     gap: var(--space-2);
   }
 }
@@ -525,23 +523,14 @@
     align-self: flex-end;
   }
   
-  /* Stack benefits grid to single column on mobile */
-  .membership-overview__benefits-header {
-    grid-template-columns: 1fr;
+  /* Stack benefits to show usage below text on mobile */
+  .membership-overview__benefit-card {
+    grid-template-columns: 32px 1fr;
+    grid-template-rows: auto auto;
   }
   
-  .membership-overview__usage-title {
-    display: none;
-  }
-  
-  .membership-overview__benefit-row {
-    grid-template-columns: 1fr;
-    gap: var(--space-1);
-  }
-  
-  .membership-overview__usage-cell {
-    align-items: flex-start;
-    text-align: left;
-    padding-left: 32px; /* Align with benefit text */
+  .membership-overview__usage-pill {
+    grid-column: 2;
+    justify-self: start;
   }
 }

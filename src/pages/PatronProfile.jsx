@@ -223,7 +223,104 @@ const patronData = {
   engagement: {
     level: 'on-fire', // cold, cool, warm, hot, on-fire
     visits: 54,
-    lastVisit: '19/11/2025'
+    lastVisit: '19/11/2025',
+    // Activity data for heatmap - Trailing Twelve Months (TTM)
+    // Structure: 12 months × 4 weeks per month = 48 data points
+    // Each month: { month: 'YYYY-MM', weeks: [week1, week2, week3, week4] }
+    // Each week: { activities: [{ type, count, value }] }
+    activityHistory: [
+      // Feb 2025 (oldest)
+      { month: '2025-02', weeks: [
+        { activities: [{ type: 'attendance', count: 1 }] },
+        { activities: [] },
+        { activities: [{ type: 'attendance', count: 2 }] },
+        { activities: [{ type: 'purchase', count: 1, value: 35 }] }
+      ]},
+      // Mar 2025
+      { month: '2025-03', weeks: [
+        { activities: [] },
+        { activities: [{ type: 'attendance', count: 1 }] },
+        { activities: [{ type: 'donation', count: 1, value: 750 }] },
+        { activities: [{ type: 'attendance', count: 2 }, { type: 'purchase', count: 1, value: 45 }] }
+      ]},
+      // Apr 2025
+      { month: '2025-04', weeks: [
+        { activities: [{ type: 'attendance', count: 1 }] },
+        { activities: [] },
+        { activities: [] },
+        { activities: [{ type: 'attendance', count: 1 }] }
+      ]},
+      // May 2025
+      { month: '2025-05', weeks: [
+        { activities: [] },
+        { activities: [{ type: 'attendance', count: 2 }] },
+        { activities: [{ type: 'attendance', count: 1 }, { type: 'purchase', count: 2, value: 78 }] },
+        { activities: [] }
+      ]},
+      // Jun 2025
+      { month: '2025-06', weeks: [
+        { activities: [{ type: 'attendance', count: 1 }] },
+        { activities: [{ type: 'donation', count: 1, value: 500 }, { type: 'attendance', count: 3 }] },
+        { activities: [{ type: 'attendance', count: 2 }] },
+        { activities: [{ type: 'purchase', count: 1, value: 25 }] }
+      ]},
+      // Jul 2025
+      { month: '2025-07', weeks: [
+        { activities: [] },
+        { activities: [] },
+        { activities: [{ type: 'attendance', count: 1 }] },
+        { activities: [] }
+      ]},
+      // Aug 2025
+      { month: '2025-08', weeks: [
+        { activities: [] },
+        { activities: [{ type: 'attendance', count: 1 }] },
+        { activities: [] },
+        { activities: [{ type: 'attendance', count: 2 }] }
+      ]},
+      // Sep 2025
+      { month: '2025-09', weeks: [
+        { activities: [{ type: 'attendance', count: 1 }] },
+        { activities: [{ type: 'purchase', count: 1, value: 42 }] },
+        { activities: [{ type: 'attendance', count: 2 }] },
+        { activities: [{ type: 'attendance', count: 1 }] }
+      ]},
+      // Oct 2025
+      { month: '2025-10', weeks: [
+        { activities: [{ type: 'attendance', count: 2 }] },
+        { activities: [{ type: 'attendance', count: 1 }, { type: 'purchase', count: 1, value: 55 }] },
+        { activities: [{ type: 'attendance', count: 3 }] },
+        { activities: [{ type: 'donation', count: 1, value: 200 }] }
+      ]},
+      // Nov 2025
+      { month: '2025-11', weeks: [
+        { activities: [{ type: 'attendance', count: 2 }, { type: 'purchase', count: 1, value: 45 }] },
+        { activities: [] },
+        { activities: [{ type: 'attendance', count: 1 }] },
+        { activities: [{ type: 'attendance', count: 4 }, { type: 'purchase', count: 2, value: 89 }] }
+      ]},
+      // Dec 2025
+      { month: '2025-12', weeks: [
+        { activities: [{ type: 'membership', count: 1, value: 145.99 }] },
+        { activities: [{ type: 'attendance', count: 2 }] },
+        { activities: [{ type: 'donation', count: 1, value: 1000 }, { type: 'attendance', count: 3 }] },
+        { activities: [{ type: 'attendance', count: 4 }, { type: 'purchase', count: 3, value: 156 }] }
+      ]},
+      // Jan 2026 (most recent)
+      { month: '2026-01', weeks: [
+        { activities: [{ type: 'attendance', count: 2 }] },
+        { activities: [] },
+        { activities: [{ type: 'attendance', count: 1 }, { type: 'purchase', count: 1, value: 32 }] },
+        { activities: [{ type: 'attendance', count: 3 }, { type: 'donation', count: 1, value: 250 }] }
+      ]}
+    ]
+  },
+  // Prospect pipeline data (null if not a prospect)
+  prospect: {
+    stage: 'cultivation', // identification, qualification, cultivation, solicitation, stewardship
+    askAmount: 25000,
+    nextAction: 'Follow up re: gallery tour',
+    lastContact: '2026-01-15'
   },
   giving: {
     // Aggregate totals

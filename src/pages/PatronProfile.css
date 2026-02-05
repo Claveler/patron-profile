@@ -44,7 +44,7 @@
   background-color: var(--color-surface);
   border-radius: var(--radius-md);
   margin-top: var(--space-6);
-  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-border);
 }
 
 .patron-profile__tab-content {

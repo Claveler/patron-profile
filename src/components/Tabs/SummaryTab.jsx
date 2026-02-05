@@ -20,7 +20,7 @@ function SummaryTab({ patron }) {
         
         {/* Right Column - Sidebar Widgets */}
         <div className="summary-tab__right">
-          <EngagementPanel engagement={patron.engagement} />
+          <EngagementPanel engagement={patron.engagement} prospect={patron.prospect} />
           <WealthInsights insights={patron.wealthInsights} />
           <SmartTips />
           <RelationshipsSummary />
