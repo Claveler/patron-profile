@@ -1,0 +1,36 @@
+/* Summary Tab */
+
+.summary-tab {
+  padding: 0;
+}
+
+.summary-tab__main {
+  display: flex;
+  gap: var(--space-4);
+}
+
+.summary-tab__left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.summary-tab__right {
+  width: 320px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .summary-tab__main {
+    flex-direction: column;
+  }
+  
+  .summary-tab__right {
+    width: 100%;
+  }
+}

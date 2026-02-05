@@ -1,0 +1,93 @@
+Skip to content
+Digital
+About
+Search
+🍪 We use cookies to ensure you have the best experience - see our policy
+Reject all
+Allow all
+
+Styleguide secondary navigation
+
+Introduction
+Get Started
+Foundations
+Accesibility - A11y
+Design tokens
+Typography
+Colors
+Iconography
+Layout
+Radii
+Shadows
+RTL directionality
+Components
+Actions
+Common Buttons
+Overview
+Usage
+Web Playground
+Icon buttons
+Login Buttons
+Payment Buttons
+Links
+Containment
+Fields
+ASSETS
+INTERNATIONAL
+Anatomy
+Properties
+Variants
+Sentiments
+Size
+State
+Contrast
+Icon
+Actions
+Common Buttons
+New
+
+A button is a UI element that allows the user to perform an action. It usually has a text label and can include an icon for visual aid.
+
+Overview
+Usage
+Web Playground
+Anatomy
+
+While buttons can include both a label and an icon, links are generally limited to text.
+
+Button
+Container: Holds the label text and optional icon.
+Start icon (optional): Communicates the button’s action.
+End icon (optional): Communicates the button’s action.
+Label: Describes the action.
+Properties
+Variants
+Default (default)
+
+The default button is the standard style of a button that is typically used for most buttons in our user interface. It is usually designed to provide a clear indication of clickable elements, such as CTA or form submission buttons.
+
+Sharp
+
+The Sharp variant, also known as black and white buttons, is a different style of button that can be used for a variety of reasons, such as:
+
+To provide a more minimalistic or understated design for the UI.
+To create a high-contrast design for users with visual impairments.
+To differentiate a specific type of button from others in the UI.
+
+
+
+
+Danger
+
+The danger button is designed to highlight critical actions or potential risks in our interface. It stands out to ensure users exercise caution, preventing accidental clicks and promoting a safer experience.
+
+Sentiments
+Size
+State
+Contrast
+Icon
+
+
+
+
+©2024 - Fever

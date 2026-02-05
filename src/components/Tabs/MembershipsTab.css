@@ -1,0 +1,44 @@
+/* Memberships Tab */
+
+.memberships-tab {
+  padding: 0;
+}
+
+.memberships-tab__main {
+  display: flex;
+  gap: var(--space-4);
+}
+
+.memberships-tab__left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.memberships-tab__right {
+  width: 340px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* Card wrapper for right column components */
+.memberships-tab__right .wrapper-card {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  box-shadow: 0 4px 8px rgba(6, 35, 44, 0.08);
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .memberships-tab__main {
+    flex-direction: column;
+  }
+  
+  .memberships-tab__right {
+    width: 100%;
+  }
+}

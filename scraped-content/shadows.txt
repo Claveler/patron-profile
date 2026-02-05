@@ -1,0 +1,68 @@
+Skip to content
+Digital
+About
+Search
+🍪 We use cookies to ensure you have the best experience - see our policy
+Reject all
+Allow all
+
+Styleguide secondary navigation
+
+Introduction
+Get Started
+Foundations
+Accesibility - A11y
+Design tokens
+Typography
+Colors
+Iconography
+Layout
+Radii
+Shadows
+Overview
+Usage
+Resources
+RTL directionality
+Components
+Actions
+Containment
+Fields
+ASSETS
+INTERNATIONAL
+Specific intent
+Shadow values
+Foundations
+Shadows
+New
+
+Elevations and shadows help to provide visual feedback and focus through depth. 
+
+Overview
+Usage
+Resources
+
+The UI components are typically flat, but depth levels can be added to establish visual relationships and hierarchy.
+
+Our shadow system adheres to a consistent scale that enhances visual balance, thereby improving user comprehension and overall interface quality.
+
+Specific intent
+
+Shadows were initially created to enhance user comprehension and provide additional information on the interface. Each shadow elevation size serves a particular purpose and indicates possible interactions or user actions. Their placement within the interface is determined by their hierarchy of importance and their effect on user interaction and attention.
+
+The use of shadows in the interface should follow certain rules:
+
+Consistent use of shadows is important, especially when different elevations are present on the same row or plane.
+
+Shadows should react to the component they are attached to.
+
+Shadows are created by a combination of shape and light source, and it is crucial to maintain the same light source throughout the product. Using different light sources on the same interface can lead to user confusion.
+
+Shadow values
+
+
+
+
+
+
+
+©2024 - Fever

@@ -1,0 +1,221 @@
+Skip to content
+Digital
+About
+Search
+🍪 We use cookies to ensure you have the best experience - see our policy
+Reject all
+Allow all
+
+Styleguide secondary navigation
+
+Introduction
+Get Started
+Foundations
+Accesibility - A11y
+Design tokens
+Typography
+Colors
+Iconography
+Layout
+Overview
+Web Guidelines
+iOS Guidelines
+Android Guidelines
+Usage
+Resources
+Radii
+Shadows
+RTL directionality
+Components
+Actions
+Containment
+Fields
+ASSETS
+INTERNATIONAL
+The grid system
+The spacing system
+Foundations
+Layout
+In progress
+
+Our apps support multiple devices and screen sizes through a comprehensive grid system. Ensuring a consistent user experience is a key goal.
+
+Overview
+Web Guidelines
+iOS Guidelines
+Android Guidelines
+Usage
+Resources
+The grid system
+
+The grid system is integral to our design approach. All measurements align to a base unit of an 8-based grid for mobile, tablet, and desktop, while smaller elements like icons and type align to a 4-unit grid.
+
+This approach helps us maintain consistency and facilitates communication between designers and developers. We chose an 8-unit grid as most screen sizes are divisible by 4, and 4 is itself an easily divisible number.
+
+The spacing system
+
+Our spacing system is based on our grid system, promoting a visually balanced user interface through consistent spacing. This enhances the quality of the UI and helps to create hierarchy and relationships between elements.
+
+Don't be afraid of empty space!
+
+We employ two types of spacing: horizontal and vertical. The horizontal spacing is primarily guided by the grid system and spacing between elements, while the vertical spacing follows set rules and minimum spacings between components. Every component in our design follows these grids. Effective use of spacing contributes to efficient layouts.
+
+Size name
+
+	
+
+Value
+
+	
+
+Example of use
+
+
+
+
+spacing.0
+
+	
+
+0
+
+	
+
+No space. Reset value
+
+
+
+
+spacing.100
+
+	
+
+4
+
+	
+
+The margin between icon + text
+
+
+
+
+spacing.200
+
+	
+
+8
+
+	
+
+The margin between label + input
+
+
+
+
+spacing.300
+
+	
+
+12
+
+	
+
+The padding within a card
+
+
+
+
+spacing.400
+
+	
+
+16
+
+	
+
+Most used.
+
+The padding within buttons
+
+
+
+
+spacing.600
+
+	
+
+24
+
+	
+
+The margin between sections/organisms
+
+
+
+
+spacing.800
+
+	
+
+32
+
+	
+
+The margin between sections/organisms
+
+
+
+
+spacing.1000
+
+	
+
+40
+
+	
+
+The margin between sections/organisms
+
+
+
+
+spacing.1200
+
+	
+
+48
+
+	
+
+The margin between sections/organisms
+
+
+
+
+spacing.1400
+
+	
+
+56
+
+	
+
+The margin between sections/organisms
+
+
+
+
+spacing.1600
+
+	
+
+64
+
+	
+
+Mainly used on a medium and large device
+
+
+
+
+©2024 - Fever

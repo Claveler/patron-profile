@@ -1,0 +1,342 @@
+/* Tax Summary Component */
+
+.tax-summary {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 4px 8px rgba(6, 35, 44, 0.08);
+  overflow: hidden;
+}
+
+/* Header */
+.tax-summary__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.tax-summary__title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin: 0 0 var(--space-1) 0;
+}
+
+.tax-summary__subtitle {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-tertiary);
+  margin: 0;
+}
+
+.tax-summary__year-select {
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  background: var(--color-white);
+  cursor: pointer;
+  min-width: 100px;
+}
+
+.tax-summary__year-select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(0, 137, 227, 0.1);
+}
+
+/* Preview Panel */
+.tax-summary__preview {
+  padding: var(--space-4);
+  background: var(--color-background);
+}
+
+/* Organization Info */
+.tax-summary__org-info {
+  display: flex;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.tax-summary__org-logo {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-primary-100);
+  color: var(--color-primary-700);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-xl);
+  flex-shrink: 0;
+}
+
+.tax-summary__org-details {
+  flex: 1;
+}
+
+.tax-summary__org-name {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin: 0 0 var(--space-1) 0;
+}
+
+.tax-summary__org-ein {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin: 0;
+  font-family: monospace;
+}
+
+.tax-summary__org-address {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-tertiary);
+  margin: var(--space-1) 0 0 0;
+}
+
+/* Divider */
+.tax-summary__divider {
+  height: 1px;
+  background: var(--color-border);
+  margin: var(--space-4) 0;
+}
+
+/* Patron Info */
+.tax-summary__patron-info {
+  margin-bottom: var(--space-4);
+}
+
+.tax-summary__patron-label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0 0 var(--space-1) 0;
+}
+
+.tax-summary__patron-name {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.tax-summary__patron-address {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin: var(--space-1) 0 0 0;
+}
+
+/* Contributions Section */
+.tax-summary__contributions {
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+}
+
+.tax-summary__section-title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin: 0 0 var(--space-3) 0;
+}
+
+/* Table */
+.tax-summary__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-sm);
+}
+
+.tax-summary__table th {
+  text-align: left;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-tertiary);
+  padding: var(--space-2) var(--space-2);
+  border-bottom: 1px solid var(--color-border);
+  font-size: var(--font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tax-summary__table td {
+  padding: var(--space-3) var(--space-2);
+  border-bottom: 1px solid var(--color-border-light);
+  color: var(--color-text-primary);
+}
+
+.tax-summary__table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.tax-summary__table tfoot td {
+  padding: var(--space-3) var(--space-2);
+  border-top: 2px solid var(--color-border);
+  background: var(--color-background);
+}
+
+.tax-summary__table .text-right {
+  text-align: right;
+}
+
+/* Type Badge */
+.tax-summary__type-badge {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 100px;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  margin-right: var(--space-2);
+}
+
+.tax-summary__type-badge--membership {
+  background: var(--color-primary-100);
+  color: var(--color-primary-700);
+}
+
+.tax-summary__type-badge--donation {
+  background: var(--color-success-100);
+  color: var(--color-success-700);
+}
+
+/* Campaign Cell */
+.tax-summary__campaign-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.tax-summary__campaign-name {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+}
+
+.tax-summary__appeal-name {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+/* Benefits Note */
+.tax-summary__benefits-note {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+  padding: var(--space-3);
+  background: var(--color-info-100);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-xs);
+  color: var(--color-info-700);
+  line-height: var(--line-height-relaxed);
+}
+
+.tax-summary__benefits-note i {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* Empty State */
+.tax-summary__empty {
+  text-align: center;
+  padding: var(--space-6) var(--space-4);
+  color: var(--color-text-tertiary);
+}
+
+.tax-summary__empty i {
+  font-size: 32px;
+  margin-bottom: var(--space-2);
+  opacity: 0.5;
+}
+
+.tax-summary__empty p {
+  margin: 0;
+  font-size: var(--font-size-sm);
+}
+
+/* Legal Footer */
+.tax-summary__legal {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-tertiary);
+  line-height: var(--line-height-relaxed);
+}
+
+.tax-summary__legal p {
+  margin: 0;
+}
+
+/* Actions */
+.tax-summary__actions {
+  display: flex;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border-top: 1px solid var(--color-border);
+  background: var(--color-white);
+}
+
+.tax-summary__action {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.tax-summary__action--secondary {
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+}
+
+.tax-summary__action--secondary:hover {
+  background: var(--color-background);
+  border-color: var(--color-border-dark);
+}
+
+.tax-summary__action--primary {
+  background: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  color: var(--color-white);
+  margin-left: auto;
+}
+
+.tax-summary__action--primary:hover {
+  background: var(--color-primary-600);
+  border-color: var(--color-primary-600);
+}
+
+.tax-summary__action--primary:disabled {
+  background: var(--color-neutral-300);
+  border-color: var(--color-neutral-300);
+  cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .tax-summary__header {
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .tax-summary__table {
+    font-size: var(--font-size-xs);
+  }
+
+  .tax-summary__actions {
+    flex-wrap: wrap;
+  }
+
+  .tax-summary__action--primary {
+    width: 100%;
+    justify-content: center;
+    margin-left: 0;
+    margin-top: var(--space-2);
+  }
+}

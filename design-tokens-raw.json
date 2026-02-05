@@ -1,0 +1,55 @@
+{
+  "colors": [
+    {
+      "name": "IntroductionWhat is a Design SystemOverviewWhy it is important?Design PrinciplesGet StartedDesignersSetting up Development EnvironmentFigma Design FlowDevelopersWebiOSAndroidFoundationsAccesibility - A11yOverviewWhy we careBest practicesToolsDesign tokensOverviewHow to readUsageHow it's worksAlias token listResourcesTypographyOverviewWebiOSAndroidUsageResourcesColorsOverviewBase colors paletteUsageAccessibilityResourcesIconographyOverviewUsageCustom iconsResourcesLayoutOverviewWeb GuidelinesiOS GuidelinesAndroid GuidelinesUsageResourcesRadiiShadowsOverviewUsageResourcesRTL directionality OverviewMirroring guidelinesWebResourcesComponents ActionsCommon ButtonsOverviewUsageWeb PlaygroundIcon buttonsOverviewUsageLogin ButtonsOverviewUsagePayment ButtonsOverviewLinksOverviewUsageContainmentBottom SheetOverviewUsageiOSWapper cardOverviewWebDividerOverviewUsageTablesOverviewWebFieldsText fieldOverviewUsageWebTextareaOverviewUsageSelectOverviewUsageFieldsetOverviewUsageResourcesASSETSCity ImagesOverviewGuidelinesResourcesPayment MethodsINTERNATIONALPhrase appHow to useResources",
+      "value": "rgb(255, 255, 255)",
+      "hex": "#ffffff"
+    }
+  ],
+  "typography": [
+    {
+      "element": "LINK",
+      "text": "",
+      "fontFamily": "Times",
+      "fontSize": "16px",
+      "fontWeight": "400",
+      "lineHeight": "normal",
+      "letterSpacing": "normal"
+    },
+    {
+      "element": "STYLE",
+      "text": ".cover .subtitle.type_body-large,.cover .descripti",
+      "fontFamily": "Times",
+      "fontSize": "16px",
+      "fontWeight": "400",
+      "lineHeight": "normal",
+      "letterSpacing": "normal"
+    },
+    {
+      "element": "H1",
+      "text": "Ignite Design System",
+      "fontFamily": "\"Red Hat Display\"",
+      "fontSize": "56px",
+      "fontWeight": "700",
+      "lineHeight": "64px",
+      "letterSpacing": "normal"
+    },
+    {
+      "element": "H2",
+      "text": "Get started with Ignite",
+      "fontFamily": "\"Red Hat Display\"",
+      "fontSize": "32px",
+      "fontWeight": "600",
+      "lineHeight": "normal",
+      "letterSpacing": "normal"
+    }
+  ],
+  "spacing": [],
+  "components": [],
+  "rawSections": [
+    {
+      "heading": "Ignite Design System",
+      "content": "Ignite Design System\nStyleguide updated 3 months ago\n\nFever Design System is the source of truth that will answer all your design questions.\n\nGet started with Ignite\nGet started with Ignite\n\n\n\n\nFor designers\nStart design!\nFor developers\nStart Develop\n\n\n\n\n\n\n\n©2024 - Fever"
+    }
+  ]
+}

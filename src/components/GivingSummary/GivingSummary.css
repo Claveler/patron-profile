@@ -1,0 +1,381 @@
+/* Giving Summary */
+
+.giving-summary {
+  background-color: var(--color-surface);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  box-shadow: 0 4px 8px rgba(6, 35, 44, 0.08);
+}
+
+/* Header */
+.giving-summary__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-4);
+}
+
+.giving-summary__title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.giving-summary__period-select {
+  padding: var(--space-2) var(--space-3);
+  padding-right: var(--space-8);
+  font-size: var(--font-size-sm);
+  font-family: var(--font-family);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-surface);
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23536B75' d='M6 8L2 4h8z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  cursor: pointer;
+}
+
+/* Hero Stat - Lifetime Value */
+.giving-summary__hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-4);
+  margin-bottom: var(--space-4);
+  background: linear-gradient(135deg, var(--color-primary-50) 0%, var(--color-surface) 100%);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-primary-100);
+}
+
+.giving-summary__hero-label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.giving-summary__hero-value {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary-600);
+}
+
+/* Value Split - Donations vs Revenue */
+.giving-summary__value-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.giving-summary__value-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-3);
+  background-color: var(--color-background);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-light);
+}
+
+.giving-summary__value-card-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.giving-summary__value-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-full);
+}
+
+.giving-summary__value-dot--donations {
+  background-color: var(--color-primary);
+}
+
+.giving-summary__value-dot--revenue {
+  background-color: var(--color-primary-200);
+}
+
+.giving-summary__value-card-label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+}
+
+.giving-summary__value-card-amount {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.giving-summary__value-card--donations .giving-summary__value-card-amount {
+  color: var(--color-primary-700);
+}
+
+.giving-summary__value-card-detail {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+/* Chart */
+.giving-summary__chart {
+  height: 160px;
+  margin-bottom: var(--space-4);
+  padding: var(--space-2) 0;
+}
+
+.giving-summary__chart-bars {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  height: 100%;
+  gap: var(--space-1);
+}
+
+.giving-summary__chart-bar-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  position: relative;
+  cursor: pointer;
+}
+
+.giving-summary__chart-bar-stack {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  width: 100%;
+  max-width: 32px;
+  height: 120px;
+  gap: 2px;
+  transition: opacity var(--transition-fast);
+}
+
+.giving-summary__chart-bar-group:not(.giving-summary__chart-bar-group--hovered) .giving-summary__chart-bar-stack {
+  opacity: 0.7;
+}
+
+.giving-summary__chart-bar-group--hovered .giving-summary__chart-bar-stack {
+  opacity: 1;
+}
+
+.giving-summary__chart-bar {
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  transition: height var(--transition-base);
+  min-height: 2px;
+}
+
+.giving-summary__chart-bar--donations {
+  background-color: var(--color-primary);
+}
+
+.giving-summary__chart-bar--revenue {
+  background-color: var(--color-primary-200);
+}
+
+.giving-summary__chart-label {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+/* Tooltip */
+.giving-summary__chart-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--color-background-dark);
+  color: var(--color-text-inverse);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-xs);
+  white-space: nowrap;
+  z-index: 10;
+  margin-bottom: var(--space-2);
+}
+
+.giving-summary__chart-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: var(--color-background-dark);
+}
+
+.giving-summary__chart-tooltip-row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+/* Transaction Stats */
+.giving-summary__transactions {
+  display: flex;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  background-color: var(--color-surface);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-4);
+}
+
+.giving-summary__transaction-stat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.giving-summary__transaction-label {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.giving-summary__transaction-value {
+  display: flex;
+  flex-direction: column;
+}
+
+.giving-summary__transaction-amount {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.giving-summary__transaction-amount--highlight {
+  color: var(--color-primary-600);
+}
+
+.giving-summary__transaction-date {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+/* Donation Attribution Section */
+.giving-summary__attribution {
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border-light);
+}
+
+.giving-summary__attribution-header {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin: 0 0 var(--space-3) 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.giving-summary__attribution-header::before {
+  content: '';
+  display: inline-block;
+  width: 3px;
+  height: 14px;
+  background-color: var(--color-primary);
+  border-radius: var(--radius-full);
+}
+
+/* Fund & Campaign Breakdowns */
+.giving-summary__breakdowns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+.giving-summary__breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.giving-summary__breakdown-title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0;
+}
+
+.giving-summary__breakdown-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.giving-summary__breakdown-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.giving-summary__breakdown-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.giving-summary__breakdown-name {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+}
+
+.giving-summary__breakdown-amount {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.giving-summary__breakdown-bar {
+  height: 8px;
+  background-color: var(--color-border-light);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.giving-summary__breakdown-bar-fill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  transition: width var(--transition-base);
+}
+
+.giving-summary__breakdown-bar-fill--fund {
+  background-color: var(--color-primary);
+}
+
+.giving-summary__breakdown-bar-fill--campaign {
+  background-color: var(--color-accent);
+}
+
+.giving-summary__breakdown-percent {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .giving-summary__value-split {
+    grid-template-columns: 1fr;
+  }
+  
+  .giving-summary__breakdowns {
+    grid-template-columns: 1fr;
+  }
+  
+  .giving-summary__hero-value {
+    font-size: var(--font-size-2xl);
+  }
+}

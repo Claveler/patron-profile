@@ -1,0 +1,95 @@
+/* Membership Savings Component */
+
+.membership-savings {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  box-shadow: 0 4px 8px rgba(6, 35, 44, 0.08);
+}
+
+.membership-savings__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-3);
+}
+
+.membership-savings__title {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.membership-savings__link {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-primary-600);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.membership-savings__link:hover {
+  color: var(--color-primary-700);
+  text-decoration: underline;
+}
+
+.membership-savings__content {
+  background: var(--color-background);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+}
+
+.membership-savings__label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-2);
+}
+
+.membership-savings__info {
+  font-size: 12px;
+  color: var(--color-text-tertiary);
+  cursor: help;
+}
+
+.membership-savings__value-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.membership-savings__value-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.membership-savings__amount {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
+.membership-savings__membership {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.membership-savings__copy {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-tertiary);
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+
+.membership-savings__copy:hover {
+  background-color: var(--color-white);
+  color: var(--color-text-primary);
+}

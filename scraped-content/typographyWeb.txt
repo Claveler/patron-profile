@@ -1,0 +1,261 @@
+Skip to content
+Digital
+About
+Search
+🍪 We use cookies to ensure you have the best experience - see our policy
+Reject all
+Allow all
+
+Styleguide secondary navigation
+
+Introduction
+Get Started
+Foundations
+Accesibility - A11y
+Design tokens
+Typography
+Overview
+Web
+iOS
+Android
+Usage
+Resources
+Colors
+Iconography
+Layout
+Radii
+Shadows
+RTL directionality
+Components
+Actions
+Containment
+Fields
+ASSETS
+INTERNATIONAL
+Montserrat
+Foundations
+Typography
+New
+
+Typography helps to create visual hierarchies, organize information, and guide users through our products.
+
+Overview
+Web
+iOS
+Android
+Usage
+Resources
+Montserrat
+
+
+
+
+	
+
+
+
+
+	
+
+Montserrat is a versatile sans-serif font designed by Julieta Ulanovsky. Its clean lines and simple geometric shapes make it a popular choice for digital interfaces, including web and mobile applications. Montserrat is highly legible, making it a great choice for use in body copy, headings, and other typographic elements in your design system
+
+bold
+Family
+Montserrat (600)
+Size
+48px
+3rem
+Line height
+56px
+3.5rem
+Letter spacing
+0px
+
+The largest text on the screen, display style is reserved for short, important text or numerals. They work best on large screens.
+
+Pack my red box with five dozen quality jugs
+headline-h1
+Family
+Montserrat (600)
+Size
+28px
+1.75rem
+Line height
+32px
+2rem
+Letter spacing
+0px
+
+Reserved for main headlines and titles.
+
+Pack my red box with five dozen quality jugs
+headline-h2
+Family
+Montserrat (600)
+Size
+24px
+1.5rem
+Line height
+28px
+1.75rem
+Letter spacing
+0px
+
+Reserved for main headlines and titles.
+
+Quick fox jumps nightly above wizard
+headline-h3
+Family
+Montserrat (600)
+Size
+20px
+1.25rem
+Line height
+24px
+1.5rem
+Letter spacing
+0px
+
+Reserved for main headlines and titles.
+
+Quick fox jumps nightly above wizard
+headline-h4
+Family
+Montserrat (600)
+Size
+18px
+1.125rem
+Line height
+28px
+1.75rem
+Letter spacing
+0px
+
+Reserved for main headlines and titles.
+
+Quick fox jumps nightly above wizard
+lead-base
+Family
+Montserrat (600)
+Size
+16px
+1rem
+Line height
+24px
+1.5rem
+Letter spacing
+0px
+
+Reserved for subtitles or minor levels of hierarchy.
+
+The wizard quickly jinxed the gnomes before they vaporized
+lead-sm
+Family
+Montserrat (600)
+Size
+14px
+0.875rem
+Line height
+20px
+1.25rem
+Letter spacing
+0px
+
+Reserved for subtitles or minor levels of hierarchy.
+
+The wizard quickly jinxed the gnomes before they vaporized
+body-base-bold
+Family
+Montserrat (600)
+Size
+16px
+1rem
+Line height
+24px
+1.5rem
+Letter spacing
+0px
+
+The main body copy of contents.
+
+Pack my red box with five dozen quality jugs
+body-base-regular
+Family
+Montserrat (400)
+Size
+16px
+1rem
+Line height
+24px
+1.5rem
+Letter spacing
+0px
+
+The main body copy of contents.
+
+The quick brown fox jumps over the lazy dog
+body-sm-bold
+Family
+Montserrat (600)
+Size
+14px
+0.875rem
+Line height
+20px
+1.25rem
+Letter spacing
+0px
+
+The main body copy of contents. Two levels of size and weight, to create hierarchy and relevance.
+
+Heavy boxes perform quick waltzes and jigs
+body-sm-regular
+Family
+Montserrat (400)
+Size
+14px
+0.875rem
+Line height
+20px
+1.25rem
+Letter spacing
+0px
+
+The main body copy of contents. Two levels of size and weight, to create hierarchy and relevance.
+
+The wizard quickly jinxed the gnomes before they vaporized
+caption-bold
+Family
+Montserrat (600)
+Size
+12px
+0.75rem
+Line height
+16px
+1rem
+Letter spacing
+0px
+
+Reserved for minor texts or less relevant information. Don't use it as a primary option for body content.
+
+The wizard quickly jinxed the gnomes before they vaporized
+caption-regular
+Family
+Montserrat (400)
+Size
+12px
+0.75rem
+Line height
+16px
+1rem
+Letter spacing
+0px
+
+Reserved for minor texts or less relevant information. Don't use it as a primary option for body content.
+
+The quick brown fox jumps over the lazy dog
+
+
+
+
+©2024 - Fever

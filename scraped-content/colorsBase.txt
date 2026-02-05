@@ -1,0 +1,90 @@
+Skip to content
+Digital
+About
+Search
+🍪 We use cookies to ensure you have the best experience - see our policy
+Reject all
+Allow all
+
+Styleguide secondary navigation
+
+Introduction
+Get Started
+Foundations
+Accesibility - A11y
+Design tokens
+Typography
+Colors
+Overview
+Base colors palette
+Usage
+Accessibility
+Resources
+Iconography
+Layout
+Radii
+Shadows
+RTL directionality
+Components
+Actions
+Containment
+Fields
+ASSETS
+INTERNATIONAL
+Base colors palette
+Primary 🔗
+Accent 🔗
+Danger 🔗
+Warning 🔗
+Success 🔗
+Neutral 🔗
+Foundations
+Colors
+Ready
+
+We have 56 color variables, in 6 main hues and their shades, to use in our products for design flexibility while maintaining brand consistency.
+
+Overview
+Base colors palette
+Usage
+Accessibility
+Resources
+Base colors palette
+Primary 🔗
+100
+#E6F4FF
+rgb(230, 244, 255)
+200
+#ACDAFB
+rgb(172, 218, 251)
+300
+#73BFF6
+rgb(115, 191, 246)
+400
+#39A5EE
+rgb(57, 165, 238)
+500
+#0089E3
+rgb(0, 137, 227)
+600
+#0079CA
+rgb(0, 121, 202)
+700
+#0068B0
+rgb(0, 104, 176)
+800
+#005795
+rgb(0, 87, 149)
+900
+#004679
+rgb(0, 70, 121)
+Accent 🔗
+Danger 🔗
+Warning 🔗
+Success 🔗
+Neutral 🔗
+
+
+
+
+©2024 - Fever

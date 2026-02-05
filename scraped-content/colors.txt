@@ -1,0 +1,112 @@
+Skip to content
+Digital
+About
+Search
+🍪 We use cookies to ensure you have the best experience - see our policy
+Reject all
+Allow all
+
+Styleguide secondary navigation
+
+Introduction
+Get Started
+Foundations
+Accesibility - A11y
+Design tokens
+Typography
+Colors
+Overview
+Base colors palette
+Usage
+Accessibility
+Resources
+Iconography
+Layout
+Radii
+Shadows
+RTL directionality
+Components
+Actions
+Containment
+Fields
+ASSETS
+INTERNATIONAL
+Main colors
+Semantic meaning
+Foundations
+Colors
+Ready
+
+We have 56 color variables, in 6 main hues and their shades, to use in our products for design flexibility while maintaining brand consistency.
+
+Overview
+Base colors palette
+Usage
+Accessibility
+Resources
+Main colors
+
+Our approach to defining colors is based on a core palette consisting of 6 colors. These colors are utilized to generate the values for all color variants palettes, which are designed to maintain accessibility while effectively conveying our brand's personality. This method is known as semantic colors.
+
+With semantic colors, we have the flexibility to update colors easily, ensure visual consistency across our products.
+
+primary
+#0089E3
+rgb(0, 137, 227)
+accent
+#6F41D7
+rgb(111, 65, 215)
+danger
+#EB0052
+rgb(235, 0, 82)
+warning
+#FF8C00
+rgb(255, 140, 0)
+success
+#24A865
+rgb(36, 168, 101)
+neutral
+#536B75
+rgb(83, 107, 117)
+Semantic meaning
+
+Semantic is attributed to colors in our design system, with each color carrying a specific significance based on its function within the interface. The role of a color determines its usage and defines its variants, making customization and modification easier.
+
+Naming patterns are utilized in design tools to identify variants and reference their usage, and color role. By following these naming conventions, designers can easily identify and utilize the appropriate color variants for their designs. Alias token list
+
+Use
+
+	
+
+Role
+
+
+
+
+Text
+
+	
+
+Text colors are applied to titles, paragraphs, or icons, and can be used to prioritize contents with main and primary colors. They can also indicate that contents are interactive with the action color, or that content is selected/unselected, with active and disabled colors.
+
+When using these colors, it's essential to consider accessibility.
+
+
+
+
+Background
+
+	
+
+The background color is typically located behind the content and used to prioritize elements with primary, subtles, and accent. It can also be used to express our brand identity or highlight elements with the brand and accent colors.
+
+
+
+
+Border
+
+	
+
+Border colors are applied on or around background colors and used to box elements prioritized with main and primary colors. They can also be used to give specific meanings like selection, success, error, etc.
+
+©2024 - Fever

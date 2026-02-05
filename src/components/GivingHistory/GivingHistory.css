@@ -1,0 +1,219 @@
+/* Giving History */
+
+.giving-history {
+  background-color: var(--color-surface);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  box-shadow: 0 4px 8px rgba(6, 35, 44, 0.08);
+}
+
+/* Header */
+.giving-history__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-4);
+}
+
+.giving-history__title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.giving-history__view-all {
+  font-size: var(--font-size-sm);
+  color: var(--color-primary);
+  font-weight: var(--font-weight-medium);
+  transition: color var(--transition-fast);
+}
+
+.giving-history__view-all:hover {
+  color: var(--color-primary-700);
+}
+
+/* Empty State */
+.giving-history__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-6);
+  color: var(--color-text-muted);
+}
+
+.giving-history__empty i {
+  font-size: var(--font-size-3xl);
+}
+
+.giving-history__empty p {
+  margin: 0;
+  font-size: var(--font-size-sm);
+}
+
+/* Gift List */
+.giving-history__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* Gift Card */
+.giving-history__gift {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  background-color: var(--color-background);
+  border-radius: var(--radius-md);
+  border-left: 3px solid var(--color-primary);
+}
+
+/* Gift Header */
+.giving-history__gift-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.giving-history__gift-date {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.giving-history__gift-date i {
+  color: var(--color-text-muted);
+}
+
+.giving-history__gift-amount {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary-600);
+}
+
+/* Gift Type Badge */
+.giving-history__gift-type {
+  display: inline-flex;
+  align-self: flex-start;
+  padding: 2px 8px;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  border-radius: var(--radius-full);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.giving-history__gift-type--donation {
+  background-color: var(--color-success-100);
+  color: var(--color-success-700);
+}
+
+.giving-history__gift-type--membership {
+  background-color: var(--color-primary-100);
+  color: var(--color-primary-700);
+}
+
+/* Gift Description */
+.giving-history__gift-description {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+/* Fund & Campaign Attribution */
+.giving-history__gift-attribution {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.giving-history__gift-fund,
+.giving-history__gift-campaign {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.giving-history__gift-fund i,
+.giving-history__gift-campaign i {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+.giving-history__gift-arrow {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+/* Appeal */
+.giving-history__gift-appeal {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.giving-history__gift-appeal i {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+/* Soft Credits */
+.giving-history__soft-credits {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-2);
+  background-color: var(--color-warning-50);
+  border-radius: var(--radius-sm);
+  margin-top: var(--space-1);
+}
+
+.giving-history__soft-credit {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-sm);
+}
+
+.giving-history__soft-credit i {
+  color: var(--color-warning-500);
+  font-size: var(--font-size-xs);
+}
+
+.giving-history__soft-credit-name {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+}
+
+.giving-history__soft-credit-type {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+}
+
+/* Tax Info */
+.giving-history__gift-tax {
+  display: flex;
+  gap: var(--space-4);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--color-border-light);
+  margin-top: var(--space-1);
+}
+
+.giving-history__gift-deductible,
+.giving-history__gift-benefits {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}

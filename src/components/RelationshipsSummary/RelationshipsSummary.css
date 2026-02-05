@@ -1,0 +1,143 @@
+/* Relationships Summary */
+
+.relationships-summary {
+  background-color: var(--color-surface);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  box-shadow: 0 4px 8px rgba(6, 35, 44, 0.08);
+}
+
+.relationships-summary__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-3);
+}
+
+.relationships-summary__title {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.relationships-summary__title i {
+  color: var(--color-primary);
+}
+
+.relationships-summary__view-all {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--font-size-sm);
+  color: var(--color-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+.relationships-summary__view-all:hover {
+  text-decoration: underline;
+}
+
+/* List */
+.relationships-summary__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+
+.relationships-summary__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2);
+  border-radius: var(--radius-md);
+  transition: background-color var(--transition-fast);
+}
+
+.relationships-summary__item:hover {
+  background-color: var(--color-surface);
+}
+
+.relationships-summary__avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  background-color: var(--avatar-color, var(--color-primary-100));
+  color: var(--avatar-color, var(--color-primary));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  flex-shrink: 0;
+}
+
+.relationships-summary__avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+}
+
+.relationships-summary__info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.relationships-summary__name {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.relationships-summary__role {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+}
+
+.relationships-summary__action {
+  color: var(--color-text-muted);
+  padding: var(--space-1);
+  font-size: var(--font-size-sm);
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.relationships-summary__item:hover .relationships-summary__action {
+  opacity: 1;
+}
+
+.relationships-summary__action:hover {
+  color: var(--color-primary);
+}
+
+/* Add Button */
+.relationships-summary__add {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  width: 100%;
+  padding: var(--space-2);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+}
+
+.relationships-summary__add:hover {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+  background-color: var(--color-primary-100);
+}

@@ -1,0 +1,153 @@
+/* Perks Usage Component */
+
+.perks-usage {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  box-shadow: 0 4px 8px rgba(6, 35, 44, 0.08);
+}
+
+.perks-usage__header {
+  margin-bottom: var(--space-4);
+}
+
+.perks-usage__title {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.perks-usage__content {
+  margin-bottom: var(--space-4);
+}
+
+.perks-usage__timeline {
+  display: flex;
+  flex-direction: column;
+}
+
+.perks-usage__item {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.perks-usage__timeline-marker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.perks-usage__icon-circle {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-secondary);
+  font-size: 10px;
+}
+
+.perks-usage__timeline-line {
+  width: 1px;
+  flex: 1;
+  background-color: var(--color-border);
+  margin: var(--space-1) 0;
+  min-height: 20px;
+}
+
+.perks-usage__item-content {
+  flex: 1;
+  padding-bottom: var(--space-4);
+}
+
+.perks-usage__item:last-child .perks-usage__item-content {
+  padding-bottom: 0;
+}
+
+.perks-usage__item-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.perks-usage__item-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.perks-usage__item-title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.perks-usage__item-event {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.perks-usage__item-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.perks-usage__item-date {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+.perks-usage__item-toggle {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-secondary);
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+
+.perks-usage__item-toggle:hover {
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+}
+
+.perks-usage__item-details {
+  margin-top: var(--space-2);
+  padding: var(--space-3);
+  background-color: var(--color-background);
+  border-radius: var(--radius-md);
+}
+
+.perks-usage__item-description {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.perks-usage__footer {
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-border);
+}
+
+.perks-usage__link {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-primary-600);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.perks-usage__link:hover {
+  color: var(--color-primary-700);
+  text-decoration: underline;
+}

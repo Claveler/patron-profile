@@ -1,0 +1,240 @@
+{
+  "meta": {
+    "name": "Fever Ignite Design System",
+    "source": "https://design.fevertools.com/1d4a57dde/p/52e17c-ignite-design-system",
+    "scrapedAt": "2026-02-05"
+  },
+  "colors": {
+    "primary": {
+      "main": "#0089E3",
+      "100": "#E6F4FF",
+      "200": "#ACDAFB",
+      "300": "#73BFF6",
+      "400": "#39A5EE",
+      "500": "#0089E3",
+      "600": "#0079CA",
+      "700": "#0068B0",
+      "800": "#005795",
+      "900": "#004679"
+    },
+    "accent": {
+      "main": "#6F41D7",
+      "rgb": "rgb(111, 65, 215)"
+    },
+    "danger": {
+      "main": "#EB0052",
+      "rgb": "rgb(235, 0, 82)"
+    },
+    "warning": {
+      "main": "#FF8C00",
+      "rgb": "rgb(255, 140, 0)"
+    },
+    "success": {
+      "main": "#24A865",
+      "rgb": "rgb(36, 168, 101)"
+    },
+    "neutral": {
+      "main": "#536B75",
+      "rgb": "rgb(83, 107, 117)"
+    }
+  },
+  "typography": {
+    "fontFamily": {
+      "primary": "Montserrat, sans-serif"
+    },
+    "fontWeight": {
+      "regular": 400,
+      "semibold": 600
+    },
+    "styles": {
+      "display": {
+        "fontFamily": "Montserrat",
+        "fontWeight": 600,
+        "fontSize": "48px",
+        "fontSizeRem": "3rem",
+        "lineHeight": "56px",
+        "lineHeightRem": "3.5rem",
+        "letterSpacing": "0px",
+        "description": "The largest text on the screen, reserved for short, important text or numerals"
+      },
+      "headline-h1": {
+        "fontFamily": "Montserrat",
+        "fontWeight": 600,
+        "fontSize": "28px",
+        "fontSizeRem": "1.75rem",
+        "lineHeight": "32px",
+        "lineHeightRem": "2rem",
+        "letterSpacing": "0px",
+        "description": "Reserved for main headlines and titles"
+      },
+      "headline-h2": {
+        "fontFamily": "Montserrat",
+        "fontWeight": 600,
+        "fontSize": "24px",
+        "fontSizeRem": "1.5rem",
+        "lineHeight": "28px",
+        "lineHeightRem": "1.75rem",
+        "letterSpacing": "0px",
+        "description": "Reserved for main headlines and titles"
+      },
+      "headline-h3": {
+        "fontFamily": "Montserrat",
+        "fontWeight": 600,
+        "fontSize": "20px",
+        "fontSizeRem": "1.25rem",
+        "lineHeight": "24px",
+        "lineHeightRem": "1.5rem",
+        "letterSpacing": "0px",
+        "description": "Reserved for main headlines and titles"
+      },
+      "headline-h4": {
+        "fontFamily": "Montserrat",
+        "fontWeight": 600,
+        "fontSize": "18px",
+        "fontSizeRem": "1.125rem",
+        "lineHeight": "28px",
+        "lineHeightRem": "1.75rem",
+        "letterSpacing": "0px",
+        "description": "Reserved for main headlines and titles"
+      },
+      "lead-base": {
+        "fontFamily": "Montserrat",
+        "fontWeight": 600,
+        "fontSize": "16px",
+        "fontSizeRem": "1rem",
+        "lineHeight": "24px",
+        "lineHeightRem": "1.5rem",
+        "letterSpacing": "0px",
+        "description": "Reserved for subtitles or minor levels of hierarchy"
+      },
+      "lead-sm": {
+        "fontFamily": "Montserrat",
+        "fontWeight": 600,
+        "fontSize": "14px",
+        "fontSizeRem": "0.875rem",
+        "lineHeight": "20px",
+        "lineHeightRem": "1.25rem",
+        "letterSpacing": "0px",
+        "description": "Reserved for subtitles or minor levels of hierarchy"
+      },
+      "body-base-bold": {
+        "fontFamily": "Montserrat",
+        "fontWeight": 600,
+        "fontSize": "16px",
+        "fontSizeRem": "1rem",
+        "lineHeight": "24px",
+        "lineHeightRem": "1.5rem",
+        "letterSpacing": "0px",
+        "description": "The main body copy of contents"
+      },
+      "body-base-regular": {
+        "fontFamily": "Montserrat",
+        "fontWeight": 400,
+        "fontSize": "16px",
+        "fontSizeRem": "1rem",
+        "lineHeight": "24px",
+        "lineHeightRem": "1.5rem",
+        "letterSpacing": "0px",
+        "description": "The main body copy of contents"
+      },
+      "body-sm-bold": {
+        "fontFamily": "Montserrat",
+        "fontWeight": 600,
+        "fontSize": "14px",
+        "fontSizeRem": "0.875rem",
+        "lineHeight": "20px",
+        "lineHeightRem": "1.25rem",
+        "letterSpacing": "0px",
+        "description": "The main body copy of contents, for hierarchy and relevance"
+      },
+      "body-sm-regular": {
+        "fontFamily": "Montserrat",
+        "fontWeight": 400,
+        "fontSize": "14px",
+        "fontSizeRem": "0.875rem",
+        "lineHeight": "20px",
+        "lineHeightRem": "1.25rem",
+        "letterSpacing": "0px",
+        "description": "The main body copy of contents, for hierarchy and relevance"
+      },
+      "caption-bold": {
+        "fontFamily": "Montserrat",
+        "fontWeight": 600,
+        "fontSize": "12px",
+        "fontSizeRem": "0.75rem",
+        "lineHeight": "16px",
+        "lineHeightRem": "1rem",
+        "letterSpacing": "0px",
+        "description": "Reserved for minor texts or less relevant information"
+      },
+      "caption-regular": {
+        "fontFamily": "Montserrat",
+        "fontWeight": 400,
+        "fontSize": "12px",
+        "fontSizeRem": "0.75rem",
+        "lineHeight": "16px",
+        "lineHeightRem": "1rem",
+        "letterSpacing": "0px",
+        "description": "Reserved for minor texts or less relevant information"
+      }
+    }
+  },
+  "radii": {
+    "none": "0px",
+    "100": "4px",
+    "200": "8px",
+    "300": "12px",
+    "400": "16px",
+    "500": "20px",
+    "600": "24px",
+    "full": "64px"
+  },
+  "spacing": {
+    "comment": "Based on 4-unit grid system",
+    "unit": "4px",
+    "scale": {
+      "0": "0px",
+      "1": "4px",
+      "2": "8px",
+      "3": "12px",
+      "4": "16px",
+      "5": "20px",
+      "6": "24px",
+      "7": "28px",
+      "8": "32px",
+      "9": "36px",
+      "10": "40px",
+      "12": "48px",
+      "14": "56px",
+      "16": "64px"
+    }
+  },
+  "shadows": {
+    "comment": "Shadow system adheres to consistent scale for visual balance",
+    "none": "none",
+    "sm": "0px 1px 2px 0px rgba(0, 0, 0, 0.05)",
+    "base": "0px 1px 3px 0px rgba(0, 0, 0, 0.1), 0px 1px 2px -1px rgba(0, 0, 0, 0.1)",
+    "md": "0px 4px 6px -1px rgba(0, 0, 0, 0.1), 0px 2px 4px -2px rgba(0, 0, 0, 0.1)",
+    "lg": "0px 10px 15px -3px rgba(0, 0, 0, 0.1), 0px 4px 6px -4px rgba(0, 0, 0, 0.1)",
+    "xl": "0px 20px 25px -5px rgba(0, 0, 0, 0.1), 0px 8px 10px -6px rgba(0, 0, 0, 0.1)"
+  },
+  "semanticColors": {
+    "text": {
+      "description": "Applied to titles, paragraphs, or icons. Can prioritize content, indicate interactivity, or show selected/disabled states"
+    },
+    "background": {
+      "description": "Located behind content. Used to prioritize elements and express brand identity"
+    },
+    "border": {
+      "description": "Applied on or around background colors. Used to box elements and give specific meanings like selection, success, error"
+    }
+  },
+  "tokenCategories": {
+    "color.text": "Text colors for titles, paragraphs, icons",
+    "color.background": "Background colors for containers and surfaces",
+    "color.border": "Border colors for outlines and dividers",
+    "color.action.text": "Text colors for interactive elements",
+    "color.action.background": "Background colors for buttons and actions",
+    "color.action.border": "Border colors for interactive elements"
+  }
+}

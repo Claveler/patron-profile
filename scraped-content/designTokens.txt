@@ -1,0 +1,160 @@
+Skip to content
+Digital
+About
+Search
+🍪 We use cookies to ensure you have the best experience - see our policy
+Reject all
+Allow all
+
+Styleguide secondary navigation
+
+Introduction
+Get Started
+Foundations
+Accesibility - A11y
+Design tokens
+Overview
+How to read
+Usage
+How it's works
+Alias token list
+Resources
+Typography
+Colors
+Iconography
+Layout
+Radii
+Shadows
+RTL directionality
+Components
+Actions
+Containment
+Fields
+ASSETS
+INTERNATIONAL
+What are design tokens?
+Example of a button component composed of many design tokens:
+What can design tokens store?
+Colors
+Typography
+Spacing and sizing
+Border
+Shadows
+Assets
+What about other types of design tokens?
+Foundations
+Design tokens
+BETA
+
+Design tokens are design elements, in the form of data, that guarantee a consistent and harmonious experience across all products.
+
+Overview
+How to read
+Usage
+How it's works
+Alias token list
+Resources
+What are design tokens?
+
+Ignite design language uses human-readable names for design elements, such as colors, typefaces, border-radius, font size, gradients, and animation durations, which are represented as data. These names are intended to be easily understood by people like you and me.
+
+These can represent anything defined by design: a color as a RGB value, an opacity as a number, animation ease as Bezier coordinates. They’re used in place of hard-coded values in order to ensure flexibility and unity across all product experiences.
+
+If you're familiar with the Atomic Design taxonomy, design tokens are what atoms are made of.
+
+The place of design tokens within the Atomic Design taxonomy
+
+Example of a button component composed of many design tokens:
+
+All the design tokens composing a button component
+
+What can design tokens store?
+
+Design tokens can represent many types of design decisions. The most common are:
+
+Colors
+
+Colors have meaning and support the purpose of the content, communicating things like hierarchy of information, interactive states, and the difference between distinct elements in your UI. Among all your design token types, color is surely one of the most important ones.
+
+Typography
+
+Text styles or typography helps our UI be usable. They create balance, hierarchy and structure for your content.
+
+A text style is composed of several child design decisions that could be considered as single design tokens like:
+
+a line-height
+
+a font size
+
+a letter spacing
+
+a font name
+
+Text styles are considered as composite design tokens because they are composed of several design tokens.
+
+Spacing and sizing
+
+Measurement or dimension design tokens help us define the size values. We can define from those values different design decisions like a spacing scale and internal or external margins...
+
+Spacing (Horizontal, Vertical, Gap)
+
+Sizing (Width/Height)
+
+Border
+
+A border is a line surrounding a UI element. The border can be customized to have different widths and can be a dashed or dotted line. We can also fill it with both a color and a gradient.
+
+Border Radius (individually or in each corner)
+
+Border Width
+
+Border color
+
+Border Style (solid, dashed)
+
+Shadows
+
+Shadows help you communicate components elevation in our UIs. These are the values we can define.
+
+Blur: is particularly useful when we stack multiple objects on top of each other. The highest most levitating object also has a shadow with the highest blur value.
+
+Offset: the x and y offset of our shadow depends on where we put the light source within your UI design. Depending on the height of our light source, the offset can increase and decrease. Generally, a light source that is more "on top" of our UI elements means a smaller offset. The offset is a Size design token.
+
+Color: In nature, shadows aren't black. They darken the shadow surface. It means that the color of our shadows shouldn't be black and would follow the colors of the other elements in our design system
+
+Assets
+
+The assets are any kind of downloadable content in our UI, and that we want to reuse across our product. They can be images, pdfs and videos.
+
+Bitmaps are raster images we can use in many contexts. They're basically any image we can display in a UI that is a .png, .jpeg, .webp, .avif...
+
+Vectors: By "vectors" we mean vector images (e.g., SVG and PDF files). We can use them for one main purpose: illustrations
+
+What about other types of design tokens?
+
+We previously listed all the main types of design tokens. We could have included other types like opacity, breakpoint or even depth (z-axis stack position) but we didn't feel it was needed to be honest. The most important thing to remember is that design tokens are at the heart of every component used in your UIs.
+
+Define and structure them with care and the rest will follow.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+©2024 - Fever
