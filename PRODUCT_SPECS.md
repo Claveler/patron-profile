@@ -1002,6 +1002,7 @@ Museum boards demand data.
 | 12. Patron Segmentation | **Mockup Complete** | Multi-tag system (system + custom tags); Settings page for tag management; Popover UI for tag assignment |
 | 13. Patron Lifecycle | **Mockup Complete** | Source tracking (Fever vs Manual); Archive/restore; "New" badge; Patron Since with relative dates |
 | 14. Dashboard | **Mockup Complete** | Quick stats, pipeline overview, closing soon, follow-ups needed, gift officer filtering |
+| 15. Data Import | **Mockup Complete** | 3-step wizard UI for Blackbaud, Tessitura, CSV imports; field mapping; preview with stats |
 
 ---
 
@@ -1214,7 +1215,43 @@ Detailed membership sample data used in mockup:
 | Usage Tracking | Shows number of patrons using each tag | Done |
 | Inline Editing | Click to edit tag labels | Done |
 | Delete Confirmation | Warns if tag is in use before deletion | Done |
-| Navigation Sidebar | Tags (active), General, Users, Integrations (placeholders) | Done |
+| Import Data Section | 3-step wizard for importing constituent data | Done (Mockup) |
+| Navigation Sidebar | Tags, Import Data (active); General, Users, Integrations (placeholders) | Done |
+
+##### Import Data Wizard (Mockup)
+
+A complete 3-step wizard mockup for importing constituent data from external CRM systems:
+
+**Step 1: Select Import Source**
+| Source | Description | Supported Data |
+|--------|-------------|----------------|
+| Blackbaud Raiser's Edge | Enterprise donor management platform | Constituents, Gifts, Memberships, Relationships, Activities, Opportunities |
+| Tessitura | Arts and cultural organization CRM | Constituents, Contributions, Memberships, Relationships, Activities |
+| CSV / Excel | Universal spreadsheet import | Constituents, Gifts, Memberships, Relationships, Activities, Tags |
+
+**Data Categories (selectable via checkboxes):**
+- Constituents (contacts, demographics, addresses)
+- Giving History (gifts, pledges, soft credits)
+- Memberships (tiers, benefits, history)
+- Relationships (households, employers)
+- Activities (notes, communications)
+- Opportunities (proposals, pipeline)
+- Tags/Attributes (custom fields, segments)
+
+**Step 2: Upload & Map Fields**
+- Drag-and-drop file upload zone
+- Supports CSV, XLSX, or native export formats
+- Auto-mapping of common field names
+- Manual field mapping with dropdown selectors
+- Sample data preview for each field
+
+**Step 3: Preview & Confirm**
+- Import summary statistics (total records, new patrons, updates, gifts, memberships)
+- Warning callouts for data quality issues (missing emails, invalid formats)
+- Sample record preview table with status badges (New/Update)
+- Confirmation before final import
+
+**Note:** This is a UI mockup only. Actual import functionality is not implemented.
 - Appeals belong to campaigns with raised, cost, and response count
 - ROI calculated as raised/cost multiplier
 
@@ -1372,6 +1409,7 @@ Patrons like Anderson Collingwood can appear in both the general Patron Profile 
 - Updated: February 6, 2026 (Gift Terminology - standardized to "Gift" for internal CRM usage)
 - Updated: February 6, 2026 (Dashboard and Patrons List - documented all implemented features including gift officer filtering, membership tier column, relative dates)
 - Updated: February 6, 2026 (Activity Heatmap - 12-month engagement visualization with TTM toggle)
+- Updated: February 6, 2026 (Import Data Wizard - 3-step mockup for Blackbaud, Tessitura, and CSV imports)
 - Product Manager: Andres Clavel
 - Designer: Pablo Rubio Retolaza
 - Tech Lead: Victor Almaraz Sanchez

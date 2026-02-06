@@ -30,6 +30,80 @@
   border: 1px solid var(--color-border);
 }
 
+/* Role Banner (for beneficiaries) */
+.memberships-tab__role-banner {
+  background: var(--color-primary-50);
+  border: 1px solid var(--color-primary-200);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
+.memberships-tab__role-banner-content {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.memberships-tab__role-banner-content > i {
+  font-size: var(--font-size-lg);
+  color: var(--color-primary);
+  margin-top: 2px;
+}
+
+.memberships-tab__role-banner-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.memberships-tab__role-banner-title {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.memberships-tab__role-banner-primary {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.memberships-tab__role-banner-link {
+  color: var(--color-primary);
+  font-weight: var(--font-weight-medium);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.memberships-tab__role-banner-link:hover {
+  text-decoration: underline;
+}
+
+.memberships-tab__role-banner-link i {
+  font-size: var(--font-size-xs);
+}
+
+.memberships-tab__role-banner-info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.memberships-tab__role-banner-info i {
+  color: var(--color-primary);
+}
+
 /* Empty State */
 .memberships-tab__empty {
   display: flex;

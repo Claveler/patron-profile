@@ -1236,6 +1236,106 @@ export const patrons = [
     giving: { lifetimeValue: 50, donations: 0, revenue: 50, lastDonation: null },
     createdDate: '2026-02-05',
     source: 'ticket'
+  },
+  
+  // ============================================
+  // BENEFICIARY PATRONS (Family members with own records)
+  // ============================================
+  
+  // Sarah Collingwood - Anderson's spouse, beneficiary on his membership
+  {
+    id: 'sarah-collingwood',
+    firstName: 'Sarah',
+    lastName: 'Collingwood',
+    photo: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop&crop=face',
+    email: 'sarah@collingwood.com',
+    phone: '(555) 123-4568',
+    address: '789 Pine Rd, Austin, TX 73301',
+    tags: ['donor'],
+    recordStatus: 'active',
+    household: {
+      name: 'Collingwood Family',
+      verified: true
+    },
+    // No assignedTo - not individually managed, but part of household
+    engagement: {
+      level: 'warm',
+      visits: 28,
+      lastVisit: '15/01/2026',
+      activityHistory: [
+        { month: '2025-02', weeks: [{ activities: [{ type: 'attendance', count: 2 }] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [{ type: 'attendance', count: 1 }] }] },
+        { month: '2025-03', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 2 }] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }] },
+        { month: '2025-04', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-05', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 2 }] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }] },
+        { month: '2025-06', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [{ type: 'attendance', count: 2 }] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }] },
+        { month: '2025-07', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-08', weeks: [{ activities: [{ type: 'attendance', count: 2 }] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }] },
+        { month: '2025-09', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [{ type: 'attendance', count: 1 }] }] },
+        { month: '2025-10', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [{ type: 'attendance', count: 2 }] }, { activities: [] }] },
+        { month: '2025-11', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }] },
+        { month: '2025-12', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2026-01', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 2 }] }, { activities: [] }, { activities: [] }] }
+      ]
+    },
+    giving: {
+      lifetimeValue: 250,
+      donations: 250,
+      revenue: 0,
+      giftCount: 1,
+      averageGift: 250,
+      lastDonation: '2025-03-15'
+    },
+    // No separate membership - she's a beneficiary on Anderson's
+    createdDate: '2023-12-02',
+    source: 'manual'
+  },
+  
+  // Emma Collingwood - Anderson's daughter, dependent on his membership
+  {
+    id: 'emma-collingwood',
+    firstName: 'Emma',
+    lastName: 'Collingwood',
+    photo: null,
+    email: null, // Minor, no email
+    phone: null,
+    address: '789 Pine Rd, Austin, TX 73301',
+    dateOfBirth: '2012-03-15', // 13 years old
+    tags: [],
+    recordStatus: 'active',
+    household: {
+      name: 'Collingwood Family',
+      verified: true
+    },
+    // No assignedTo - dependent/minor
+    engagement: {
+      level: 'cool',
+      visits: 7,
+      lastVisit: '20/12/2025',
+      activityHistory: [
+        { month: '2025-02', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-03', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }] },
+        { month: '2025-04', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-05', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-06', weeks: [{ activities: [] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }] },
+        { month: '2025-07', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }] },
+        { month: '2025-08', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-09', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-10', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-11', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-12', weeks: [{ activities: [] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }] },
+        { month: '2026-01', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] }
+      ]
+    },
+    giving: {
+      lifetimeValue: 0,
+      donations: 0,
+      revenue: 0,
+      giftCount: 0,
+      lastDonation: null
+    },
+    // No separate membership - she's a dependent on Anderson's
+    createdDate: '2024-01-15',
+    source: 'manual'
   }
 ]
 
@@ -1453,4 +1553,600 @@ export const deleteTag = (tagId) => {
 // Get count of patrons using a specific tag
 export const getTagUsageCount = (tagId) => {
   return patrons.filter(p => p.tags && p.tags.includes(tagId)).length
+}
+
+// ============================================
+// MEMBERSHIP MODEL - SEPARATE ENTITIES
+// ============================================
+
+// Tier beneficiary limits
+export const tierLimits = {
+  'Basic': 1,
+  'Silver': 2,
+  'Gold': 4,
+  'Platinum': Infinity
+}
+
+// Memberships as first-class entities
+export const memberships = [
+  {
+    id: 'mem-anderson-gold',
+    programme: 'General Membership',
+    tier: 'Gold',
+    status: 'active',
+    
+    // Date tracking
+    startDate: '2023-12-02',
+    renewalDate: '2026-12-02',
+    expirationDate: '2026-12-02',
+    
+    // MembershipOverview required properties
+    membershipId: 'MEM-2023-001',  // For QR code display
+    periodStart: '02/12/2025',     // DD/MM/YYYY format for progress bar
+    validUntil: '02/12/2026',      // DD/MM/YYYY format for progress bar
+    daysToRenewal: 300,            // For churn risk calculation
+    
+    // Auto-renewal
+    autoRenew: true,
+    autoRenewal: true,  // Alias for MembershipOverview compatibility
+    paymentMethod: { type: 'visa', last4: '4242' },
+    memberYears: 2,
+    
+    // Card styling
+    cardStyle: {
+      backgroundColor: '#1a5a5a',
+      textColor: '#ffffff',
+      accentColor: '#ffeb3b'
+    },
+    
+    // Usage analytics
+    usageAnalytics: {
+      overallPercentage: 67,
+      categories: [
+        { name: 'Admissions', used: 47, available: 'unlimited', percentage: 100 },
+        { name: 'Guest Passes', used: 3, available: 5, percentage: 60 },
+        { name: 'F&B Discounts', used: 12, available: 'unlimited', percentage: 100 },
+        { name: 'Event Discounts', used: 2, available: 'unlimited', percentage: 100 }
+      ],
+      unusedBenefits: ['Welcome pack', 'Priority entry'],
+      mostUsed: 'Admissions'
+    },
+    
+    // Upgrade options
+    upgradeEligible: true,
+    upgradeTier: 'Platinum',
+    upgradeComparison: {
+      currentTier: 'Gold',
+      upgradeTier: 'Platinum',
+      upgradePrice: 249.99,
+      priceDifference: 104.00,
+      improvements: [
+        { feature: 'Guest passes', current: '5/year', upgrade: 'Unlimited' },
+        { feature: 'F&B Discount', current: '10%', upgrade: '25%' },
+        { feature: 'Parking', current: 'Not included', upgrade: 'Free valet' },
+        { feature: 'Event discounts', current: '20%', upgrade: '35%' }
+      ],
+      newPerks: [
+        'Exclusive member lounge access',
+        'Complimentary coat check',
+        'Early access to all events',
+        'Personal concierge service'
+      ]
+    },
+    
+    // Benefits with usage tracking
+    benefits: [
+      { category: 'access', title: 'Unlimited visits', description: 'to all exhibits', usage: { used: 47, limit: null, resetDate: null }, icon: 'fa-ticket' },
+      { category: 'access', title: 'Priority entry', description: 'skip the line', usage: null, icon: 'fa-forward' },
+      { category: 'discount', title: 'Bring a friend for free', description: 'every visit', usage: { used: 3, limit: 5, resetDate: '12/02/2026' }, icon: 'fa-user-plus' },
+      { category: 'discount', title: '20% off special events', description: "your ticket and friend's ticket", usage: null, icon: 'fa-percent' },
+      { category: 'discount', title: '10% F&B discount', description: 'at all venue restaurants', usage: { used: 12, limit: null, resetDate: null }, icon: 'fa-utensils' },
+      { category: 'complimentary', title: 'Welcome pack', description: 'Paradox tote + exclusive goodies', usage: { used: 1, limit: 1, resetDate: null }, icon: 'fa-gift' }
+    ],
+    
+    // Member events
+    memberEvents: {
+      earlyAccess: [
+        { id: 1, name: 'Halloween Night Special', date: '2026-10-31', memberAccess: '2026-10-15', publicAccess: '2026-10-22', status: 'upcoming', image: 'https://images.unsplash.com/photo-1509557965875-b88c97052f0e?w=100&h=60&fit=crop' },
+        { id: 3, name: 'Spring Gala 2026', date: '2026-04-20', memberAccess: '2026-03-01', publicAccess: '2026-03-15', status: 'unlocked', image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=100&h=60&fit=crop' },
+        { id: 4, name: 'Summer Concert Series', date: '2026-07-04', memberAccess: '2026-06-01', publicAccess: '2026-06-15', status: 'upcoming', image: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=100&h=60&fit=crop' }
+      ],
+      memberOnly: [
+        { id: 2, name: 'VIP Wine Tasting Evening', date: '2026-03-15', image: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=100&h=60&fit=crop', exclusive: true },
+        { id: 5, name: 'Members Evening: Behind the Scenes', date: '2026-02-28', image: 'https://images.unsplash.com/photo-1518998053901-5348d3961a04?w=100&h=60&fit=crop', exclusive: true },
+        { id: 6, name: 'Curator Talk: Modern Art', date: '2026-03-22', image: 'https://images.unsplash.com/photo-1577083288073-40892c0860a4?w=100&h=60&fit=crop', exclusive: true }
+      ]
+    },
+    
+    // Membership history
+    membershipHistory: [
+      { date: '2023-12-02', event: 'Joined', tier: 'Silver', programme: 'General Membership' },
+      { date: '2024-06-15', event: 'Upgraded', tier: 'Gold', programme: 'General Membership' },
+      { date: '2024-12-02', event: 'Renewed', tier: 'Gold', programme: 'General Membership' },
+      { date: '2025-12-02', event: 'Renewed', tier: 'Gold', programme: 'General Membership' }
+    ],
+    
+    // Legacy alias for history
+    history: [
+      { date: '2023-12-02', event: 'Joined', tier: 'Silver', programme: 'General Membership' },
+      { date: '2024-06-15', event: 'Upgraded', tier: 'Gold', programme: 'General Membership' },
+      { date: '2024-12-02', event: 'Renewed', tier: 'Gold', programme: 'General Membership' },
+      { date: '2025-12-02', event: 'Renewed', tier: 'Gold', programme: 'General Membership' }
+    ]
+  }
+]
+
+// Membership beneficiaries (join table)
+export const membershipBeneficiaries = [
+  {
+    id: 'mb-1',
+    membershipId: 'mem-anderson-gold',
+    patronId: 'anderson-collingwood',
+    role: 'primary',
+    roleLabel: 'Primary',
+    canManage: true,
+    addedDate: '2023-12-02',
+    removedDate: null,
+    status: 'active'
+  },
+  {
+    id: 'mb-2',
+    membershipId: 'mem-anderson-gold',
+    patronId: 'sarah-collingwood',
+    role: 'beneficiary',
+    roleLabel: 'Spouse',
+    canManage: false,
+    addedDate: '2023-12-02',
+    removedDate: null,
+    status: 'active'
+  },
+  {
+    id: 'mb-3',
+    membershipId: 'mem-anderson-gold',
+    patronId: 'emma-collingwood',
+    role: 'dependent',
+    roleLabel: 'Child',
+    canManage: false,
+    addedDate: '2024-01-15',
+    removedDate: null,
+    status: 'active'
+  }
+]
+
+// Membership usage tracking (per beneficiary)
+export const membershipUsage = [
+  // Anderson's usage
+  { id: 'usage-1', membershipId: 'mem-anderson-gold', patronId: 'anderson-collingwood', benefitType: 'admission', quantity: 12 },
+  { id: 'usage-2', membershipId: 'mem-anderson-gold', patronId: 'anderson-collingwood', benefitType: 'guest_pass', quantity: 1 },
+  { id: 'usage-3', membershipId: 'mem-anderson-gold', patronId: 'anderson-collingwood', benefitType: 'fb_discount', quantity: 4 },
+  // Sarah's usage
+  { id: 'usage-4', membershipId: 'mem-anderson-gold', patronId: 'sarah-collingwood', benefitType: 'admission', quantity: 28 },
+  { id: 'usage-5', membershipId: 'mem-anderson-gold', patronId: 'sarah-collingwood', benefitType: 'guest_pass', quantity: 2 },
+  { id: 'usage-6', membershipId: 'mem-anderson-gold', patronId: 'sarah-collingwood', benefitType: 'fb_discount', quantity: 8 },
+  // Emma's usage
+  { id: 'usage-7', membershipId: 'mem-anderson-gold', patronId: 'emma-collingwood', benefitType: 'admission', quantity: 7 },
+  { id: 'usage-8', membershipId: 'mem-anderson-gold', patronId: 'emma-collingwood', benefitType: 'guest_pass', quantity: 0 },
+  { id: 'usage-9', membershipId: 'mem-anderson-gold', patronId: 'emma-collingwood', benefitType: 'fb_discount', quantity: 0 },
+]
+
+// Relationships (CRM connections between patrons)
+export const patronRelationships = [
+  // Anderson's relationships
+  {
+    id: 'rel-1',
+    fromPatronId: 'anderson-collingwood',
+    toPatronId: 'sarah-collingwood',
+    type: 'household',
+    role: 'Spouse',
+    reciprocalRole: 'Spouse',
+    isPrimary: true,
+    startDate: null,
+    endDate: null,
+    notes: null
+  },
+  {
+    id: 'rel-2',
+    fromPatronId: 'anderson-collingwood',
+    toPatronId: 'emma-collingwood',
+    type: 'household',
+    role: 'Daughter',
+    reciprocalRole: 'Father',
+    isPrimary: false,
+    startDate: null,
+    endDate: null,
+    notes: null
+  },
+  // Sarah's reverse relationships (auto-created)
+  {
+    id: 'rel-3',
+    fromPatronId: 'sarah-collingwood',
+    toPatronId: 'anderson-collingwood',
+    type: 'household',
+    role: 'Spouse',
+    reciprocalRole: 'Spouse',
+    isPrimary: true,
+    startDate: null,
+    endDate: null,
+    notes: null
+  },
+  {
+    id: 'rel-4',
+    fromPatronId: 'sarah-collingwood',
+    toPatronId: 'emma-collingwood',
+    type: 'household',
+    role: 'Daughter',
+    reciprocalRole: 'Mother',
+    isPrimary: false,
+    startDate: null,
+    endDate: null,
+    notes: null
+  },
+  // Emma's reverse relationships
+  {
+    id: 'rel-5',
+    fromPatronId: 'emma-collingwood',
+    toPatronId: 'anderson-collingwood',
+    type: 'household',
+    role: 'Father',
+    reciprocalRole: 'Daughter',
+    isPrimary: true,
+    startDate: null,
+    endDate: null,
+    notes: null
+  },
+  {
+    id: 'rel-6',
+    fromPatronId: 'emma-collingwood',
+    toPatronId: 'sarah-collingwood',
+    type: 'household',
+    role: 'Mother',
+    reciprocalRole: 'Daughter',
+    isPrimary: false,
+    startDate: null,
+    endDate: null,
+    notes: null
+  },
+  // Anderson's professional relationships
+  {
+    id: 'rel-7',
+    fromPatronId: 'anderson-collingwood',
+    toPatronId: null, // External contact (not in system as patron yet)
+    type: 'professional',
+    role: 'Financial Advisor',
+    reciprocalRole: 'Client',
+    isPrimary: false,
+    startDate: null,
+    endDate: null,
+    notes: 'Robert Chen - handles estate planning',
+    externalContact: { name: 'Robert Chen', company: 'Collingwood Wealth Management', initials: 'RC' }
+  }
+]
+
+// ============================================
+// MEMBERSHIP HELPER FUNCTIONS
+// ============================================
+
+// Get all memberships for a patron (where they are primary or beneficiary)
+export const getMembershipsByPatronId = (patronId) => {
+  if (!patronId) return []
+  
+  const beneficiaryLinks = membershipBeneficiaries.filter(
+    mb => mb.patronId === patronId && mb.status === 'active'
+  )
+  
+  return beneficiaryLinks
+    .map(link => {
+      const membership = memberships.find(m => m.id === link.membershipId)
+      if (!membership) return null
+      return {
+        ...membership,
+        patronId: patronId,  // Add patron ID for QR code in MembershipOverview
+        patronRole: link.role,
+        patronRoleLabel: link.roleLabel,
+        canManage: link.canManage,
+        addedDate: link.addedDate
+      }
+    })
+    .filter(Boolean) // Remove any null entries
+}
+
+// Get all beneficiaries for a membership (with full patron data)
+export const getBeneficiariesByMembershipId = (membershipId) => {
+  const links = membershipBeneficiaries.filter(
+    mb => mb.membershipId === membershipId && mb.status === 'active'
+  )
+  
+  return links.map(link => {
+    const patron = patrons.find(p => p.id === link.patronId)
+    return {
+      ...link,
+      patron: patron ? {
+        id: patron.id,
+        firstName: patron.firstName,
+        lastName: patron.lastName,
+        name: `${patron.firstName} ${patron.lastName}`,
+        email: patron.email,
+        photo: patron.photo,
+        dateOfBirth: patron.dateOfBirth
+      } : null
+    }
+  })
+}
+
+// Get a patron's role on a specific membership
+export const getPatronMembershipRole = (patronId, membershipId) => {
+  const link = membershipBeneficiaries.find(
+    mb => mb.patronId === patronId && mb.membershipId === membershipId && mb.status === 'active'
+  )
+  return link ? link.role : null
+}
+
+// Check if patron is primary on a membership
+export const isPatronPrimaryOnMembership = (patronId, membershipId) => {
+  return getPatronMembershipRole(patronId, membershipId) === 'primary'
+}
+
+// Get primary patron for a membership
+export const getPrimaryPatronForMembership = (membershipId) => {
+  const primaryLink = membershipBeneficiaries.find(
+    mb => mb.membershipId === membershipId && mb.role === 'primary' && mb.status === 'active'
+  )
+  if (!primaryLink) return null
+  
+  const patron = patrons.find(p => p.id === primaryLink.patronId)
+  return patron ? {
+    id: patron.id,
+    firstName: patron.firstName,
+    lastName: patron.lastName,
+    name: `${patron.firstName} ${patron.lastName}`,
+    email: patron.email,
+    photo: patron.photo
+  } : null
+}
+
+// Get beneficiary slot info for a membership
+export const getMembershipSlotInfo = (membershipId) => {
+  const membership = memberships.find(m => m.id === membershipId)
+  if (!membership) return null
+  
+  const activeBeneficiaries = membershipBeneficiaries.filter(
+    mb => mb.membershipId === membershipId && mb.status === 'active'
+  )
+  
+  const limit = tierLimits[membership.tier] || 1
+  
+  return {
+    used: activeBeneficiaries.length,
+    limit: limit === Infinity ? 'unlimited' : limit,
+    available: limit === Infinity ? Infinity : limit - activeBeneficiaries.length,
+    canAdd: limit === Infinity || activeBeneficiaries.length < limit
+  }
+}
+
+// Get usage breakdown by patron for a membership
+export const getMembershipUsageByPatron = (membershipId) => {
+  const usage = membershipUsage.filter(u => u.membershipId === membershipId)
+  const beneficiaries = getBeneficiariesByMembershipId(membershipId)
+  
+  const breakdown = {}
+  beneficiaries.forEach(b => {
+    const patronUsage = usage.filter(u => u.patronId === b.patronId)
+    breakdown[b.patronId] = {
+      patron: b.patron,
+      role: b.roleLabel,
+      usage: patronUsage.reduce((acc, u) => {
+        acc[u.benefitType] = (acc[u.benefitType] || 0) + u.quantity
+        return acc
+      }, {})
+    }
+  })
+  
+  return breakdown
+}
+
+// Add a beneficiary to a membership
+export const addBeneficiaryToMembership = (membershipId, patronId, roleLabel, createRelationship = false) => {
+  const slotInfo = getMembershipSlotInfo(membershipId)
+  if (!slotInfo.canAdd) {
+    return { success: false, error: 'Membership has reached beneficiary limit' }
+  }
+  
+  // Check if patron is already on this membership
+  const existing = membershipBeneficiaries.find(
+    mb => mb.membershipId === membershipId && mb.patronId === patronId && mb.status === 'active'
+  )
+  if (existing) {
+    return { success: false, error: 'Patron is already a beneficiary on this membership' }
+  }
+  
+  const newBeneficiary = {
+    id: `mb-${Date.now()}`,
+    membershipId,
+    patronId,
+    role: 'beneficiary',
+    roleLabel,
+    canManage: false,
+    addedDate: new Date().toISOString().split('T')[0],
+    removedDate: null,
+    status: 'active'
+  }
+  
+  membershipBeneficiaries.push(newBeneficiary)
+  
+  // Optionally create household relationship
+  if (createRelationship) {
+    const primary = getPrimaryPatronForMembership(membershipId)
+    if (primary && primary.id !== patronId) {
+      addPatronRelationship(primary.id, patronId, 'household', roleLabel)
+    }
+  }
+  
+  return { success: true, beneficiary: newBeneficiary }
+}
+
+// Remove a beneficiary from a membership (soft delete)
+export const removeBeneficiaryFromMembership = (membershipId, patronId, removeRelationship = false) => {
+  const link = membershipBeneficiaries.find(
+    mb => mb.membershipId === membershipId && mb.patronId === patronId && mb.status === 'active'
+  )
+  
+  if (!link) {
+    return { success: false, error: 'Beneficiary not found on this membership' }
+  }
+  
+  if (link.role === 'primary') {
+    return { success: false, error: 'Cannot remove primary account holder' }
+  }
+  
+  link.status = 'removed'
+  link.removedDate = new Date().toISOString().split('T')[0]
+  
+  // Optionally end the relationship
+  if (removeRelationship) {
+    const primary = getPrimaryPatronForMembership(membershipId)
+    if (primary) {
+      endPatronRelationship(primary.id, patronId)
+    }
+  }
+  
+  return { success: true }
+}
+
+// ============================================
+// RELATIONSHIP HELPER FUNCTIONS
+// ============================================
+
+// Get relationships for a patron
+export const getPatronRelationships = (patronId) => {
+  if (!patronId) return []
+  
+  return patronRelationships.filter(
+    r => r.fromPatronId === patronId && !r.endDate
+  ).map(rel => {
+    // Get linked patron data if it exists
+    let linkedPatron = null
+    if (rel.toPatronId) {
+      const patron = patrons.find(p => p.id === rel.toPatronId)
+      if (patron) {
+        linkedPatron = {
+          id: patron.id,
+          firstName: patron.firstName,
+          lastName: patron.lastName,
+          name: `${patron.firstName} ${patron.lastName}`,
+          email: patron.email,
+          photo: patron.photo
+        }
+      }
+    }
+    
+    return {
+      ...rel,
+      linkedPatron,
+      displayName: linkedPatron ? linkedPatron.name : rel.externalContact?.name || 'Unknown',
+      initials: linkedPatron 
+        ? `${linkedPatron.firstName[0]}${linkedPatron.lastName[0]}`
+        : rel.externalContact?.initials || '??'
+    }
+  })
+}
+
+// Add a relationship between patrons
+export const addPatronRelationship = (fromPatronId, toPatronId, type, role, reciprocalRole = null) => {
+  // Determine reciprocal role based on role if not provided
+  const reciprocal = reciprocalRole || getReciprocalRole(role)
+  
+  // Create relationship from -> to
+  const rel1 = {
+    id: `rel-${Date.now()}-1`,
+    fromPatronId,
+    toPatronId,
+    type,
+    role,
+    reciprocalRole: reciprocal,
+    isPrimary: false,
+    startDate: new Date().toISOString().split('T')[0],
+    endDate: null,
+    notes: null
+  }
+  patronRelationships.push(rel1)
+  
+  // Create reciprocal relationship to -> from
+  const rel2 = {
+    id: `rel-${Date.now()}-2`,
+    fromPatronId: toPatronId,
+    toPatronId: fromPatronId,
+    type,
+    role: reciprocal,
+    reciprocalRole: role,
+    isPrimary: false,
+    startDate: new Date().toISOString().split('T')[0],
+    endDate: null,
+    notes: null
+  }
+  patronRelationships.push(rel2)
+  
+  return { rel1, rel2 }
+}
+
+// End a relationship (soft delete)
+export const endPatronRelationship = (fromPatronId, toPatronId) => {
+  const today = new Date().toISOString().split('T')[0]
+  
+  // End both directions
+  patronRelationships.forEach(rel => {
+    if (
+      (rel.fromPatronId === fromPatronId && rel.toPatronId === toPatronId) ||
+      (rel.fromPatronId === toPatronId && rel.toPatronId === fromPatronId)
+    ) {
+      rel.endDate = today
+    }
+  })
+}
+
+// Get reciprocal role
+const getReciprocalRole = (role) => {
+  const reciprocals = {
+    'Spouse': 'Spouse',
+    'Partner': 'Partner',
+    'Child': 'Parent',
+    'Parent': 'Child',
+    'Daughter': 'Parent',
+    'Son': 'Parent',
+    'Father': 'Child',
+    'Mother': 'Child',
+    'Sibling': 'Sibling',
+    'Friend': 'Friend',
+    'Colleague': 'Colleague',
+    'Financial Advisor': 'Client',
+    'Client': 'Financial Advisor'
+  }
+  return reciprocals[role] || role
+}
+
+// Search patrons by name or email (for add beneficiary modal)
+export const searchPatrons = (query, excludeIds = []) => {
+  if (!query || query.length < 2) return []
+  
+  const lowerQuery = query.toLowerCase()
+  
+  return patrons
+    .filter(p => {
+      if (excludeIds.includes(p.id)) return false
+      if (p.status === 'archived') return false
+      
+      const fullName = `${p.firstName} ${p.lastName}`.toLowerCase()
+      const email = (p.email || '').toLowerCase()
+      
+      return fullName.includes(lowerQuery) || email.includes(lowerQuery)
+    })
+    .slice(0, 10)
+    .map(p => ({
+      id: p.id,
+      firstName: p.firstName,
+      lastName: p.lastName,
+      name: `${p.firstName} ${p.lastName}`,
+      email: p.email,
+      photo: p.photo,
+      hasMembership: getMembershipsByPatronId(p.id).length > 0
+    }))
 }

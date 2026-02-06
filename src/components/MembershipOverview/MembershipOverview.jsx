@@ -19,6 +19,9 @@ const paymentIcons = {
 }
 
 function MembershipOverview({ membership, patronName, patronEmail }) {
+  // IMPORTANT: All hooks must be called before any early returns (Rules of Hooks)
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false)
+  
   // Guard for incomplete membership data
   if (!membership?.programme || !membership?.benefits) {
     return (
@@ -36,8 +39,6 @@ function MembershipOverview({ membership, patronName, patronEmail }) {
       </div>
     )
   }
-
-  const [showUpgradeModal, setShowUpgradeModal] = useState(false)
   const qrValue = `${membership.patronId}-${membership.membershipId}`
   
   // Churn risk calculation

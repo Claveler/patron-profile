@@ -64,6 +64,7 @@ function App() {
             patronId={selectedPatronId} 
             onBack={handleBackToList}
             onSelectOpportunity={handleSelectOpportunity}
+            onSelectPatron={handleSelectPatron}
           />
         )
       case 'opportunities':

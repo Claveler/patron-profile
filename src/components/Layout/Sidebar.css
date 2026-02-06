@@ -27,42 +27,48 @@
 .sidebar__menu {
   list-style: none;
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
 }
 
 .sidebar__item {
-  margin-bottom: var(--space-1);
+  /* No margin - gap handles spacing */
 }
 
 .sidebar__link {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-2) var(--space-3);
-  color: var(--color-text-inverse);
-  opacity: 0.8;
+  gap: 0.25rem;
+  height: 2.5rem;
+  padding: 0.75rem;
+  color: #ffffff;
   text-decoration: none;
-  border-radius: var(--radius-md);
-  font-size: var(--font-size-base);
-  font-weight: var(--font-weight-medium);
-  transition: all var(--transition-fast);
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5rem;
+  transition: background-color 0.3s ease-in-out;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .sidebar__link:hover {
-  opacity: 1;
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: #000405;
   text-decoration: none;
 }
 
 .sidebar__link--expanded {
-  opacity: 1;
+  /* Keep same styling when expanded */
 }
 
 .sidebar__icon {
   width: 20px;
-  font-size: var(--font-size-md);
+  font-size: 1rem;
   text-align: center;
   flex-shrink: 0;
+  color: #f2f3f3;
 }
 
 .sidebar__label {
@@ -79,36 +85,44 @@
 /* Submenu */
 .sidebar__submenu {
   list-style: none;
-  padding-left: calc(20px + var(--space-3) + var(--space-3));
-  margin-top: var(--space-1);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-block: 0.25rem;
+  padding-block-end: 0.25rem;
+  padding-inline-start: 1.5rem;
+  border-bottom: 1px dashed #536b75;
 }
 
 .sidebar__subitem {
-  margin-bottom: var(--space-1);
+  /* No margin - gap handles spacing */
 }
 
 .sidebar__sublink {
-  display: block;
-  padding: var(--space-2) var(--space-3);
-  color: var(--color-text-inverse);
-  opacity: 0.7;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  height: 2.5rem;
+  padding: 0.75rem;
+  color: #ffffff;
   text-decoration: none;
-  border-radius: var(--radius-md);
-  font-size: var(--font-size-base);
-  transition: all var(--transition-fast);
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5rem;
+  transition: background-color 0.3s ease-in-out;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .sidebar__sublink:hover {
-  opacity: 1;
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: #000405;
   text-decoration: none;
 }
 
 .sidebar__sublink--active {
-  opacity: 1;
   background-color: #2C4751;
-  color: var(--color-white);
-  font-weight: var(--font-weight-semibold);
+  color: #ffffff;
 }
 
 .sidebar__sublink--active:hover {

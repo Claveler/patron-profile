@@ -52,8 +52,16 @@
   transition: background-color var(--transition-fast);
 }
 
+.relationships-summary__item--clickable {
+  cursor: pointer;
+}
+
 .relationships-summary__item:hover {
-  background-color: var(--color-surface);
+  background-color: var(--color-neutral-50);
+}
+
+.relationships-summary__item--clickable:hover {
+  background-color: var(--color-primary-50);
 }
 
 .relationships-summary__avatar {
@@ -134,4 +142,23 @@
   color: var(--color-primary);
   border-color: var(--color-primary);
   background-color: var(--color-primary-100);
+}
+
+/* External contact indicator */
+.relationships-summary__external {
+  color: var(--color-text-muted);
+  padding: var(--space-1);
+  font-size: var(--font-size-xs);
+}
+
+/* Empty state */
+.relationships-summary__empty {
+  padding: var(--space-4);
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.relationships-summary__empty p {
+  margin: 0;
 }

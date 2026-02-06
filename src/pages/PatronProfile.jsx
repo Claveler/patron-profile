@@ -8,7 +8,9 @@ import OpportunityModal from '../components/OpportunityModal/OpportunityModal'
 import GiftModal from '../components/GiftModal/GiftModal'
 import ActivityModal from '../components/ActivityModal/ActivityModal'
 import AssignPortfolioModal from '../components/AssignPortfolioModal/AssignPortfolioModal'
-import { getPatronById, isManagedProspect, archivePatron, restorePatron, updatePatronTags } from '../data/patrons'
+import AddBeneficiaryModal from '../components/AddBeneficiaryModal/AddBeneficiaryModal'
+import RemoveBeneficiaryModal from '../components/RemoveBeneficiaryModal/RemoveBeneficiaryModal'
+import { getPatronById, isManagedProspect, archivePatron, restorePatron, updatePatronTags, getMembershipsByPatronId, getPrimaryPatronForMembership } from '../data/patrons'
 import './PatronProfile.css'
 
 const tabs = [
@@ -503,7 +505,7 @@ const defaultPatronData = {
   }
 }
 
-function PatronProfile({ patronId, onBack, onSelectOpportunity }) {
+function PatronProfile({ patronId, onBack, onSelectOpportunity, onSelectPatron }) {
   const [activeTab, setActiveTab] = useState('summary')
   
   // Modal states (managed at profile level for access from InfoBox and tabs)
@@ -511,6 +513,9 @@ function PatronProfile({ patronId, onBack, onSelectOpportunity }) {
   const [showGiftModal, setShowGiftModal] = useState(false)
   const [showActivityModal, setShowActivityModal] = useState(false)
   const [showAssignModal, setShowAssignModal] = useState(false)
+  const [showAddBeneficiaryModal, setShowAddBeneficiaryModal] = useState(false)
+  const [showRemoveBeneficiaryModal, setShowRemoveBeneficiaryModal] = useState(false)
+  const [beneficiaryToRemove, setBeneficiaryToRemove] = useState(null)
 
   // Get patron data from store, fallback to default if not found
   const patronData = useMemo(() => {
@@ -526,6 +531,20 @@ function PatronProfile({ patronId, onBack, onSelectOpportunity }) {
   const isManaged = isManagedProspect(patronData)
   
   const patronFullName = `${patronData.firstName} ${patronData.lastName}`
+
+  // Get membership data for beneficiary modals
+  const membershipData = useMemo(() => {
+    const memberships = getMembershipsByPatronId(patronData.id)
+    if (memberships.length > 0) {
+      const membership = memberships[0]
+      const primaryPatron = getPrimaryPatronForMembership(membership.id)
+      return {
+        membershipId: membership.id,
+        primaryPatronName: primaryPatron ? primaryPatron.name : patronFullName
+      }
+    }
+    return null
+  }, [patronData.id, patronFullName])
 
   // Modal handlers
   const handleCreateOpportunity = () => setShowOpportunityModal(true)
@@ -576,6 +595,20 @@ function PatronProfile({ patronId, onBack, onSelectOpportunity }) {
     window.location.reload() // Simple approach for demo
   }
 
+  // Beneficiary management handlers
+  const handleAddBeneficiary = () => setShowAddBeneficiaryModal(true)
+
+  const handleRemoveBeneficiary = (beneficiary) => {
+    setBeneficiaryToRemove(beneficiary)
+    setShowRemoveBeneficiaryModal(true)
+  }
+
+  const handleBeneficiarySuccess = () => {
+    console.log('Beneficiary updated')
+    // Force re-render to show updated beneficiaries
+    window.location.reload() // Simple approach for demo
+  }
+
   const renderTabContent = () => {
     switch (activeTab) {
       case 'summary':
@@ -586,10 +619,21 @@ function PatronProfile({ patronId, onBack, onSelectOpportunity }) {
             onCreateOpportunity={handleCreateOpportunity}
             onRecordGift={handleRecordGift}
             onLogActivity={handleLogActivity}
+            onNavigateToPatron={onSelectPatron}
           />
         )
       case 'memberships':
-        return <MembershipsTab membership={patronData.membership} patronName={patronFullName} patronEmail={patronData.email} />
+        return (
+          <MembershipsTab 
+            membership={patronData.membership}
+            patronId={patronData.id}
+            patronName={patronFullName} 
+            patronEmail={patronData.email}
+            onNavigateToPatron={onSelectPatron}
+            onAddBeneficiary={handleAddBeneficiary}
+            onRemoveBeneficiary={handleRemoveBeneficiary}
+          />
+        )
       case 'profile':
         return <div className="coming-soon">Profile tab coming soon...</div>
       case 'timeline':
@@ -605,6 +649,7 @@ function PatronProfile({ patronId, onBack, onSelectOpportunity }) {
             onCreateOpportunity={handleCreateOpportunity}
             onRecordGift={handleRecordGift}
             onLogActivity={handleLogActivity}
+            onNavigateToPatron={onSelectPatron}
           />
         )
     }
@@ -710,6 +755,29 @@ function PatronProfile({ patronId, onBack, onSelectOpportunity }) {
         patronId={patronData.id}
         patronName={patronFullName}
       />
+
+      {membershipData && (
+        <>
+          <AddBeneficiaryModal
+            isOpen={showAddBeneficiaryModal}
+            onClose={() => setShowAddBeneficiaryModal(false)}
+            membershipId={membershipData.membershipId}
+            primaryPatronName={membershipData.primaryPatronName}
+            onSuccess={handleBeneficiarySuccess}
+          />
+
+          <RemoveBeneficiaryModal
+            isOpen={showRemoveBeneficiaryModal}
+            onClose={() => {
+              setShowRemoveBeneficiaryModal(false)
+              setBeneficiaryToRemove(null)
+            }}
+            membershipId={membershipData.membershipId}
+            beneficiary={beneficiaryToRemove}
+            onSuccess={handleBeneficiarySuccess}
+          />
+        </>
+      )}
     </div>
   )
 }

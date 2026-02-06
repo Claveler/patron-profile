@@ -13,7 +13,8 @@ function SummaryTab({
   onSelectOpportunity, 
   onCreateOpportunity,
   onRecordGift,
-  onLogActivity
+  onLogActivity,
+  onNavigateToPatron
 }) {
   const isManaged = isManagedProspect(patron)
 
@@ -42,7 +43,10 @@ function SummaryTab({
           <EngagementPanel engagement={patron.engagement} />
           <WealthInsights insights={patron.wealthInsights} />
           <SmartTips />
-          <RelationshipsSummary />
+          <RelationshipsSummary 
+            patronId={patron.id}
+            onNavigateToPatron={onNavigateToPatron}
+          />
         </div>
       </div>
     </div>

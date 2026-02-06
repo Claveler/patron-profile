@@ -1,41 +1,10 @@
+import { getPatronRelationships } from '../../data/patrons'
 import './RelationshipsSummary.css'
 
-const relationships = [
-  {
-    id: 1,
-    name: 'Michael Johnson',
-    role: 'Spouse',
-    type: 'household',
-    avatar: null,
-    initials: 'MJ'
-  },
-  {
-    id: 2,
-    name: 'Emily Johnson',
-    role: 'Daughter',
-    type: 'household',
-    avatar: null,
-    initials: 'EJ'
-  },
-  {
-    id: 3,
-    name: 'Robert Chen',
-    role: 'Financial Advisor',
-    type: 'professional',
-    avatar: null,
-    initials: 'RC'
-  },
-  {
-    id: 4,
-    name: 'Johnson Family Foundation',
-    role: 'DAF Account',
-    type: 'organization',
-    avatar: null,
-    initials: 'JF'
-  }
-]
-
-function RelationshipsSummary() {
+function RelationshipsSummary({ patronId, onNavigateToPatron }) {
+  // Get relationships from data layer
+  const relationships = getPatronRelationships(patronId)
+  
   const getTypeColor = (type) => {
     switch (type) {
       case 'household':
@@ -47,6 +16,30 @@ function RelationshipsSummary() {
       default:
         return 'var(--color-text-muted)'
     }
+  }
+
+  const handleRelationshipClick = (relationship) => {
+    // If linked patron exists and callback is provided, navigate to their profile
+    if (relationship.linkedPatron && onNavigateToPatron) {
+      onNavigateToPatron(relationship.linkedPatron.id)
+    }
+  }
+
+  if (relationships.length === 0) {
+    return (
+      <div className="relationships-summary">
+        <div className="relationships-summary__header">
+          <h4 className="relationships-summary__title">Relationships</h4>
+        </div>
+        <div className="relationships-summary__empty">
+          <p>No relationships recorded yet.</p>
+        </div>
+        <button className="relationships-summary__add">
+          <i className="fa-solid fa-plus"></i>
+          Add Relationship
+        </button>
+      </div>
+    )
   }
 
   return (
@@ -61,24 +54,35 @@ function RelationshipsSummary() {
 
       <div className="relationships-summary__list">
         {relationships.map((relationship) => (
-          <div key={relationship.id} className="relationships-summary__item">
+          <div 
+            key={relationship.id} 
+            className={`relationships-summary__item ${relationship.linkedPatron ? 'relationships-summary__item--clickable' : ''}`}
+            onClick={() => handleRelationshipClick(relationship)}
+          >
             <div 
               className="relationships-summary__avatar"
               style={{ '--avatar-color': getTypeColor(relationship.type) }}
             >
-              {relationship.avatar ? (
-                <img src={relationship.avatar} alt={relationship.name} />
+              {relationship.linkedPatron?.photo ? (
+                <img src={relationship.linkedPatron.photo} alt={relationship.displayName} />
               ) : (
                 <span>{relationship.initials}</span>
               )}
             </div>
             <div className="relationships-summary__info">
-              <span className="relationships-summary__name">{relationship.name}</span>
+              <span className="relationships-summary__name">{relationship.displayName}</span>
               <span className="relationships-summary__role">{relationship.role}</span>
             </div>
-            <button className="relationships-summary__action" title="View profile">
-              <i className="fa-solid fa-chevron-right"></i>
-            </button>
+            {relationship.linkedPatron && (
+              <button className="relationships-summary__action" title="View profile">
+                <i className="fa-solid fa-chevron-right"></i>
+              </button>
+            )}
+            {!relationship.linkedPatron && relationship.externalContact && (
+              <span className="relationships-summary__external" title="External contact">
+                <i className="fa-solid fa-arrow-up-right-from-square"></i>
+              </span>
+            )}
           </div>
         ))}
       </div>
