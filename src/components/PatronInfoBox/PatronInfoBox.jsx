@@ -16,8 +16,11 @@ const formatCurrency = (amount) => {
   }).format(amount)
 }
 
-function PatronInfoBox({ patron, isManaged, onCreateOpportunity, onAddActivity }) {
+function PatronInfoBox({ patron, isManaged, onCreateOpportunity, onAddActivity, onArchive, onRestore }) {
   const [actionsOpen, setActionsOpen] = useState(false)
+
+  // Check if patron is archived
+  const isArchived = patron.status === 'archived'
 
   // Get opportunity summary for managed prospects
   const openOpportunities = isManaged ? getOpenOpportunitiesForPatron(patron.id) : []
@@ -37,8 +40,32 @@ function PatronInfoBox({ patron, isManaged, onCreateOpportunity, onAddActivity }
     }
   }
 
+  const handleArchive = () => {
+    setActionsOpen(false)
+    if (onArchive && window.confirm(`Are you sure you want to archive ${patron.firstName} ${patron.lastName}? They will be hidden from the patrons list but can be restored later.`)) {
+      onArchive()
+    }
+  }
+
+  const handleRestore = () => {
+    setActionsOpen(false)
+    if (onRestore) {
+      onRestore()
+    }
+  }
+
   return (
-    <div className="patron-info-box">
+    <div className={`patron-info-box ${isArchived ? 'patron-info-box--archived' : ''}`}>
+      {/* Archived Banner */}
+      {isArchived && (
+        <div className="patron-info-box__archived-banner">
+          <i className="fa-solid fa-box-archive"></i>
+          <span>This patron is archived</span>
+          <button className="patron-info-box__restore-btn" onClick={handleRestore}>
+            Restore
+          </button>
+        </div>
+      )}
       {/* Photo and Basic Info */}
       <div className="patron-info-box__main">
         <div className="patron-info-box__photo">
@@ -189,6 +216,18 @@ function PatronInfoBox({ patron, isManaged, onCreateOpportunity, onAddActivity }
                 <button className="patron-info-box__dropdown-item" onClick={handleCreateOpportunity}>
                   <i className="fa-solid fa-bullseye"></i>
                   Create Opportunity
+                </button>
+              )}
+              <div className="patron-info-box__dropdown-divider"></div>
+              {isArchived ? (
+                <button className="patron-info-box__dropdown-item patron-info-box__dropdown-item--success" onClick={handleRestore}>
+                  <i className="fa-solid fa-rotate-left"></i>
+                  Restore Patron
+                </button>
+              ) : (
+                <button className="patron-info-box__dropdown-item patron-info-box__dropdown-item--danger" onClick={handleArchive}>
+                  <i className="fa-solid fa-box-archive"></i>
+                  Archive Patron
                 </button>
               )}
             </div>

@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useState, useMemo } from 'react'
 import { 
   getOpenOpportunities, 
   getPipelineTotals, 
@@ -6,6 +6,7 @@ import {
   opportunities 
 } from '../../data/opportunities'
 import { patrons, isManagedProspect } from '../../data/patrons'
+import { getAllStaff } from '../../data/campaigns'
 import './Dashboard.css'
 
 // Format currency
@@ -41,23 +42,39 @@ const getDaysSince = (dateStr) => {
 }
 
 function Dashboard({ onNavigateToPatron, onNavigateToOpportunity, onNavigateToPage }) {
-  // Pipeline totals
-  const pipelineTotals = useMemo(() => getPipelineTotals(), [])
+  // Filter state
+  const [selectedOfficer, setSelectedOfficer] = useState(null) // null = "All"
   
-  // Open opportunities by stage
-  const opportunitiesByStage = useMemo(() => {
+  // Get staff list for dropdown
+  const staff = useMemo(() => getAllStaff(), [])
+  
+  // Get filtered open opportunities based on selected officer
+  const filteredOpportunities = useMemo(() => {
     const openOpps = getOpenOpportunities()
+    if (!selectedOfficer) return openOpps
+    return openOpps.filter(opp => opp.assignedTo === selectedOfficer)
+  }, [selectedOfficer])
+  
+  // Pipeline totals (filtered)
+  const pipelineTotals = useMemo(() => {
+    const count = filteredOpportunities.length
+    const totalValue = filteredOpportunities.reduce((sum, opp) => sum + opp.askAmount, 0)
+    const weightedValue = filteredOpportunities.reduce((sum, opp) => sum + (opp.askAmount * (opp.probability / 100)), 0)
+    return { count, totalValue, weightedValue }
+  }, [filteredOpportunities])
+  
+  // Open opportunities by stage (filtered)
+  const opportunitiesByStage = useMemo(() => {
     return PIPELINE_STAGES.map(stage => ({
       ...stage,
-      opportunities: openOpps.filter(opp => opp.stage === stage.id),
-      total: openOpps.filter(opp => opp.stage === stage.id).reduce((sum, opp) => sum + opp.askAmount, 0)
+      opportunities: filteredOpportunities.filter(opp => opp.stage === stage.id),
+      total: filteredOpportunities.filter(opp => opp.stage === stage.id).reduce((sum, opp) => sum + opp.askAmount, 0)
     }))
-  }, [])
+  }, [filteredOpportunities])
   
-  // Tasks due (opportunities with overdue contact)
+  // Tasks due (opportunities with overdue contact) - filtered
   const tasksDue = useMemo(() => {
-    const openOpps = getOpenOpportunities()
-    return openOpps
+    return filteredOpportunities
       .map(opp => ({
         ...opp,
         daysSinceContact: getDaysSince(opp.lastContact)
@@ -65,37 +82,52 @@ function Dashboard({ onNavigateToPatron, onNavigateToOpportunity, onNavigateToPa
       .filter(opp => opp.daysSinceContact > 14) // More than 2 weeks
       .sort((a, b) => b.daysSinceContact - a.daysSinceContact)
       .slice(0, 5)
-  }, [])
+  }, [filteredOpportunities])
   
-  // Upcoming closes (opportunities closing soon)
+  // Upcoming closes (opportunities closing soon) - filtered
   const upcomingCloses = useMemo(() => {
-    const openOpps = getOpenOpportunities()
     const today = new Date()
     const thirtyDaysFromNow = new Date(today.getTime() + 30 * 24 * 60 * 60 * 1000)
     
-    return openOpps
+    return filteredOpportunities
       .filter(opp => {
         const closeDate = new Date(opp.expectedClose)
         return closeDate >= today && closeDate <= thirtyDaysFromNow
       })
       .sort((a, b) => new Date(a.expectedClose) - new Date(b.expectedClose))
       .slice(0, 5)
-  }, [])
+  }, [filteredOpportunities])
   
-  // Quick stats
+  // Quick stats (filtered by selected officer)
   const stats = useMemo(() => {
-    const managedProspects = patrons.filter(p => isManagedProspect(p)).length
-    const totalPatrons = patrons.length
-    const wonOpportunities = opportunities.filter(opp => opp.status === 'won')
+    // Filter patrons by assigned officer if one is selected
+    const filteredPatrons = selectedOfficer 
+      ? patrons.filter(p => p.assignedTo === selectedOfficer)
+      : patrons
+    
+    const managedProspects = selectedOfficer
+      ? filteredPatrons.length
+      : patrons.filter(p => isManagedProspect(p)).length
+    
+    const totalPatrons = selectedOfficer ? filteredPatrons.length : patrons.length
+    
+    // Filter won opportunities by officer if selected
+    const wonOpportunities = selectedOfficer
+      ? opportunities.filter(opp => opp.status === 'won' && opp.assignedTo === selectedOfficer)
+      : opportunities.filter(opp => opp.status === 'won')
     const ytdGiving = wonOpportunities.reduce((sum, opp) => sum + opp.askAmount, 0)
+    
+    const generalConstituents = selectedOfficer 
+      ? 0 // When filtering by officer, they only see managed prospects
+      : patrons.filter(p => !isManagedProspect(p)).length
     
     return {
       totalPatrons,
       managedProspects,
-      generalConstituents: totalPatrons - managedProspects,
+      generalConstituents,
       ytdGiving
     }
-  }, [])
+  }, [selectedOfficer])
 
   return (
     <div className="dashboard">
@@ -104,6 +136,18 @@ function Dashboard({ onNavigateToPatron, onNavigateToOpportunity, onNavigateToPa
         <div className="dashboard__header-content">
           <h1 className="dashboard__title">Dashboard</h1>
           <p className="dashboard__subtitle">Welcome back. Here's what needs your attention today.</p>
+        </div>
+        <div className="dashboard__header-actions">
+          <select 
+            className="dashboard__filter"
+            value={selectedOfficer || ''}
+            onChange={(e) => setSelectedOfficer(e.target.value || null)}
+          >
+            <option value="">All Gift Officers</option>
+            {staff.map(s => (
+              <option key={s.id} value={s.name}>{s.name}</option>
+            ))}
+          </select>
         </div>
       </div>
 

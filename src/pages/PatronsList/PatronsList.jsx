@@ -1,17 +1,34 @@
 import { useState, useMemo } from 'react'
-import { patrons, patronCategories, engagementLevels, isManagedProspect, formatDate } from '../../data/patrons'
+import { patrons, patronCategories, engagementLevels, patronSources, isManagedProspect, formatDate, getActivePatrons } from '../../data/patrons'
 import PatronModal from '../../components/PatronModal/PatronModal'
 import './PatronsList.css'
+
+// Check if patron was added in the last 7 days
+const isRecentlyAdded = (createdDate) => {
+  if (!createdDate) return false
+  const created = new Date(createdDate)
+  const sevenDaysAgo = new Date()
+  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7)
+  return created >= sevenDaysAgo
+}
+
+// Get source configuration
+const getSourceConfig = (sourceId) => {
+  return patronSources.find(s => s.id === sourceId) || null
+}
 
 function PatronsList({ onSelectPatron }) {
   const [searchTerm, setSearchTerm] = useState('')
   const [sortField, setSortField] = useState('lastName')
   const [sortDirection, setSortDirection] = useState('asc')
   const [openMenuId, setOpenMenuId] = useState(null)
+  const [showPatronModal, setShowPatronModal] = useState(false)
+  const [showArchived, setShowArchived] = useState(false)
 
   // Filter and sort patrons
   const filteredPatrons = useMemo(() => {
-    let result = [...patrons]
+    // Start with active patrons or all patrons based on toggle
+    let result = showArchived ? [...patrons] : getActivePatrons()
     
     // Filter by search term
     if (searchTerm) {
@@ -54,7 +71,7 @@ function PatronsList({ onSelectPatron }) {
     })
     
     return result
-  }, [searchTerm, sortField, sortDirection])
+  }, [searchTerm, sortField, sortDirection, showArchived])
 
   const handleSort = (field) => {
     if (sortField === field) {
@@ -127,11 +144,23 @@ function PatronsList({ onSelectPatron }) {
             />
           </div>
           <div className="patrons-list__actions">
+            <label className="patrons-list__toggle">
+              <input
+                type="checkbox"
+                checked={showArchived}
+                onChange={(e) => setShowArchived(e.target.checked)}
+              />
+              <span>Show archived</span>
+            </label>
             <button className="patrons-list__filter-btn">
               <i className="fa-solid fa-sliders"></i>
               Filters
             </button>
-            <button className="patrons-list__add-btn">
+            <button 
+              className="patrons-list__add-btn"
+              onClick={() => setShowPatronModal(true)}
+            >
+              <i className="fa-solid fa-plus"></i>
               Add new patron
             </button>
           </div>
@@ -172,12 +201,15 @@ function PatronsList({ onSelectPatron }) {
             <tbody>
               {filteredPatrons.map(patron => {
                 const isManaged = isManagedProspect(patron)
+                const isArchived = patron.status === 'archived'
+                const isNew = isRecentlyAdded(patron.createdDate)
+                const sourceConfig = getSourceConfig(patron.source)
                 const category = getCategoryConfig(patron.category)
                 
                 return (
                   <tr 
                     key={patron.id} 
-                    className={`patrons-list__row ${isManaged ? 'patrons-list__row--managed' : ''}`}
+                    className={`patrons-list__row ${isManaged ? 'patrons-list__row--managed' : ''} ${isArchived ? 'patrons-list__row--archived' : ''} ${isNew ? 'patrons-list__row--new' : ''}`}
                     onClick={() => handleRowClick(patron)}
                   >
                     <td className="patrons-list__td patrons-list__td--name">
@@ -186,16 +218,32 @@ function PatronsList({ onSelectPatron }) {
                           <img 
                             src={patron.photo} 
                             alt="" 
-                            className="patrons-list__avatar"
+                            className={`patrons-list__avatar ${isArchived ? 'patrons-list__avatar--archived' : ''}`}
                           />
                         ) : (
-                          <div className="patrons-list__avatar patrons-list__avatar--placeholder">
+                          <div className={`patrons-list__avatar patrons-list__avatar--placeholder ${isArchived ? 'patrons-list__avatar--archived' : ''}`}>
                             <i className="fa-solid fa-user"></i>
                           </div>
                         )}
-                        <span className="patrons-list__name">
-                          {patron.firstName} {patron.lastName}
-                        </span>
+                        <div className="patrons-list__name-wrapper">
+                          <div className="patrons-list__name-row">
+                            <span className="patrons-list__name">
+                              {patron.firstName} {patron.lastName}
+                            </span>
+                            {isNew && (
+                              <span className="patrons-list__new-badge">New</span>
+                            )}
+                          </div>
+                          {isArchived && (
+                            <span className="patrons-list__archived-badge">Archived</span>
+                          )}
+                          {sourceConfig && (
+                            <span className="patrons-list__source" title={`Added via: ${sourceConfig.label}`}>
+                              <i className={`fa-solid ${sourceConfig.icon}`}></i>
+                              {sourceConfig.label}
+                            </span>
+                          )}
+                        </div>
                       </div>
                     </td>
                     <td className="patrons-list__td patrons-list__td--email">
@@ -252,7 +300,8 @@ function PatronsList({ onSelectPatron }) {
         {/* Results count */}
         <div className="patrons-list__footer">
           <span className="patrons-list__count">
-            Showing {filteredPatrons.length} of {patrons.length} patrons
+            Showing {filteredPatrons.length} of {showArchived ? patrons.length : getActivePatrons().length} patrons
+            {showArchived && ` (including archived)`}
           </span>
         </div>
       </div>

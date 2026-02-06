@@ -8,7 +8,7 @@ import OpportunityModal from '../components/OpportunityModal/OpportunityModal'
 import GiftModal from '../components/GiftModal/GiftModal'
 import ActivityModal from '../components/ActivityModal/ActivityModal'
 import AssignPortfolioModal from '../components/AssignPortfolioModal/AssignPortfolioModal'
-import { getPatronById, isManagedProspect } from '../data/patrons'
+import { getPatronById, isManagedProspect, archivePatron, restorePatron } from '../data/patrons'
 import './PatronProfile.css'
 
 const tabs = [
@@ -510,6 +510,7 @@ function PatronProfile({ patronId, onBack, onSelectOpportunity }) {
   const [showOpportunityModal, setShowOpportunityModal] = useState(false)
   const [showGiftModal, setShowGiftModal] = useState(false)
   const [showActivityModal, setShowActivityModal] = useState(false)
+  const [showAssignModal, setShowAssignModal] = useState(false)
 
   // Get patron data from store, fallback to default if not found
   const patronData = useMemo(() => {
@@ -545,6 +546,27 @@ function PatronProfile({ patronId, onBack, onSelectOpportunity }) {
   const handleActivitySuccess = (newActivity) => {
     console.log('Logged activity:', newActivity)
     // In a real app, this would refresh the timeline
+  }
+
+  const handleAssignSuccess = (result) => {
+    console.log('Assigned to portfolio:', result)
+    // In a real app, this would refresh the patron data to reflect new assignment
+  }
+
+  const handleArchive = () => {
+    archivePatron(patronData.id)
+    console.log('Archived patron:', patronData.id)
+    // Navigate back to patrons list after archiving
+    if (onBack) {
+      onBack()
+    }
+  }
+
+  const handleRestore = () => {
+    restorePatron(patronData.id)
+    console.log('Restored patron:', patronData.id)
+    // Force re-render by updating a key or refreshing data
+    window.location.reload() // Simple approach for demo
   }
 
   const renderTabContent = () => {
@@ -629,6 +651,8 @@ function PatronProfile({ patronId, onBack, onSelectOpportunity }) {
           isManaged={isManaged}
           onCreateOpportunity={handleCreateOpportunity}
           onAddActivity={handleLogActivity}
+          onArchive={handleArchive}
+          onRestore={handleRestore}
         />
 
         {/* Tab Section */}

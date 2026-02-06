@@ -51,6 +51,15 @@ export const pipelineStages = [
   { id: 'stewardship', label: 'Stewardship' },
 ]
 
+// Patron sources (how they entered the system)
+export const patronSources = [
+  { id: 'ticket', label: 'Ticket Purchase', icon: 'fa-ticket' },
+  { id: 'manual', label: 'Manual Entry', icon: 'fa-keyboard' },
+  { id: 'online', label: 'Online Donation', icon: 'fa-globe' },
+  { id: 'import', label: 'Data Import', icon: 'fa-file-import' },
+  { id: 'membership', label: 'Membership Signup', icon: 'fa-id-card' },
+]
+
 /**
  * PATRONS DATABASE
  * Mix of Managed Prospects and General Constituents
@@ -658,10 +667,12 @@ export const patrons = [
     email: 'rachel.kim@gmail.com',
     phone: '(555) 222-3333',
     category: 'member',
-    // General Constituent
+    // General Constituent - RECENTLY ADDED via ticket purchase
     engagement: { level: 'cool', visits: 6, lastVisit: '20/12/2025' },
     giving: { lifetimeValue: 450, donations: 100, revenue: 350, lastDonation: '2025-12-15' },
-    membership: { status: 'active', tier: 'Basic', daysToRenewal: 250 }
+    membership: { status: 'active', tier: 'Basic', daysToRenewal: 250 },
+    createdDate: '2026-02-03',
+    source: 'ticket'
   },
   {
     id: 'david-chen',
@@ -671,9 +682,11 @@ export const patrons = [
     email: 'd.chen@company.com',
     phone: '(555) 333-4444',
     category: 'donor',
-    // General Constituent
+    // General Constituent - RECENTLY ADDED via online donation
     engagement: { level: 'cold', visits: 2, lastVisit: '05/09/2025' },
-    giving: { lifetimeValue: 275, donations: 200, revenue: 75, lastDonation: '2025-08-20' }
+    giving: { lifetimeValue: 275, donations: 200, revenue: 75, lastDonation: '2025-08-20' },
+    createdDate: '2026-02-01',
+    source: 'online'
   },
   {
     id: 'maria-santos',
@@ -683,10 +696,12 @@ export const patrons = [
     email: 'maria.santos@email.com',
     phone: '(555) 444-5555',
     category: 'member',
-    // General Constituent
+    // General Constituent - RECENTLY ADDED via membership signup
     engagement: { level: 'warm', visits: 18, lastVisit: '28/01/2026' },
     giving: { lifetimeValue: 620, donations: 150, revenue: 470, lastDonation: '2026-01-20' },
-    membership: { status: 'active', tier: 'Silver', daysToRenewal: 60 }
+    membership: { status: 'active', tier: 'Silver', daysToRenewal: 60 },
+    createdDate: '2026-02-04',
+    source: 'membership'
   },
   {
     id: 'james-wilson',
@@ -696,9 +711,11 @@ export const patrons = [
     email: 'jwilson@business.net',
     phone: '(555) 555-6666',
     category: 'prospect',
-    // General Constituent - identified as prospect but not yet assigned
+    // General Constituent - RECENTLY ADDED via ticket purchase
     engagement: { level: 'cold', visits: 1, lastVisit: '10/01/2026' },
-    giving: { lifetimeValue: 50, donations: 0, revenue: 50, lastDonation: null }
+    giving: { lifetimeValue: 50, donations: 0, revenue: 50, lastDonation: null },
+    createdDate: '2026-02-05',
+    source: 'ticket'
   }
 ]
 
@@ -768,6 +785,8 @@ export const addPatron = (patronData) => {
     assignedTo: patronData.assignedTo || null,
     // Created timestamp
     createdDate: new Date().toISOString().split('T')[0],
+    // Source - how they entered the system
+    source: patronData.source || 'manual',
   }
   
   patrons.push(newPatron)
@@ -791,3 +810,24 @@ export const updatePatron = (id, updates) => {
 export const assignPatronToOfficer = (patronId, assignedTo) => {
   return updatePatron(patronId, { assignedTo })
 }
+
+// Archive a patron (soft delete)
+export const archivePatron = (patronId, reason = 'other') => {
+  return updatePatron(patronId, { 
+    status: 'archived',
+    archivedDate: new Date().toISOString(),
+    archivedReason: reason
+  })
+}
+
+// Restore an archived patron
+export const restorePatron = (patronId) => {
+  return updatePatron(patronId, { 
+    status: 'active',
+    archivedDate: null,
+    archivedReason: null
+  })
+}
+
+// Get active patrons only (excludes archived)
+export const getActivePatrons = () => patrons.filter(p => p.status !== 'archived')

@@ -111,6 +111,7 @@ function PatronModal({
         address: formData.address.trim() || null,
         category: formData.category,
         notes: formData.notes.trim() || null,
+        source: 'manual', // Created via manual entry form
       }
       
       const newPatron = addPatron(patronData)

@@ -222,6 +222,81 @@
   text-align: center;
 }
 
+/* Dropdown divider */
+.patron-info-box__dropdown-divider {
+  height: 1px;
+  background-color: var(--color-border);
+  margin: var(--space-2) 0;
+}
+
+/* Danger button (Archive) */
+.patron-info-box__dropdown-item--danger {
+  color: var(--color-error);
+}
+
+.patron-info-box__dropdown-item--danger i {
+  color: var(--color-error);
+}
+
+.patron-info-box__dropdown-item--danger:hover {
+  background-color: var(--color-error-bg, #fef2f2);
+}
+
+/* Success button (Restore) */
+.patron-info-box__dropdown-item--success {
+  color: var(--color-success);
+}
+
+.patron-info-box__dropdown-item--success i {
+  color: var(--color-success);
+}
+
+.patron-info-box__dropdown-item--success:hover {
+  background-color: var(--color-success-bg, #f0fdf4);
+}
+
+/* Archived patron styling */
+.patron-info-box--archived {
+  opacity: 0.85;
+}
+
+.patron-info-box__archived-banner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--color-warning-bg, #fef9c3);
+  border: 1px solid var(--color-warning, #facc15);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-4);
+  font-size: var(--font-size-sm);
+  color: var(--color-warning-dark, #854d0e);
+}
+
+.patron-info-box__archived-banner i {
+  font-size: var(--font-size-lg);
+}
+
+.patron-info-box__archived-banner span {
+  flex: 1;
+}
+
+.patron-info-box__restore-btn {
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-warning-dark, #854d0e);
+  background-color: rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--color-warning, #facc15);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.patron-info-box__restore-btn:hover {
+  background-color: white;
+}
+
 /* Prospect Info section */
 .patron-info-box__prospect-info {
   background-color: var(--color-primary-50, #e6f4ff);
