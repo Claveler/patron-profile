@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { patronCategories, addPatron } from '../../data/patrons'
+import { patronTags, addPatron } from '../../data/patrons'
 import './PatronModal.css'
 
 function PatronModal({ 
@@ -109,7 +109,7 @@ function PatronModal({
         email: formData.email.trim() || null,
         phone: formData.phone.trim() || null,
         address: formData.address.trim() || null,
-        category: formData.category,
+        tags: [formData.category], // Convert single selection to tags array
         notes: formData.notes.trim() || null,
         source: 'manual', // Created via manual entry form
       }
@@ -238,7 +238,7 @@ function PatronModal({
           {/* Category */}
           <div className="patron-modal__field">
             <label className="patron-modal__label" htmlFor="patron-category">
-              Category
+              Initial Tag
             </label>
             <select
               id="patron-category"
@@ -247,8 +247,8 @@ function PatronModal({
               value={formData.category}
               onChange={handleInputChange}
             >
-              {patronCategories.map(cat => (
-                <option key={cat.id} value={cat.id}>{cat.label}</option>
+              {patronTags.map(tag => (
+                <option key={tag.id} value={tag.id}>{tag.label}</option>
               ))}
             </select>
           </div>

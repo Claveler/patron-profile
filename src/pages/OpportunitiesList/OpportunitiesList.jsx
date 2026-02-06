@@ -108,159 +108,163 @@ function OpportunitiesList({ onSelectOpportunity, onSelectPatron }) {
 
   return (
     <div className="opportunities-list">
-      {/* Header */}
+      {/* Dark Fever Header with Breadcrumb */}
       <div className="opportunities-list__header">
-        <div className="opportunities-list__title-row">
-          <h1 className="opportunities-list__title">
-            <i className="fa-solid fa-bullseye"></i>
-            Opportunities
-          </h1>
-          <button 
-            className="opportunities-list__create-btn"
-            onClick={handleCreateClick}
-          >
-            <i className="fa-solid fa-plus"></i>
-            Create Opportunity
-          </button>
+        <div className="opportunities-list__breadcrumb">
+          <span className="opportunities-list__breadcrumb-section">Fundraising</span>
+          <i className="fa-solid fa-chevron-right opportunities-list__breadcrumb-separator"></i>
         </div>
-        
-        {/* Pipeline Stats */}
-        <div className="opportunities-list__stats">
-          <div className="opportunities-list__stat opportunities-list__stat--highlight">
-            <span className="opportunities-list__stat-value">{stats.total}</span>
-            <span className="opportunities-list__stat-label">Open Opportunities</span>
+        <h1 className="opportunities-list__title">Opportunities</h1>
+      </div>
+
+      {/* Main Content Container */}
+      <div className="opportunities-list__container">
+        {/* Toolbar with search, filters, and create button */}
+        <div className="opportunities-list__toolbar">
+          <div className="opportunities-list__search">
+            <i className="fa-solid fa-search opportunities-list__search-icon"></i>
+            <input
+              type="text"
+              className="opportunities-list__search-input"
+              placeholder="Search by name, patron, or description"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
           </div>
+          
+          <div className="opportunities-list__actions">
+            <div className="opportunities-list__filter-group">
+              <select 
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                className="opportunities-list__filter"
+              >
+                <option value="open">Open</option>
+                <option value="closed">Closed</option>
+                <option value="all">All Status</option>
+              </select>
+              
+              <select 
+                value={stageFilter}
+                onChange={(e) => setStageFilter(e.target.value)}
+                className="opportunities-list__filter"
+              >
+                <option value="all">All Stages</option>
+                {PIPELINE_STAGES.map(stage => (
+                  <option key={stage.id} value={stage.id}>{stage.label}</option>
+                ))}
+              </select>
+              
+              <select 
+                value={campaignFilter}
+                onChange={(e) => setCampaignFilter(e.target.value)}
+                className="opportunities-list__filter"
+              >
+                <option value="all">All Campaigns</option>
+                {campaigns.map(campaign => (
+                  <option key={campaign.id} value={campaign.id}>{campaign.name}</option>
+                ))}
+              </select>
+              
+              <select 
+                value={assigneeFilter}
+                onChange={(e) => setAssigneeFilter(e.target.value)}
+                className="opportunities-list__filter"
+              >
+                <option value="all">All Assignees</option>
+                {assignees.map(assignee => (
+                  <option key={assignee.initials} value={assignee.initials}>
+                    {assignee.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            
+            <button 
+              className="opportunities-list__create-btn"
+              onClick={handleCreateClick}
+            >
+              Create opportunity
+            </button>
+          </div>
+        </div>
+
+        {/* Pipeline Stats Summary */}
+        <div className="opportunities-list__stats">
+          <div className="opportunities-list__stat">
+            <span className="opportunities-list__stat-value opportunities-list__stat-value--highlight">{stats.total}</span>
+            <span className="opportunities-list__stat-label">Open</span>
+          </div>
+          <div className="opportunities-list__stat-divider"></div>
           <div className="opportunities-list__stat">
             <span className="opportunities-list__stat-value">{formatCurrency(stats.totalValue)}</span>
             <span className="opportunities-list__stat-label">Total Pipeline</span>
           </div>
+          <div className="opportunities-list__stat-divider"></div>
           <div className="opportunities-list__stat">
             <span className="opportunities-list__stat-value">{formatCurrency(stats.weightedValue)}</span>
-            <span className="opportunities-list__stat-label">Weighted Pipeline</span>
+            <span className="opportunities-list__stat-label">Weighted</span>
           </div>
         </div>
 
-        {/* Stage breakdown */}
+        {/* Stage breakdown pills */}
         <div className="opportunities-list__stages">
           {PIPELINE_STAGES.map(stage => (
-            <div 
+            <button 
               key={stage.id}
               className={`opportunities-list__stage ${stageFilter === stage.id ? 'opportunities-list__stage--active' : ''}`}
               onClick={() => setStageFilter(stageFilter === stage.id ? 'all' : stage.id)}
             >
               <span className="opportunities-list__stage-label">{stage.label}</span>
               <span className="opportunities-list__stage-count">{stats.byStage[stage.id]?.count || 0}</span>
-              <span className="opportunities-list__stage-value">
-                {formatCurrency(stats.byStage[stage.id]?.value || 0)}
-              </span>
-            </div>
+            </button>
           ))}
         </div>
-      </div>
 
-      {/* Filters */}
-      <div className="opportunities-list__filters">
-        <div className="opportunities-list__search">
-          <i className="fa-solid fa-search"></i>
-          <input
-            type="text"
-            placeholder="Search opportunities..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
+        {/* Table header */}
+        <div className="opportunities-list__table-header">
+          <span>Opportunity</span>
+          <span>Amount</span>
+          <span>Stage</span>
+          <span>Prob.</span>
+          <span>Expected Close</span>
+          <span>Assigned To</span>
         </div>
-        
-        <div className="opportunities-list__filter-group">
-          <select 
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="opportunities-list__filter"
-          >
-            <option value="open">Open</option>
-            <option value="closed">Closed</option>
-            <option value="all">All Status</option>
-          </select>
-          
-          <select 
-            value={stageFilter}
-            onChange={(e) => setStageFilter(e.target.value)}
-            className="opportunities-list__filter"
-          >
-            <option value="all">All Stages</option>
-            {PIPELINE_STAGES.map(stage => (
-              <option key={stage.id} value={stage.id}>{stage.label}</option>
-            ))}
-          </select>
-          
-          <select 
-            value={campaignFilter}
-            onChange={(e) => setCampaignFilter(e.target.value)}
-            className="opportunities-list__filter"
-          >
-            <option value="all">All Campaigns</option>
-            {campaigns.map(campaign => (
-              <option key={campaign.id} value={campaign.id}>{campaign.name}</option>
-            ))}
-          </select>
-          
-          <select 
-            value={assigneeFilter}
-            onChange={(e) => setAssigneeFilter(e.target.value)}
-            className="opportunities-list__filter"
-          >
-            <option value="all">All Assignees</option>
-            {assignees.map(assignee => (
-              <option key={assignee.initials} value={assignee.initials}>
-                {assignee.name}
-              </option>
-            ))}
-          </select>
+
+        {/* Opportunities list */}
+        <div className="opportunities-list__content">
+          {filteredOpportunities.length === 0 ? (
+            <div className="opportunities-list__empty">
+              <i className="fa-solid fa-bullseye"></i>
+              <p>No opportunities match your filters</p>
+              <button onClick={() => {
+                setStageFilter('all')
+                setCampaignFilter('all')
+                setAssigneeFilter('all')
+                setStatusFilter('open')
+                setSearchQuery('')
+              }}>
+                Clear Filters
+              </button>
+            </div>
+          ) : (
+            filteredOpportunities.map(opp => (
+              <OpportunityCard
+                key={opp.id}
+                opportunity={opp}
+                variant="full"
+                onClick={handleOpportunityClick}
+                onPatronClick={handlePatronClick}
+                showPatronName={true}
+              />
+            ))
+          )}
         </div>
-      </div>
 
-      {/* List header */}
-      <div className="opportunities-list__table-header">
-        <span>Opportunity</span>
-        <span>Amount</span>
-        <span>Stage</span>
-        <span>Prob.</span>
-        <span>Expected Close</span>
-        <span>Assigned To</span>
-      </div>
-
-      {/* Opportunities list */}
-      <div className="opportunities-list__content">
-        {filteredOpportunities.length === 0 ? (
-          <div className="opportunities-list__empty">
-            <i className="fa-solid fa-bullseye"></i>
-            <p>No opportunities match your filters</p>
-            <button onClick={() => {
-              setStageFilter('all')
-              setCampaignFilter('all')
-              setAssigneeFilter('all')
-              setStatusFilter('open')
-              setSearchQuery('')
-            }}>
-              Clear Filters
-            </button>
-          </div>
-        ) : (
-          filteredOpportunities.map(opp => (
-            <OpportunityCard
-              key={opp.id}
-              opportunity={opp}
-              variant="full"
-              onClick={handleOpportunityClick}
-              onPatronClick={handlePatronClick}
-              showPatronName={true}
-            />
-          ))
-        )}
-      </div>
-
-      {/* Results count */}
-      <div className="opportunities-list__footer">
-        Showing {filteredOpportunities.length} of {opportunities.length} opportunities
+        {/* Results count */}
+        <div className="opportunities-list__footer">
+          Showing {filteredOpportunities.length} of {opportunities.length} opportunities
+        </div>
       </div>
 
       {/* Create Opportunity Modal */}

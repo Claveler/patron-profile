@@ -9,6 +9,7 @@ import MovesManagement from './pages/MovesManagement/MovesManagement'
 import CampaignManagement from './pages/CampaignManagement/CampaignManagement'
 import OpportunitiesList from './pages/OpportunitiesList/OpportunitiesList'
 import OpportunityDetail from './pages/OpportunityDetail/OpportunityDetail'
+import Settings from './pages/Settings/Settings'
 
 function App() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
@@ -80,6 +81,8 @@ function App() {
             onNavigateToPatron={handleSelectPatron}
           />
         )
+      case 'settings':
+        return <Settings />
       default:
         return (
           <Dashboard 

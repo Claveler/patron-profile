@@ -5,6 +5,19 @@ import MembershipHistory from '../MembershipHistory/MembershipHistory'
 import './MembershipsTab.css'
 
 function MembershipsTab({ membership, patronName, patronEmail }) {
+  // Empty state for patrons without membership
+  if (!membership) {
+    return (
+      <div className="memberships-tab">
+        <div className="memberships-tab__empty">
+          <i className="fa-solid fa-id-card"></i>
+          <h3>No Membership</h3>
+          <p>This patron is not currently a member.</p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="memberships-tab">
       <div className="memberships-tab__main">

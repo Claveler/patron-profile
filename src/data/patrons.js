@@ -24,14 +24,21 @@ export const giftOfficers = [
   { id: 'lucas-thomas', name: 'Lucas Thomas' },
 ]
 
-// Patron categories (tags)
-export const patronCategories = [
-  { id: 'prospect', label: 'Prospect', color: 'neutral' },
-  { id: 'donor', label: 'Donor', color: 'neutral' },
-  { id: 'member', label: 'Member', color: 'neutral' },
-  { id: 'engaged-patron', label: 'Engaged Patron', color: 'success' },
-  { id: 'large-donor', label: 'Large Donor', color: 'warning' },
+// Patron tags (for segmentation)
+export const patronTags = [
+  // System tags (common classifications)
+  { id: 'prospect', label: 'Prospect', system: true },
+  { id: 'donor', label: 'Donor', system: true },
+  { id: 'major-donor', label: 'Major Donor', system: true },
+  { id: 'board-member', label: 'Board Member', system: true },
+  { id: 'volunteer', label: 'Volunteer', system: true },
+  { id: 'corporate', label: 'Corporate', system: true },
+  { id: 'foundation', label: 'Foundation', system: true },
+  // Custom tags can be added dynamically by users
 ]
+
+// Legacy: kept for backwards compatibility during migration
+export const patronCategories = patronTags
 
 // Engagement levels
 export const engagementLevels = [
@@ -85,7 +92,7 @@ export const patrons = [
     email: 'collingander@gmail.com',
     phone: '(555) 123-4567',
     address: '789 Pine Rd, Austin, TX 73301',
-    category: 'donor',
+    tags: ['major-donor', 'donor', 'board-member'],
     household: {
       name: 'Collingwood Family',
       verified: true
@@ -319,7 +326,7 @@ export const patrons = [
     photo: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150&h=150&fit=crop&crop=face',
     email: 'paul.fairfax@outlook.com',
     phone: '(555) 111-2222',
-    category: 'donor',
+    tags: ['donor', 'corporate'],
     // NO assignedTo - General Constituent
     // NO prospect data - not in pipeline
     engagement: {
@@ -558,7 +565,7 @@ export const patrons = [
     photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face',
     email: 'jake_thompson@gmail.com',
     phone: '(555) 234-5678',
-    category: 'prospect',
+    tags: ['prospect'],
     assignedTo: 'Liam Johnson',
     engagement: {
       level: 'cold',
@@ -590,7 +597,7 @@ export const patrons = [
     photo: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face',
     email: 'sophia1234@gmail.com',
     phone: '(555) 345-6789',
-    category: 'donor',
+    tags: ['donor'],
     assignedTo: 'Emma Smith',
     engagement: {
       level: 'cold',
@@ -622,7 +629,7 @@ export const patrons = [
     photo: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
     email: 'lucas_taylor@yahoo.com',
     phone: '(555) 456-7890',
-    category: 'member',
+    tags: ['donor'],
     assignedTo: 'Liam Johnson',
     engagement: {
       level: 'warm',
@@ -644,7 +651,57 @@ export const patrons = [
       ]
     },
     giving: { lifetimeValue: 2800, donations: 1500, revenue: 1300, lastDonation: '2025-10-20' },
-    membership: { status: 'active', tier: 'Silver', daysToRenewal: 45 },
+    membership: {
+      status: 'active',
+      programme: 'General Membership',
+      tier: 'Silver',
+      memberSince: '10/11/2024',
+      currentPeriod: '10 March 2026',
+      periodType: 'yearly',
+      daysToRenewal: 45,
+      price: 89.99,
+      totalSavings: 18.50,
+      patronId: 'sophia-thomas',
+      membershipId: 'MEM-2024-312',
+      periodStart: '10/03/2025',
+      validUntil: '10/03/2026',
+      cardStyle: {
+        backgroundColor: '#5C6B7A',
+        textColor: '#ffffff',
+        accentColor: '#B8C5D1'
+      },
+      autoRenewal: false,
+      paymentMethod: {
+        type: 'visa',
+        last4: '7721'
+      },
+      memberYears: 1,
+      upgradeEligible: true,
+      upgradeTier: 'Gold',
+      benefits: [
+        { category: 'access', title: 'Unlimited visits', description: 'to all standard exhibits', usage: { used: 8, limit: null, resetDate: null }, icon: 'fa-ticket' },
+        { category: 'discount', title: 'Bring a friend for free', description: 'twice per year', usage: { used: 1, limit: 2, resetDate: '10/03/2026' }, icon: 'fa-user-plus' },
+        { category: 'discount', title: '10% off special events', description: 'your ticket only', usage: null, icon: 'fa-percent' },
+        { category: 'discount', title: '5% F&B discount', description: 'at main café', usage: { used: 2, limit: null, resetDate: null }, icon: 'fa-utensils' }
+      ],
+      usageAnalytics: {
+        overallPercentage: 25,
+        categories: [
+          { name: 'Admissions', used: 8, available: 'unlimited', percentage: 30 },
+          { name: 'Guest Passes', used: 1, available: 2, percentage: 50 },
+          { name: 'F&B Discounts', used: 2, available: 'unlimited', percentage: 15 }
+        ],
+        unusedBenefits: ['Event discounts'],
+        mostUsed: 'Admissions'
+      },
+      beneficiaries: [
+        { id: 1, name: 'Sophia Thomas', role: 'Primary', avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&fit=crop&crop=face' }
+      ],
+      membershipHistory: [
+        { date: '2024-11-10', event: 'Joined', tier: 'Silver', programme: 'General Membership' },
+        { date: '2025-03-10', event: 'Renewed', tier: 'Silver', programme: 'General Membership' }
+      ]
+    },
     source: 'import',
     createdDate: '2024-08-20'
   },
@@ -655,7 +712,7 @@ export const patrons = [
     photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face',
     email: 'anderava@gmail.com',
     phone: '(555) 567-8901',
-    category: 'engaged-patron',
+    tags: ['donor', 'volunteer'],
     assignedTo: 'Liam Johnson',
     engagement: {
       level: 'hot',
@@ -687,7 +744,7 @@ export const patrons = [
     photo: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face',
     email: 'samantha_itsme@gmail.com',
     phone: '(555) 678-9012',
-    category: 'large-donor',
+    tags: ['major-donor', 'donor'],
     assignedTo: 'Emma Smith',
     engagement: {
       level: 'on-fire',
@@ -719,7 +776,7 @@ export const patrons = [
     photo: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&h=150&fit=crop&crop=face',
     email: 'johnsonmchl@microsoft.com',
     phone: '(555) 789-0123',
-    category: 'member',
+    tags: ['donor', 'corporate'],
     assignedTo: 'Emma Smith',
     engagement: {
       level: 'warm',
@@ -741,7 +798,62 @@ export const patrons = [
       ]
     },
     giving: { lifetimeValue: 3200, donations: 2000, revenue: 1200, lastDonation: '2025-11-10' },
-    membership: { status: 'active', tier: 'Gold', daysToRenewal: 120 },
+    membership: {
+      status: 'active',
+      programme: 'General Membership',
+      tier: 'Gold',
+      memberSince: '15/03/2023',
+      currentPeriod: '15 June 2026',
+      periodType: 'yearly',
+      daysToRenewal: 120,
+      price: 145.99,
+      totalSavings: 412.50,
+      patronId: 'samantha-carter',
+      membershipId: 'MEM-2023-089',
+      periodStart: '15/06/2025',
+      validUntil: '15/06/2026',
+      cardStyle: {
+        backgroundColor: '#B8860B',
+        textColor: '#ffffff',
+        accentColor: '#D4AF37'
+      },
+      autoRenewal: true,
+      paymentMethod: {
+        type: 'amex',
+        last4: '1008'
+      },
+      memberYears: 3,
+      upgradeEligible: false,
+      benefits: [
+        { category: 'access', title: 'Unlimited visits', description: 'to all exhibits', usage: { used: 67, limit: null, resetDate: null }, icon: 'fa-ticket' },
+        { category: 'access', title: 'Priority entry', description: 'skip the line', usage: null, icon: 'fa-forward' },
+        { category: 'discount', title: 'Bring a friend for free', description: 'every visit', usage: { used: 4, limit: 5, resetDate: '15/06/2026' }, icon: 'fa-user-plus' },
+        { category: 'discount', title: '20% off special events', description: "your ticket and friend's ticket", usage: null, icon: 'fa-percent' },
+        { category: 'discount', title: '10% F&B discount', description: 'at all venue restaurants', usage: { used: 25, limit: null, resetDate: null }, icon: 'fa-utensils' },
+        { category: 'complimentary', title: 'Welcome pack', description: 'Paradox tote + exclusive goodies', usage: { used: 1, limit: 1, resetDate: null }, icon: 'fa-gift' }
+      ],
+      usageAnalytics: {
+        overallPercentage: 85,
+        categories: [
+          { name: 'Admissions', used: 67, available: 'unlimited', percentage: 95 },
+          { name: 'Guest Passes', used: 4, available: 5, percentage: 80 },
+          { name: 'F&B Discounts', used: 25, available: 'unlimited', percentage: 85 },
+          { name: 'Event Discounts', used: 3, available: 'unlimited', percentage: 60 }
+        ],
+        unusedBenefits: ['Priority entry'],
+        mostUsed: 'Admissions'
+      },
+      beneficiaries: [
+        { id: 1, name: 'Samantha Carter', role: 'Primary', avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=40&h=40&fit=crop&crop=face' },
+        { id: 2, name: 'Michael Carter', role: 'Spouse', avatar: null }
+      ],
+      membershipHistory: [
+        { date: '2023-03-15', event: 'Joined', tier: 'Silver', programme: 'General Membership' },
+        { date: '2023-09-01', event: 'Upgraded', tier: 'Gold', programme: 'General Membership' },
+        { date: '2024-06-15', event: 'Renewed', tier: 'Gold', programme: 'General Membership' },
+        { date: '2025-06-15', event: 'Renewed', tier: 'Gold', programme: 'General Membership' }
+      ]
+    },
     source: 'import',
     createdDate: '2024-09-10'
   },
@@ -752,7 +864,7 @@ export const patrons = [
     photo: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=150&h=150&fit=crop&crop=face',
     email: 'mia_wilson1960@gmail.com',
     phone: '(555) 890-1234',
-    category: 'donor',
+    tags: ['donor'],
     assignedTo: 'Sophia Anderson',
     engagement: {
       level: 'on-fire',
@@ -784,7 +896,7 @@ export const patrons = [
     photo: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&h=150&fit=crop&crop=face',
     email: 'olibrown@gmail.com',
     phone: '(555) 901-2345',
-    category: 'donor',
+    tags: ['donor'],
     assignedTo: 'Lucas Thomas',
     engagement: {
       level: 'cool',
@@ -816,7 +928,7 @@ export const patrons = [
     photo: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&h=150&fit=crop&crop=face',
     email: 'ethan_davies_1234@gmail.com',
     phone: '(555) 012-3456',
-    category: 'member',
+    tags: ['donor'],
     assignedTo: 'Emma Smith',
     engagement: {
       level: 'cool',
@@ -838,7 +950,58 @@ export const patrons = [
       ]
     },
     giving: { lifetimeValue: 950, donations: 250, revenue: 700, lastDonation: '2025-10-25' },
-    membership: { status: 'active', tier: 'Silver', daysToRenewal: 90 },
+    membership: {
+      status: 'active',
+      programme: 'General Membership',
+      tier: 'Silver',
+      memberSince: '01/05/2024',
+      currentPeriod: '01 May 2026',
+      periodType: 'yearly',
+      daysToRenewal: 90,
+      price: 89.99,
+      totalSavings: 67.20,
+      patronId: 'olivia-brown',
+      membershipId: 'MEM-2024-156',
+      periodStart: '01/05/2025',
+      validUntil: '01/05/2026',
+      cardStyle: {
+        backgroundColor: '#5C6B7A',
+        textColor: '#ffffff',
+        accentColor: '#B8C5D1'
+      },
+      autoRenewal: true,
+      paymentMethod: {
+        type: 'mastercard',
+        last4: '3344'
+      },
+      memberYears: 2,
+      upgradeEligible: true,
+      upgradeTier: 'Gold',
+      benefits: [
+        { category: 'access', title: 'Unlimited visits', description: 'to all standard exhibits', usage: { used: 12, limit: null, resetDate: null }, icon: 'fa-ticket' },
+        { category: 'discount', title: 'Bring a friend for free', description: 'twice per year', usage: { used: 1, limit: 2, resetDate: '01/05/2026' }, icon: 'fa-user-plus' },
+        { category: 'discount', title: '10% off special events', description: 'your ticket only', usage: null, icon: 'fa-percent' },
+        { category: 'discount', title: '5% F&B discount', description: 'at main café', usage: { used: 4, limit: null, resetDate: null }, icon: 'fa-utensils' }
+      ],
+      usageAnalytics: {
+        overallPercentage: 50,
+        categories: [
+          { name: 'Admissions', used: 12, available: 'unlimited', percentage: 45 },
+          { name: 'Guest Passes', used: 1, available: 2, percentage: 50 },
+          { name: 'F&B Discounts', used: 4, available: 'unlimited', percentage: 35 },
+          { name: 'Event Discounts', used: 1, available: 'unlimited', percentage: 25 }
+        ],
+        unusedBenefits: [],
+        mostUsed: 'Admissions'
+      },
+      beneficiaries: [
+        { id: 1, name: 'Olivia Brown', role: 'Primary', avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=40&h=40&fit=crop&crop=face' }
+      ],
+      membershipHistory: [
+        { date: '2024-05-01', event: 'Joined', tier: 'Silver', programme: 'General Membership' },
+        { date: '2025-05-01', event: 'Renewed', tier: 'Silver', programme: 'General Membership' }
+      ]
+    },
     source: 'import',
     createdDate: '2024-12-01'
   },
@@ -857,7 +1020,7 @@ export const patrons = [
     photo: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&h=150&fit=crop&crop=face',
     email: 'rachel.kim@gmail.com',
     phone: '(555) 222-3333',
-    category: 'member',
+    tags: ['donor'],
     // General Constituent - RECENTLY ADDED via ticket purchase
     engagement: {
       level: 'cool',
@@ -879,7 +1042,51 @@ export const patrons = [
       ]
     },
     giving: { lifetimeValue: 450, donations: 100, revenue: 350, lastDonation: '2025-12-15' },
-    membership: { status: 'active', tier: 'Basic', daysToRenewal: 250 },
+    membership: {
+      status: 'active',
+      programme: 'General Membership',
+      tier: 'Basic',
+      memberSince: '25/11/2025',
+      currentPeriod: '25 November 2026',
+      periodType: 'yearly',
+      daysToRenewal: 250,
+      price: 49.99,
+      totalSavings: 24.00,
+      patronId: 'rachel-kim',
+      membershipId: 'MEM-2025-589',
+      periodStart: '25/11/2025',
+      validUntil: '25/11/2026',
+      cardStyle: {
+        backgroundColor: '#8B7355',
+        textColor: '#ffffff',
+        accentColor: '#A89070'
+      },
+      autoRenewal: false,
+      paymentMethod: {
+        type: 'mastercard',
+        last4: '6622'
+      },
+      memberYears: 1,
+      upgradeEligible: true,
+      upgradeTier: 'Silver',
+      benefits: [
+        { category: 'access', title: 'Unlimited visits', description: 'to all standard exhibits', usage: { used: 6, limit: null, resetDate: null }, icon: 'fa-ticket' }
+      ],
+      usageAnalytics: {
+        overallPercentage: 40,
+        categories: [
+          { name: 'Admissions', used: 6, available: 'unlimited', percentage: 40 }
+        ],
+        unusedBenefits: [],
+        mostUsed: 'Admissions'
+      },
+      beneficiaries: [
+        { id: 1, name: 'Rachel Kim', role: 'Primary', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=40&h=40&fit=crop&crop=face' }
+      ],
+      membershipHistory: [
+        { date: '2025-11-25', event: 'Joined', tier: 'Basic', programme: 'General Membership' }
+      ]
+    },
     createdDate: '2026-02-03',
     source: 'ticket'
   },
@@ -890,7 +1097,7 @@ export const patrons = [
     photo: 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=150&h=150&fit=crop&crop=face',
     email: 'd.chen@company.com',
     phone: '(555) 333-4444',
-    category: 'donor',
+    tags: ['donor'],
     // General Constituent - RECENTLY ADDED via online donation
     engagement: {
       level: 'cold',
@@ -922,7 +1129,7 @@ export const patrons = [
     photo: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=150&h=150&fit=crop&crop=face',
     email: 'maria.santos@email.com',
     phone: '(555) 444-5555',
-    category: 'member',
+    tags: ['donor'],
     // General Constituent - RECENTLY ADDED via membership signup
     engagement: {
       level: 'warm',
@@ -944,7 +1151,57 @@ export const patrons = [
       ]
     },
     giving: { lifetimeValue: 620, donations: 150, revenue: 470, lastDonation: '2026-01-20' },
-    membership: { status: 'active', tier: 'Silver', daysToRenewal: 60 },
+    membership: {
+      status: 'active',
+      programme: 'General Membership',
+      tier: 'Silver',
+      memberSince: '15/10/2025',
+      currentPeriod: '15 April 2026',
+      periodType: 'yearly',
+      daysToRenewal: 60,
+      price: 89.99,
+      totalSavings: 95.40,
+      patronId: 'maria-santos',
+      membershipId: 'MEM-2025-421',
+      periodStart: '15/10/2025',
+      validUntil: '15/10/2026',
+      cardStyle: {
+        backgroundColor: '#5C6B7A',
+        textColor: '#ffffff',
+        accentColor: '#B8C5D1'
+      },
+      autoRenewal: true,
+      paymentMethod: {
+        type: 'visa',
+        last4: '9156'
+      },
+      memberYears: 1,
+      upgradeEligible: true,
+      upgradeTier: 'Gold',
+      benefits: [
+        { category: 'access', title: 'Unlimited visits', description: 'to all standard exhibits', usage: { used: 18, limit: null, resetDate: null }, icon: 'fa-ticket' },
+        { category: 'discount', title: 'Bring a friend for free', description: 'twice per year', usage: { used: 2, limit: 2, resetDate: '15/10/2026' }, icon: 'fa-user-plus' },
+        { category: 'discount', title: '10% off special events', description: 'your ticket only', usage: null, icon: 'fa-percent' },
+        { category: 'discount', title: '5% F&B discount', description: 'at main café', usage: { used: 6, limit: null, resetDate: null }, icon: 'fa-utensils' }
+      ],
+      usageAnalytics: {
+        overallPercentage: 70,
+        categories: [
+          { name: 'Admissions', used: 18, available: 'unlimited', percentage: 70 },
+          { name: 'Guest Passes', used: 2, available: 2, percentage: 100 },
+          { name: 'F&B Discounts', used: 6, available: 'unlimited', percentage: 50 },
+          { name: 'Event Discounts', used: 2, available: 'unlimited', percentage: 40 }
+        ],
+        unusedBenefits: [],
+        mostUsed: 'Guest Passes'
+      },
+      beneficiaries: [
+        { id: 1, name: 'Maria Santos', role: 'Primary', avatar: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=40&h=40&fit=crop&crop=face' }
+      ],
+      membershipHistory: [
+        { date: '2025-10-15', event: 'Joined', tier: 'Silver', programme: 'General Membership' }
+      ]
+    },
     createdDate: '2026-02-04',
     source: 'membership'
   },
@@ -955,7 +1212,7 @@ export const patrons = [
     photo: null,
     email: 'jwilson@business.net',
     phone: '(555) 555-6666',
-    category: 'prospect',
+    tags: ['prospect'],
     // General Constituent - RECENTLY ADDED via ticket purchase
     engagement: {
       level: 'cold',
@@ -1073,7 +1330,7 @@ export const addPatron = (patronData) => {
     email: patronData.email || null,
     phone: patronData.phone || null,
     address: patronData.address || null,
-    category: patronData.category || 'prospect',
+    tags: patronData.tags || ['prospect'],
     // Default empty engagement
     engagement: {
       level: 'cold',
@@ -1140,3 +1397,60 @@ export const restorePatron = (patronId) => {
 
 // Get active patrons only (excludes archived)
 export const getActivePatrons = () => patrons.filter(p => p.status !== 'archived')
+
+// ============================================
+// TAG MANAGEMENT FUNCTIONS
+// ============================================
+
+// Update a patron's tags
+export const updatePatronTags = (patronId, tags) => {
+  return updatePatron(patronId, { tags })
+}
+
+// Add a new custom tag
+export const addCustomTag = (label) => {
+  const id = label.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
+  
+  // Check if tag already exists
+  const existing = patronTags.find(t => t.id === id)
+  if (existing) return existing
+  
+  const newTag = {
+    id,
+    label,
+    system: false, // Custom tag
+  }
+  patronTags.push(newTag)
+  return newTag
+}
+
+// Update an existing tag's label
+export const updateTagLabel = (tagId, newLabel) => {
+  const tag = patronTags.find(t => t.id === tagId)
+  if (!tag) return null
+  tag.label = newLabel
+  return tag
+}
+
+// Delete a tag from the system and remove from all patrons
+export const deleteTag = (tagId) => {
+  const index = patronTags.findIndex(t => t.id === tagId)
+  if (index === -1) return false
+  
+  // Remove tag from patronTags
+  patronTags.splice(index, 1)
+  
+  // Remove tag from all patrons that have it
+  patrons.forEach(patron => {
+    if (patron.tags && patron.tags.includes(tagId)) {
+      patron.tags = patron.tags.filter(t => t !== tagId)
+    }
+  })
+  
+  return true
+}
+
+// Get count of patrons using a specific tag
+export const getTagUsageCount = (tagId) => {
+  return patrons.filter(p => p.tags && p.tags.includes(tagId)).length
+}

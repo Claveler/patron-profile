@@ -1,5 +1,4 @@
 import OpportunitiesPanel from '../OpportunitiesPanel/OpportunitiesPanel'
-import AddToPortfolioBar from '../AddToPortfolioBar/AddToPortfolioBar'
 import GivingSummary from '../GivingSummary/GivingSummary'
 import ActivityTimeline from '../ActivityTimeline/ActivityTimeline'
 import EngagementPanel from '../EngagementPanel/EngagementPanel'
@@ -14,28 +13,16 @@ function SummaryTab({
   onSelectOpportunity, 
   onCreateOpportunity,
   onRecordGift,
-  onLogActivity,
-  onAssignToPortfolio 
+  onLogActivity
 }) {
   const isManaged = isManagedProspect(patron)
 
   return (
     <div className="summary-tab">
-      {/* Add to Portfolio Bar for General Constituents */}
-      {!isManaged && (
-        <AddToPortfolioBar 
-          patron={patron} 
-          onAddToPortfolio={onAssignToPortfolio} 
-        />
-      )}
-      
       <div className="summary-tab__main">
         {/* Left Column - Giving Summary & Activity */}
         <div className="summary-tab__left">
-          <GivingSummary 
-            giving={patron.giving} 
-            onRecordGift={onRecordGift}
-          />
+          <GivingSummary giving={patron.giving} />
           <ActivityTimeline 
             gifts={patron.giving?.gifts || []} 
             onAddActivity={onLogActivity}

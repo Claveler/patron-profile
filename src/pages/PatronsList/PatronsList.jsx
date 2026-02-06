@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { patrons, patronCategories, engagementLevels, isManagedProspect, formatRelativeDate, getActivePatrons, getPatronOrigin } from '../../data/patrons'
+import { patrons, patronTags, engagementLevels, isManagedProspect, formatRelativeDate, getActivePatrons, getPatronOrigin } from '../../data/patrons'
 import PatronModal from '../../components/PatronModal/PatronModal'
 import AssignPortfolioModal from '../../components/AssignPortfolioModal/AssignPortfolioModal'
 import './PatronsList.css'
@@ -72,6 +72,12 @@ function PatronsList({ onSelectPatron }) {
           aVal = levels.indexOf(a.engagement?.level || 'cold')
           bVal = levels.indexOf(b.engagement?.level || 'cold')
           break
+        case 'membershipTier':
+          // Sort by tier: Gold > Silver > Basic > None
+          const tierOrder = { 'Gold': 3, 'Silver': 2, 'Basic': 1 }
+          aVal = tierOrder[a.membership?.tier] || 0
+          bVal = tierOrder[b.membership?.tier] || 0
+          break
         default:
           aVal = a[sortField] || ''
           bVal = b[sortField] || ''
@@ -94,8 +100,12 @@ function PatronsList({ onSelectPatron }) {
     }
   }
 
-  const getCategoryConfig = (categoryId) => {
-    return patronCategories.find(c => c.id === categoryId) || { label: categoryId, color: 'neutral' }
+  const getTagConfig = (tagId) => {
+    return patronTags.find(t => t.id === tagId) || { id: tagId, label: tagId }
+  }
+
+  const getMembershipTier = (patron) => {
+    return patron.membership?.tier || null
   }
 
   const getEngagementLabel = (levelId) => {
@@ -197,7 +207,14 @@ function PatronsList({ onSelectPatron }) {
                   Lifetime Value
                   <i className={`fa-solid fa-sort patrons-list__sort-icon ${sortField === 'lifetimeValue' ? 'patrons-list__sort-icon--active' : ''}`}></i>
                 </th>
-                <th className="patrons-list__th">Category</th>
+                <th 
+                  className="patrons-list__th patrons-list__th--sortable"
+                  onClick={() => handleSort('membershipTier')}
+                >
+                  Membership
+                  <i className={`fa-solid fa-sort patrons-list__sort-icon ${sortField === 'membershipTier' ? 'patrons-list__sort-icon--active' : ''}`}></i>
+                </th>
+                <th className="patrons-list__th">Tags</th>
                 <th className="patrons-list__th">Owner</th>
                 <th 
                   className="patrons-list__th patrons-list__th--sortable"
@@ -222,7 +239,10 @@ function PatronsList({ onSelectPatron }) {
                 const isArchived = patron.status === 'archived'
                 const isNew = isRecentlyAdded(patron.createdDate)
                 const origin = getPatronOrigin(patron.source)
-                const category = getCategoryConfig(patron.category)
+                const membershipTier = getMembershipTier(patron)
+                const tags = patron.tags || []
+                const displayTags = tags.slice(0, 2)
+                const remainingTags = tags.length - 2
                 
                 return (
                   <tr 
@@ -265,10 +285,26 @@ function PatronsList({ onSelectPatron }) {
                     <td className="patrons-list__td patrons-list__td--ltv">
                       {formatCurrency(patron.giving?.lifetimeValue || 0)}
                     </td>
-                    <td className="patrons-list__td">
-                      <span className={`patrons-list__category patrons-list__category--${category.color}`}>
-                        {category.label}
-                      </span>
+                    <td className="patrons-list__td patrons-list__td--membership">
+                      {membershipTier ? (
+                        <span className={`patrons-list__membership patrons-list__membership--${membershipTier.toLowerCase()}`}>
+                          {membershipTier}
+                        </span>
+                      ) : (
+                        <span className="patrons-list__membership patrons-list__membership--none">—</span>
+                      )}
+                    </td>
+                    <td className="patrons-list__td patrons-list__td--tags">
+                      <div className="patrons-list__tags-container" data-tooltip={tags.map(t => getTagConfig(t).label).join(', ')}>
+                        {displayTags.map(tagId => (
+                          <span key={tagId} className="patrons-list__tag">
+                            {getTagConfig(tagId).label}
+                          </span>
+                        ))}
+                        {remainingTags > 0 && (
+                          <span className="patrons-list__tag patrons-list__tag--more">+{remainingTags}</span>
+                        )}
+                      </div>
                     </td>
                     <td className="patrons-list__td patrons-list__td--owner">
                       {patron.assignedTo ? (

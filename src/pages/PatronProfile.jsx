@@ -8,7 +8,7 @@ import OpportunityModal from '../components/OpportunityModal/OpportunityModal'
 import GiftModal from '../components/GiftModal/GiftModal'
 import ActivityModal from '../components/ActivityModal/ActivityModal'
 import AssignPortfolioModal from '../components/AssignPortfolioModal/AssignPortfolioModal'
-import { getPatronById, isManagedProspect, archivePatron, restorePatron } from '../data/patrons'
+import { getPatronById, isManagedProspect, archivePatron, restorePatron, updatePatronTags } from '../data/patrons'
 import './PatronProfile.css'
 
 const tabs = [
@@ -569,6 +569,13 @@ function PatronProfile({ patronId, onBack, onSelectOpportunity }) {
     window.location.reload() // Simple approach for demo
   }
 
+  const handleUpdateTags = (newTags) => {
+    updatePatronTags(patronData.id, newTags)
+    console.log('Updated tags:', newTags)
+    // Force re-render to show updated tags
+    window.location.reload() // Simple approach for demo
+  }
+
   const renderTabContent = () => {
     switch (activeTab) {
       case 'summary':
@@ -579,7 +586,6 @@ function PatronProfile({ patronId, onBack, onSelectOpportunity }) {
             onCreateOpportunity={handleCreateOpportunity}
             onRecordGift={handleRecordGift}
             onLogActivity={handleLogActivity}
-            onAssignToPortfolio={handleAssignToPortfolio}
           />
         )
       case 'memberships':
@@ -599,7 +605,6 @@ function PatronProfile({ patronId, onBack, onSelectOpportunity }) {
             onCreateOpportunity={handleCreateOpportunity}
             onRecordGift={handleRecordGift}
             onLogActivity={handleLogActivity}
-            onAssignToPortfolio={handleAssignToPortfolio}
           />
         )
     }
@@ -653,6 +658,7 @@ function PatronProfile({ patronId, onBack, onSelectOpportunity }) {
           onAddActivity={handleLogActivity}
           onArchive={handleArchive}
           onRestore={handleRestore}
+          onUpdateTags={handleUpdateTags}
         />
 
         {/* Tab Section */}
@@ -662,6 +668,7 @@ function PatronProfile({ patronId, onBack, onSelectOpportunity }) {
             activeTab={activeTab} 
             onTabChange={setActiveTab}
             assignedTo={patronData.assignedTo}
+            onAssign={handleAssignToPortfolio}
           />
           
           <div className="patron-profile__tab-content">

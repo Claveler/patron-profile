@@ -19,6 +19,24 @@ const paymentIcons = {
 }
 
 function MembershipOverview({ membership, patronName, patronEmail }) {
+  // Guard for incomplete membership data
+  if (!membership?.programme || !membership?.benefits) {
+    return (
+      <div className="membership-overview wrapper-card">
+        <div className="membership-overview__header">
+          <h4 className="membership-overview__title">Overview</h4>
+        </div>
+        <div className="membership-overview__empty">
+          <i className="fa-solid fa-id-card"></i>
+          <p>Membership details not available</p>
+          <span className="membership-overview__empty-tier">
+            {membership?.tier || 'Unknown'} Member
+          </span>
+        </div>
+      </div>
+    )
+  }
+
   const [showUpgradeModal, setShowUpgradeModal] = useState(false)
   const qrValue = `${membership.patronId}-${membership.membershipId}`
   

@@ -131,13 +131,20 @@ function Dashboard({ onNavigateToPatron, onNavigateToOpportunity, onNavigateToPa
 
   return (
     <div className="dashboard">
-      {/* Page Header */}
+      {/* Dark Fever Header */}
       <div className="dashboard__header">
-        <div className="dashboard__header-content">
-          <h1 className="dashboard__title">Dashboard</h1>
-          <p className="dashboard__subtitle">Welcome back. Here's what needs your attention today.</p>
+        <div className="dashboard__breadcrumb">
+          <span className="dashboard__breadcrumb-section">Fundraising</span>
+          <i className="fa-solid fa-chevron-right dashboard__breadcrumb-separator"></i>
         </div>
-        <div className="dashboard__header-actions">
+        <h1 className="dashboard__title">Dashboard</h1>
+      </div>
+
+      {/* Main Content Container */}
+      <div className="dashboard__container">
+        {/* Toolbar with subtitle and filter */}
+        <div className="dashboard__toolbar">
+          <p className="dashboard__subtitle">Welcome back. Here's what needs your attention today.</p>
           <select 
             className="dashboard__filter"
             value={selectedOfficer || ''}
@@ -149,10 +156,9 @@ function Dashboard({ onNavigateToPatron, onNavigateToOpportunity, onNavigateToPa
             ))}
           </select>
         </div>
-      </div>
 
-      {/* Quick Stats Row */}
-      <div className="dashboard__stats-row">
+        {/* Quick Stats Row */}
+        <div className="dashboard__stats-row">
         <div className="dashboard__stat-card">
           <div className="dashboard__stat-icon dashboard__stat-icon--primary">
             <i className="fa-solid fa-bullseye"></i>
@@ -386,6 +392,7 @@ function Dashboard({ onNavigateToPatron, onNavigateToOpportunity, onNavigateToPa
             </div>
           </div>
         </div>
+      </div>
       </div>
     </div>
   )

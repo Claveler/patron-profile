@@ -25,7 +25,7 @@ function PerksUsage({ perks }) {
   return (
     <div className="perks-usage wrapper-card">
       <div className="perks-usage__header">
-        <h4 className="perks-usage__title">Perks usage</h4>
+        <h4 className="perks-usage__title">Perks Usage</h4>
       </div>
       
       <div className="perks-usage__content">

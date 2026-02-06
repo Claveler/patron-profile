@@ -1,29 +1,68 @@
 /* Dashboard Page */
 .dashboard {
-  padding: 24px;
   background: var(--color-background);
   min-height: 100vh;
-}
-
-/* Header */
-.dashboard__header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 24px;
-  gap: 16px;
-}
-
-.dashboard__header-content {
   display: flex;
   flex-direction: column;
-  gap: 4px;
 }
 
-.dashboard__header-actions {
+/* Dark Fever Header */
+.dashboard__header {
+  background-color: var(--color-background-dark);
+  padding: var(--space-4) var(--space-6);
+  color: var(--color-text-inverse);
+}
+
+.dashboard__breadcrumb {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+
+.dashboard__breadcrumb-section {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-inverse);
+  opacity: 0.7;
+}
+
+.dashboard__breadcrumb-separator {
+  font-size: 10px;
+  color: var(--color-text-inverse);
+  opacity: 0.5;
+}
+
+.dashboard__title {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  margin: 0;
+  color: inherit;
+}
+
+/* Main Container */
+.dashboard__container {
+  padding: var(--space-6);
+  background-color: var(--color-surface);
+  margin: var(--space-6);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+/* Toolbar */
+.dashboard__toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.dashboard__subtitle {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-tertiary);
+  margin: 0;
 }
 
 .dashboard__filter {
@@ -53,25 +92,11 @@
   box-shadow: 0 0 0 2px var(--color-primary-bg);
 }
 
-.dashboard__title {
-  font-size: 24px;
-  font-weight: 600;
-  color: var(--color-text-primary);
-  margin: 0;
-}
-
-.dashboard__subtitle {
-  font-size: 14px;
-  color: var(--color-text-tertiary);
-  margin: 0;
-}
-
 /* Stats Row */
 .dashboard__stats-row {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 16px;
-  margin-bottom: 24px;
 }
 
 .dashboard__stat-card {

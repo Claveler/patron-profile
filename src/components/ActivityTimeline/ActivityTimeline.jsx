@@ -177,7 +177,7 @@ function ActivityTimeline({ gifts = [], activities = mockActivities, onAddActivi
     <div className="activity-timeline">
       {/* Header */}
       <div className="activity-timeline__header">
-        <h3 className="activity-timeline__title">Recent activity</h3>
+        <h3 className="activity-timeline__title">Recent Activity</h3>
         <div className="activity-timeline__filters">
           <button 
             className={`activity-timeline__filter ${filter === 'all' ? 'activity-timeline__filter--active' : ''}`}
@@ -207,12 +207,11 @@ function ActivityTimeline({ gifts = [], activities = mockActivities, onAddActivi
         <div className="activity-timeline__actions">
           {onRecordGift && (
             <button className="activity-timeline__record-gift-btn" onClick={onRecordGift}>
-              <i className="fa-solid fa-hand-holding-dollar"></i>
               Record Gift
             </button>
           )}
           <button className="activity-timeline__add-btn" onClick={handleAddActivity}>
-            Add activity
+            Add Activity
           </button>
         </div>
       </div>

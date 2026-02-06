@@ -63,23 +63,17 @@
 
 /* Record Gift button */
 .activity-timeline__record-gift-btn {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: var(--color-success-light);
-  color: var(--color-success);
-  border: none;
-  padding: 6px 12px;
-  border-radius: 6px;
   font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-primary);
+  background: transparent;
+  border: none;
   cursor: pointer;
-  transition: all 0.15s ease;
+  white-space: nowrap;
 }
 
 .activity-timeline__record-gift-btn:hover {
-  background: var(--color-success);
-  color: white;
+  text-decoration: underline;
 }
 
 /* Add activity button */

@@ -17,7 +17,7 @@ const monthlyData = [
   { month: 'Dec', year: '25', donations: 450, revenue: 220 },
 ]
 
-function GivingSummary({ giving, onRecordGift }) {
+function GivingSummary({ giving }) {
   const [selectedPeriod, setSelectedPeriod] = useState('12-months')
   const [hoveredLine, setHoveredLine] = useState(null) // 'total' | 'revenue' | null
   const [hoveredPointIndex, setHoveredPointIndex] = useState(null)
@@ -29,15 +29,6 @@ function GivingSummary({ giving, onRecordGift }) {
       <div className="giving-summary">
         <div className="giving-summary__header">
           <h3 className="giving-summary__title">Financial Summary</h3>
-          {onRecordGift && (
-            <button 
-              className="giving-summary__add-btn"
-              onClick={onRecordGift}
-              title="Record a gift"
-            >
-              <i className="fa-solid fa-plus"></i>
-            </button>
-          )}
         </div>
         <div className="giving-summary__empty">
           <i className="fa-solid fa-chart-pie"></i>
@@ -118,15 +109,6 @@ function GivingSummary({ giving, onRecordGift }) {
             <option value="ytd">Year to date</option>
             <option value="all">All time</option>
           </select>
-          {onRecordGift && (
-            <button 
-              className="giving-summary__add-btn"
-              onClick={onRecordGift}
-              title="Record a gift"
-            >
-              <i className="fa-solid fa-plus"></i>
-            </button>
-          )}
         </div>
       </div>
 
