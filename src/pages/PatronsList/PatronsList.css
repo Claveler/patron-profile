@@ -226,6 +226,13 @@
   color: var(--color-text-secondary);
 }
 
+/* Lifetime Value Cell */
+.patrons-list__td--ltv {
+  font-weight: var(--font-weight-semibold);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-primary);
+}
+
 /* Category Tag */
 .patrons-list__category {
   display: inline-block;
@@ -259,6 +266,28 @@
 .patrons-list__owner--none {
   color: var(--color-text-muted);
   font-weight: var(--font-weight-regular);
+}
+
+/* Assign Button (for unassigned patrons) */
+.patrons-list__assign-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: transparent;
+  border: 1px dashed var(--color-border);
+  border-radius: 999px;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.patrons-list__assign-btn:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background: var(--color-primary-light);
 }
 
 /* Engagement Level */
@@ -399,19 +428,48 @@
   background-color: #dcfce7;
 }
 
-/* Source Indicator */
-.patrons-list__source {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 11px;
-  color: var(--color-text-tertiary);
-  margin-top: 2px;
+/* Origin Indicator (Fever vs Manual) */
+.patrons-list__origin {
+  position: relative;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  cursor: help;
 }
 
-.patrons-list__source i {
-  font-size: 10px;
-  color: var(--color-text-muted);
+.patrons-list__origin--fever {
+  background-color: var(--color-primary);
+}
+
+.patrons-list__origin--manual {
+  background-color: var(--color-text-muted);
+}
+
+/* Origin Tooltip */
+.patrons-list__origin::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 6px);
+  transform: translateX(-50%);
+  background-color: var(--color-text-primary);
+  color: white;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.15s, visibility 0.15s;
+  z-index: 100;
+  pointer-events: none;
+}
+
+.patrons-list__origin:hover::after {
+  opacity: 1;
+  visibility: visible;
 }
 
 /* Archived Row Styling */

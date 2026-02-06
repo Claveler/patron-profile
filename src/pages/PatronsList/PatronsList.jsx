@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react'
-import { patrons, patronCategories, engagementLevels, patronSources, isManagedProspect, formatDate, getActivePatrons } from '../../data/patrons'
+import { patrons, patronCategories, engagementLevels, isManagedProspect, formatRelativeDate, getActivePatrons, getPatronOrigin } from '../../data/patrons'
 import PatronModal from '../../components/PatronModal/PatronModal'
+import AssignPortfolioModal from '../../components/AssignPortfolioModal/AssignPortfolioModal'
 import './PatronsList.css'
 
 // Check if patron was added in the last 7 days
@@ -12,18 +13,24 @@ const isRecentlyAdded = (createdDate) => {
   return created >= sevenDaysAgo
 }
 
-// Get source configuration
-const getSourceConfig = (sourceId) => {
-  return patronSources.find(s => s.id === sourceId) || null
+// Format currency for display
+const formatCurrency = (amount) => {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(amount)
 }
 
 function PatronsList({ onSelectPatron }) {
   const [searchTerm, setSearchTerm] = useState('')
-  const [sortField, setSortField] = useState('lastName')
-  const [sortDirection, setSortDirection] = useState('asc')
+  const [sortField, setSortField] = useState('createdDate')
+  const [sortDirection, setSortDirection] = useState('desc') // newest first
   const [openMenuId, setOpenMenuId] = useState(null)
   const [showPatronModal, setShowPatronModal] = useState(false)
   const [showArchived, setShowArchived] = useState(false)
+  const [assigningPatron, setAssigningPatron] = useState(null) // { id, name }
 
   // Filter and sort patrons
   const filteredPatrons = useMemo(() => {
@@ -51,9 +58,14 @@ function PatronsList({ onSelectPatron }) {
           aVal = `${a.lastName} ${a.firstName}`.toLowerCase()
           bVal = `${b.lastName} ${b.firstName}`.toLowerCase()
           break
-        case 'lastDonation':
-          aVal = a.giving?.lastDonation || ''
-          bVal = b.giving?.lastDonation || ''
+        case 'createdDate':
+          // Patrons without createdDate sort to bottom (oldest)
+          aVal = a.createdDate || '1900-01-01'
+          bVal = b.createdDate || '1900-01-01'
+          break
+        case 'lifetimeValue':
+          aVal = a.giving?.lifetimeValue || 0
+          bVal = b.giving?.lifetimeValue || 0
           break
         case 'engagement':
           const levels = ['cold', 'cool', 'warm', 'hot', 'on-fire']
@@ -137,7 +149,7 @@ function PatronsList({ onSelectPatron }) {
             <i className="fa-solid fa-magnifying-glass patrons-list__search-icon"></i>
             <input
               type="text"
-              placeholder="Search by name, email and owner"
+              placeholder="Search by name or owner"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="patrons-list__search-input"
@@ -178,15 +190,21 @@ function PatronsList({ onSelectPatron }) {
                   Name
                   <i className={`fa-solid fa-sort patrons-list__sort-icon ${sortField === 'lastName' ? 'patrons-list__sort-icon--active' : ''}`}></i>
                 </th>
-                <th className="patrons-list__th">Email</th>
+                <th 
+                  className="patrons-list__th patrons-list__th--sortable"
+                  onClick={() => handleSort('lifetimeValue')}
+                >
+                  Lifetime Value
+                  <i className={`fa-solid fa-sort patrons-list__sort-icon ${sortField === 'lifetimeValue' ? 'patrons-list__sort-icon--active' : ''}`}></i>
+                </th>
                 <th className="patrons-list__th">Category</th>
                 <th className="patrons-list__th">Owner</th>
                 <th 
                   className="patrons-list__th patrons-list__th--sortable"
-                  onClick={() => handleSort('lastDonation')}
+                  onClick={() => handleSort('createdDate')}
                 >
-                  Last donation
-                  <i className={`fa-solid fa-sort patrons-list__sort-icon ${sortField === 'lastDonation' ? 'patrons-list__sort-icon--active' : ''}`}></i>
+                  Patron Since
+                  <i className={`fa-solid fa-sort patrons-list__sort-icon ${sortField === 'createdDate' ? 'patrons-list__sort-icon--active' : ''}`}></i>
                 </th>
                 <th 
                   className="patrons-list__th patrons-list__th--sortable"
@@ -203,7 +221,7 @@ function PatronsList({ onSelectPatron }) {
                 const isManaged = isManagedProspect(patron)
                 const isArchived = patron.status === 'archived'
                 const isNew = isRecentlyAdded(patron.createdDate)
-                const sourceConfig = getSourceConfig(patron.source)
+                const origin = getPatronOrigin(patron.source)
                 const category = getCategoryConfig(patron.category)
                 
                 return (
@@ -227,6 +245,10 @@ function PatronsList({ onSelectPatron }) {
                         )}
                         <div className="patrons-list__name-wrapper">
                           <div className="patrons-list__name-row">
+                            <span 
+                              className={`patrons-list__origin patrons-list__origin--${origin}`}
+                              data-tooltip={origin === 'fever' ? 'Added via Fever' : 'Manually added'}
+                            />
                             <span className="patrons-list__name">
                               {patron.firstName} {patron.lastName}
                             </span>
@@ -237,17 +259,11 @@ function PatronsList({ onSelectPatron }) {
                           {isArchived && (
                             <span className="patrons-list__archived-badge">Archived</span>
                           )}
-                          {sourceConfig && (
-                            <span className="patrons-list__source" title={`Added via: ${sourceConfig.label}`}>
-                              <i className={`fa-solid ${sourceConfig.icon}`}></i>
-                              {sourceConfig.label}
-                            </span>
-                          )}
                         </div>
                       </div>
                     </td>
-                    <td className="patrons-list__td patrons-list__td--email">
-                      {patron.email}
+                    <td className="patrons-list__td patrons-list__td--ltv">
+                      {formatCurrency(patron.giving?.lifetimeValue || 0)}
                     </td>
                     <td className="patrons-list__td">
                       <span className={`patrons-list__category patrons-list__category--${category.color}`}>
@@ -258,11 +274,20 @@ function PatronsList({ onSelectPatron }) {
                       {patron.assignedTo ? (
                         <span className="patrons-list__owner">{patron.assignedTo}</span>
                       ) : (
-                        <span className="patrons-list__owner patrons-list__owner--none">-</span>
+                        <button 
+                          className="patrons-list__assign-btn"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            setAssigningPatron({ id: patron.id, name: `${patron.firstName} ${patron.lastName}` })
+                          }}
+                        >
+                          <i className="fa-solid fa-plus"></i>
+                          Assign
+                        </button>
                       )}
                     </td>
                     <td className="patrons-list__td">
-                      {patron.giving?.lastDonation ? formatDate(patron.giving.lastDonation) : '-'}
+                      {formatRelativeDate(patron.createdDate)}
                     </td>
                     <td className="patrons-list__td">
                       <span className={`patrons-list__engagement patrons-list__engagement--${patron.engagement?.level || 'cold'}`}>
@@ -312,6 +337,17 @@ function PatronsList({ onSelectPatron }) {
         onClose={() => setShowPatronModal(false)}
         onSuccess={handlePatronCreated}
       />
+
+      {/* Assign to Portfolio Modal */}
+      {assigningPatron && (
+        <AssignPortfolioModal
+          isOpen={!!assigningPatron}
+          onClose={() => setAssigningPatron(null)}
+          onSuccess={() => setAssigningPatron(null)}
+          patronId={assigningPatron.id}
+          patronName={assigningPatron.name}
+        />
+      )}
     </div>
   )
 }

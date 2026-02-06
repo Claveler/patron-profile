@@ -52,13 +52,20 @@ export const pipelineStages = [
 ]
 
 // Patron sources (how they entered the system)
+// origin: 'fever' = auto-created from Fever transaction, 'manual' = added by gift officer
 export const patronSources = [
-  { id: 'ticket', label: 'Ticket Purchase', icon: 'fa-ticket' },
-  { id: 'manual', label: 'Manual Entry', icon: 'fa-keyboard' },
-  { id: 'online', label: 'Online Donation', icon: 'fa-globe' },
-  { id: 'import', label: 'Data Import', icon: 'fa-file-import' },
-  { id: 'membership', label: 'Membership Signup', icon: 'fa-id-card' },
+  { id: 'ticket', label: 'Ticket Purchase', icon: 'fa-ticket', origin: 'fever' },
+  { id: 'online', label: 'Online Donation', icon: 'fa-globe', origin: 'fever' },
+  { id: 'membership', label: 'Membership Signup', icon: 'fa-id-card', origin: 'fever' },
+  { id: 'manual', label: 'Manual Entry', icon: 'fa-keyboard', origin: 'manual' },
+  { id: 'import', label: 'Data Import', icon: 'fa-file-import', origin: 'manual' },
 ]
+
+// Get patron origin type (fever or manual)
+export const getPatronOrigin = (source) => {
+  const sourceConfig = patronSources.find(s => s.id === source)
+  return sourceConfig?.origin || 'manual' // Default to manual for legacy data
+}
 
 /**
  * PATRONS DATABASE
@@ -299,7 +306,9 @@ export const patrons = [
         { id: 5, date: '11/18/2024', type: 'donation', description: 'Online Donation', amount: 250.00, deductible: 250.00, benefitsValue: 0, campaign: '2025 Annual Fund', appeal: 'Website Donate Button' }
       ],
       inKindDonations: []
-    }
+    },
+    source: 'manual',
+    createdDate: '2024-11-18'
   },
 
   // Paul Fairfax - FULL DATA (General Constituent demo patron)
@@ -536,7 +545,9 @@ export const patrons = [
         { id: 2, year: 2024, generated: '10/01/2025', sent: true, sentDate: '12/01/2025' }
       ],
       inKindDonations: []
-    }
+    },
+    source: 'ticket',
+    createdDate: '2024-02-27'
   },
 
   // Other Managed Prospects (simplified data for list view)
@@ -549,8 +560,28 @@ export const patrons = [
     phone: '(555) 234-5678',
     category: 'prospect',
     assignedTo: 'Liam Johnson',
-    engagement: { level: 'cold', visits: 3, lastVisit: '01/10/2025' },
-    giving: { lifetimeValue: 150, donations: 0, revenue: 150, lastDonation: null }
+    engagement: {
+      level: 'cold',
+      visits: 3,
+      lastVisit: '01/10/2025',
+      activityHistory: [
+        { month: '2025-02', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-03', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-04', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-05', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-06', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-07', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-08', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-09', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-10', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-11', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-12', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2026-01', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] }
+      ]
+    },
+    giving: { lifetimeValue: 150, donations: 0, revenue: 150, lastDonation: null },
+    source: 'import',
+    createdDate: '2025-06-15'
   },
   {
     id: 'sophia-thomas',
@@ -561,8 +592,28 @@ export const patrons = [
     phone: '(555) 345-6789',
     category: 'donor',
     assignedTo: 'Emma Smith',
-    engagement: { level: 'cold', visits: 8, lastVisit: '12/10/2025' },
-    giving: { lifetimeValue: 1250, donations: 750, revenue: 500, lastDonation: '2025-10-12' }
+    engagement: {
+      level: 'cold',
+      visits: 8,
+      lastVisit: '12/10/2025',
+      activityHistory: [
+        { month: '2025-02', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-03', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-04', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-05', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-06', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-07', weeks: [{ activities: [] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }] },
+        { month: '2025-08', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }] },
+        { month: '2025-09', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [{ type: 'donation', count: 1, value: 750 }] }, { activities: [] }] },
+        { month: '2025-10', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 2 }] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }] },
+        { month: '2025-11', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-12', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2026-01', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] }
+      ]
+    },
+    giving: { lifetimeValue: 1250, donations: 750, revenue: 500, lastDonation: '2025-10-12' },
+    source: 'import',
+    createdDate: '2025-04-10'
   },
   {
     id: 'lucas-taylor',
@@ -573,9 +624,29 @@ export const patrons = [
     phone: '(555) 456-7890',
     category: 'member',
     assignedTo: 'Liam Johnson',
-    engagement: { level: 'warm', visits: 22, lastVisit: '20/10/2025' },
+    engagement: {
+      level: 'warm',
+      visits: 22,
+      lastVisit: '20/10/2025',
+      activityHistory: [
+        { month: '2025-02', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }] },
+        { month: '2025-03', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 2 }] }, { activities: [] }, { activities: [{ type: 'purchase', count: 1, value: 45 }] }] },
+        { month: '2025-04', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }] },
+        { month: '2025-05', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 2 }] }, { activities: [{ type: 'donation', count: 1, value: 500 }] }, { activities: [] }] },
+        { month: '2025-06', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }, { activities: [{ type: 'attendance', count: 2 }] }] },
+        { month: '2025-07', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [{ type: 'purchase', count: 1, value: 35 }] }, { activities: [] }] },
+        { month: '2025-08', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [{ type: 'donation', count: 1, value: 500 }] }] },
+        { month: '2025-09', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 2 }] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }] },
+        { month: '2025-10', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [{ type: 'purchase', count: 1, value: 55 }] }, { activities: [{ type: 'attendance', count: 2 }, { type: 'donation', count: 1, value: 500 }] }, { activities: [] }] },
+        { month: '2025-11', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-12', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2026-01', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] }
+      ]
+    },
     giving: { lifetimeValue: 2800, donations: 1500, revenue: 1300, lastDonation: '2025-10-20' },
-    membership: { status: 'active', tier: 'Silver', daysToRenewal: 45 }
+    membership: { status: 'active', tier: 'Silver', daysToRenewal: 45 },
+    source: 'import',
+    createdDate: '2024-08-20'
   },
   {
     id: 'ava-anderson',
@@ -586,8 +657,28 @@ export const patrons = [
     phone: '(555) 567-8901',
     category: 'engaged-patron',
     assignedTo: 'Liam Johnson',
-    engagement: { level: 'hot', visits: 45, lastVisit: '01/11/2025' },
-    giving: { lifetimeValue: 8500, donations: 7000, revenue: 1500, lastDonation: '2025-11-01' }
+    engagement: {
+      level: 'hot',
+      visits: 45,
+      lastVisit: '01/11/2025',
+      activityHistory: [
+        { month: '2025-02', weeks: [{ activities: [{ type: 'attendance', count: 2 }] }, { activities: [{ type: 'purchase', count: 1, value: 65 }] }, { activities: [{ type: 'attendance', count: 3 }] }, { activities: [{ type: 'attendance', count: 1 }] }] },
+        { month: '2025-03', weeks: [{ activities: [{ type: 'attendance', count: 2 }] }, { activities: [{ type: 'donation', count: 1, value: 1000 }] }, { activities: [{ type: 'attendance', count: 2 }] }, { activities: [{ type: 'attendance', count: 3 }, { type: 'purchase', count: 1, value: 45 }] }] },
+        { month: '2025-04', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [{ type: 'attendance', count: 2 }] }, { activities: [{ type: 'purchase', count: 1, value: 38 }] }, { activities: [{ type: 'attendance', count: 2 }] }] },
+        { month: '2025-05', weeks: [{ activities: [{ type: 'attendance', count: 3 }] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [{ type: 'donation', count: 1, value: 2000 }] }, { activities: [{ type: 'attendance', count: 2 }] }] },
+        { month: '2025-06', weeks: [{ activities: [{ type: 'attendance', count: 2 }] }, { activities: [{ type: 'purchase', count: 2, value: 78 }] }, { activities: [{ type: 'attendance', count: 3 }] }, { activities: [{ type: 'attendance', count: 1 }] }] },
+        { month: '2025-07', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [{ type: 'attendance', count: 2 }] }, { activities: [{ type: 'donation', count: 1, value: 1500 }] }, { activities: [{ type: 'attendance', count: 2 }] }] },
+        { month: '2025-08', weeks: [{ activities: [{ type: 'attendance', count: 2 }] }, { activities: [{ type: 'purchase', count: 1, value: 55 }] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [{ type: 'attendance', count: 3 }] }] },
+        { month: '2025-09', weeks: [{ activities: [{ type: 'attendance', count: 2 }] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [{ type: 'donation', count: 1, value: 1000 }] }, { activities: [{ type: 'attendance', count: 2 }] }] },
+        { month: '2025-10', weeks: [{ activities: [{ type: 'attendance', count: 3 }] }, { activities: [{ type: 'purchase', count: 1, value: 42 }] }, { activities: [{ type: 'attendance', count: 2 }] }, { activities: [{ type: 'attendance', count: 1 }] }] },
+        { month: '2025-11', weeks: [{ activities: [{ type: 'attendance', count: 2 }, { type: 'donation', count: 1, value: 1500 }] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-12', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2026-01', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] }
+      ]
+    },
+    giving: { lifetimeValue: 8500, donations: 7000, revenue: 1500, lastDonation: '2025-11-01' },
+    source: 'import',
+    createdDate: '2024-03-15'
   },
   {
     id: 'samantha-carter',
@@ -598,8 +689,28 @@ export const patrons = [
     phone: '(555) 678-9012',
     category: 'large-donor',
     assignedTo: 'Emma Smith',
-    engagement: { level: 'on-fire', visits: 67, lastVisit: '15/10/2025' },
-    giving: { lifetimeValue: 125000, donations: 120000, revenue: 5000, lastDonation: '2025-10-15' }
+    engagement: {
+      level: 'on-fire',
+      visits: 67,
+      lastVisit: '15/10/2025',
+      activityHistory: [
+        { month: '2025-02', weeks: [{ activities: [{ type: 'attendance', count: 3 }, { type: 'donation', count: 1, value: 10000 }] }, { activities: [{ type: 'attendance', count: 2 }] }, { activities: [{ type: 'attendance', count: 4 }, { type: 'purchase', count: 2, value: 125 }] }, { activities: [{ type: 'attendance', count: 2 }] }] },
+        { month: '2025-03', weeks: [{ activities: [{ type: 'attendance', count: 3 }] }, { activities: [{ type: 'attendance', count: 2 }, { type: 'donation', count: 1, value: 15000 }] }, { activities: [{ type: 'attendance', count: 4 }] }, { activities: [{ type: 'attendance', count: 3 }, { type: 'purchase', count: 1, value: 89 }] }] },
+        { month: '2025-04', weeks: [{ activities: [{ type: 'attendance', count: 2 }] }, { activities: [{ type: 'attendance', count: 3 }] }, { activities: [{ type: 'attendance', count: 2 }, { type: 'donation', count: 1, value: 5000 }] }, { activities: [{ type: 'attendance', count: 4 }] }] },
+        { month: '2025-05', weeks: [{ activities: [{ type: 'attendance', count: 3 }, { type: 'purchase', count: 2, value: 156 }] }, { activities: [{ type: 'attendance', count: 2 }] }, { activities: [{ type: 'attendance', count: 4 }] }, { activities: [{ type: 'attendance', count: 2 }, { type: 'donation', count: 1, value: 25000 }] }] },
+        { month: '2025-06', weeks: [{ activities: [{ type: 'attendance', count: 4 }] }, { activities: [{ type: 'attendance', count: 3 }] }, { activities: [{ type: 'attendance', count: 2 }, { type: 'purchase', count: 1, value: 78 }] }, { activities: [{ type: 'attendance', count: 3 }] }] },
+        { month: '2025-07', weeks: [{ activities: [{ type: 'attendance', count: 2 }] }, { activities: [{ type: 'attendance', count: 4 }, { type: 'donation', count: 1, value: 20000 }] }, { activities: [{ type: 'attendance', count: 3 }] }, { activities: [{ type: 'attendance', count: 2 }] }] },
+        { month: '2025-08', weeks: [{ activities: [{ type: 'attendance', count: 3 }, { type: 'purchase', count: 2, value: 112 }] }, { activities: [{ type: 'attendance', count: 4 }] }, { activities: [{ type: 'attendance', count: 2 }] }, { activities: [{ type: 'attendance', count: 3 }, { type: 'donation', count: 1, value: 15000 }] }] },
+        { month: '2025-09', weeks: [{ activities: [{ type: 'attendance', count: 4 }] }, { activities: [{ type: 'attendance', count: 2 }] }, { activities: [{ type: 'attendance', count: 3 }, { type: 'purchase', count: 1, value: 65 }] }, { activities: [{ type: 'attendance', count: 4 }] }] },
+        { month: '2025-10', weeks: [{ activities: [{ type: 'attendance', count: 3 }] }, { activities: [{ type: 'attendance', count: 4 }, { type: 'donation', count: 1, value: 30000 }] }, { activities: [{ type: 'attendance', count: 2 }] }, { activities: [] }] },
+        { month: '2025-11', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-12', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2026-01', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] }
+      ]
+    },
+    giving: { lifetimeValue: 125000, donations: 120000, revenue: 5000, lastDonation: '2025-10-15' },
+    source: 'import',
+    createdDate: '2023-05-01'
   },
   {
     id: 'john-martinez',
@@ -610,9 +721,29 @@ export const patrons = [
     phone: '(555) 789-0123',
     category: 'member',
     assignedTo: 'Emma Smith',
-    engagement: { level: 'warm', visits: 18, lastVisit: '10/11/2025' },
+    engagement: {
+      level: 'warm',
+      visits: 18,
+      lastVisit: '10/11/2025',
+      activityHistory: [
+        { month: '2025-02', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }] },
+        { month: '2025-03', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 2 }] }, { activities: [] }, { activities: [{ type: 'donation', count: 1, value: 500 }] }] },
+        { month: '2025-04', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [{ type: 'purchase', count: 1, value: 45 }] }, { activities: [] }] },
+        { month: '2025-05', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }] },
+        { month: '2025-06', weeks: [{ activities: [{ type: 'attendance', count: 2 }] }, { activities: [] }, { activities: [] }, { activities: [{ type: 'donation', count: 1, value: 500 }] }] },
+        { month: '2025-07', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [{ type: 'purchase', count: 1, value: 38 }] }, { activities: [] }] },
+        { month: '2025-08', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }] },
+        { month: '2025-09', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 2 }] }, { activities: [] }, { activities: [{ type: 'donation', count: 1, value: 500 }] }] },
+        { month: '2025-10', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [{ type: 'purchase', count: 1, value: 52 }] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-11', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 2 }, { type: 'donation', count: 1, value: 500 }] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-12', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2026-01', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] }
+      ]
+    },
     giving: { lifetimeValue: 3200, donations: 2000, revenue: 1200, lastDonation: '2025-11-10' },
-    membership: { status: 'active', tier: 'Gold', daysToRenewal: 120 }
+    membership: { status: 'active', tier: 'Gold', daysToRenewal: 120 },
+    source: 'import',
+    createdDate: '2024-09-10'
   },
   {
     id: 'mia-wilson',
@@ -623,8 +754,28 @@ export const patrons = [
     phone: '(555) 890-1234',
     category: 'donor',
     assignedTo: 'Sophia Anderson',
-    engagement: { level: 'on-fire', visits: 52, lastVisit: '30/10/2025' },
-    giving: { lifetimeValue: 85000, donations: 80000, revenue: 5000, lastDonation: '2025-10-30' }
+    engagement: {
+      level: 'on-fire',
+      visits: 52,
+      lastVisit: '30/10/2025',
+      activityHistory: [
+        { month: '2025-02', weeks: [{ activities: [{ type: 'attendance', count: 2 }, { type: 'donation', count: 1, value: 5000 }] }, { activities: [{ type: 'attendance', count: 3 }] }, { activities: [{ type: 'attendance', count: 2 }, { type: 'purchase', count: 1, value: 95 }] }, { activities: [{ type: 'attendance', count: 2 }] }] },
+        { month: '2025-03', weeks: [{ activities: [{ type: 'attendance', count: 3 }] }, { activities: [{ type: 'attendance', count: 2 }, { type: 'donation', count: 1, value: 10000 }] }, { activities: [{ type: 'attendance', count: 2 }] }, { activities: [{ type: 'attendance', count: 3 }] }] },
+        { month: '2025-04', weeks: [{ activities: [{ type: 'attendance', count: 2 }, { type: 'purchase', count: 2, value: 145 }] }, { activities: [{ type: 'attendance', count: 3 }] }, { activities: [{ type: 'attendance', count: 2 }] }, { activities: [{ type: 'attendance', count: 2 }, { type: 'donation', count: 1, value: 15000 }] }] },
+        { month: '2025-05', weeks: [{ activities: [{ type: 'attendance', count: 3 }] }, { activities: [{ type: 'attendance', count: 2 }] }, { activities: [{ type: 'attendance', count: 3 }, { type: 'purchase', count: 1, value: 78 }] }, { activities: [{ type: 'attendance', count: 2 }] }] },
+        { month: '2025-06', weeks: [{ activities: [{ type: 'attendance', count: 2 }, { type: 'donation', count: 1, value: 10000 }] }, { activities: [{ type: 'attendance', count: 3 }] }, { activities: [{ type: 'attendance', count: 2 }] }, { activities: [{ type: 'attendance', count: 3 }] }] },
+        { month: '2025-07', weeks: [{ activities: [{ type: 'attendance', count: 2 }] }, { activities: [{ type: 'attendance', count: 3 }, { type: 'purchase', count: 2, value: 112 }] }, { activities: [{ type: 'attendance', count: 2 }] }, { activities: [{ type: 'attendance', count: 2 }, { type: 'donation', count: 1, value: 15000 }] }] },
+        { month: '2025-08', weeks: [{ activities: [{ type: 'attendance', count: 3 }] }, { activities: [{ type: 'attendance', count: 2 }] }, { activities: [{ type: 'attendance', count: 3 }, { type: 'purchase', count: 1, value: 65 }] }, { activities: [{ type: 'attendance', count: 2 }] }] },
+        { month: '2025-09', weeks: [{ activities: [{ type: 'attendance', count: 2 }, { type: 'donation', count: 1, value: 10000 }] }, { activities: [{ type: 'attendance', count: 3 }] }, { activities: [{ type: 'attendance', count: 2 }] }, { activities: [{ type: 'attendance', count: 3 }] }] },
+        { month: '2025-10', weeks: [{ activities: [{ type: 'attendance', count: 3 }] }, { activities: [{ type: 'attendance', count: 2 }, { type: 'purchase', count: 1, value: 89 }] }, { activities: [{ type: 'attendance', count: 2 }] }, { activities: [{ type: 'attendance', count: 3 }, { type: 'donation', count: 1, value: 15000 }] }] },
+        { month: '2025-11', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-12', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2026-01', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] }
+      ]
+    },
+    giving: { lifetimeValue: 85000, donations: 80000, revenue: 5000, lastDonation: '2025-10-30' },
+    source: 'import',
+    createdDate: '2023-08-20'
   },
   {
     id: 'olivia-brown',
@@ -635,8 +786,28 @@ export const patrons = [
     phone: '(555) 901-2345',
     category: 'donor',
     assignedTo: 'Lucas Thomas',
-    engagement: { level: 'cool', visits: 12, lastVisit: '05/11/2025' },
-    giving: { lifetimeValue: 1800, donations: 1200, revenue: 600, lastDonation: '2025-11-05' }
+    engagement: {
+      level: 'cool',
+      visits: 12,
+      lastVisit: '05/11/2025',
+      activityHistory: [
+        { month: '2025-02', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-03', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [{ type: 'donation', count: 1, value: 400 }] }] },
+        { month: '2025-04', weeks: [{ activities: [] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }] },
+        { month: '2025-05', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }, { activities: [{ type: 'purchase', count: 1, value: 35 }] }] },
+        { month: '2025-06', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [{ type: 'donation', count: 1, value: 400 }] }, { activities: [] }] },
+        { month: '2025-07', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-08', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [{ type: 'purchase', count: 1, value: 42 }] }] },
+        { month: '2025-09', weeks: [{ activities: [] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [{ type: 'donation', count: 1, value: 400 }] }] },
+        { month: '2025-10', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-11', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-12', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2026-01', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] }
+      ]
+    },
+    giving: { lifetimeValue: 1800, donations: 1200, revenue: 600, lastDonation: '2025-11-05' },
+    source: 'import',
+    createdDate: '2025-01-15'
   },
   {
     id: 'ethan-davis',
@@ -647,9 +818,29 @@ export const patrons = [
     phone: '(555) 012-3456',
     category: 'member',
     assignedTo: 'Emma Smith',
-    engagement: { level: 'cool', visits: 15, lastVisit: '25/10/2025' },
+    engagement: {
+      level: 'cool',
+      visits: 15,
+      lastVisit: '25/10/2025',
+      activityHistory: [
+        { month: '2025-02', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-03', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [{ type: 'purchase', count: 1, value: 45 }] }, { activities: [] }] },
+        { month: '2025-04', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }] },
+        { month: '2025-05', weeks: [{ activities: [] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [{ type: 'donation', count: 1, value: 250 }] }] },
+        { month: '2025-06', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }, { activities: [{ type: 'purchase', count: 1, value: 38 }] }] },
+        { month: '2025-07', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }] },
+        { month: '2025-08', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }, { activities: [{ type: 'purchase', count: 1, value: 52 }] }] },
+        { month: '2025-09', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-10', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [{ type: 'attendance', count: 2 }] }, { activities: [] }] },
+        { month: '2025-11', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-12', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2026-01', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] }
+      ]
+    },
     giving: { lifetimeValue: 950, donations: 250, revenue: 700, lastDonation: '2025-10-25' },
-    membership: { status: 'active', tier: 'Silver', daysToRenewal: 90 }
+    membership: { status: 'active', tier: 'Silver', daysToRenewal: 90 },
+    source: 'import',
+    createdDate: '2024-12-01'
   },
 
   // ============================================
@@ -668,7 +859,25 @@ export const patrons = [
     phone: '(555) 222-3333',
     category: 'member',
     // General Constituent - RECENTLY ADDED via ticket purchase
-    engagement: { level: 'cool', visits: 6, lastVisit: '20/12/2025' },
+    engagement: {
+      level: 'cool',
+      visits: 6,
+      lastVisit: '20/12/2025',
+      activityHistory: [
+        { month: '2025-02', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-03', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-04', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-05', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-06', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-07', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-08', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-09', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-10', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }] },
+        { month: '2025-11', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [{ type: 'membership', count: 1, value: 100 }] }] },
+        { month: '2025-12', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }, { type: 'donation', count: 1, value: 100 }] }, { activities: [] }] },
+        { month: '2026-01', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] }
+      ]
+    },
     giving: { lifetimeValue: 450, donations: 100, revenue: 350, lastDonation: '2025-12-15' },
     membership: { status: 'active', tier: 'Basic', daysToRenewal: 250 },
     createdDate: '2026-02-03',
@@ -683,7 +892,25 @@ export const patrons = [
     phone: '(555) 333-4444',
     category: 'donor',
     // General Constituent - RECENTLY ADDED via online donation
-    engagement: { level: 'cold', visits: 2, lastVisit: '05/09/2025' },
+    engagement: {
+      level: 'cold',
+      visits: 2,
+      lastVisit: '05/09/2025',
+      activityHistory: [
+        { month: '2025-02', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-03', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-04', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-05', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-06', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-07', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-08', weeks: [{ activities: [] }, { activities: [] }, { activities: [{ type: 'donation', count: 1, value: 200 }] }, { activities: [] }] },
+        { month: '2025-09', weeks: [{ activities: [{ type: 'attendance', count: 2 }] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-10', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-11', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-12', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2026-01', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] }
+      ]
+    },
     giving: { lifetimeValue: 275, donations: 200, revenue: 75, lastDonation: '2025-08-20' },
     createdDate: '2026-02-01',
     source: 'online'
@@ -697,7 +924,25 @@ export const patrons = [
     phone: '(555) 444-5555',
     category: 'member',
     // General Constituent - RECENTLY ADDED via membership signup
-    engagement: { level: 'warm', visits: 18, lastVisit: '28/01/2026' },
+    engagement: {
+      level: 'warm',
+      visits: 18,
+      lastVisit: '28/01/2026',
+      activityHistory: [
+        { month: '2025-02', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-03', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-04', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-05', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-06', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-07', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }] },
+        { month: '2025-08', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [{ type: 'attendance', count: 2 }] }, { activities: [{ type: 'purchase', count: 1, value: 55 }] }] },
+        { month: '2025-09', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }] },
+        { month: '2025-10', weeks: [{ activities: [{ type: 'attendance', count: 2 }] }, { activities: [] }, { activities: [{ type: 'membership', count: 1, value: 150 }] }, { activities: [{ type: 'attendance', count: 1 }] }] },
+        { month: '2025-11', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }] },
+        { month: '2025-12', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [{ type: 'donation', count: 1, value: 150 }] }, { activities: [{ type: 'attendance', count: 1 }] }] },
+        { month: '2026-01', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [{ type: 'attendance', count: 1 }] }] }
+      ]
+    },
     giving: { lifetimeValue: 620, donations: 150, revenue: 470, lastDonation: '2026-01-20' },
     membership: { status: 'active', tier: 'Silver', daysToRenewal: 60 },
     createdDate: '2026-02-04',
@@ -712,7 +957,25 @@ export const patrons = [
     phone: '(555) 555-6666',
     category: 'prospect',
     // General Constituent - RECENTLY ADDED via ticket purchase
-    engagement: { level: 'cold', visits: 1, lastVisit: '10/01/2026' },
+    engagement: {
+      level: 'cold',
+      visits: 1,
+      lastVisit: '10/01/2026',
+      activityHistory: [
+        { month: '2025-02', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-03', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-04', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-05', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-06', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-07', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-08', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-09', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-10', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-11', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-12', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2026-01', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }] }
+      ]
+    },
     giving: { lifetimeValue: 50, donations: 0, revenue: 50, lastDonation: null },
     createdDate: '2026-02-05',
     source: 'ticket'
@@ -736,6 +999,29 @@ export const formatDate = (dateStr) => {
   return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
 }
 
+// Helper to format date as relative time (e.g., "2 days ago", "1 year ago")
+export const formatRelativeDate = (dateString) => {
+  if (!dateString) return '-'
+  
+  const date = new Date(dateString)
+  const now = new Date()
+  const diffMs = now - date
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
+  
+  if (diffDays === 0) return 'Today'
+  if (diffDays === 1) return 'Yesterday'
+  if (diffDays < 7) return `${diffDays} days ago`
+  
+  const diffWeeks = Math.floor(diffDays / 7)
+  if (diffDays < 30) return diffWeeks === 1 ? '1 week ago' : `${diffWeeks} weeks ago`
+  
+  const diffMonths = Math.floor(diffDays / 30)
+  if (diffDays < 365) return diffMonths === 1 ? '1 month ago' : `${diffMonths} months ago`
+  
+  const years = Math.floor(diffDays / 365)
+  return years === 1 ? '1 year ago' : `${years} years ago`
+}
+
 // =============================================================================
 // MUTATION FUNCTIONS (Mock - for demo purposes)
 // =============================================================================
@@ -755,6 +1041,28 @@ const generatePatronId = (firstName, lastName) => {
   return uniqueId
 }
 
+// Generate empty activity history for new patrons (12 months, 4 weeks each)
+const generateEmptyActivityHistory = () => {
+  const months = []
+  const now = new Date()
+  
+  for (let i = 11; i >= 0; i--) {
+    const date = new Date(now.getFullYear(), now.getMonth() - i, 1)
+    const monthStr = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`
+    months.push({
+      month: monthStr,
+      weeks: [
+        { activities: [] },
+        { activities: [] },
+        { activities: [] },
+        { activities: [] }
+      ]
+    })
+  }
+  
+  return months
+}
+
 // Add new patron
 export const addPatron = (patronData) => {
   const newPatron = {
@@ -771,6 +1079,7 @@ export const addPatron = (patronData) => {
       level: 'cold',
       visits: 0,
       lastVisit: null,
+      activityHistory: generateEmptyActivityHistory(),
     },
     // Default empty giving
     giving: {
