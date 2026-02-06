@@ -490,16 +490,19 @@ Partner opens Documents tab → Selects year → Generates/Previews summary → 
 | 2025 Contributions | $895.99 total |
 | 2025 Deductible | $845.99 |
 
-#### 3. Giving Summary
+#### 3. Giving Summary (Financial Summary)
 - **Lifetime Contributions**: Total giving with breakdown (donations vs. revenue)
 - **Average Contribution**: Mean gift size
-- **Visual Chart**: Area chart showing giving trends over time
+- **Hybrid Chart**: Toggle between two visualization modes:
+  - **Cumulative View**: Stacked area chart showing growth over time
+  - **Nominal View**: Bar chart showing individual period amounts
 - **Time Filters**: 1 year, 5 years, YTD, All time
 - **Transaction Highlights**:
   - First transaction (date and amount)
   - Last transaction (date and amount)
   - Largest transaction (date and amount)
-- **Fundraising Metrics**: Funds, Campaigns, Appeals contributed to
+- **Gift Attribution**: Breakdown by Fund, Campaign, and Year
+- **Record Gift**: Button to manually record a new gift
 
 #### 4. Engagement Module
 - **Engagement Level**: Visual indicator with 5 levels:
@@ -508,7 +511,12 @@ Partner opens Documents tab → Selects year → Generates/Previews summary → 
   - Warm (smile)
   - Hot (laugh)
   - On Fire (fire icon)
+- **Engagement Badge**: Tooltip on hover explaining the level
 - **Attendance Tracking**: Total visits and last visit date
+- **Activity Heatmap**: 12-month × 4-week grid showing engagement intensity
+  - Color intensity indicates activity level (lighter = less, darker = more)
+  - TTM (Trailing Twelve Months) toggle to switch view
+  - Helps visualize seasonal patterns and engagement consistency
 - **Manual Override**: Staff can adjust engagement level
 
 #### 5. Wealth Insights (Phase 3)
@@ -669,6 +677,135 @@ const isManagedProspect = (patron) => Boolean(patron?.assignedTo)
 
 ---
 
+## Patron Tagging System
+
+### Overview
+Patrons are segmented using a flexible **tagging system** that replaces the previous single-category approach. This allows for more nuanced classification and segmentation.
+
+### Tag Types
+
+**System Tags** (predefined, cannot be deleted):
+- Prospect
+- Donor
+- Major Donor
+- Board Member
+- Volunteer
+- Corporate
+- Foundation
+
+**Custom Tags**: Users can create additional tags for organization-specific segmentation (e.g., "Gala 2026 Prospect", "Museum Circle").
+
+### Tag Display
+
+**In Patron Profile (PatronInfoBox):**
+- Shows first tag + clickable "+N" indicator for additional tags
+- Clicking the indicator opens a **popover** with:
+  - Full list of assigned tags (removable)
+  - Search/add input with autocomplete
+  - Option to create new custom tags
+
+**In Patrons List:**
+- Shows up to 2 tags with "+N more" overflow indicator
+- Hover tooltip shows full tag list
+
+### Tag Management (Settings Page)
+The **Fundraising > Settings** page provides global tag configuration:
+- View all system and custom tags
+- See usage count (number of patrons using each tag)
+- Edit tag labels (inline editing)
+- Delete custom tags (with confirmation if in use)
+- Create new custom tags
+
+### Data Model
+```javascript
+// Patron record
+{
+  tags: ['major-donor', 'donor', 'board-member'], // Array of tag IDs
+  // ...other fields
+}
+
+// Tag definition (src/data/patrons.js)
+{
+  id: 'major-donor',
+  label: 'Major Donor',
+  system: true  // false for custom tags
+}
+```
+
+---
+
+## Patron Source Indicators
+
+### Overview
+The system tracks how patrons entered the database, displaying visual indicators to distinguish between automatically-created and manually-added patrons.
+
+### Source Types
+
+| Source | Icon | Description |
+|--------|------|-------------|
+| **Fever** | Fever logo dot | Patron created automatically via Fever transaction (ticket purchase, online order) |
+| **Manual** | Edit icon dot | Patron added manually by staff |
+
+### Display
+- **Patrons List**: Small indicator dot before patron name
+- **"New" Badge**: Blue badge shown for patrons added within last 7 days
+
+### Data Model
+```javascript
+{
+  source: 'ticket',     // Options: ticket, online, membership, manual, import
+  createdDate: '2026-02-04T10:30:00Z'
+}
+```
+
+---
+
+## Patron Archive (Soft Delete)
+
+### Overview
+Rather than permanently deleting patrons, the system uses a **soft delete** approach via archiving. This preserves data integrity while hiding inactive patrons from normal workflows.
+
+### Archiving
+- **Action**: Click "Archive" in patron actions dropdown
+- **Confirmation**: Warning dialog explains the patron will be hidden
+- **Result**: Patron status set to `archived`, hidden from main Patrons List
+
+### Restoring
+- **View Archived**: Toggle "Show Archived" filter in Patrons List
+- **Visual**: Archived patrons show a gray "Archived" badge
+- **Action**: Click "Restore" in actions dropdown or archived banner
+- **Result**: Patron status restored to `active`
+
+### Data Model
+```javascript
+{
+  status: 'archived',           // 'active' | 'archived'
+  archivedDate: '2026-02-05T...',
+  archivedReason: 'duplicate'   // optional
+}
+```
+
+---
+
+## Gift Terminology
+
+### Industry Standard
+Following museum industry conventions (Blackbaud, Tessitura, Bloomerang), the platform uses **"Gift"** for charitable donations in staff-facing interfaces:
+
+| Context | Term Used |
+|---------|-----------|
+| Database/Internal | Gift, Gift Record |
+| Staff UI | "Record Gift", "Gift History", "Giving Summary" |
+| Public-Facing | "Donate", "Make a Donation" |
+| Tax Documents | "Contribution", "Gift" |
+
+### Rationale
+- **Professional**: "Gift" is industry-standard for donor CRM software
+- **Relational**: Implies personal, philanthropic relationship vs. transactional "donation"
+- **Legal**: Aligns with IRS terminology for tax-deductible contributions
+
+---
+
 ## Patron Categories
 
 ### Philanthropic Supporters
@@ -695,6 +832,7 @@ const isManagedProspect = (patron) => Boolean(patron?.assignedTo)
 
 ## Patron Statuses
 - Active
+- Archived
 - Inactive
 - Pending
 - Prospect
@@ -850,9 +988,9 @@ Museum boards demand data.
 
 | Feature | Current Status | Notes |
 |---------|----------------|-------|
-| 1. Unified 360° View | **Mockup Complete** | Summary tab with giving, activity, engagement, opportunities |
+| 1. Unified 360° View | **Mockup Complete** | Summary tab with giving, activity, engagement, opportunities, activity heatmap |
 | 2. Campaign Management | **Mockup Complete** | DCAP hierarchy in data model; Campaign dashboard with goal progress, appeals ROI; GivingSummary shows patron Fund/Campaign breakdown; GivingHistory shows gifts with soft credits; Opportunities linked to campaigns |
-| 3. Membership Management | **Mockup Complete** | Full Memberships tab with card, benefits, upgrades |
+| 3. Membership Management | **Mockup Complete** | Full Memberships tab with card, benefits, usage analytics, upgrades |
 | 4. Moves Management | **Mockup Complete** | Opportunity-based Kanban board with 5 stages; OpportunitiesList page with filters; OpportunityDetail page with edit/close; Multiple opportunities per patron supported |
 | 5. Prospect Research | **Placeholder** | WealthInsights component (needs DonorSearch API) |
 | 6. FMV Calculation | **Mockup Complete** | Documents tab with tax receipts showing deductible amounts |
@@ -860,7 +998,10 @@ Museum boards demand data.
 | 8. Grant Tracking | Not Started | Future roadmap |
 | 9. Event/Gala Mgmt | **Partial** | MemberEvents component; no table seating |
 | 10. Financial Integration | Not Started | Future roadmap |
-| 11. Custom Reporting | Not Started | Future roadmap |
+| 11. Custom Reporting | Not Started | Dashboard with gift officer filter; Campaign ROI reports |
+| 12. Patron Segmentation | **Mockup Complete** | Multi-tag system (system + custom tags); Settings page for tag management; Popover UI for tag assignment |
+| 13. Patron Lifecycle | **Mockup Complete** | Source tracking (Fever vs Manual); Archive/restore; "New" badge; Patron Since with relative dates |
+| 14. Dashboard | **Mockup Complete** | Quick stats, pipeline overview, closing soon, follow-ups needed, gift officer filtering |
 
 ---
 
@@ -976,10 +1117,10 @@ Detailed membership sample data used in mockup:
 #### Summary Tab
 | Component | Description | Status |
 |-----------|-------------|--------|
-| PatronInfoBox | Profile photo, contact info, membership badge, actions dropdown, opportunity summary for managed prospects | Done |
-| FinancialSummary | Lifetime value (donations + revenue), donations/revenue split with avg gift, monthly chart, donation attribution (by Fund/Campaign) | Done |
-| RecentActivity | Timeline with filters (donations, events, communications) | Done |
-| EngagementPanel | Visual engagement level (Cold → On Fire), visit stats, activity heatmap | Done |
+| PatronInfoBox | Profile photo, contact info, membership badge, tags popover (view/add/remove tags), actions dropdown (archive/restore), assign button for unassigned patrons, opportunity summary for managed prospects | Done |
+| GivingSummary | Lifetime value, donations/revenue split, avg gift, hybrid chart (stacked area cumulative / bar nominal), donation attribution (by Fund/Campaign/Year), transaction highlights | Done |
+| ActivityTimeline | Timeline with filters (Gifts, Events, Communications), "Add Activity" and "Record Gift" buttons | Done |
+| EngagementPanel | Visual engagement level (Cold → On Fire), visit stats, 12-month activity heatmap with TTM toggle | Done |
 | OpportunitiesPanel | Patron's active opportunities, pipeline value summary, closed opportunities (collapsible) - for Managed Prospects | Done |
 | AddToPortfolioBar | Prompt to assign constituent to portfolio - for General Constituents | Done |
 | WealthInsights | Propensity score, DonorSearch placeholder | Done |
@@ -1002,6 +1143,32 @@ Detailed membership sample data used in mockup:
 | DocumentHistory | Generated docs, receipts, in-kind donations | Done |
 
 ### Completed Pages
+
+#### Dashboard
+| Component | Description | Status |
+|-----------|-------------|--------|
+| Quick Stats Cards | Open Opportunities, Pipeline Value, Weighted Pipeline, Managed Prospects | Done |
+| Pipeline Overview | Stage-by-stage breakdown with counts and values | Done |
+| Closing Soon | Opportunities closing within 30 days | Done |
+| Follow-ups Needed | Opportunities with no contact in 14+ days | Done |
+| Quick Actions | Links to Add Patron, New Opportunity, View Campaigns, Pipeline Board | Done |
+| Patron Summary | Total Patrons, Managed, General Constituents counts | Done |
+| Gift Officer Filter | Filter all dashboard data by assigned relationship manager | Done |
+
+#### Patrons List
+| Component | Description | Status |
+|-----------|-------------|--------|
+| Table View | Sortable columns: Name, Lifetime Value, Membership, Tags, Owner, Patron Since, Engagement | Done |
+| Search | Search by name, email, or owner | Done |
+| Sorting | Sort by any column header (ascending/descending) | Done |
+| Source Indicators | Fever (auto-created) vs Manual (staff-added) dot icons | Done |
+| New Badge | Blue "New" badge for patrons added in last 7 days | Done |
+| Membership Column | Tier pill (Gold/Silver/Basic) with color coding | Done |
+| Tags Column | Up to 2 tags visible + "+N more" overflow with tooltip | Done |
+| Assign Button | Pill-style "+ Assign" button for unassigned patrons | Done |
+| Patron Since | Relative date format ("2 days ago", "3 months ago") | Done |
+| Archive Toggle | Show/hide archived patrons | Done |
+| Create Patron Modal | Form to add new patron with tags and source | Done |
 
 #### Pipeline (Moves Management)
 | Component | Description | Status |
@@ -1037,6 +1204,17 @@ Detailed membership sample data used in mockup:
 - Campaign belongs to a Fund (DCAP hierarchy)
 - Campaign has goal, raised, donor count, gift count, avg gift
 - Campaign has start/end dates and manager
+
+#### Settings (Fundraising Settings)
+| Component | Description | Status |
+|-----------|-------------|--------|
+| Tags Section | Manage system and custom tags for patron segmentation | Done |
+| System Tags | View predefined tags with usage counts, edit labels | Done |
+| Custom Tags | Create, edit, delete user-defined tags | Done |
+| Usage Tracking | Shows number of patrons using each tag | Done |
+| Inline Editing | Click to edit tag labels | Done |
+| Delete Confirmation | Warns if tag is in use before deletion | Done |
+| Navigation Sidebar | Tags (active), General, Users, Integrations (placeholders) | Done |
 - Appeals belong to campaigns with raised, cost, and response count
 - ROI calculated as raised/cost multiplier
 
@@ -1188,6 +1366,12 @@ Patrons like Anderson Collingwood can appear in both the general Patron Profile 
 - Updated: February 5, 2026 (Staff Assignment Terminology - unified "Owner"/"Gift Officer" to "Assigned To")
 - Updated: February 6, 2026 (Patron Management Model - General Constituents vs Managed Prospects distinction)
 - Updated: February 6, 2026 (Opportunity Model Migration - pipeline tracks opportunities not patrons; added Fundraising Entity Model section; new Opportunities module documentation)
+- Updated: February 6, 2026 (Tagging System - migrated from single category to multi-tag model; Tags popover UI; Settings page for tag management)
+- Updated: February 6, 2026 (Patron Source Indicators - Fever vs Manual origin; "New" badge for recently added patrons)
+- Updated: February 6, 2026 (Patron Archive - soft delete with restore capability)
+- Updated: February 6, 2026 (Gift Terminology - standardized to "Gift" for internal CRM usage)
+- Updated: February 6, 2026 (Dashboard and Patrons List - documented all implemented features including gift officer filtering, membership tier column, relative dates)
+- Updated: February 6, 2026 (Activity Heatmap - 12-month engagement visualization with TTM toggle)
 - Product Manager: Andres Clavel
 - Designer: Pablo Rubio Retolaza
 - Tech Lead: Victor Almaraz Sanchez
