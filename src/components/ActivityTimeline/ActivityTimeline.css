@@ -53,6 +53,35 @@
   border-color: var(--color-primary);
 }
 
+/* Actions container */
+.activity-timeline__actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* Record Gift button */
+.activity-timeline__record-gift-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--color-success-light);
+  color: var(--color-success);
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.activity-timeline__record-gift-btn:hover {
+  background: var(--color-success);
+  color: white;
+}
+
 /* Add activity button */
 .activity-timeline__add-btn {
   font-size: var(--font-size-sm);
@@ -355,7 +384,7 @@
     white-space: nowrap;
   }
 
-  .activity-timeline__add-btn {
+  .activity-timeline__actions {
     margin-left: auto;
   }
 

@@ -39,6 +39,7 @@ function SummaryTab({
           <ActivityTimeline 
             gifts={patron.giving?.gifts || []} 
             onAddActivity={onLogActivity}
+            onRecordGift={onRecordGift}
           />
         </div>
         

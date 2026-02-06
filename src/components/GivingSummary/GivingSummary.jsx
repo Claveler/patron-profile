@@ -143,7 +143,7 @@ function GivingSummary({ giving, onRecordGift }) {
         <div className="giving-summary__value-card giving-summary__value-card--donations">
           <div className="giving-summary__value-card-header">
             <span className="giving-summary__value-dot giving-summary__value-dot--donations"></span>
-            <span className="giving-summary__value-card-label">Donations</span>
+            <span className="giving-summary__value-card-label">Gifts</span>
           </div>
           <span className="giving-summary__value-card-amount">{formatCurrency(giving.donations || 0)}</span>
           {giving.averageGift && (
@@ -354,7 +354,7 @@ function GivingSummary({ giving, onRecordGift }) {
                   </div>
                   <div className="giving-summary__chart-tooltip-row">
                     <span className="giving-summary__tooltip-dot giving-summary__tooltip-dot--donations"></span>
-                    <span>Donations:</span>
+                    <span>Gifts:</span>
                     <span>{formatCurrency(chartData[hoveredPointIndex].displayDonations)}</span>
                   </div>
                   <div className="giving-summary__chart-tooltip-row">
@@ -407,7 +407,7 @@ function GivingSummary({ giving, onRecordGift }) {
                           </div>
                           <div className="giving-summary__chart-tooltip-row">
                             <span className="giving-summary__tooltip-dot giving-summary__tooltip-dot--donations"></span>
-                            <span>Donations:</span>
+                            <span>Gifts:</span>
                             <span>{formatCurrency(d.displayDonations)}</span>
                           </div>
                           <div className="giving-summary__chart-tooltip-row">
@@ -484,7 +484,7 @@ function GivingSummary({ giving, onRecordGift }) {
       {/* Donation Attribution Section - Only show if we have attribution data */}
       {(giving.byFund || giving.byCampaign) && (
         <div className="giving-summary__attribution">
-          <h4 className="giving-summary__attribution-header">Donation Attribution</h4>
+          <h4 className="giving-summary__attribution-header">Gift Attribution</h4>
           <div className="giving-summary__breakdowns">
             {/* Fund Breakdown */}
             {giving.byFund && Object.keys(giving.byFund).length > 0 && (

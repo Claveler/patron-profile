@@ -5,13 +5,13 @@ import './ActivityTimeline.css'
 const activityTypes = {
   donation: {
     icon: 'fa-hand-holding-dollar',
-    title: 'Donation',
-    filter: 'donations'
+    title: 'Gift',
+    filter: 'gifts'
   },
   membership: {
     icon: 'fa-id-card',
     title: 'Membership',
-    filter: 'donations'
+    filter: 'gifts'
   },
   phone: {
     icon: 'fa-phone',
@@ -121,7 +121,7 @@ Liam Johnson`
   }
 ]
 
-function ActivityTimeline({ gifts = [], activities = mockActivities, onAddActivity }) {
+function ActivityTimeline({ gifts = [], activities = mockActivities, onAddActivity, onRecordGift }) {
   const [expandedItem, setExpandedItem] = useState(null)
   const [filter, setFilter] = useState('all')
   const [visibleCount, setVisibleCount] = useState(6)
@@ -186,10 +186,10 @@ function ActivityTimeline({ gifts = [], activities = mockActivities, onAddActivi
             All
           </button>
           <button 
-            className={`activity-timeline__filter ${filter === 'donations' ? 'activity-timeline__filter--active' : ''}`}
-            onClick={() => setFilter('donations')}
+            className={`activity-timeline__filter ${filter === 'gifts' ? 'activity-timeline__filter--active' : ''}`}
+            onClick={() => setFilter('gifts')}
           >
-            Donations
+            Gifts
           </button>
           <button 
             className={`activity-timeline__filter ${filter === 'events' ? 'activity-timeline__filter--active' : ''}`}
@@ -204,9 +204,17 @@ function ActivityTimeline({ gifts = [], activities = mockActivities, onAddActivi
             Communications
           </button>
         </div>
-        <button className="activity-timeline__add-btn" onClick={handleAddActivity}>
-          Add activity
-        </button>
+        <div className="activity-timeline__actions">
+          {onRecordGift && (
+            <button className="activity-timeline__record-gift-btn" onClick={onRecordGift}>
+              <i className="fa-solid fa-hand-holding-dollar"></i>
+              Record Gift
+            </button>
+          )}
+          <button className="activity-timeline__add-btn" onClick={handleAddActivity}>
+            Add activity
+          </button>
+        </div>
       </div>
 
       {/* Activity List */}
