@@ -2,7 +2,6 @@
 
 .patrons-list {
   min-height: 100%;
-  background-color: #fafbfb;  /* Light gray page background - Figma aligned */
 }
 
 /* Page Header - matches PatronProfile */
@@ -38,11 +37,10 @@
 /* Main Container */
 .patrons-list__container {
   padding: var(--space-6);
-  background-color: #ffffff;
+  background-color: var(--color-surface);
   margin: var(--space-6);
-  border-radius: 8px;
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
 }
 
 /* Toolbar */
@@ -71,19 +69,18 @@
 
 .patrons-list__search-input {
   width: 100%;
-  padding: 10px 12px 10px 36px;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
+  padding: var(--space-2) var(--space-3) var(--space-2) var(--space-8);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
   font-size: var(--font-size-sm);
   font-family: var(--font-family);
-  background-color: #ffffff;
-  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  background-color: var(--color-surface);
+  transition: border-color var(--transition-fast);
 }
 
 .patrons-list__search-input:focus {
   outline: none;
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
 .patrons-list__search-input::placeholder {
@@ -145,12 +142,9 @@
   text-align: left;
   padding: var(--space-3) var(--space-4);
   font-weight: var(--font-weight-medium);
-  color: #536B75;  /* Figma aligned - subtle gray */
-  border-bottom: 1px solid #e5e7eb;
+  color: var(--color-text-secondary);
+  border-bottom: 1px solid var(--color-border);
   white-space: nowrap;
-  font-size: var(--font-size-xs);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
 }
 
 .patrons-list__th--sortable {
@@ -189,7 +183,7 @@
 
 .patrons-list__td {
   padding: var(--space-3) var(--space-4);
-  border-bottom: 1px solid #f0f0f0;  /* Lighter row dividers - Figma aligned */
+  border-bottom: 1px solid var(--color-border-light);
   color: var(--color-text-primary);
   vertical-align: middle;
 }
@@ -330,8 +324,8 @@
 
 /* Owner Cell */
 .patrons-list__td--owner {
-  color: #0891b2;  /* Teal/cyan link color - Figma aligned */
-  font-weight: 500;
+  color: var(--color-primary);
+  font-weight: var(--font-weight-medium);
 }
 
 .patrons-list__owner--none {
