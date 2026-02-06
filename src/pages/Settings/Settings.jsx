@@ -148,7 +148,7 @@ function Settings() {
       {/* Page Header */}
       <div className="settings__header">
         <div className="settings__breadcrumb">
-          <span className="settings__breadcrumb-section">Organization</span>
+          <span className="settings__breadcrumb-section">Fundraising</span>
           <i className="fa-solid fa-chevron-right settings__breadcrumb-separator"></i>
         </div>
         <h1 className="settings__title">Settings</h1>

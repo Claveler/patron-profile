@@ -52,10 +52,7 @@ function OpportunitiesPanel({
     <div className="opportunities-panel wrapper-card">
       {/* Header */}
       <div className="opportunities-panel__header">
-        <h4 className="opportunities-panel__title">
-          <i className="fa-solid fa-bullseye"></i>
-          Opportunities
-        </h4>
+        <h4 className="opportunities-panel__title">Opportunities</h4>
         <button 
           className="opportunities-panel__add-btn"
           onClick={handleCreateClick}

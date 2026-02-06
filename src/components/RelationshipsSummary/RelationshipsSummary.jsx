@@ -52,10 +52,7 @@ function RelationshipsSummary() {
   return (
     <div className="relationships-summary">
       <div className="relationships-summary__header">
-        <h4 className="relationships-summary__title">
-          <i className="fa-solid fa-users"></i>
-          Relationships
-        </h4>
+        <h4 className="relationships-summary__title">Relationships</h4>
         <button className="relationships-summary__view-all">
           View All
           <i className="fa-solid fa-arrow-right"></i>

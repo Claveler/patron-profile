@@ -15,7 +15,7 @@
 }
 
 .membership-overview__title {
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-md);
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary);
   margin: 0;
@@ -86,6 +86,11 @@
   min-width: 0;             /* Allow content to shrink below intrinsic size */
   display: flex;
   flex-direction: column;
+  /* Visual container styling */
+  background-color: var(--color-background);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  padding: var(--space-4);
 }
 
 /* Membership Card - CR80 standard aspect ratio (85.60mm × 53.98mm ≈ 1.586:1) */

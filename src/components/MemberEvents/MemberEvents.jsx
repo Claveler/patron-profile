@@ -63,10 +63,7 @@ function MemberEvents({ events }) {
   return (
     <div className="member-events wrapper-card">
       <div className="member-events__header">
-        <h4 className="member-events__title">
-          <i className="fa-solid fa-calendar-star"></i>
-          Member Events
-        </h4>
+        <h4 className="member-events__title">Member Events</h4>
         <span className="member-events__count">{allEvents.length} events</span>
       </div>
       
