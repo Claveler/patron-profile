@@ -10,6 +10,7 @@ const getMenuItems = (activePage) => [
     hasSubmenu: true,
     expanded: true,
     submenu: [
+      { label: 'Dashboard', page: 'dashboard', active: activePage === 'dashboard' },
       { label: 'Donation module', href: '#' },
       { label: 'Donation page', href: '#' },
       // 'patrons' is the list view, 'patron' is the detail view - both should highlight Patrons

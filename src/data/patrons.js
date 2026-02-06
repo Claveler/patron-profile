@@ -718,3 +718,76 @@ export const formatDate = (dateStr) => {
   const date = new Date(dateStr)
   return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
 }
+
+// =============================================================================
+// MUTATION FUNCTIONS (Mock - for demo purposes)
+// =============================================================================
+
+// Generate unique ID from name
+const generatePatronId = (firstName, lastName) => {
+  const baseId = `${firstName.toLowerCase()}-${lastName.toLowerCase()}`
+    .replace(/[^a-z-]/g, '')
+  
+  // Check if ID already exists
+  let uniqueId = baseId
+  let counter = 1
+  while (patrons.find(p => p.id === uniqueId)) {
+    uniqueId = `${baseId}-${counter}`
+    counter++
+  }
+  return uniqueId
+}
+
+// Add new patron
+export const addPatron = (patronData) => {
+  const newPatron = {
+    id: generatePatronId(patronData.firstName, patronData.lastName),
+    firstName: patronData.firstName,
+    lastName: patronData.lastName,
+    photo: null,
+    email: patronData.email || null,
+    phone: patronData.phone || null,
+    address: patronData.address || null,
+    category: patronData.category || 'prospect',
+    // Default empty engagement
+    engagement: {
+      level: 'cold',
+      visits: 0,
+      lastVisit: null,
+    },
+    // Default empty giving
+    giving: {
+      lifetimeValue: 0,
+      donations: 0,
+      revenue: 0,
+      lastDonation: null,
+    },
+    // Optional notes
+    notes: patronData.notes || null,
+    // No relationship manager by default (General Constituent)
+    assignedTo: patronData.assignedTo || null,
+    // Created timestamp
+    createdDate: new Date().toISOString().split('T')[0],
+  }
+  
+  patrons.push(newPatron)
+  return newPatron
+}
+
+// Update existing patron
+export const updatePatron = (id, updates) => {
+  const index = patrons.findIndex(p => p.id === id)
+  if (index === -1) return null
+  
+  patrons[index] = {
+    ...patrons[index],
+    ...updates,
+  }
+  
+  return patrons[index]
+}
+
+// Assign patron to gift officer (convert to Managed Prospect)
+export const assignPatronToOfficer = (patronId, assignedTo) => {
+  return updatePatron(patronId, { assignedTo })
+}

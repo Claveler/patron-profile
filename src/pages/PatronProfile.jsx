@@ -7,6 +7,7 @@ import DocumentsTab from '../components/Tabs/DocumentsTab'
 import OpportunityModal from '../components/OpportunityModal/OpportunityModal'
 import GiftModal from '../components/GiftModal/GiftModal'
 import ActivityModal from '../components/ActivityModal/ActivityModal'
+import AssignPortfolioModal from '../components/AssignPortfolioModal/AssignPortfolioModal'
 import { getPatronById, isManagedProspect } from '../data/patrons'
 import './PatronProfile.css'
 
@@ -529,6 +530,7 @@ function PatronProfile({ patronId, onBack, onSelectOpportunity }) {
   const handleCreateOpportunity = () => setShowOpportunityModal(true)
   const handleRecordGift = () => setShowGiftModal(true)
   const handleLogActivity = () => setShowActivityModal(true)
+  const handleAssignToPortfolio = () => setShowAssignModal(true)
   
   const handleOpportunitySuccess = (newOpportunity) => {
     console.log('Created opportunity:', newOpportunity)
@@ -555,6 +557,7 @@ function PatronProfile({ patronId, onBack, onSelectOpportunity }) {
             onCreateOpportunity={handleCreateOpportunity}
             onRecordGift={handleRecordGift}
             onLogActivity={handleLogActivity}
+            onAssignToPortfolio={handleAssignToPortfolio}
           />
         )
       case 'memberships':
@@ -574,6 +577,7 @@ function PatronProfile({ patronId, onBack, onSelectOpportunity }) {
             onCreateOpportunity={handleCreateOpportunity}
             onRecordGift={handleRecordGift}
             onLogActivity={handleLogActivity}
+            onAssignToPortfolio={handleAssignToPortfolio}
           />
         )
     }
@@ -664,6 +668,14 @@ function PatronProfile({ patronId, onBack, onSelectOpportunity }) {
         isOpen={showActivityModal}
         onClose={() => setShowActivityModal(false)}
         onSuccess={handleActivitySuccess}
+        patronId={patronData.id}
+        patronName={patronFullName}
+      />
+
+      <AssignPortfolioModal
+        isOpen={showAssignModal}
+        onClose={() => setShowAssignModal(false)}
+        onSuccess={handleAssignSuccess}
         patronId={patronData.id}
         patronName={patronFullName}
       />

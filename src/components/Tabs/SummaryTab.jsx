@@ -14,15 +14,10 @@ function SummaryTab({
   onSelectOpportunity, 
   onCreateOpportunity,
   onRecordGift,
-  onLogActivity 
+  onLogActivity,
+  onAssignToPortfolio 
 }) {
   const isManaged = isManagedProspect(patron)
-
-  const handleAddToPortfolio = () => {
-    // TODO: Implement portfolio assignment modal/flow
-    console.log('Add to portfolio:', patron.id)
-    alert(`This would open a modal to assign ${patron.firstName} ${patron.lastName} to a relationship manager.`)
-  }
 
   return (
     <div className="summary-tab">
@@ -30,7 +25,7 @@ function SummaryTab({
       {!isManaged && (
         <AddToPortfolioBar 
           patron={patron} 
-          onAddToPortfolio={handleAddToPortfolio} 
+          onAddToPortfolio={onAssignToPortfolio} 
         />
       )}
       

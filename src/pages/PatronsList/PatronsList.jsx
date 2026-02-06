@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
 import { patrons, patronCategories, engagementLevels, isManagedProspect, formatDate } from '../../data/patrons'
+import PatronModal from '../../components/PatronModal/PatronModal'
 import './PatronsList.css'
 
 function PatronsList({ onSelectPatron }) {
@@ -90,6 +91,14 @@ function PatronsList({ onSelectPatron }) {
   // Close menu when clicking outside
   const handleTableClick = () => {
     if (openMenuId) setOpenMenuId(null)
+  }
+
+  // Handle new patron creation success
+  const handlePatronCreated = (newPatron) => {
+    // Optionally navigate to the new patron's profile
+    if (onSelectPatron) {
+      onSelectPatron(newPatron.id)
+    }
   }
 
   return (
@@ -247,6 +256,13 @@ function PatronsList({ onSelectPatron }) {
           </span>
         </div>
       </div>
+
+      {/* Patron Modal */}
+      <PatronModal
+        isOpen={showPatronModal}
+        onClose={() => setShowPatronModal(false)}
+        onSuccess={handlePatronCreated}
+      />
     </div>
   )
 }

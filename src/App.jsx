@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Header from './components/Layout/Header'
 import Sidebar from './components/Layout/Sidebar'
 import Footer from './components/Layout/Footer'
+import Dashboard from './pages/Dashboard/Dashboard'
 import PatronsList from './pages/PatronsList/PatronsList'
 import PatronProfile from './pages/PatronProfile'
 import MovesManagement from './pages/MovesManagement/MovesManagement'
@@ -11,7 +12,7 @@ import OpportunityDetail from './pages/OpportunityDetail/OpportunityDetail'
 
 function App() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
-  const [activePage, setActivePage] = useState('patrons') // Start at list view
+  const [activePage, setActivePage] = useState('dashboard') // Start at dashboard
   const [selectedPatronId, setSelectedPatronId] = useState(null)
   const [selectedOpportunityId, setSelectedOpportunityId] = useState(null)
 
@@ -37,6 +38,14 @@ function App() {
 
   const renderPage = () => {
     switch (activePage) {
+      case 'dashboard':
+        return (
+          <Dashboard 
+            onNavigateToPatron={handleSelectPatron}
+            onNavigateToOpportunity={handleSelectOpportunity}
+            onNavigateToPage={setActivePage}
+          />
+        )
       case 'pipeline':
         return (
           <MovesManagement 
@@ -72,7 +81,13 @@ function App() {
           />
         )
       default:
-        return <PatronsList onSelectPatron={handleSelectPatron} />
+        return (
+          <Dashboard 
+            onNavigateToPatron={handleSelectPatron}
+            onNavigateToOpportunity={handleSelectOpportunity}
+            onNavigateToPage={setActivePage}
+          />
+        )
     }
   }
 
