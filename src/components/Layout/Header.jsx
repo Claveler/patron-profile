@@ -21,10 +21,13 @@ function Header({ onToggleSidebar }) {
       </div>
       
       <div className="header__right">
+        <button className="header__create-btn">
+          Create event
+        </button>
         <button className="header__user-menu">
           <span className="header__user-info">
             <span className="header__user-name">Andres Clavel</span>
-            <span className="header__user-org">SO Tests</span>
+            <span className="header__user-org">Fever Demo Events</span>
           </span>
           <i className="fa-regular fa-circle-user header__user-icon"></i>
         </button>

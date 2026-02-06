@@ -4,32 +4,31 @@ function Footer() {
   return (
     <footer className="footer">
       <div className="footer__content">
-        <div className="footer__brand">
-          <span className="footer__logo">fever</span>
-        </div>
+        <img src="/fever-logo-white.svg" alt="Fever Logo" className="footer__logo" />
         
-        <div className="footer__section">
-          <h4 className="footer__title">How fever works</h4>
-          <ul className="footer__links">
-            <li><a href="#">How to view the status of my plans</a></li>
-            <li><a href="#">Billing Manual</a></li>
-            <li><a href="#">How to validate tickets</a></li>
-          </ul>
-        </div>
-        
-        <div className="footer__section">
-          <h4 className="footer__title">Support Contact</h4>
-          <ul className="footer__links">
-            <li><a href="tel:+34911876636">+34 911 87 66 36</a></li>
-            <li>Monday to Friday (09:30 to 18:30)</li>
-            <li><a href="#">Send us a message</a></li>
-          </ul>
+        <div className="footer__links">
+          <div className="info-column">
+            <span className="info-column__title">How Fever Works</span>
+            <a href="#" className="info-column__link">FeverZone Guide</a>
+            <a href="#" className="info-column__link">Frequently Asked Questions</a>
+            <a href="#" className="info-column__link">Validation Guide</a>
+            <a href="#" className="info-column__link">How to validate tickets</a>
+          </div>
+          
+          <div className="info-column">
+            <span className="info-column__title">Partners' support contact</span>
+            <a href="tel:+16672443490" className="info-column__link">(667) 244-3490</a>
+            <span className="info-column__link">Monday to Friday (08:00 - 20:30)</span>
+            <a href="#" className="info-column__link">Send us a message</a>
+          </div>
         </div>
       </div>
       
-      <div className="footer__bottom">
-        <p className="footer__copyright">©2024 - Fever | Made in Madrid & NYC</p>
-        <span className="footer__version">v 0.00001</span>
+      <div className="footer__separator"></div>
+      
+      <div className="footer__copyright">
+        <p>©2026 Fever</p>
+        <p>v. 12.0.2</p>
       </div>
     </footer>
   )

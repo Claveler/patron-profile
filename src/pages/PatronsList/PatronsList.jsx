@@ -159,7 +159,7 @@ function PatronsList({ onSelectPatron }) {
             <i className="fa-solid fa-magnifying-glass patrons-list__search-icon"></i>
             <input
               type="text"
-              placeholder="Search by name or owner"
+              placeholder="Search by name, email and owner"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="patrons-list__search-input"
@@ -336,7 +336,7 @@ function PatronsList({ onSelectPatron }) {
                           className="patrons-list__menu-btn"
                           onClick={(e) => handleMenuClick(e, patron.id)}
                         >
-                          <i className="fa-solid fa-ellipsis"></i>
+                          <i className="fa-solid fa-ellipsis-vertical"></i>
                         </button>
                         {openMenuId === patron.id && (
                           <div className="patrons-list__dropdown">
