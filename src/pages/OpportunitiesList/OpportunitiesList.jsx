@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
 import OpportunityCard from '../../components/OpportunityCard/OpportunityCard'
+import OpportunityModal from '../../components/OpportunityModal/OpportunityModal'
 import { 
   opportunities, 
   getOpenOpportunities, 
@@ -21,13 +22,16 @@ const formatCurrency = (amount) => {
   }).format(amount)
 }
 
-function OpportunitiesList({ onSelectOpportunity, onSelectPatron, onCreateOpportunity }) {
+function OpportunitiesList({ onSelectOpportunity, onSelectPatron }) {
   // Filters
   const [stageFilter, setStageFilter] = useState('all')
   const [campaignFilter, setCampaignFilter] = useState('all')
   const [assigneeFilter, setAssigneeFilter] = useState('all')
   const [statusFilter, setStatusFilter] = useState('open')
   const [searchQuery, setSearchQuery] = useState('')
+  
+  // Modal state
+  const [showCreateModal, setShowCreateModal] = useState(false)
 
   // Get filter options
   const campaigns = getCampaigns()
@@ -94,11 +98,12 @@ function OpportunitiesList({ onSelectOpportunity, onSelectPatron, onCreateOpport
   }
 
   const handleCreateClick = () => {
-    if (onCreateOpportunity) {
-      onCreateOpportunity()
-    } else {
-      alert('This would open a modal to create a new opportunity.')
-    }
+    setShowCreateModal(true)
+  }
+
+  const handleOpportunityCreated = (newOpportunity) => {
+    console.log('Created opportunity:', newOpportunity)
+    // In a real app, this would refresh the list
   }
 
   return (
@@ -257,6 +262,13 @@ function OpportunitiesList({ onSelectOpportunity, onSelectPatron, onCreateOpport
       <div className="opportunities-list__footer">
         Showing {filteredOpportunities.length} of {opportunities.length} opportunities
       </div>
+
+      {/* Create Opportunity Modal */}
+      <OpportunityModal
+        isOpen={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
+        onSuccess={handleOpportunityCreated}
+      />
     </div>
   )
 }

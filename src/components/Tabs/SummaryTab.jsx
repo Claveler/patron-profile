@@ -9,19 +9,19 @@ import RelationshipsSummary from '../RelationshipsSummary/RelationshipsSummary'
 import { isManagedProspect } from '../../data/patrons'
 import './SummaryTab.css'
 
-function SummaryTab({ patron, onSelectOpportunity }) {
+function SummaryTab({ 
+  patron, 
+  onSelectOpportunity, 
+  onCreateOpportunity,
+  onRecordGift,
+  onLogActivity 
+}) {
   const isManaged = isManagedProspect(patron)
 
   const handleAddToPortfolio = () => {
     // TODO: Implement portfolio assignment modal/flow
     console.log('Add to portfolio:', patron.id)
     alert(`This would open a modal to assign ${patron.firstName} ${patron.lastName} to a relationship manager.`)
-  }
-
-  const handleCreateOpportunity = (patronId) => {
-    // TODO: Implement opportunity creation modal/flow
-    console.log('Create opportunity for:', patronId)
-    alert(`This would open a modal to create an opportunity for ${patron.firstName} ${patron.lastName}.`)
   }
 
   return (
@@ -37,8 +37,14 @@ function SummaryTab({ patron, onSelectOpportunity }) {
       <div className="summary-tab__main">
         {/* Left Column - Giving Summary & Activity */}
         <div className="summary-tab__left">
-          <GivingSummary giving={patron.giving} />
-          <ActivityTimeline gifts={patron.giving?.gifts || []} />
+          <GivingSummary 
+            giving={patron.giving} 
+            onRecordGift={onRecordGift}
+          />
+          <ActivityTimeline 
+            gifts={patron.giving?.gifts || []} 
+            onAddActivity={onLogActivity}
+          />
         </div>
         
         {/* Right Column - Sidebar Widgets */}
@@ -47,7 +53,7 @@ function SummaryTab({ patron, onSelectOpportunity }) {
             <OpportunitiesPanel 
               patronId={patron.id}
               onSelectOpportunity={onSelectOpportunity}
-              onCreateOpportunity={handleCreateOpportunity}
+              onCreateOpportunity={onCreateOpportunity}
             />
           )}
           <EngagementPanel engagement={patron.engagement} />

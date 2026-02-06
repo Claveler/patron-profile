@@ -4,6 +4,9 @@ import TabNavigation from '../components/TabNavigation/TabNavigation'
 import SummaryTab from '../components/Tabs/SummaryTab'
 import MembershipsTab from '../components/Tabs/MembershipsTab'
 import DocumentsTab from '../components/Tabs/DocumentsTab'
+import OpportunityModal from '../components/OpportunityModal/OpportunityModal'
+import GiftModal from '../components/GiftModal/GiftModal'
+import ActivityModal from '../components/ActivityModal/ActivityModal'
 import { getPatronById, isManagedProspect } from '../data/patrons'
 import './PatronProfile.css'
 
@@ -501,6 +504,11 @@ const defaultPatronData = {
 
 function PatronProfile({ patronId, onBack, onSelectOpportunity }) {
   const [activeTab, setActiveTab] = useState('summary')
+  
+  // Modal states (managed at profile level for access from InfoBox and tabs)
+  const [showOpportunityModal, setShowOpportunityModal] = useState(false)
+  const [showGiftModal, setShowGiftModal] = useState(false)
+  const [showActivityModal, setShowActivityModal] = useState(false)
 
   // Get patron data from store, fallback to default if not found
   const patronData = useMemo(() => {
@@ -514,13 +522,43 @@ function PatronProfile({ patronId, onBack, onSelectOpportunity }) {
 
   // Determine if this is a Managed Prospect or General Constituent
   const isManaged = isManagedProspect(patronData)
+  
+  const patronFullName = `${patronData.firstName} ${patronData.lastName}`
+
+  // Modal handlers
+  const handleCreateOpportunity = () => setShowOpportunityModal(true)
+  const handleRecordGift = () => setShowGiftModal(true)
+  const handleLogActivity = () => setShowActivityModal(true)
+  
+  const handleOpportunitySuccess = (newOpportunity) => {
+    console.log('Created opportunity:', newOpportunity)
+    // In a real app, this would refresh the data
+  }
+  
+  const handleGiftSuccess = (newGift) => {
+    console.log('Recorded gift:', newGift)
+    // In a real app, this would refresh the giving summary
+  }
+  
+  const handleActivitySuccess = (newActivity) => {
+    console.log('Logged activity:', newActivity)
+    // In a real app, this would refresh the timeline
+  }
 
   const renderTabContent = () => {
     switch (activeTab) {
       case 'summary':
-        return <SummaryTab patron={patronData} onSelectOpportunity={onSelectOpportunity} />
+        return (
+          <SummaryTab 
+            patron={patronData} 
+            onSelectOpportunity={onSelectOpportunity}
+            onCreateOpportunity={handleCreateOpportunity}
+            onRecordGift={handleRecordGift}
+            onLogActivity={handleLogActivity}
+          />
+        )
       case 'memberships':
-        return <MembershipsTab membership={patronData.membership} patronName={`${patronData.firstName} ${patronData.lastName}`} patronEmail={patronData.email} />
+        return <MembershipsTab membership={patronData.membership} patronName={patronFullName} patronEmail={patronData.email} />
       case 'profile':
         return <div className="coming-soon">Profile tab coming soon...</div>
       case 'timeline':
@@ -530,7 +568,14 @@ function PatronProfile({ patronId, onBack, onSelectOpportunity }) {
       case 'documents':
         return <DocumentsTab patron={patronData} />
       default:
-        return <SummaryTab patron={patronData} />
+        return (
+          <SummaryTab 
+            patron={patronData}
+            onCreateOpportunity={handleCreateOpportunity}
+            onRecordGift={handleRecordGift}
+            onLogActivity={handleLogActivity}
+          />
+        )
     }
   }
 
@@ -578,6 +623,8 @@ function PatronProfile({ patronId, onBack, onSelectOpportunity }) {
         <PatronInfoBox 
           patron={patronData} 
           isManaged={isManaged}
+          onCreateOpportunity={handleCreateOpportunity}
+          onAddActivity={handleLogActivity}
         />
 
         {/* Tab Section */}
@@ -594,6 +641,32 @@ function PatronProfile({ patronId, onBack, onSelectOpportunity }) {
           </div>
         </div>
       </div>
+
+      {/* Modals - managed at profile level */}
+      <OpportunityModal
+        isOpen={showOpportunityModal}
+        onClose={() => setShowOpportunityModal(false)}
+        onSuccess={handleOpportunitySuccess}
+        patronId={patronData.id}
+        patronName={patronFullName}
+        defaultAssignedTo={patronData.assignedTo}
+      />
+
+      <GiftModal
+        isOpen={showGiftModal}
+        onClose={() => setShowGiftModal(false)}
+        onSuccess={handleGiftSuccess}
+        patronId={patronData.id}
+        patronName={patronFullName}
+      />
+
+      <ActivityModal
+        isOpen={showActivityModal}
+        onClose={() => setShowActivityModal(false)}
+        onSuccess={handleActivitySuccess}
+        patronId={patronData.id}
+        patronName={patronFullName}
+      />
     </div>
   )
 }

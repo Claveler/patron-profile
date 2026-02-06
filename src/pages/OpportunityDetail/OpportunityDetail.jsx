@@ -1,5 +1,7 @@
-import { useState, useMemo } from 'react'
-import { getOpportunityById, PIPELINE_STAGES } from '../../data/opportunities'
+import { useState } from 'react'
+import { getOpportunityById, PIPELINE_STAGES, updateOpportunityStage, closeOpportunityAsLost } from '../../data/opportunities'
+import ActivityModal from '../../components/ActivityModal/ActivityModal'
+import CloseWonModal from '../../components/CloseWonModal/CloseWonModal'
 import './OpportunityDetail.css'
 
 // Format currency
@@ -29,7 +31,7 @@ const getDaysSince = (dateStr) => {
 }
 
 function OpportunityDetail({ opportunityId, onBack, onNavigateToPatron }) {
-  const opportunity = getOpportunityById(opportunityId)
+  const [opportunity, setOpportunity] = useState(() => getOpportunityById(opportunityId))
 
   // Editable state (in a real app, this would update the data)
   const [editMode, setEditMode] = useState(false)
@@ -37,6 +39,10 @@ function OpportunityDetail({ opportunityId, onBack, onNavigateToPatron }) {
   const [probability, setProbability] = useState(opportunity?.probability || 50)
   const [expectedClose, setExpectedClose] = useState(opportunity?.expectedClose || '')
   const [nextAction, setNextAction] = useState(opportunity?.nextAction || '')
+  
+  // Modal states
+  const [showActivityModal, setShowActivityModal] = useState(false)
+  const [showCloseWonModal, setShowCloseWonModal] = useState(false)
   
   if (!opportunity) {
     return (
@@ -70,21 +76,39 @@ function OpportunityDetail({ opportunityId, onBack, onNavigateToPatron }) {
   const handleAdvanceStage = () => {
     if (currentStageIndex < PIPELINE_STAGES.length - 1) {
       const nextStage = PIPELINE_STAGES[currentStageIndex + 1]
-      alert(`Advancing to: ${nextStage.label} (mock)`)
+      updateOpportunityStage(opportunityId, nextStage.id)
+      // Refresh the opportunity data
+      setOpportunity(getOpportunityById(opportunityId))
     }
   }
 
   const handleCloseWon = () => {
-    if (confirm('Close this opportunity as Won? This will create a gift record.')) {
-      alert('Closed as Won - Gift record created (mock)')
-    }
+    setShowCloseWonModal(true)
+  }
+
+  const handleCloseWonSuccess = (result) => {
+    console.log('Closed as won:', result)
+    // Refresh the opportunity data
+    setOpportunity(getOpportunityById(opportunityId))
   }
 
   const handleCloseLost = () => {
     const reason = prompt('Why was this opportunity lost?', 'Not interested at this time')
     if (reason) {
-      alert(`Closed as Lost - Reason: ${reason} (mock)`)
+      closeOpportunityAsLost(opportunityId, reason)
+      // Refresh the opportunity data
+      setOpportunity(getOpportunityById(opportunityId))
     }
+  }
+
+  const handleLogContact = () => {
+    setShowActivityModal(true)
+  }
+
+  const handleActivitySuccess = (activity) => {
+    console.log('Logged activity:', activity)
+    // Refresh the opportunity data to update lastContact
+    setOpportunity(getOpportunityById(opportunityId))
   }
 
   const handlePatronClick = () => {
@@ -288,7 +312,10 @@ function OpportunityDetail({ opportunityId, onBack, onNavigateToPatron }) {
                   </span>
                 )}
               </span>
-              <button className="opportunity-detail__log-contact-btn">
+              <button 
+                className="opportunity-detail__log-contact-btn"
+                onClick={handleLogContact}
+              >
                 <i className="fa-solid fa-phone"></i>
                 Log Contact
               </button>
@@ -372,6 +399,24 @@ function OpportunityDetail({ opportunityId, onBack, onNavigateToPatron }) {
           </div>
         </div>
       </div>
+
+      {/* Modals */}
+      <ActivityModal
+        isOpen={showActivityModal}
+        onClose={() => setShowActivityModal(false)}
+        onSuccess={handleActivitySuccess}
+        patronId={opportunity?.patronId}
+        patronName={opportunity?.patronName}
+        opportunityId={opportunityId}
+        opportunityName={opportunity?.name}
+      />
+
+      <CloseWonModal
+        isOpen={showCloseWonModal}
+        onClose={() => setShowCloseWonModal(false)}
+        onSuccess={handleCloseWonSuccess}
+        opportunityId={opportunityId}
+      />
     </div>
   )
 }

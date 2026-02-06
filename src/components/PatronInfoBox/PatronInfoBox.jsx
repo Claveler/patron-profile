@@ -16,12 +16,26 @@ const formatCurrency = (amount) => {
   }).format(amount)
 }
 
-function PatronInfoBox({ patron, isManaged }) {
+function PatronInfoBox({ patron, isManaged, onCreateOpportunity, onAddActivity }) {
   const [actionsOpen, setActionsOpen] = useState(false)
 
   // Get opportunity summary for managed prospects
   const openOpportunities = isManaged ? getOpenOpportunitiesForPatron(patron.id) : []
   const totalPipeline = openOpportunities.reduce((sum, opp) => sum + opp.askAmount, 0)
+  
+  const handleCreateOpportunity = () => {
+    setActionsOpen(false)
+    if (onCreateOpportunity) {
+      onCreateOpportunity()
+    }
+  }
+  
+  const handleAddActivity = () => {
+    setActionsOpen(false)
+    if (onAddActivity) {
+      onAddActivity()
+    }
+  }
 
   return (
     <div className="patron-info-box">
@@ -155,7 +169,7 @@ function PatronInfoBox({ patron, isManaged }) {
                 <i className="fa-solid fa-tags"></i>
                 Change Category
               </button>
-              <button className="patron-info-box__dropdown-item">
+              <button className="patron-info-box__dropdown-item" onClick={handleAddActivity}>
                 <i className="fa-solid fa-plus"></i>
                 Add activity
               </button>
@@ -172,7 +186,7 @@ function PatronInfoBox({ patron, isManaged }) {
                 Modify Engagement Level
               </button>
               {isManaged && (
-                <button className="patron-info-box__dropdown-item">
+                <button className="patron-info-box__dropdown-item" onClick={handleCreateOpportunity}>
                   <i className="fa-solid fa-bullseye"></i>
                   Create Opportunity
                 </button>

@@ -121,7 +121,7 @@ Liam Johnson`
   }
 ]
 
-function ActivityTimeline({ gifts = [], activities = mockActivities }) {
+function ActivityTimeline({ gifts = [], activities = mockActivities, onAddActivity }) {
   const [expandedItem, setExpandedItem] = useState(null)
   const [filter, setFilter] = useState('all')
   const [visibleCount, setVisibleCount] = useState(6)
@@ -162,7 +162,11 @@ function ActivityTimeline({ gifts = [], activities = mockActivities }) {
   }
 
   const handleAddActivity = () => {
-    alert('This would open a modal to add a new activity.')
+    if (onAddActivity) {
+      onAddActivity()
+    } else {
+      alert('This would open a modal to add a new activity.')
+    }
   }
 
   const handleLoadMore = () => {

@@ -430,3 +430,127 @@ export const PIPELINE_STAGES = [
   { id: 'solicitation', label: 'Solicitation', description: 'Ready to ask' },
   { id: 'stewardship', label: 'Stewardship', description: 'Post-gift' },
 ]
+
+// Probability options for dropdowns
+export const PROBABILITY_OPTIONS = [
+  { value: 10, label: '10%' },
+  { value: 25, label: '25%' },
+  { value: 50, label: '50%' },
+  { value: 75, label: '75%' },
+  { value: 90, label: '90%' },
+]
+
+// =============================================================================
+// MUTATION FUNCTIONS (Mock - for demo purposes)
+// =============================================================================
+
+// Generate unique ID
+const generateId = () => `opp-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+
+// Add new opportunity
+export const addOpportunity = (opportunityData) => {
+  const newOpportunity = {
+    id: generateId(),
+    patronId: opportunityData.patronId,
+    patronName: opportunityData.patronName,
+    
+    name: opportunityData.name,
+    description: opportunityData.description || '',
+    askAmount: opportunityData.askAmount,
+    
+    stage: opportunityData.stage || 'identification',
+    probability: opportunityData.probability || 25,
+    expectedClose: opportunityData.expectedClose,
+    
+    nextAction: opportunityData.nextAction || '',
+    lastContact: new Date().toISOString().split('T')[0],
+    
+    fund: opportunityData.fund,
+    campaign: opportunityData.campaign,
+    
+    assignedTo: opportunityData.assignedTo,
+    assignedToInitials: opportunityData.assignedToInitials || opportunityData.assignedTo?.split(' ').map(n => n[0]).join(''),
+    
+    status: 'open',
+    closedDate: null,
+    closedReason: null,
+    
+    createdDate: new Date().toISOString().split('T')[0],
+  }
+  
+  opportunities.push(newOpportunity)
+  return newOpportunity
+}
+
+// Update existing opportunity
+export const updateOpportunity = (id, updates) => {
+  const index = opportunities.findIndex(opp => opp.id === id)
+  if (index === -1) return null
+  
+  opportunities[index] = {
+    ...opportunities[index],
+    ...updates,
+  }
+  
+  return opportunities[index]
+}
+
+// Update opportunity stage (convenience function for drag-and-drop)
+export const updateOpportunityStage = (id, newStage) => {
+  return updateOpportunity(id, { stage: newStage })
+}
+
+// Close opportunity as Won
+export const closeOpportunityAsWon = (id, actualAmount = null, notes = null) => {
+  const opportunity = getOpportunityById(id)
+  if (!opportunity) return null
+  
+  const closedOpportunity = updateOpportunity(id, {
+    status: 'won',
+    stage: 'stewardship',
+    closedDate: new Date().toISOString().split('T')[0],
+    closedReason: notes || 'Gift received',
+    probability: 100,
+    // If actual amount differs from ask, update it
+    askAmount: actualAmount || opportunity.askAmount,
+  })
+  
+  // In a real app, this would also create a Gift record
+  // For demo, we return the opportunity with a gift reference
+  return {
+    opportunity: closedOpportunity,
+    gift: {
+      id: `gift-${Date.now()}`,
+      patronId: opportunity.patronId,
+      patronName: opportunity.patronName,
+      amount: actualAmount || opportunity.askAmount,
+      date: new Date().toISOString().split('T')[0],
+      fund: opportunity.fund,
+      campaign: opportunity.campaign,
+      opportunityId: id,
+      type: 'donation',
+    }
+  }
+}
+
+// Close opportunity as Lost
+export const closeOpportunityAsLost = (id, reason = null) => {
+  return updateOpportunity(id, {
+    status: 'lost',
+    closedDate: new Date().toISOString().split('T')[0],
+    closedReason: reason || 'Declined',
+  })
+}
+
+// Log contact (updates lastContact and optionally nextAction)
+export const logContact = (id, contactDate, nextAction = null) => {
+  const updates = {
+    lastContact: contactDate || new Date().toISOString().split('T')[0],
+  }
+  
+  if (nextAction !== null) {
+    updates.nextAction = nextAction
+  }
+  
+  return updateOpportunity(id, updates)
+}

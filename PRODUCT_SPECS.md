@@ -70,6 +70,182 @@ Transform Fever from a ticketing platform into a **Museum Relationship Platform*
 
 ---
 
+## Fundraising Entity Model
+
+This section documents how the core fundraising entities relate to each other. Understanding these relationships is critical for the system architecture.
+
+### Entity Relationships
+
+```mermaid
+erDiagram
+    PATRON ||--o{ OPPORTUNITY : "has"
+    PATRON }o--o| STAFF : "assignedTo"
+    OPPORTUNITY }o--|| CAMPAIGN : "belongs to"
+    OPPORTUNITY ||--o| GIFT : "closes as Won"
+    CAMPAIGN ||--o{ APPEAL : "contains"
+    CAMPAIGN }o--|| FUND : "belongs to"
+    GIFT }o--|| FUND : "attributed to"
+    GIFT }o--|| CAMPAIGN : "attributed to"
+    GIFT }o--o| APPEAL : "attributed to"
+    
+    PATRON {
+        string id
+        string assignedTo
+        object giving
+        object engagement
+    }
+    
+    OPPORTUNITY {
+        string id
+        string patronId
+        string name
+        number askAmount
+        string stage
+        number probability
+        date expectedClose
+        string campaign
+        string assignedTo
+        string status
+    }
+    
+    CAMPAIGN {
+        string id
+        string name
+        string fund
+        number goal
+        number raised
+        date startDate
+        date endDate
+    }
+    
+    GIFT {
+        string id
+        string patronId
+        number amount
+        string fund
+        string campaign
+        string appeal
+        date date
+    }
+```
+
+### Patron and Opportunity
+
+- A patron can have 0, 1, or many opportunities (one-to-many relationship)
+- Opportunities are linked to patrons via the `patronId` field
+- Having opportunities does NOT make someone a Managed Prospect (only `assignedTo` does)
+- A General Constituent could theoretically have opportunities if assigned to a portfolio later
+- The patron profile's **OpportunitiesPanel** displays all opportunities for that patron
+- The patron header shows an opportunity summary: "2 active opportunities · $60K pipeline"
+
+### Opportunity and Pipeline (Moves Management)
+
+- The Pipeline Kanban board displays **Opportunities**, not Patrons
+- Each column represents a pipeline stage: Identification → Qualification → Cultivation → Solicitation → Stewardship
+- Dragging a card between columns changes the opportunity's `stage` field
+- Only opportunities with `status: 'open'` appear on the board
+- When closed (Won/Lost), opportunity is removed from active pipeline
+- Multiple opportunities from the same patron can appear on the board simultaneously
+- Filter by: Assignee, Campaign, Stage
+
+### Opportunity and Campaign
+
+- Each opportunity has a `campaign` field linking it to a fundraising campaign
+- This connects the "ask" to the strategic fundraising goal
+- Examples: "2026 Annual Fund", "Building the Future Capital Campaign"
+- The OpportunitiesList page can filter by campaign
+- The Pipeline (MovesManagement) can filter by campaign
+- When opportunity closes as "Won", the resulting gift inherits the campaign attribution
+
+### Campaign and DCAP Hierarchy
+
+Campaigns exist within the DCAP (Designation/Fund → Campaign → Appeal → Package) hierarchy:
+
+- **Fund**: The accounting destination (Annual Operating, Capital Building, Education, Endowment)
+- **Campaign**: The strategic multi-year goal (2026 Annual Fund, Building the Future)
+- **Appeal**: The marketing trigger (Spring Gala, Year-End Mailer)
+- **Package**: The specific variant for A/B testing (optional)
+
+Opportunities are linked at the Campaign level. Gifts record full attribution (Fund + Campaign + Appeal).
+
+### Opportunity to Gift Lifecycle
+
+**When an opportunity is "Closed as Won":**
+- A new Gift record is created
+- Gift amount = opportunity's askAmount (or actual amount received)
+- Gift inherits: patronId, campaign, fund, assignedTo (as soft credit)
+- Opportunity status changes to `closed-won`
+
+**When an opportunity is "Closed as Lost":**
+- No gift record created
+- Opportunity status changes to `closed-lost`
+- Record preserved for historical analysis (why did they say no?)
+
+### Patron and Campaign (via Gifts)
+
+- Patrons don't directly belong to campaigns
+- The relationship is through completed gifts
+- GivingSummary shows patron's campaign breakdown
+- A patron may contribute to multiple campaigns over time
+
+### Navigation Flow
+
+```mermaid
+flowchart TD
+    subgraph PatronProfile [Patron Profile]
+        Header[PatronInfoBox]
+        OppPanel[OpportunitiesPanel]
+    end
+    
+    subgraph OpportunityPages [Opportunity Management]
+        OppList[OpportunitiesList]
+        OppDetail[OpportunityDetail]
+    end
+    
+    subgraph Pipeline [Moves Management]
+        Kanban[Pipeline Kanban Board]
+    end
+    
+    subgraph CampaignPages [Campaign Management]
+        CampList[CampaignManagement]
+    end
+    
+    Header -->|"View opportunities"| OppPanel
+    OppPanel -->|"Click opportunity"| OppDetail
+    OppPanel -->|"Create opportunity"| OppDetail
+    
+    OppList -->|"Click row"| OppDetail
+    OppList -->|"Click patron name"| PatronProfile
+    
+    Kanban -->|"Click card"| OppDetail
+    Kanban -->|"Click patron name"| PatronProfile
+    Kanban -->|"Drag card"| Kanban
+    
+    OppDetail -->|"View patron"| PatronProfile
+    OppDetail -->|"Close as Won"| Gift[Gift Record Created]
+    
+    CampList -->|"Filter opps by campaign"| OppList
+```
+
+### Key Architectural Decisions
+
+**1. Why opportunities, not patrons, on the pipeline?**
+- A single donor may be cultivated for multiple asks simultaneously (Gala sponsorship + Annual Fund gift)
+- Pipeline reporting needs dollar values and expected close dates per "deal"
+- Industry standard (Salesforce, Raiser's Edge) uses this model
+
+**2. Why separate patron `assignedTo` from opportunity assignment?**
+- Patron ownership (portfolio assignment) is persistent
+- Opportunity assignment can differ (different staff for different campaigns)
+- A patron remains "managed" even if all their opportunities close
+
+**3. Why link opportunities to campaigns?**
+- Enables pipeline reporting by campaign ("$2M in solicitation for Annual Fund")
+- Connects cultivation efforts to strategic goals
+- Ensures gift attribution when opportunity closes
+
+---
+
 ## Target Users
 
 ### Primary Users
@@ -385,25 +561,28 @@ In a typical mid-to-large museum database:
 
 **General Constituent**
 - Any patron in the database who is NOT being actively cultivated
-- No assigned relationship manager
+- No assigned relationship manager (`assignedTo` field is empty)
 - Interactions are transactional (buy a ticket, renew membership)
 - Handled through mass communications and automated workflows
+- May have 0 opportunities
 
 **Managed Prospect**
-- A patron with assigned relationship manager ("Assigned To" field)
-- Has prospect pipeline data (stage, ask amount, next action)
-- Being actively cultivated through the Moves Management process
+- A patron with an assigned relationship manager (`assignedTo` field populated)
+- In someone's portfolio for active cultivation
+- May have 0, 1, or many **Opportunities** (see Fundraising Entity Model)
 - Requires high-touch, manual relationship building
+
+**Important**: The distinction is based solely on whether the patron has an `assignedTo` value. Pipeline stages are tracked on **Opportunities**, not on the patron record itself.
 
 ### Why This Distinction Matters
 
 1. **Staff Accountability**: Major Gift Officers are evaluated on their "portfolio" of managed prospects. If the system mixes in 50,000 general constituents, accountability is lost.
 
-2. **Interface Performance**: The Moves Management Kanban board cannot display thousands of cards. Only the ~2% who are Managed Prospects belong there.
+2. **Interface Performance**: The Moves Management Kanban board displays Opportunities from managed prospects. Only the ~2% of patrons who are actively managed will have opportunities on the board.
 
 3. **Data Sensitivity**: Managed Prospects often have wealth screening data, relationship notes, and cultivation strategies that should have restricted access.
 
-4. **Feature Relevance**: Pipeline-specific features (ask amount, next action, stage tracking) are meaningless for General Constituents.
+4. **Feature Relevance**: Opportunity-specific features (ask amount, expected close, probability) only appear for Managed Prospects.
 
 ### Implementation in UI
 
@@ -411,11 +590,11 @@ The Patron Profile adapts based on patron type:
 
 | Feature | General Constituent | Managed Prospect |
 |---------|---------------------|------------------|
-| **Header Badge** | "General Constituent" | "Managed Prospect" |
-| **Prospect Pipeline Card** | Shows "Add to Portfolio" prompt | Shows full pipeline with stage, ask amount |
-| **Alert Banner** | General alerts only (renewal) | Cultivation alerts (contact overdue) |
+| **Header Info** | Basic contact info | Shows "Assigned to [Name]" + opportunity summary |
+| **Sidebar Panel** | "Add to Portfolio" prompt | OpportunitiesPanel with active opportunities |
+| **Actions Dropdown** | Standard actions | Includes "Create Opportunity" |
 | **Smart Tips** | General recommendations | Cultivation-focused tips |
-| **Assigned To** | Empty or "—" | Shows relationship manager |
+| **Opportunity Summary** | Not shown | "2 active opportunities · $60K pipeline" |
 
 ### "Promote to Prospect" Workflow
 
@@ -424,8 +603,8 @@ The system should support promoting a General Constituent to a Managed Prospect:
 **Manual Promotion:**
 - Staff identifies high-potential donor
 - Clicks "Add to Portfolio" on their profile
-- Assigns to a Gift Officer
-- Sets initial pipeline stage and ask amount
+- Assigns to a Gift Officer (sets `assignedTo`)
+- Optionally creates their first Opportunity
 
 **Automated Alerts (Future):**
 - When lifetime giving crosses threshold (e.g., $5,000)
@@ -434,32 +613,49 @@ The system should support promoting a General Constituent to a Managed Prospect:
 
 ### Data Model
 
+**Patron Records** (`src/data/patrons.js`):
+
 ```javascript
-// General Constituent (no pipeline data)
+// General Constituent (no assignedTo)
 {
   id: 'paul-fairfax',
   firstName: 'Paul',
   lastName: 'Fairfax',
-  // NO assignedTo field
-  // NO prospect field
+  // NO assignedTo field - not in anyone's portfolio
   engagement: { ... },
   giving: { ... }
 }
 
-// Managed Prospect (has pipeline data)
+// Managed Prospect (has assignedTo)
 {
   id: 'anderson-collingwood',
   firstName: 'Anderson',
   lastName: 'Collingwood',
-  assignedTo: 'Liam Johnson',  // Relationship manager
-  prospect: {
-    stage: 'cultivation',       // Pipeline stage
-    askAmount: 25000,           // Target gift amount
-    nextAction: 'Follow up re: gallery tour',
-    lastContact: '2026-01-15'
-  },
+  assignedTo: 'Liam Johnson',  // Relationship manager - makes this a Managed Prospect
+  // NOTE: No prospect object - pipeline data is on Opportunities
   engagement: { ... },
   giving: { ... }
+}
+```
+
+**Opportunity Records** (`src/data/opportunities.js`):
+
+```javascript
+// Opportunities are separate entities linked to patrons
+{
+  id: 'opp-1',
+  patronId: 'anderson-collingwood',
+  patronName: 'Anderson Collingwood',
+  name: 'Annual Fund Major Gift',
+  askAmount: 25000,
+  stage: 'cultivation',        // Pipeline stage lives HERE
+  probability: 60,
+  expectedClose: '2026-03-15',
+  nextAction: 'Follow up re: gallery tour',
+  lastContact: '2026-01-15',
+  campaign: '2026 Annual Fund',
+  assignedTo: 'Liam Johnson',
+  status: 'open'               // open, closed-won, closed-lost
 }
 ```
 
@@ -467,7 +663,8 @@ The system should support promoting a General Constituent to a Managed Prospect:
 
 ```javascript
 // Determine if patron is actively managed
-const isManagedProspect = (patron) => Boolean(patron.assignedTo && patron.prospect)
+// A managed prospect simply has an assignedTo (relationship manager)
+const isManagedProspect = (patron) => Boolean(patron?.assignedTo)
 ```
 
 ---
@@ -591,9 +788,23 @@ Membership is the "top of funnel" for future major donors.
 - **Digital Cards**: Apple/Google Wallet for contactless entry
 
 ### 4. Major Gift & "Moves Management" Pipeline
-Dedicated Gift Officers cultivate wealthy donors over years.
-- **Pipeline Tracking**: Kanban-style board (Qualification → Solicitation → Stewardship)
+Dedicated Gift Officers cultivate wealthy donors over years. The pipeline tracks **Opportunities** (specific asks), not patrons directly.
+
+- **Opportunity-Based Architecture**: Each potential gift is a distinct Opportunity record linked to a patron
+- **Pipeline Tracking**: Kanban-style board showing Opportunities across 5 stages (Identification → Qualification → Cultivation → Solicitation → Stewardship)
+- **Multiple Opportunities per Patron**: A single donor can have multiple active asks (e.g., Annual Fund + Capital Campaign)
+- **Opportunity Lifecycle**: Opportunities are "Closed as Won" (creates gift record) or "Closed as Lost" (preserved for analysis)
 - **Task/Activity Reminders**: "Call Donor X three days after gallery tour"
+
+**Opportunities Module Components:**
+
+| Component | Description |
+|-----------|-------------|
+| **OpportunitiesList** | Global table view with filters (Stage, Campaign, Assignee, Status) |
+| **OpportunityDetail** | Full detail page with editable fields, pipeline stepper, close actions |
+| **OpportunitiesPanel** | Patron profile sidebar showing their opportunities |
+| **OpportunityCard** | Reusable card component (compact, full, kanban variants) |
+| **MovesManagement** | Kanban board displaying Opportunity cards |
 
 ### 5. Advanced Prospect Research Integration
 Integration with wealth screening services (WealthEngine, DonorSearch).
@@ -639,10 +850,10 @@ Museum boards demand data.
 
 | Feature | Current Status | Notes |
 |---------|----------------|-------|
-| 1. Unified 360° View | **Mockup Complete** | Summary tab with giving, activity, engagement |
-| 2. Campaign Management | **Mockup Complete** | DCAP hierarchy in data model; Campaign dashboard with goal progress, appeals ROI; GivingSummary shows patron Fund/Campaign breakdown; GivingHistory shows gifts with soft credits |
+| 1. Unified 360° View | **Mockup Complete** | Summary tab with giving, activity, engagement, opportunities |
+| 2. Campaign Management | **Mockup Complete** | DCAP hierarchy in data model; Campaign dashboard with goal progress, appeals ROI; GivingSummary shows patron Fund/Campaign breakdown; GivingHistory shows gifts with soft credits; Opportunities linked to campaigns |
 | 3. Membership Management | **Mockup Complete** | Full Memberships tab with card, benefits, upgrades |
-| 4. Moves Management | **Mockup Complete** | Pipeline Kanban board with 5 stages, drag-and-drop |
+| 4. Moves Management | **Mockup Complete** | Opportunity-based Kanban board with 5 stages; OpportunitiesList page with filters; OpportunityDetail page with edit/close; Multiple opportunities per patron supported |
 | 5. Prospect Research | **Placeholder** | WealthInsights component (needs DonorSearch API) |
 | 6. FMV Calculation | **Mockup Complete** | Documents tab with tax receipts showing deductible amounts |
 | 7. Household Mapping | **Partial** | RelationshipsSummary on Summary tab; full tab placeholder |
@@ -765,10 +976,12 @@ Detailed membership sample data used in mockup:
 #### Summary Tab
 | Component | Description | Status |
 |-----------|-------------|--------|
-| PatronInfoBox | Profile photo, contact info, membership badge, actions dropdown | Done |
+| PatronInfoBox | Profile photo, contact info, membership badge, actions dropdown, opportunity summary for managed prospects | Done |
 | FinancialSummary | Lifetime value (donations + revenue), donations/revenue split with avg gift, monthly chart, donation attribution (by Fund/Campaign) | Done |
 | RecentActivity | Timeline with filters (donations, events, communications) | Done |
-| EngagementPanel | Visual engagement level (Cold → On Fire), visit stats, prospect pipeline status (stage, ask amount, next action) | Done |
+| EngagementPanel | Visual engagement level (Cold → On Fire), visit stats, activity heatmap | Done |
+| OpportunitiesPanel | Patron's active opportunities, pipeline value summary, closed opportunities (collapsible) - for Managed Prospects | Done |
+| AddToPortfolioBar | Prompt to assign constituent to portfolio - for General Constituents | Done |
 | WealthInsights | Propensity score, DonorSearch placeholder | Done |
 | SmartTips | AI insights panel with actionable recommendations | Done |
 | RelationshipsSummary | Household/professional/organization connections | Done |
@@ -793,11 +1006,22 @@ Detailed membership sample data used in mockup:
 #### Pipeline (Moves Management)
 | Component | Description | Status |
 |-----------|-------------|--------|
-| MovesManagement | Kanban board with 5 stages (Identification → Stewardship) | Done |
-| Pipeline Cards | Prospect cards with ask amount, last contact, next action | Done |
-| Drag-and-Drop | HTML5 native drag between stages | Done |
+| MovesManagement | Kanban board with 5 stages (Identification → Stewardship) showing **Opportunities** | Done |
+| OpportunityCard (kanban) | Opportunity cards with patron name, ask amount, next action, contact status | Done |
+| Drag-and-Drop | HTML5 native drag between stages (changes opportunity stage) | Done |
 | Assigned To Filter | Filter pipeline by assigned staff | Done |
+| Campaign Filter | Filter pipeline by campaign | Done |
 | Pipeline Totals | Stage and total pipeline value calculations | Done |
+
+#### Opportunities Module
+| Component | Description | Status |
+|-----------|-------------|--------|
+| OpportunitiesList | Global table view of all opportunities with filters | Done |
+| OpportunityDetail | Full opportunity detail page with edit mode | Done |
+| OpportunityCard | Reusable card component (compact, full, kanban variants) | Done |
+| OpportunitiesPanel | Patron sidebar showing their opportunities | Done |
+| Pipeline Stepper | Visual stage indicator on OpportunityDetail | Done |
+| Close Actions | "Advance Stage", "Close as Won", "Close as Lost" buttons | Done |
 
 #### Campaigns (Campaign Management)
 | Component | Description | Status |
@@ -834,16 +1058,22 @@ Detailed membership sample data used in mockup:
 
 The following workflows should naturally connect when built:
 
-**Activity Logging → Pipeline Next Action**
+**Activity Logging → Opportunity Next Action**
 - When a gift officer logs an activity (call, meeting, email) in the Timeline tab or RecentActivity component
-- The system should prompt for the new "Next Action" to update the prospect pipeline
-- This keeps the "Next Action" in EngagementPanel's prospect pipeline section current
+- The system should prompt for the new "Next Action" to update the Opportunity
+- This keeps the "Next Action" in OpportunityDetail and OpportunitiesPanel current
 - Data flows: Timeline/RecentActivity → prospect.nextAction → EngagementPanel display
 
 **Pipeline Stage Transitions**
-- When moving a prospect between stages in the Pipeline (Kanban) view
-- The patron's prospect data should update automatically
-- EngagementPanel reflects the new stage in real-time
+- When moving an Opportunity between stages in the Pipeline (Kanban) view via drag-and-drop
+- The Opportunity's stage field updates automatically
+- OpportunityDetail and OpportunitiesPanel reflect the new stage in real-time
+- Multiple opportunities for the same patron can be at different stages simultaneously
+
+**Opportunity Close Flow**
+- "Close as Won" creates a Gift record with inherited campaign/fund attribution
+- "Close as Lost" preserves the opportunity for historical analysis
+- Closed opportunities are removed from the Pipeline board but remain visible in OpportunitiesList with status filter
 
 ---
 
@@ -957,6 +1187,7 @@ Patrons like Anderson Collingwood can appear in both the general Patron Profile 
 - Updated: February 5, 2026 (Competitive Features Checklist, Implementation Status, Coverage Assessment)
 - Updated: February 5, 2026 (Staff Assignment Terminology - unified "Owner"/"Gift Officer" to "Assigned To")
 - Updated: February 6, 2026 (Patron Management Model - General Constituents vs Managed Prospects distinction)
+- Updated: February 6, 2026 (Opportunity Model Migration - pipeline tracks opportunities not patrons; added Fundraising Entity Model section; new Opportunities module documentation)
 - Product Manager: Andres Clavel
 - Designer: Pablo Rubio Retolaza
 - Tech Lead: Victor Almaraz Sanchez
