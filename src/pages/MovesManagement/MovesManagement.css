@@ -68,6 +68,11 @@
   font-weight: var(--font-weight-semibold);
 }
 
+.moves-management__total-count {
+  font-size: var(--font-size-sm);
+  margin-left: var(--space-2);
+}
+
 /* Filters */
 .moves-management__filters {
   display: flex;
@@ -186,131 +191,25 @@
 }
 
 /* ============================================
-   PIPELINE CARDS
+   CARD WRAPPERS (for drag functionality)
    ============================================ */
 
-.pipeline-card {
-  background: var(--color-surface);
-  border-radius: var(--radius-md);
-  padding: var(--space-3);
-  box-shadow: var(--shadow-sm);
+.moves-management__card-wrapper {
   cursor: grab;
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
-  border: 1px solid var(--color-border-light);
+  transition: transform var(--transition-fast), opacity var(--transition-fast);
 }
 
-.pipeline-card:hover {
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
-}
-
-.pipeline-card:active {
+.moves-management__card-wrapper:active {
   cursor: grabbing;
 }
 
-.pipeline-card--dragging {
+.moves-management__card-wrapper--dragging {
   opacity: 0.5;
   transform: scale(1.02);
+}
+
+.moves-management__card-wrapper--dragging .opportunity-card {
   box-shadow: var(--shadow-lg);
-}
-
-/* Card Header */
-.pipeline-card__header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: var(--space-2);
-  gap: var(--space-2);
-}
-
-.pipeline-card__name {
-  font-size: var(--font-size-base);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-primary);
-  cursor: pointer;
-  flex: 1;
-  line-height: var(--line-height-tight);
-}
-
-.pipeline-card__name:hover {
-  text-decoration: underline;
-}
-
-.pipeline-card__amount {
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text-primary);
-  white-space: nowrap;
-}
-
-/* Card Contact Info */
-.pipeline-card__contact {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: var(--font-size-xs);
-  margin-bottom: var(--space-2);
-}
-
-.pipeline-card__date {
-  color: var(--color-text-secondary);
-}
-
-.pipeline-card__days {
-  padding: 2px 6px;
-  border-radius: var(--radius-sm);
-  font-weight: var(--font-weight-medium);
-}
-
-.pipeline-card__days--good {
-  background: var(--color-success-100);
-  color: var(--color-success-700);
-}
-
-.pipeline-card__days--warning {
-  background: var(--color-warning-100);
-  color: var(--color-warning-700);
-}
-
-.pipeline-card__days--overdue {
-  background: var(--color-error-100);
-  color: var(--color-error-700);
-}
-
-/* Card Action */
-.pipeline-card__action {
-  font-size: var(--font-size-xs);
-  color: var(--color-text-secondary);
-  display: flex;
-  align-items: flex-start;
-  gap: var(--space-2);
-  padding: var(--space-2);
-  background: var(--color-background);
-  border-radius: var(--radius-sm);
-  margin-bottom: var(--space-2);
-  line-height: var(--line-height-normal);
-}
-
-.pipeline-card__action i {
-  color: var(--color-primary);
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-
-/* Card Footer */
-.pipeline-card__footer {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.pipeline-card__assignee {
-  background: var(--color-primary-100);
-  color: var(--color-primary-700);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-semibold);
-  padding: 2px 8px;
-  border-radius: var(--radius-full);
-  cursor: default;
 }
 
 /* ============================================

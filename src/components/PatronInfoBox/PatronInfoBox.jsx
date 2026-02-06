@@ -1,8 +1,27 @@
 import { useState } from 'react'
+import { getOpenOpportunitiesForPatron } from '../../data/opportunities'
 import './PatronInfoBox.css'
 
-function PatronInfoBox({ patron }) {
+// Format currency
+const formatCurrency = (amount) => {
+  if (!amount) return '$0'
+  if (amount >= 1000) {
+    return `$${Math.round(amount / 1000)}K`
+  }
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(amount)
+}
+
+function PatronInfoBox({ patron, isManaged }) {
   const [actionsOpen, setActionsOpen] = useState(false)
+
+  // Get opportunity summary for managed prospects
+  const openOpportunities = isManaged ? getOpenOpportunitiesForPatron(patron.id) : []
+  const totalPipeline = openOpportunities.reduce((sum, opp) => sum + opp.askAmount, 0)
 
   return (
     <div className="patron-info-box">
@@ -98,6 +117,24 @@ function PatronInfoBox({ patron }) {
         </div>
       )}
 
+      {/* Managed Prospect Info - Shows assignedTo and opportunity summary */}
+      {isManaged && (
+        <div className="patron-info-box__section patron-info-box__prospect-info">
+          <div className="patron-info-box__info-item">
+            <i className="fa-solid fa-user-tie patron-info-box__info-icon"></i>
+            <span>Assigned to <strong>{patron.assignedTo}</strong></span>
+          </div>
+          {openOpportunities.length > 0 && (
+            <div className="patron-info-box__opp-summary">
+              <i className="fa-solid fa-bullseye patron-info-box__info-icon"></i>
+              <span>
+                {openOpportunities.length} active opportunit{openOpportunities.length === 1 ? 'y' : 'ies'} · {formatCurrency(totalPipeline)} pipeline
+              </span>
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Actions */}
       <div className="patron-info-box__actions">
         <div className="patron-info-box__dropdown">
@@ -134,6 +171,12 @@ function PatronInfoBox({ patron }) {
                 <i className="fa-solid fa-fire-flame-curved"></i>
                 Modify Engagement Level
               </button>
+              {isManaged && (
+                <button className="patron-info-box__dropdown-item">
+                  <i className="fa-solid fa-bullseye"></i>
+                  Create Opportunity
+                </button>
+              )}
             </div>
           )}
         </div>

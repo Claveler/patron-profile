@@ -2,6 +2,7 @@
 
 .patron-info-box {
   display: flex;
+  flex-wrap: wrap;
   align-items: flex-start;
   gap: var(--space-4);
   background-color: var(--color-surface);
@@ -10,6 +11,7 @@
   padding: var(--space-4);
   box-shadow: var(--shadow-lg);
 }
+
 
 /* Main section with photo and name */
 .patron-info-box__main {
@@ -218,4 +220,47 @@
   width: 20px;
   color: var(--color-text-secondary);
   text-align: center;
+}
+
+/* Prospect Info section */
+.patron-info-box__prospect-info {
+  background-color: var(--color-primary-50, #e6f4ff);
+  border-left: 2px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2) var(--space-3);
+}
+
+.patron-info-box__opp-summary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-sm);
+  color: var(--color-primary);
+}
+
+.patron-info-box__opp-summary .patron-info-box__info-icon {
+  color: var(--color-primary);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .patron-info-box {
+    flex-direction: column;
+  }
+  
+  .patron-info-box__section {
+    padding-left: 0;
+    border-left: none;
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--color-border);
+  }
+  
+  .patron-info-box__actions {
+    margin-left: 0;
+    width: 100%;
+  }
+  
+  .patron-info-box__actions-btn {
+    width: 100%;
+  }
 }

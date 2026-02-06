@@ -3,13 +3,16 @@
  * 
  * Terminology:
  * - MANAGED PROSPECT: A patron with an assigned relationship manager (owner) 
- *   who is being actively cultivated through the moves management pipeline.
- *   Has: assignedTo, prospect data
+ *   who is in someone's portfolio. They may have 0, 1, or many opportunities.
+ *   Has: assignedTo field
  * 
  * - GENERAL CONSTITUENT: A patron in the database who is not being actively 
  *   managed through individual relationship management. Handled via automated
  *   campaigns and appeals.
- *   Has: No assignedTo, no prospect data
+ *   Has: No assignedTo field
+ * 
+ * NOTE: Pipeline stages are tracked on OPPORTUNITIES, not patrons.
+ * See opportunities.js for pipeline data.
  */
 
 // Gift Officers / Relationship Managers
@@ -71,20 +74,8 @@ export const patrons = [
       name: 'Collingwood Family',
       verified: true
     },
-    // MANAGED PROSPECT INDICATOR
+    // MANAGED PROSPECT - has assignedTo (opportunities tracked separately)
     assignedTo: 'Liam Johnson',
-    prospect: {
-      stage: 'cultivation',
-      askAmount: 25000,
-      probability: 75,
-      expectedClose: 'Q2 2026',
-      nextAction: 'Follow up re: gallery tour',
-      lastContact: '2026-01-15',
-      mostRecentGift: {
-        amount: 5000,
-        date: '2025-12-15'
-      }
-    },
     engagement: {
       level: 'on-fire',
       visits: 54,
@@ -549,15 +540,6 @@ export const patrons = [
     phone: '(555) 234-5678',
     category: 'prospect',
     assignedTo: 'Liam Johnson',
-    prospect: {
-      stage: 'identification',
-      askAmount: 10000,
-      probability: 25,
-      expectedClose: 'Q4 2026',
-      nextAction: 'Schedule discovery meeting',
-      lastContact: '2025-10-01',
-      mostRecentGift: null
-    },
     engagement: { level: 'cold', visits: 3, lastVisit: '01/10/2025' },
     giving: { lifetimeValue: 150, donations: 0, revenue: 150, lastDonation: null }
   },
@@ -570,18 +552,6 @@ export const patrons = [
     phone: '(555) 345-6789',
     category: 'donor',
     assignedTo: 'Emma Smith',
-    prospect: {
-      stage: 'qualification',
-      askAmount: 5000,
-      probability: 35,
-      expectedClose: 'Q3 2026',
-      nextAction: 'Review wealth screening',
-      lastContact: '2025-10-05',
-      mostRecentGift: {
-        amount: 750,
-        date: '2025-10-12'
-      }
-    },
     engagement: { level: 'cold', visits: 8, lastVisit: '12/10/2025' },
     giving: { lifetimeValue: 1250, donations: 750, revenue: 500, lastDonation: '2025-10-12' }
   },
@@ -594,12 +564,6 @@ export const patrons = [
     phone: '(555) 456-7890',
     category: 'member',
     assignedTo: 'Liam Johnson',
-    prospect: {
-      stage: 'cultivation',
-      askAmount: 15000,
-      nextAction: 'Invite to board dinner',
-      lastContact: '2025-10-18'
-    },
     engagement: { level: 'warm', visits: 22, lastVisit: '20/10/2025' },
     giving: { lifetimeValue: 2800, donations: 1500, revenue: 1300, lastDonation: '2025-10-20' },
     membership: { status: 'active', tier: 'Silver', daysToRenewal: 45 }
@@ -613,18 +577,6 @@ export const patrons = [
     phone: '(555) 567-8901',
     category: 'engaged-patron',
     assignedTo: 'Liam Johnson',
-    prospect: {
-      stage: 'solicitation',
-      askAmount: 50000,
-      probability: 90,
-      expectedClose: 'Q1 2026',
-      nextAction: 'Present gift proposal',
-      lastContact: '2025-10-28',
-      mostRecentGift: {
-        amount: 5000,
-        date: '2025-11-01'
-      }
-    },
     engagement: { level: 'hot', visits: 45, lastVisit: '01/11/2025' },
     giving: { lifetimeValue: 8500, donations: 7000, revenue: 1500, lastDonation: '2025-11-01' }
   },
@@ -637,12 +589,6 @@ export const patrons = [
     phone: '(555) 678-9012',
     category: 'large-donor',
     assignedTo: 'Emma Smith',
-    prospect: {
-      stage: 'stewardship',
-      askAmount: 100000,
-      nextAction: 'Send impact report',
-      lastContact: '2025-10-10'
-    },
     engagement: { level: 'on-fire', visits: 67, lastVisit: '15/10/2025' },
     giving: { lifetimeValue: 125000, donations: 120000, revenue: 5000, lastDonation: '2025-10-15' }
   },
@@ -655,12 +601,6 @@ export const patrons = [
     phone: '(555) 789-0123',
     category: 'member',
     assignedTo: 'Emma Smith',
-    prospect: {
-      stage: 'cultivation',
-      askAmount: 20000,
-      nextAction: 'Gallery tour follow-up',
-      lastContact: '2025-11-05'
-    },
     engagement: { level: 'warm', visits: 18, lastVisit: '10/11/2025' },
     giving: { lifetimeValue: 3200, donations: 2000, revenue: 1200, lastDonation: '2025-11-10' },
     membership: { status: 'active', tier: 'Gold', daysToRenewal: 120 }
@@ -674,12 +614,6 @@ export const patrons = [
     phone: '(555) 890-1234',
     category: 'donor',
     assignedTo: 'Sophia Anderson',
-    prospect: {
-      stage: 'stewardship',
-      askAmount: 75000,
-      nextAction: 'Quarterly check-in call',
-      lastContact: '2025-10-25'
-    },
     engagement: { level: 'on-fire', visits: 52, lastVisit: '30/10/2025' },
     giving: { lifetimeValue: 85000, donations: 80000, revenue: 5000, lastDonation: '2025-10-30' }
   },
@@ -692,12 +626,6 @@ export const patrons = [
     phone: '(555) 901-2345',
     category: 'donor',
     assignedTo: 'Lucas Thomas',
-    prospect: {
-      stage: 'qualification',
-      askAmount: 8000,
-      nextAction: 'Research corporate connections',
-      lastContact: '2025-11-01'
-    },
     engagement: { level: 'cool', visits: 12, lastVisit: '05/11/2025' },
     giving: { lifetimeValue: 1800, donations: 1200, revenue: 600, lastDonation: '2025-11-05' }
   },
@@ -710,20 +638,16 @@ export const patrons = [
     phone: '(555) 012-3456',
     category: 'member',
     assignedTo: 'Emma Smith',
-    prospect: {
-      stage: 'identification',
-      askAmount: 5000,
-      nextAction: 'Upgrade membership pitch',
-      lastContact: '2025-10-20'
-    },
     engagement: { level: 'cool', visits: 15, lastVisit: '25/10/2025' },
     giving: { lifetimeValue: 950, donations: 250, revenue: 700, lastDonation: '2025-10-25' },
     membership: { status: 'active', tier: 'Silver', daysToRenewal: 90 }
   },
 
   // ============================================
-  // GENERAL CONSTITUENTS (no assignedTo, no prospect)
-  // These are in the database but not actively managed
+  // GENERAL CONSTITUENTS (no assignedTo)
+  // These are in the database but not actively managed.
+  // They may be promoted to Managed Prospect by assigning
+  // them to a relationship manager.
   // ============================================
   
   {
@@ -782,7 +706,8 @@ export const patrons = [
 export const getPatronById = (id) => patrons.find(p => p.id === id)
 
 // Helper function to determine if patron is a Managed Prospect
-export const isManagedProspect = (patron) => Boolean(patron.assignedTo && patron.prospect)
+// A managed prospect has an assignedTo (relationship manager)
+export const isManagedProspect = (patron) => Boolean(patron?.assignedTo)
 
 // Helper function to get display name
 export const getPatronDisplayName = (patron) => `${patron.firstName} ${patron.lastName}`

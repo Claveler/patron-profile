@@ -14,6 +14,7 @@ const getMenuItems = (activePage) => [
       { label: 'Donation page', href: '#' },
       // 'patrons' is the list view, 'patron' is the detail view - both should highlight Patrons
       { label: 'Patrons', page: 'patrons', active: activePage === 'patrons' || activePage === 'patron' },
+      { label: 'Opportunities', page: 'opportunities', active: activePage === 'opportunities' || activePage === 'opportunity' },
       { label: 'Pipeline', page: 'pipeline', active: activePage === 'pipeline' },
       { label: 'Campaigns', page: 'campaigns', active: activePage === 'campaigns' },
     ]

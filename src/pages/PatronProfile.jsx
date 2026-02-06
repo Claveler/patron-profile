@@ -316,13 +316,8 @@ const defaultPatronData = {
       ]}
     ]
   },
-  // Prospect pipeline data (null if not a prospect)
-  prospect: {
-    stage: 'cultivation', // identification, qualification, cultivation, solicitation, stewardship
-    askAmount: 25000,
-    nextAction: 'Follow up re: gallery tour',
-    lastContact: '2026-01-15'
-  },
+  // Note: Pipeline stages are now tracked on Opportunities, not patrons
+  // See src/data/opportunities.js for opportunity records
   giving: {
     // Aggregate totals
     lifetimeValue: 3222.50,      // Total financial relationship (donations + revenue)
@@ -504,7 +499,7 @@ const defaultPatronData = {
   }
 }
 
-function PatronProfile({ patronId, onBack }) {
+function PatronProfile({ patronId, onBack, onSelectOpportunity }) {
   const [activeTab, setActiveTab] = useState('summary')
 
   // Get patron data from store, fallback to default if not found
@@ -523,7 +518,7 @@ function PatronProfile({ patronId, onBack }) {
   const renderTabContent = () => {
     switch (activeTab) {
       case 'summary':
-        return <SummaryTab patron={patronData} />
+        return <SummaryTab patron={patronData} onSelectOpportunity={onSelectOpportunity} />
       case 'memberships':
         return <MembershipsTab membership={patronData.membership} patronName={`${patronData.firstName} ${patronData.lastName}`} patronEmail={patronData.email} />
       case 'profile':
@@ -580,7 +575,10 @@ function PatronProfile({ patronId, onBack }) {
       {/* Main Content Container */}
       <div className="patron-profile__container">
         {/* Patron Info Box */}
-        <PatronInfoBox patron={patronData} />
+        <PatronInfoBox 
+          patron={patronData} 
+          isManaged={isManaged}
+        />
 
         {/* Tab Section */}
         <div className="patron-profile__tabs-wrapper">
