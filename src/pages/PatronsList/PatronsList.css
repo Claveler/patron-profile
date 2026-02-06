@@ -1,0 +1,400 @@
+/* Patrons List Page */
+
+.patrons-list {
+  min-height: 100%;
+}
+
+/* Page Header - matches PatronProfile */
+.patrons-list__header {
+  background-color: var(--color-background-dark);
+  padding: var(--space-4) var(--space-6);
+  color: var(--color-text-inverse);
+}
+
+.patrons-list__breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+
+.patrons-list__breadcrumb-section {
+  font-size: var(--font-size-sm);
+  opacity: 0.7;
+}
+
+.patrons-list__breadcrumb-separator {
+  font-size: 10px;
+  opacity: 0.5;
+}
+
+.patrons-list__title {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  margin: 0;
+}
+
+/* Main Container */
+.patrons-list__container {
+  padding: var(--space-6);
+  background-color: var(--color-surface);
+  margin: var(--space-6);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+}
+
+/* Toolbar */
+.patrons-list__toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-4);
+  gap: var(--space-4);
+}
+
+.patrons-list__search {
+  position: relative;
+  flex: 1;
+  max-width: 400px;
+}
+
+.patrons-list__search-icon {
+  position: absolute;
+  left: var(--space-3);
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.patrons-list__search-input {
+  width: 100%;
+  padding: var(--space-2) var(--space-3) var(--space-2) var(--space-8);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  font-family: var(--font-family);
+  background-color: var(--color-surface);
+  transition: border-color var(--transition-fast);
+}
+
+.patrons-list__search-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.patrons-list__search-input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.patrons-list__actions {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.patrons-list__filter-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-primary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.patrons-list__filter-btn:hover {
+  background-color: var(--color-primary-100);
+}
+
+.patrons-list__add-btn {
+  padding: var(--space-2) var(--space-4);
+  background-color: var(--color-primary);
+  color: var(--color-text-inverse);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.patrons-list__add-btn:hover {
+  background-color: var(--color-primary-600);
+}
+
+/* Table */
+.patrons-list__table-wrapper {
+  overflow-x: auto;
+}
+
+.patrons-list__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-sm);
+}
+
+.patrons-list__th {
+  text-align: left;
+  padding: var(--space-3) var(--space-4);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  border-bottom: 1px solid var(--color-border);
+  white-space: nowrap;
+}
+
+.patrons-list__th--sortable {
+  cursor: pointer;
+  user-select: none;
+}
+
+.patrons-list__th--sortable:hover {
+  color: var(--color-text-primary);
+}
+
+.patrons-list__sort-icon {
+  margin-left: var(--space-1);
+  font-size: 10px;
+  opacity: 0.5;
+}
+
+.patrons-list__sort-icon--active {
+  opacity: 1;
+  color: var(--color-primary);
+}
+
+.patrons-list__th--actions {
+  width: 48px;
+}
+
+/* Table Rows */
+.patrons-list__row {
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.patrons-list__row:hover {
+  background-color: var(--color-background);
+}
+
+.patrons-list__td {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-border-light);
+  color: var(--color-text-primary);
+  vertical-align: middle;
+}
+
+/* Patron Name Cell */
+.patrons-list__td--name {
+  font-weight: var(--font-weight-medium);
+}
+
+.patrons-list__patron-info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.patrons-list__avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.patrons-list__avatar--placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-background);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+}
+
+.patrons-list__name {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+/* Email Cell */
+.patrons-list__td--email {
+  color: var(--color-text-secondary);
+}
+
+/* Category Tag */
+.patrons-list__category {
+  display: inline-block;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  color: var(--color-text-secondary);
+}
+
+.patrons-list__category--success {
+  background-color: var(--color-success-100);
+  border-color: var(--color-success-200);
+  color: var(--color-success-700);
+}
+
+.patrons-list__category--warning {
+  background-color: var(--color-warning-100);
+  border-color: var(--color-warning);
+  color: var(--color-warning-700);
+}
+
+/* Owner Cell */
+.patrons-list__td--owner {
+  color: var(--color-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+.patrons-list__owner--none {
+  color: var(--color-text-muted);
+  font-weight: var(--font-weight-regular);
+}
+
+/* Engagement Level */
+.patrons-list__engagement {
+  font-weight: var(--font-weight-medium);
+}
+
+.patrons-list__engagement--cold {
+  color: var(--color-text-muted);
+}
+
+.patrons-list__engagement--cool {
+  color: var(--color-info);
+}
+
+.patrons-list__engagement--warm {
+  color: var(--color-warning);
+}
+
+.patrons-list__engagement--hot {
+  color: #E74C3C;
+}
+
+.patrons-list__engagement--on-fire {
+  color: var(--color-danger);
+}
+
+/* Actions Menu */
+.patrons-list__td--actions {
+  position: relative;
+}
+
+.patrons-list__menu-container {
+  position: relative;
+}
+
+.patrons-list__menu-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+
+.patrons-list__menu-btn:hover {
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+}
+
+.patrons-list__dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  min-width: 150px;
+  z-index: 100;
+  overflow: hidden;
+}
+
+.patrons-list__dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  border: none;
+  background: none;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  text-align: left;
+  transition: background-color var(--transition-fast);
+}
+
+.patrons-list__dropdown-item:hover {
+  background-color: var(--color-background);
+}
+
+.patrons-list__dropdown-item i {
+  color: var(--color-text-muted);
+  width: 16px;
+}
+
+/* Footer */
+.patrons-list__footer {
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border-light);
+  margin-top: var(--space-4);
+}
+
+.patrons-list__count {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .patrons-list__container {
+    margin: var(--space-4);
+    padding: var(--space-4);
+  }
+  
+  .patrons-list__toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .patrons-list__search {
+    max-width: none;
+  }
+  
+  .patrons-list__actions {
+    justify-content: flex-end;
+  }
+}
+
+@media (max-width: 768px) {
+  .patrons-list__header {
+    padding: var(--space-3) var(--space-4);
+  }
+  
+  .patrons-list__container {
+    margin: var(--space-3);
+    padding: var(--space-3);
+  }
+  
+  .patrons-list__td--email {
+    display: none;
+  }
+}

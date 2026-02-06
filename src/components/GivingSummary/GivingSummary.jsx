@@ -22,6 +22,21 @@ function GivingSummary({ giving }) {
   const [hoveredLine, setHoveredLine] = useState(null) // 'total' | 'revenue' | null
   const [hoveredPointIndex, setHoveredPointIndex] = useState(null)
   const [chartView, setChartView] = useState('cumulative') // 'cumulative' | 'nominal'
+
+  // Early return if no giving data
+  if (!giving) {
+    return (
+      <div className="giving-summary">
+        <div className="giving-summary__header">
+          <h3 className="giving-summary__title">Financial Summary</h3>
+        </div>
+        <div className="giving-summary__empty">
+          <i className="fa-solid fa-chart-pie"></i>
+          <p>No financial data available</p>
+        </div>
+      </div>
+    )
+  }
   
   // Calculate cumulative data
   const cumulativeData = useMemo(() => {
@@ -112,17 +127,19 @@ function GivingSummary({ giving }) {
             <span className="giving-summary__value-dot giving-summary__value-dot--donations"></span>
             <span className="giving-summary__value-card-label">Donations</span>
           </div>
-          <span className="giving-summary__value-card-amount">{formatCurrency(giving.donations)}</span>
-          <span className="giving-summary__value-card-detail">
-            Avg Gift: {formatCurrency(giving.averageGift)}
-          </span>
+          <span className="giving-summary__value-card-amount">{formatCurrency(giving.donations || 0)}</span>
+          {giving.averageGift && (
+            <span className="giving-summary__value-card-detail">
+              Avg Gift: {formatCurrency(giving.averageGift)}
+            </span>
+          )}
         </div>
         <div className="giving-summary__value-card giving-summary__value-card--revenue">
           <div className="giving-summary__value-card-header">
             <span className="giving-summary__value-dot giving-summary__value-dot--revenue"></span>
             <span className="giving-summary__value-card-label">Revenue</span>
           </div>
-          <span className="giving-summary__value-card-amount">{formatCurrency(giving.revenue)}</span>
+          <span className="giving-summary__value-card-amount">{formatCurrency(giving.revenue || 0)}</span>
           <span className="giving-summary__value-card-detail">
             Tickets, F&B, Merch
           </span>
@@ -336,6 +353,12 @@ function GivingSummary({ giving }) {
           ) : (
             /* Bar Chart for Nominal View */
             <div className="giving-summary__bars-container">
+              {/* Grid lines */}
+              <div className="giving-summary__bar-grid-lines">
+                {yAxisTicks.map((tick) => (
+                  <div key={tick} className="giving-summary__bar-grid-line" />
+                ))}
+              </div>
               <div className="giving-summary__bars">
                 {chartData.map((d, i) => {
                   const revenueHeight = (d.displayRevenue / maxValue) * 100
@@ -407,86 +430,100 @@ function GivingSummary({ giving }) {
         </div>
       </div>
 
-      {/* Transaction Stats */}
-      <div className="giving-summary__transactions">
-        <div className="giving-summary__transaction-stat">
-          <span className="giving-summary__transaction-label">First Transaction</span>
-          <div className="giving-summary__transaction-value">
-            <span className="giving-summary__transaction-amount">{formatCurrency(giving.firstTransaction.amount)}</span>
-            <span className="giving-summary__transaction-date">{giving.firstTransaction.date}</span>
-          </div>
-        </div>
-        <div className="giving-summary__transaction-stat">
-          <span className="giving-summary__transaction-label">Last Transaction</span>
-          <div className="giving-summary__transaction-value">
-            <span className="giving-summary__transaction-amount">{formatCurrency(giving.lastTransaction.amount)}</span>
-            <span className="giving-summary__transaction-date">{giving.lastTransaction.date}</span>
-          </div>
-        </div>
-        <div className="giving-summary__transaction-stat">
-          <span className="giving-summary__transaction-label">Largest Transaction</span>
-          <div className="giving-summary__transaction-value">
-            <span className="giving-summary__transaction-amount giving-summary__transaction-amount--highlight">{formatCurrency(giving.largestTransaction.amount)}</span>
-            <span className="giving-summary__transaction-date">{giving.largestTransaction.date}</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Donation Attribution Section */}
-      <div className="giving-summary__attribution">
-        <h4 className="giving-summary__attribution-header">Donation Attribution</h4>
-        <div className="giving-summary__breakdowns">
-          {/* Fund Breakdown */}
-          <div className="giving-summary__breakdown">
-            <h5 className="giving-summary__breakdown-title">By Fund</h5>
-            <div className="giving-summary__breakdown-list">
-              {giving.byFund && Object.entries(giving.byFund).map(([id, fund]) => {
-                const percentage = (fund.total / giving.donations) * 100
-                return (
-                  <div key={id} className="giving-summary__breakdown-item">
-                    <div className="giving-summary__breakdown-header">
-                      <span className="giving-summary__breakdown-name">{fund.name}</span>
-                      <span className="giving-summary__breakdown-amount">{formatCurrency(fund.total)}</span>
-                    </div>
-                    <div className="giving-summary__breakdown-bar">
-                      <div 
-                        className="giving-summary__breakdown-bar-fill giving-summary__breakdown-bar-fill--fund"
-                        style={{ width: `${percentage}%` }}
-                      ></div>
-                    </div>
-                    <span className="giving-summary__breakdown-percent">{percentage.toFixed(0)}%</span>
-                  </div>
-                )
-              })}
+      {/* Transaction Stats - Only show if transaction data exists */}
+      {(giving.firstTransaction || giving.lastTransaction || giving.largestTransaction) && (
+        <div className="giving-summary__transactions">
+          {giving.firstTransaction && (
+            <div className="giving-summary__transaction-stat">
+              <span className="giving-summary__transaction-label">First Transaction</span>
+              <div className="giving-summary__transaction-value">
+                <span className="giving-summary__transaction-amount">{formatCurrency(giving.firstTransaction.amount)}</span>
+                <span className="giving-summary__transaction-date">{giving.firstTransaction.date}</span>
+              </div>
             </div>
-          </div>
-
-          {/* Campaign Breakdown */}
-          <div className="giving-summary__breakdown">
-            <h5 className="giving-summary__breakdown-title">By Campaign</h5>
-            <div className="giving-summary__breakdown-list">
-              {giving.byCampaign && Object.entries(giving.byCampaign).map(([id, campaign]) => {
-                const percentage = (campaign.total / giving.donations) * 100
-                return (
-                  <div key={id} className="giving-summary__breakdown-item">
-                    <div className="giving-summary__breakdown-header">
-                      <span className="giving-summary__breakdown-name">{campaign.name}</span>
-                      <span className="giving-summary__breakdown-amount">{formatCurrency(campaign.total)}</span>
-                    </div>
-                    <div className="giving-summary__breakdown-bar">
-                      <div 
-                        className="giving-summary__breakdown-bar-fill giving-summary__breakdown-bar-fill--campaign"
-                        style={{ width: `${percentage}%` }}
-                      ></div>
-                    </div>
-                    <span className="giving-summary__breakdown-percent">{percentage.toFixed(0)}%</span>
-                  </div>
-                )
-              })}
+          )}
+          {giving.lastTransaction && (
+            <div className="giving-summary__transaction-stat">
+              <span className="giving-summary__transaction-label">Last Transaction</span>
+              <div className="giving-summary__transaction-value">
+                <span className="giving-summary__transaction-amount">{formatCurrency(giving.lastTransaction.amount)}</span>
+                <span className="giving-summary__transaction-date">{giving.lastTransaction.date}</span>
+              </div>
             </div>
+          )}
+          {giving.largestTransaction && (
+            <div className="giving-summary__transaction-stat">
+              <span className="giving-summary__transaction-label">Largest Transaction</span>
+              <div className="giving-summary__transaction-value">
+                <span className="giving-summary__transaction-amount giving-summary__transaction-amount--highlight">{formatCurrency(giving.largestTransaction.amount)}</span>
+                <span className="giving-summary__transaction-date">{giving.largestTransaction.date}</span>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Donation Attribution Section - Only show if we have attribution data */}
+      {(giving.byFund || giving.byCampaign) && (
+        <div className="giving-summary__attribution">
+          <h4 className="giving-summary__attribution-header">Donation Attribution</h4>
+          <div className="giving-summary__breakdowns">
+            {/* Fund Breakdown */}
+            {giving.byFund && Object.keys(giving.byFund).length > 0 && (
+              <div className="giving-summary__breakdown">
+                <h5 className="giving-summary__breakdown-title">By Fund</h5>
+                <div className="giving-summary__breakdown-list">
+                  {Object.entries(giving.byFund).map(([id, fund]) => {
+                    const percentage = giving.donations ? (fund.total / giving.donations) * 100 : 0
+                    return (
+                      <div key={id} className="giving-summary__breakdown-item">
+                        <div className="giving-summary__breakdown-header">
+                          <span className="giving-summary__breakdown-name">{fund.name}</span>
+                          <span className="giving-summary__breakdown-amount">{formatCurrency(fund.total)}</span>
+                        </div>
+                        <div className="giving-summary__breakdown-bar">
+                          <div 
+                            className="giving-summary__breakdown-bar-fill giving-summary__breakdown-bar-fill--fund"
+                            style={{ width: `${percentage}%` }}
+                          ></div>
+                        </div>
+                        <span className="giving-summary__breakdown-percent">{percentage.toFixed(0)}%</span>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* Campaign Breakdown */}
+            {giving.byCampaign && Object.keys(giving.byCampaign).length > 0 && (
+              <div className="giving-summary__breakdown">
+                <h5 className="giving-summary__breakdown-title">By Campaign</h5>
+                <div className="giving-summary__breakdown-list">
+                  {Object.entries(giving.byCampaign).map(([id, campaign]) => {
+                    const percentage = giving.donations ? (campaign.total / giving.donations) * 100 : 0
+                    return (
+                      <div key={id} className="giving-summary__breakdown-item">
+                        <div className="giving-summary__breakdown-header">
+                          <span className="giving-summary__breakdown-name">{campaign.name}</span>
+                          <span className="giving-summary__breakdown-amount">{formatCurrency(campaign.total)}</span>
+                        </div>
+                        <div className="giving-summary__breakdown-bar">
+                          <div 
+                            className="giving-summary__breakdown-bar-fill giving-summary__breakdown-bar-fill--campaign"
+                            style={{ width: `${percentage}%` }}
+                          ></div>
+                        </div>
+                        <span className="giving-summary__breakdown-percent">{percentage.toFixed(0)}%</span>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
           </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }

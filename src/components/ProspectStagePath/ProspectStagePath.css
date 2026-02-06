@@ -1,0 +1,180 @@
+/* Prospect Stage Path - Fever-style circle stepper */
+
+.prospect-stage-path {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--space-4);
+}
+
+/* Stepper Row */
+.prospect-stage-path__stepper {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-4);
+}
+
+/* Steps Container - evenly distribute steps */
+.prospect-stage-path__steps {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+/* Individual Step - circle with label below */
+.prospect-stage-path__step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  flex-shrink: 0;
+}
+
+/* Connector lines between steps - aligned with circle centers */
+.prospect-stage-path__connector {
+  height: 2px;
+  flex: 1;
+  min-width: 20px;
+  background-color: #ccd2d8;
+  border-radius: 64px;
+  margin: 0 4px;
+  align-self: flex-start;
+  margin-top: 11px; /* (24px circle height / 2) - 1px line height */
+}
+
+.prospect-stage-path__connector--active {
+  background-color: var(--color-primary);
+}
+
+/* Circle */
+.prospect-stage-path__circle {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all var(--transition-fast);
+  position: relative;
+  z-index: 1;
+}
+
+/* Completed Circle */
+.prospect-stage-path__circle--completed {
+  background-color: var(--color-primary);
+  border: 2px solid var(--color-primary);
+  color: white;
+}
+
+.prospect-stage-path__circle--completed i {
+  font-size: 10px;
+}
+
+/* Current Circle */
+.prospect-stage-path__circle--current {
+  background-color: white;
+  border: 2px solid var(--color-primary);
+}
+
+.prospect-stage-path__inner-dot {
+  width: 10px;
+  height: 10px;
+  background-color: var(--color-primary);
+  border-radius: 50%;
+}
+
+/* Future Circle */
+.prospect-stage-path__circle--future {
+  background-color: white;
+  border: 2px solid #ccd2d8;
+}
+
+/* Label */
+.prospect-stage-path__label {
+  margin-top: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #536b75;
+  white-space: nowrap;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.prospect-stage-path__label--current {
+  color: var(--color-primary);
+}
+
+.prospect-stage-path__label--future {
+  color: #a7b2ba;
+}
+
+/* Mark Complete Button - styled like Actions button */
+.prospect-stage-path__complete-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  background-color: var(--color-primary-600);
+  color: white;
+  border: none;
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.prospect-stage-path__complete-btn:hover {
+  background-color: var(--color-primary-700);
+}
+
+.prospect-stage-path__complete-btn i {
+  font-size: 11px;
+}
+
+/* Responsive */
+@media (max-width: 1000px) {
+  .prospect-stage-path__stepper {
+    flex-direction: column;
+    gap: var(--space-3);
+    padding-bottom: var(--space-8);
+  }
+  
+  .prospect-stage-path__complete-btn {
+    align-self: flex-end;
+  }
+  
+  .prospect-stage-path__label {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 768px) {
+  .prospect-stage-path__label {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 600px) {
+  .prospect-stage-path__circle {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .prospect-stage-path__connector {
+    margin-top: 9px; /* (20px circle height / 2) - 1px line height */
+  }
+  
+  .prospect-stage-path__inner-dot {
+    width: 8px;
+    height: 8px;
+  }
+  
+  .prospect-stage-path__circle--completed i {
+    font-size: 8px;
+  }
+}

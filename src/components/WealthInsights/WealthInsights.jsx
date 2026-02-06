@@ -1,6 +1,32 @@
 import './WealthInsights.css'
 
 function WealthInsights({ insights }) {
+  // Show empty state if no wealth insights available
+  if (!insights) {
+    return (
+      <div className="wealth-insights wrapper-card">
+        <div className="wealth-insights__header">
+          <h4 className="wealth-insights__title">Wealth Insights</h4>
+          <div className="wealth-insights__powered-by">
+            <span>Powered by</span>
+            <img 
+              src="/donorsearch.png" 
+              alt="DonorSearch" 
+              className="wealth-insights__logo"
+            />
+          </div>
+        </div>
+        <div className="wealth-insights__empty">
+          <i className="fa-solid fa-chart-pie"></i>
+          <p>No wealth data available</p>
+          <button className="wealth-insights__request-btn">
+            Request Screening
+          </button>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="wealth-insights wrapper-card">
       <div className="wealth-insights__header">

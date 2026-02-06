@@ -9,14 +9,6 @@ const engagementLevels = [
   { id: 'on-fire', label: 'On Fire', icon: 'fa-fire-flame-curved' },
 ]
 
-const pipelineStages = [
-  { id: 'identification', label: 'Identification' },
-  { id: 'qualification', label: 'Qualification' },
-  { id: 'cultivation', label: 'Cultivation' },
-  { id: 'solicitation', label: 'Solicitation' },
-  { id: 'stewardship', label: 'Stewardship' },
-]
-
 const activityTypes = {
   donation: { label: 'Donation', icon: 'fa-heart', color: 'var(--color-success)' },
   attendance: { label: 'Visit', icon: 'fa-ticket', color: 'var(--color-primary)' },
@@ -68,12 +60,26 @@ const formatWeekTooltip = (monthStr, weekIndex) => {
   return `${monthName}, Week ${weekIndex + 1}`
 }
 
-function EngagementPanel({ engagement, prospect, onViewPipeline }) {
+function EngagementPanel({ engagement }) {
   const [hoveredWeek, setHoveredWeek] = useState(null)
-  const [viewMode, setViewMode] = useState('heatmap') // 'gauge' | 'heatmap'
+  // Default to gauge view if no activity history (for General Constituents with basic data)
+  const hasActivityHistory = engagement?.activityHistory && engagement.activityHistory.length > 0
+  const [viewMode, setViewMode] = useState(hasActivityHistory ? 'heatmap' : 'gauge') // 'gauge' | 'heatmap'
+  
+  // Handle missing engagement data
+  if (!engagement) {
+    return (
+      <div className="engagement-panel wrapper-card">
+        <div className="engagement-panel__empty">
+          <i className="fa-solid fa-chart-simple"></i>
+          <p>No engagement data available</p>
+        </div>
+      </div>
+    )
+  }
+  
   const currentLevelIndex = engagementLevels.findIndex(l => l.id === engagement.level)
-  const currentStageIndex = prospect ? pipelineStages.findIndex(s => s.id === prospect.stage) : -1
-  const currentLevel = engagementLevels[currentLevelIndex]
+  const currentLevel = engagementLevels[currentLevelIndex] || engagementLevels[0]
 
   const toggleViewMode = () => {
     setViewMode(prev => prev === 'gauge' ? 'heatmap' : 'gauge')
@@ -81,74 +87,23 @@ function EngagementPanel({ engagement, prospect, onViewPipeline }) {
 
   return (
     <div className="engagement-panel wrapper-card">
-      {/* View Mode Toggle */}
-      <div className="engagement-panel__view-toggle">
-        <button 
-          className={`engagement-panel__toggle-btn ${viewMode === 'gauge' ? 'engagement-panel__toggle-btn--active' : ''}`}
-          onClick={toggleViewMode}
-          title={viewMode === 'gauge' ? 'Switch to heatmap view' : 'Switch to gauge view'}
-        >
-          <i className={`fa-solid ${viewMode === 'gauge' ? 'fa-table-cells' : 'fa-chart-simple'}`}></i>
-        </button>
-      </div>
-      {/* Prospect Pipeline Section - Conditional, shown first for actionability */}
-      {prospect && (
-        <div className="engagement-panel__section engagement-panel__section--pipeline engagement-panel__section--first">
-          <div className="engagement-panel__section-header">
-            <span className="engagement-panel__section-title">Prospect Pipeline</span>
-            {onViewPipeline && (
-              <button 
-                className="engagement-panel__view-link"
-                onClick={onViewPipeline}
-              >
-                View <i className="fa-solid fa-arrow-right"></i>
-              </button>
-            )}
-          </div>
-          
-          <div className="engagement-panel__pipeline-box">
-            {/* Mini Stage Indicator */}
-            <div className="engagement-panel__pipeline-stages">
-              {pipelineStages.map((stage, index) => {
-                const isActive = index <= currentStageIndex
-                const isCurrent = index === currentStageIndex
-                return (
-                  <div key={stage.id} className="engagement-panel__pipeline-stage">
-                    {index > 0 && (
-                      <div className={`engagement-panel__pipeline-line ${isActive ? 'engagement-panel__pipeline-line--active' : ''}`}></div>
-                    )}
-                    <div 
-                      className={`engagement-panel__pipeline-dot ${isActive ? 'engagement-panel__pipeline-dot--active' : ''} ${isCurrent ? 'engagement-panel__pipeline-dot--current' : ''}`}
-                      title={stage.label}
-                    ></div>
-                  </div>
-                )
-              })}
-              <span className="engagement-panel__pipeline-stage-label">
-                {pipelineStages[currentStageIndex]?.label}
-              </span>
-            </div>
-
-            {/* Ask Amount */}
-            <div className="engagement-panel__pipeline-ask">
-              <span className="engagement-panel__pipeline-ask-label">Ask Amount</span>
-              <span className="engagement-panel__pipeline-ask-value">{formatCurrency(prospect.askAmount)}</span>
-            </div>
-
-            {/* Next Action */}
-            <div className="engagement-panel__pipeline-action">
-              <i className="fa-solid fa-arrow-right"></i>
-              <span>{prospect.nextAction}</span>
-            </div>
-          </div>
+      {/* View Mode Toggle - Only show if activity history exists */}
+      {hasActivityHistory && (
+        <div className="engagement-panel__view-toggle">
+          <button 
+            className={`engagement-panel__toggle-btn ${viewMode === 'gauge' ? 'engagement-panel__toggle-btn--active' : ''}`}
+            onClick={toggleViewMode}
+            title={viewMode === 'gauge' ? 'Switch to heatmap view' : 'Switch to gauge view'}
+          >
+            <i className={`fa-solid ${viewMode === 'gauge' ? 'fa-table-cells' : 'fa-chart-simple'}`}></i>
+          </button>
         </div>
       )}
-
       {/* === GAUGE VIEW === */}
       {viewMode === 'gauge' && (
         <>
           {/* Engagement Level Section */}
-          <div className={`engagement-panel__section engagement-panel__section--engagement ${!prospect ? 'engagement-panel__section--first' : ''}`}>
+          <div className="engagement-panel__section engagement-panel__section--engagement engagement-panel__section--first">
             <div className="engagement-panel__section-header">
               <span className="engagement-panel__section-title">Engagement Level</span>
             </div>
@@ -199,7 +154,7 @@ function EngagementPanel({ engagement, prospect, onViewPipeline }) {
 
       {/* === HEATMAP VIEW === */}
       {viewMode === 'heatmap' && engagement.activityHistory && (
-        <div className={`engagement-panel__section engagement-panel__section--activity ${!prospect ? 'engagement-panel__section--first' : ''}`}>
+        <div className="engagement-panel__section engagement-panel__section--activity engagement-panel__section--first">
           <div className="engagement-panel__section-header">
             <div className="engagement-panel__activity-title-row">
               <span className="engagement-panel__section-title">Activity</span>

@@ -9,7 +9,13 @@ function PatronInfoBox({ patron }) {
       {/* Photo and Basic Info */}
       <div className="patron-info-box__main">
         <div className="patron-info-box__photo">
-          <img src={patron.photo} alt={`${patron.firstName} ${patron.lastName}`} />
+          {patron.photo ? (
+            <img src={patron.photo} alt={`${patron.firstName} ${patron.lastName}`} />
+          ) : (
+            <div className="patron-info-box__photo-placeholder">
+              <i className="fa-solid fa-user"></i>
+            </div>
+          )}
         </div>
         <div className="patron-info-box__details">
           <h2 className="patron-info-box__name">
@@ -17,14 +23,16 @@ function PatronInfoBox({ patron }) {
             {' '}
             <span className="patron-info-box__name-last">{patron.lastName}</span>
           </h2>
-          <div className="patron-info-box__household">
-            <a href="#" className="patron-info-box__household-link">
-              {patron.household.name}
-            </a>
-            {patron.household.verified && (
-              <i className="fa-solid fa-badge-check patron-info-box__verified"></i>
-            )}
-          </div>
+          {patron.household && (
+            <div className="patron-info-box__household">
+              <a href="#" className="patron-info-box__household-link">
+                {patron.household.name}
+              </a>
+              {patron.household.verified && (
+                <i className="fa-solid fa-badge-check patron-info-box__verified"></i>
+              )}
+            </div>
+          )}
           <div className="patron-info-box__tags">
             <span className="patron-info-box__tag patron-info-box__tag--accent">
               {patron.category}
@@ -41,39 +49,54 @@ function PatronInfoBox({ patron }) {
 
       {/* Contact Info */}
       <div className="patron-info-box__section patron-info-box__contact">
-        <div className="patron-info-box__info-item">
-          <i className="fa-solid fa-envelope patron-info-box__info-icon"></i>
-          <span>{patron.email}</span>
-          <i className="fa-solid fa-star patron-info-box__star" title="Primary email"></i>
-        </div>
-        <div className="patron-info-box__info-item">
-          <i className="fa-solid fa-phone patron-info-box__info-icon"></i>
-          <span>{patron.phone}</span>
-        </div>
-        <div className="patron-info-box__info-item">
-          <i className="fa-solid fa-location-dot patron-info-box__info-icon"></i>
-          <span>{patron.address}</span>
-        </div>
+        {patron.email && (
+          <div className="patron-info-box__info-item">
+            <i className="fa-solid fa-envelope patron-info-box__info-icon"></i>
+            <span>{patron.email}</span>
+            <i className="fa-solid fa-star patron-info-box__star" title="Primary email"></i>
+          </div>
+        )}
+        {patron.phone && (
+          <div className="patron-info-box__info-item">
+            <i className="fa-solid fa-phone patron-info-box__info-icon"></i>
+            <span>{patron.phone}</span>
+          </div>
+        )}
+        {patron.address && (
+          <div className="patron-info-box__info-item">
+            <i className="fa-solid fa-location-dot patron-info-box__info-icon"></i>
+            <span>{patron.address}</span>
+          </div>
+        )}
       </div>
 
-      {/* Membership Info */}
-      <div className="patron-info-box__section patron-info-box__membership">
-        <div className="patron-info-box__info-item">
-          <i className="fa-solid fa-address-card patron-info-box__info-icon"></i>
-          <span>{patron.membership.programme} - {patron.membership.tier}</span>
-        </div>
-        <div className="patron-info-box__info-item">
-          <i className="fa-solid fa-calendar-day patron-info-box__info-icon"></i>
-          <span>Member since {patron.membership.memberSince}</span>
-        </div>
-        <div className="patron-info-box__info-item">
-          <i className="fa-solid fa-clock-rotate-left patron-info-box__info-icon"></i>
-          <span>{patron.membership.daysToRenewal} days to renewal</span>
-          {patron.membership.daysToRenewal < 180 && (
-            <i className="fa-solid fa-triangle-exclamation patron-info-box__warning" title="Renewal approaching"></i>
+      {/* Membership Info - Only show if membership data exists */}
+      {patron.membership && (
+        <div className="patron-info-box__section patron-info-box__membership">
+          <div className="patron-info-box__info-item">
+            <i className="fa-solid fa-address-card patron-info-box__info-icon"></i>
+            <span>
+              {patron.membership.programme ? `${patron.membership.programme} - ` : ''}
+              {patron.membership.tier || 'Member'}
+            </span>
+          </div>
+          {patron.membership.memberSince && (
+            <div className="patron-info-box__info-item">
+              <i className="fa-solid fa-calendar-day patron-info-box__info-icon"></i>
+              <span>Member since {patron.membership.memberSince}</span>
+            </div>
+          )}
+          {patron.membership.daysToRenewal !== undefined && (
+            <div className="patron-info-box__info-item">
+              <i className="fa-solid fa-clock-rotate-left patron-info-box__info-icon"></i>
+              <span>{patron.membership.daysToRenewal} days to renewal</span>
+              {patron.membership.daysToRenewal < 180 && (
+                <i className="fa-solid fa-triangle-exclamation patron-info-box__warning" title="Renewal approaching"></i>
+              )}
+            </div>
           )}
         </div>
-      </div>
+      )}
 
       {/* Actions */}
       <div className="patron-info-box__actions">

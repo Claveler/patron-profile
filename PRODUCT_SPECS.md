@@ -365,6 +365,113 @@ Partner opens Documents tab → Selects year → Generates/Previews summary → 
 
 ---
 
+## Patron Management Model: The Two-Speed System
+
+### Overview
+
+A critical distinction in museum fundraising software is between patrons who are **actively managed** through individual relationship cultivation versus those who are **handled at scale** through automated campaigns. This "two-speed system" reflects how development teams actually operate.
+
+### The Donor Pyramid
+
+In a typical mid-to-large museum database:
+
+| Segment | % of Database | Description | Management Style |
+|---------|---------------|-------------|------------------|
+| **General Constituents** | ~90% | One-time ticket buyers, small donors, basic members | Automated (campaigns, appeals, email blasts) |
+| **Mid-Level Donors** | ~8% | $500–$2,500 donors | Semi-automated workflows |
+| **Managed Prospects** | ~2% | High-capacity individuals ($10,000+ potential) | Individual relationship management |
+
+### Terminology
+
+**General Constituent**
+- Any patron in the database who is NOT being actively cultivated
+- No assigned relationship manager
+- Interactions are transactional (buy a ticket, renew membership)
+- Handled through mass communications and automated workflows
+
+**Managed Prospect**
+- A patron with assigned relationship manager ("Assigned To" field)
+- Has prospect pipeline data (stage, ask amount, next action)
+- Being actively cultivated through the Moves Management process
+- Requires high-touch, manual relationship building
+
+### Why This Distinction Matters
+
+1. **Staff Accountability**: Major Gift Officers are evaluated on their "portfolio" of managed prospects. If the system mixes in 50,000 general constituents, accountability is lost.
+
+2. **Interface Performance**: The Moves Management Kanban board cannot display thousands of cards. Only the ~2% who are Managed Prospects belong there.
+
+3. **Data Sensitivity**: Managed Prospects often have wealth screening data, relationship notes, and cultivation strategies that should have restricted access.
+
+4. **Feature Relevance**: Pipeline-specific features (ask amount, next action, stage tracking) are meaningless for General Constituents.
+
+### Implementation in UI
+
+The Patron Profile adapts based on patron type:
+
+| Feature | General Constituent | Managed Prospect |
+|---------|---------------------|------------------|
+| **Header Badge** | "General Constituent" | "Managed Prospect" |
+| **Prospect Pipeline Card** | Shows "Add to Portfolio" prompt | Shows full pipeline with stage, ask amount |
+| **Alert Banner** | General alerts only (renewal) | Cultivation alerts (contact overdue) |
+| **Smart Tips** | General recommendations | Cultivation-focused tips |
+| **Assigned To** | Empty or "—" | Shows relationship manager |
+
+### "Promote to Prospect" Workflow
+
+The system should support promoting a General Constituent to a Managed Prospect:
+
+**Manual Promotion:**
+- Staff identifies high-potential donor
+- Clicks "Add to Portfolio" on their profile
+- Assigns to a Gift Officer
+- Sets initial pipeline stage and ask amount
+
+**Automated Alerts (Future):**
+- When lifetime giving crosses threshold (e.g., $5,000)
+- When wealth screening flags high capacity
+- System notifies Development Director: "New prospect identified—assign to portfolio?"
+
+### Data Model
+
+```javascript
+// General Constituent (no pipeline data)
+{
+  id: 'paul-fairfax',
+  firstName: 'Paul',
+  lastName: 'Fairfax',
+  // NO assignedTo field
+  // NO prospect field
+  engagement: { ... },
+  giving: { ... }
+}
+
+// Managed Prospect (has pipeline data)
+{
+  id: 'anderson-collingwood',
+  firstName: 'Anderson',
+  lastName: 'Collingwood',
+  assignedTo: 'Liam Johnson',  // Relationship manager
+  prospect: {
+    stage: 'cultivation',       // Pipeline stage
+    askAmount: 25000,           // Target gift amount
+    nextAction: 'Follow up re: gallery tour',
+    lastContact: '2026-01-15'
+  },
+  engagement: { ... },
+  giving: { ... }
+}
+```
+
+### Helper Function
+
+```javascript
+// Determine if patron is actively managed
+const isManagedProspect = (patron) => Boolean(patron.assignedTo && patron.prospect)
+```
+
+---
+
 ## Patron Categories
 
 ### Philanthropic Supporters
@@ -849,6 +956,7 @@ Patrons like Anderson Collingwood can appear in both the general Patron Profile 
 - Updated: February 5, 2026 (Documents tab for tax documentation)
 - Updated: February 5, 2026 (Competitive Features Checklist, Implementation Status, Coverage Assessment)
 - Updated: February 5, 2026 (Staff Assignment Terminology - unified "Owner"/"Gift Officer" to "Assigned To")
+- Updated: February 6, 2026 (Patron Management Model - General Constituents vs Managed Prospects distinction)
 - Product Manager: Andres Clavel
 - Designer: Pablo Rubio Retolaza
 - Tech Lead: Victor Almaraz Sanchez

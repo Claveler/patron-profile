@@ -1,0 +1,281 @@
+/* Prospect Pipeline Card */
+/* This is a pipeline-only feature for Managed Prospects */
+
+.prospect-pipeline-card {
+  background-color: var(--color-surface);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  /* Pipeline indicator - subtle left border accent */
+  border-left: 3px solid var(--color-primary);
+  position: relative;
+}
+
+/* Pipeline badge indicator */
+.prospect-pipeline-card__pipeline-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  background-color: var(--color-primary-50);
+  border: 1px solid var(--color-primary-100);
+  border-radius: var(--radius-full);
+  font-size: 10px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-primary-600);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: help;
+}
+
+.prospect-pipeline-card__pipeline-badge i {
+  font-size: 8px;
+}
+
+/* Header */
+.prospect-pipeline-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-4);
+}
+
+.prospect-pipeline-card__title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.prospect-pipeline-card__title i {
+  color: var(--color-primary);
+}
+
+.prospect-pipeline-card__view-link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--font-size-sm);
+  color: var(--color-primary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: color var(--transition-fast);
+}
+
+.prospect-pipeline-card__view-link:hover {
+  color: var(--color-primary-600);
+}
+
+/* Stage Visualization */
+.prospect-pipeline-card__stages {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: var(--space-4);
+  padding: var(--space-3) 0;
+}
+
+.prospect-pipeline-card__stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  flex: 1;
+}
+
+.prospect-pipeline-card__line {
+  position: absolute;
+  top: 12px;
+  right: 50%;
+  width: 100%;
+  height: 2px;
+  background-color: var(--color-border);
+  z-index: 0;
+}
+
+.prospect-pipeline-card__line--active {
+  background-color: var(--color-primary);
+}
+
+.prospect-pipeline-card__dot {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-surface);
+  border: 2px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+  transition: all var(--transition-fast);
+}
+
+.prospect-pipeline-card__dot--active {
+  border-color: var(--color-primary);
+  background-color: var(--color-primary-50);
+}
+
+.prospect-pipeline-card__dot--current {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.prospect-pipeline-card__dot--current i {
+  color: white;
+  font-size: 10px;
+}
+
+.prospect-pipeline-card__stage-label {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  margin-top: var(--space-2);
+  text-align: center;
+}
+
+.prospect-pipeline-card__stage-label--current {
+  color: var(--color-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* Metrics */
+.prospect-pipeline-card__metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+  padding: var(--space-3);
+  background-color: var(--color-background);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-4);
+}
+
+.prospect-pipeline-card__metric {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.prospect-pipeline-card__metric-label {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.prospect-pipeline-card__metric-value {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.prospect-pipeline-card__metric-value--primary {
+  color: var(--color-primary-600);
+  font-size: var(--font-size-xl);
+}
+
+.prospect-pipeline-card__metric-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.prospect-pipeline-card__days {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+}
+
+.prospect-pipeline-card__days--ok {
+  background-color: var(--color-success-50);
+  color: var(--color-success-700);
+}
+
+.prospect-pipeline-card__days--warning {
+  background-color: var(--color-warning-50);
+  color: var(--color-warning-700);
+}
+
+.prospect-pipeline-card__days--overdue {
+  background-color: var(--color-error-50);
+  color: var(--color-error-700);
+}
+
+/* Next Action */
+.prospect-pipeline-card__action {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  background-color: var(--color-primary-50);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-primary-100);
+}
+
+.prospect-pipeline-card__action-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-primary-600);
+}
+
+.prospect-pipeline-card__action-label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.prospect-pipeline-card__action-text {
+  flex: 1;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+}
+
+.prospect-pipeline-card__action-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-primary);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-primary-200);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.prospect-pipeline-card__action-btn:hover {
+  background-color: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .prospect-pipeline-card__stages {
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+  
+  .prospect-pipeline-card__stage {
+    flex-basis: 18%;
+  }
+  
+  .prospect-pipeline-card__line {
+    display: none;
+  }
+  
+  .prospect-pipeline-card__metrics {
+    grid-template-columns: 1fr;
+  }
+}

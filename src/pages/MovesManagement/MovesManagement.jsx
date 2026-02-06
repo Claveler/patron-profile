@@ -287,7 +287,11 @@ function MovesManagement({ onNavigateToPatron }) {
                     <div className="pipeline-card__header">
                       <span 
                         className="pipeline-card__name"
-                        onClick={() => onNavigateToPatron && onNavigateToPatron()}
+                        onClick={() => {
+                          // Convert name to patron ID format (e.g., "Anderson Collingwood" -> "anderson-collingwood")
+                          const patronId = prospect.name.toLowerCase().replace(/\s+/g, '-')
+                          onNavigateToPatron && onNavigateToPatron(patronId)
+                        }}
                         title="View patron profile"
                       >
                         {prospect.name}

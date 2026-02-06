@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import PatronInfoBox from '../components/PatronInfoBox/PatronInfoBox'
 import TabNavigation from '../components/TabNavigation/TabNavigation'
 import SummaryTab from '../components/Tabs/SummaryTab'
 import MembershipsTab from '../components/Tabs/MembershipsTab'
 import DocumentsTab from '../components/Tabs/DocumentsTab'
+import { getPatronById, isManagedProspect } from '../data/patrons'
 import './PatronProfile.css'
 
 const tabs = [
@@ -15,8 +16,8 @@ const tabs = [
   { id: 'documents', label: 'Documents' },
 ]
 
-// Sample patron data
-const patronData = {
+// Default/fallback patron data (Anderson Collingwood) for backwards compatibility
+const defaultPatronData = {
   id: '123456',
   firstName: 'Anderson',
   lastName: 'Collingwood',
@@ -503,8 +504,21 @@ const patronData = {
   }
 }
 
-function PatronProfile() {
+function PatronProfile({ patronId, onBack }) {
   const [activeTab, setActiveTab] = useState('summary')
+
+  // Get patron data from store, fallback to default if not found
+  const patronData = useMemo(() => {
+    if (patronId) {
+      const patron = getPatronById(patronId)
+      if (patron) return patron
+    }
+    // Fallback to default patron (Anderson Collingwood full data)
+    return defaultPatronData
+  }, [patronId])
+
+  // Determine if this is a Managed Prospect or General Constituent
+  const isManaged = isManagedProspect(patronData)
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -532,8 +546,35 @@ function PatronProfile() {
         <div className="patron-profile__breadcrumb">
           <span className="patron-profile__breadcrumb-section">Fundraising</span>
           <i className="fa-solid fa-chevron-right patron-profile__breadcrumb-separator"></i>
+          {onBack && (
+            <>
+              <button 
+                className="patron-profile__breadcrumb-link"
+                onClick={onBack}
+              >
+                Patrons
+              </button>
+              <i className="fa-solid fa-chevron-right patron-profile__breadcrumb-separator"></i>
+            </>
+          )}
         </div>
-        <h1 className="patron-profile__title">Patrons</h1>
+        <div className="patron-profile__title-row">
+          <h1 className="patron-profile__title">
+            {patronData.firstName} {patronData.lastName}
+          </h1>
+          {isManaged && (
+            <span className="patron-profile__badge patron-profile__badge--managed">
+              <i className="fa-solid fa-user-tie"></i>
+              Managed Prospect
+            </span>
+          )}
+          {!isManaged && (
+            <span className="patron-profile__badge patron-profile__badge--general">
+              <i className="fa-solid fa-user"></i>
+              General Constituent
+            </span>
+          )}
+        </div>
       </div>
 
       {/* Main Content Container */}

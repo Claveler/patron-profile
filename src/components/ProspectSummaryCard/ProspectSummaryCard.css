@@ -1,0 +1,249 @@
+/* Prospect Summary Card */
+
+.prospect-summary-card {
+  background-color: var(--color-surface);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-left: 4px solid transparent;
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+}
+
+/* Alert State - Contact Overdue */
+.prospect-summary-card--alert {
+  border-left-color: #f59e0b;
+  background-color: #fffbf5;
+}
+
+/* Header */
+.prospect-summary-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-4);
+}
+
+.prospect-summary-card__title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.prospect-summary-card__title i {
+  color: var(--color-primary);
+  font-size: var(--font-size-sm);
+}
+
+/* Grid Layout */
+.prospect-summary-card__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3) var(--space-4);
+}
+
+/* Individual Field */
+.prospect-summary-card__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.prospect-summary-card__field--full {
+  grid-column: 1 / -1;
+}
+
+.prospect-summary-card__label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Value Row */
+.prospect-summary-card__value-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.prospect-summary-card__value {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  flex: 1;
+}
+
+.prospect-summary-card__value--highlight {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-success);
+  font-size: var(--font-size-base);
+}
+
+.prospect-summary-card__value--warning {
+  color: var(--color-warning-dark, #b45309);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* Warning Icon */
+.prospect-summary-card__warning-icon {
+  color: #f59e0b;
+  font-size: var(--font-size-sm);
+  flex-shrink: 0;
+}
+
+/* Alert Field State */
+.prospect-summary-card__field--alert {
+  background-color: rgba(245, 158, 11, 0.08);
+  margin: calc(-1 * var(--space-2));
+  padding: var(--space-2);
+  border-radius: var(--radius-sm);
+}
+
+/* Log Contact Button (visible when overdue) */
+.prospect-summary-card__log-contact-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-2);
+  background-color: #f59e0b;
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.prospect-summary-card__log-contact-btn:hover {
+  background-color: #d97706;
+}
+
+.prospect-summary-card__log-contact-btn i {
+  font-size: 9px;
+}
+
+.prospect-summary-card__value--action {
+  font-style: italic;
+}
+
+.prospect-summary-card__value strong {
+  font-weight: var(--font-weight-semibold);
+}
+
+.prospect-summary-card__mrc-date {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+}
+
+/* Probability Badge */
+.prospect-summary-card__probability {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  min-width: 48px;
+}
+
+.prospect-summary-card__probability--low {
+  background-color: #fef2f2;
+  color: #dc2626;
+}
+
+.prospect-summary-card__probability--medium {
+  background-color: #fffbeb;
+  color: #d97706;
+}
+
+.prospect-summary-card__probability--high {
+  background-color: #f0fdf4;
+  color: #16a34a;
+}
+
+/* Edit & Action Buttons */
+.prospect-summary-card__edit-btn,
+.prospect-summary-card__action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  opacity: 0;
+  flex-shrink: 0;
+}
+
+.prospect-summary-card__field:hover .prospect-summary-card__edit-btn,
+.prospect-summary-card__field:hover .prospect-summary-card__action-btn {
+  opacity: 1;
+}
+
+.prospect-summary-card__edit-btn:hover {
+  background: var(--color-gray-100);
+  color: var(--color-primary);
+}
+
+.prospect-summary-card__action-btn {
+  color: var(--color-success);
+}
+
+.prospect-summary-card__action-btn:hover {
+  background: var(--color-success);
+  color: white;
+}
+
+.prospect-summary-card__edit-btn i,
+.prospect-summary-card__action-btn i {
+  font-size: 10px;
+}
+
+/* Link */
+.prospect-summary-card__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-primary);
+  text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.prospect-summary-card__link:hover {
+  text-decoration: underline;
+}
+
+.prospect-summary-card__link i {
+  font-size: 9px;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .prospect-summary-card__grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .prospect-summary-card__field--full {
+    grid-column: 1;
+  }
+  
+  .prospect-summary-card__edit-btn,
+  .prospect-summary-card__action-btn {
+    opacity: 1;
+  }
+}
