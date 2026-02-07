@@ -206,7 +206,7 @@ function MovesManagement({ onNavigateToPatron, onSelectOpportunity, embedded = f
             <div className="moves-management__column-header">
               <div className="moves-management__column-title">
                 <div className="moves-management__column-title-left">
-                  <span className="moves-management__column-name">{stage.label}</span>
+                  <span className="moves-management__column-name" data-tooltip={stage.description}>{stage.label}</span>
                   <span className="moves-management__column-count">
                     {getOpportunitiesForStage(stage.id).length}
                   </span>

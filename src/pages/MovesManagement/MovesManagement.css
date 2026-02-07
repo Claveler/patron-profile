@@ -140,7 +140,8 @@
   display: flex;
   gap: var(--space-4);
   flex: 1;
-  overflow-x: auto;
+  overflow-x: clip;
+  overflow-y: visible;
   padding-bottom: var(--space-4);
 }
 
@@ -185,6 +186,30 @@
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary);
+  position: relative;
+  cursor: default;
+}
+
+.moves-management__column-name::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 0;
+  padding: 4px 10px;
+  background-color: var(--color-background-dark, #1a1a2e);
+  color: var(--color-text-inverse, #fff);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-normal, 400);
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  z-index: 10;
+}
+
+.moves-management__column-name:hover::after {
+  opacity: 1;
 }
 
 .moves-management__column-count {
@@ -279,7 +304,6 @@
 @media (max-width: 1200px) {
   .moves-management__board {
     overflow-x: auto;
-    padding-bottom: var(--space-4);
   }
   
   .moves-management__column {

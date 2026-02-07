@@ -233,6 +233,7 @@ function OpportunitiesList({ onSelectOpportunity, onSelectPatron, embedded = fal
               key={stage.id}
               className={`opportunities-list__stage ${stageFilter === stage.id ? 'opportunities-list__stage--active' : ''}`}
               onClick={() => setStageFilter(stageFilter === stage.id ? 'all' : stage.id)}
+              data-tooltip={stage.description}
             >
               <span className="opportunities-list__stage-label">{stage.label}</span>
               <span className="opportunities-list__stage-count">{stats.byStage[stage.id]?.count || 0}</span>

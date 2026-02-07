@@ -7,6 +7,7 @@
   bottom: 0;
   width: var(--sidebar-width);
   background-color: var(--color-background-dark);
+  border-right: 1px solid var(--color-neutral-600);
   overflow-y: auto;
   overflow-x: hidden;
   transition: width var(--transition-slow);
