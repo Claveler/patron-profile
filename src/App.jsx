@@ -5,9 +5,8 @@ import Footer from './components/Layout/Footer'
 import Dashboard from './pages/Dashboard/Dashboard'
 import PatronsList from './pages/PatronsList/PatronsList'
 import PatronProfile from './pages/PatronProfile'
-import MovesManagement from './pages/MovesManagement/MovesManagement'
 import CampaignManagement from './pages/CampaignManagement/CampaignManagement'
-import OpportunitiesList from './pages/OpportunitiesList/OpportunitiesList'
+import Opportunities from './pages/Opportunities/Opportunities'
 import OpportunityDetail from './pages/OpportunityDetail/OpportunityDetail'
 import Settings from './pages/Settings/Settings'
 
@@ -47,13 +46,6 @@ function App() {
             onNavigateToPage={setActivePage}
           />
         )
-      case 'pipeline':
-        return (
-          <MovesManagement 
-            onNavigateToPatron={handleSelectPatron} 
-            onSelectOpportunity={handleSelectOpportunity}
-          />
-        )
       case 'campaigns':
         return <CampaignManagement />
       case 'patrons':
@@ -69,7 +61,7 @@ function App() {
         )
       case 'opportunities':
         return (
-          <OpportunitiesList 
+          <Opportunities 
             onSelectOpportunity={handleSelectOpportunity}
             onSelectPatron={handleSelectPatron}
           />

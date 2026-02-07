@@ -27,7 +27,7 @@ const formatCurrency = (amount) => {
   }).format(amount)
 }
 
-function MovesManagement({ onNavigateToPatron, onSelectOpportunity }) {
+function MovesManagement({ onNavigateToPatron, onSelectOpportunity, embedded = false }) {
   const [opportunities, setOpportunities] = useState(
     initialOpportunities.filter(opp => opp.status === 'open')
   )
@@ -98,15 +98,17 @@ function MovesManagement({ onNavigateToPatron, onSelectOpportunity }) {
   }
 
   return (
-    <div className="moves-management">
-      {/* Page Header / Breadcrumb - matches PatronProfile */}
-      <div className="moves-management__header">
-        <div className="moves-management__breadcrumb">
-          <span className="moves-management__breadcrumb-section">Fundraising</span>
-          <i className="fa-solid fa-chevron-right moves-management__breadcrumb-separator"></i>
+    <div className={`moves-management ${embedded ? 'moves-management--embedded' : ''}`}>
+      {/* Page Header / Breadcrumb - hidden when embedded */}
+      {!embedded && (
+        <div className="moves-management__header">
+          <div className="moves-management__breadcrumb">
+            <span className="moves-management__breadcrumb-section">Fundraising</span>
+            <i className="fa-solid fa-chevron-right moves-management__breadcrumb-separator"></i>
+          </div>
+          <h1 className="moves-management__title">Pipeline</h1>
         </div>
-        <h1 className="moves-management__title">Pipeline</h1>
-      </div>
+      )}
 
       {/* Main Content Container */}
       <div className="moves-management__container">

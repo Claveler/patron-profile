@@ -22,7 +22,7 @@ const formatCurrency = (amount) => {
   }).format(amount)
 }
 
-function OpportunitiesList({ onSelectOpportunity, onSelectPatron }) {
+function OpportunitiesList({ onSelectOpportunity, onSelectPatron, embedded = false }) {
   // Filters
   const [stageFilter, setStageFilter] = useState('all')
   const [campaignFilter, setCampaignFilter] = useState('all')
@@ -107,15 +107,17 @@ function OpportunitiesList({ onSelectOpportunity, onSelectPatron }) {
   }
 
   return (
-    <div className="opportunities-list">
-      {/* Dark Fever Header with Breadcrumb */}
-      <div className="opportunities-list__header">
-        <div className="opportunities-list__breadcrumb">
-          <span className="opportunities-list__breadcrumb-section">Fundraising</span>
-          <i className="fa-solid fa-chevron-right opportunities-list__breadcrumb-separator"></i>
+    <div className={`opportunities-list ${embedded ? 'opportunities-list--embedded' : ''}`}>
+      {/* Dark Fever Header with Breadcrumb - hidden when embedded */}
+      {!embedded && (
+        <div className="opportunities-list__header">
+          <div className="opportunities-list__breadcrumb">
+            <span className="opportunities-list__breadcrumb-section">Fundraising</span>
+            <i className="fa-solid fa-chevron-right opportunities-list__breadcrumb-separator"></i>
+          </div>
+          <h1 className="opportunities-list__title">Opportunities</h1>
         </div>
-        <h1 className="opportunities-list__title">Opportunities</h1>
-      </div>
+      )}
 
       {/* Main Content Container */}
       <div className="opportunities-list__container">

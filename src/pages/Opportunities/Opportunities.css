@@ -1,0 +1,103 @@
+/* Opportunities Page */
+
+.opportunities {
+  min-height: 100%;
+}
+
+/* Page Header - matches PatronsList, CampaignManagement */
+.opportunities__header {
+  background-color: var(--color-background-dark);
+  padding: var(--space-4) var(--space-6);
+  color: var(--color-text-inverse);
+}
+
+.opportunities__breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+
+.opportunities__breadcrumb-section {
+  font-size: var(--font-size-sm);
+  opacity: 0.7;
+}
+
+.opportunities__breadcrumb-separator {
+  font-size: 10px;
+  opacity: 0.5;
+}
+
+.opportunities__title {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  margin: 0;
+}
+
+/* Main Container - matches PatronProfile */
+.opportunities__container {
+  padding: var(--space-6);
+}
+
+/* Tabs Wrapper - white card container */
+.opportunities__tabs-wrapper {
+  background-color: var(--color-surface);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+}
+
+/* Tab Navigation - matches TabNavigation component */
+.opportunities__tab-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: var(--space-3) var(--space-4) 0;
+}
+
+.opportunities__tabs {
+  display: flex;
+  gap: var(--space-1);
+  flex: 1;
+}
+
+.opportunities__tab {
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-primary);
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--color-border);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.opportunities__tab:hover {
+  color: var(--color-primary-600);
+}
+
+.opportunities__tab--active {
+  color: var(--color-primary-600);
+  border-bottom-color: var(--color-primary-600);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: -0.01em;
+}
+
+/* Tab Content */
+.opportunities__tab-content {
+  padding: var(--space-4);
+}
+
+/* Embedded mode adjustments - remove extra padding from child components */
+.moves-management--embedded,
+.opportunities-list--embedded {
+  height: 100%;
+}
+
+.moves-management--embedded .moves-management__container,
+.opportunities-list--embedded .opportunities-list__container {
+  padding: 0;
+  margin: 0;
+  border: none;
+  border-radius: 0;
+}
