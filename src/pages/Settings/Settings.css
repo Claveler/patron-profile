@@ -50,7 +50,9 @@
 .settings__nav {
   display: flex;
   flex-direction: column;
-  gap: 0;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 0.5rem;
   padding: 0.5rem;
   border-radius: 0.5rem;
   border: 1px solid #f2f3f3;
@@ -64,7 +66,8 @@
 .settings__nav-item {
   display: flex;
   align-items: center;
-  gap: 0.25rem;
+  align-self: stretch;
+  gap: 0.5rem;
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
   font-size: var(--font-size-sm);
@@ -93,11 +96,13 @@
   pointer-events: none;
 }
 
-/* Content Area - its own card (from Fever Zone .wrapper-card) */
+/* Content Area - its own card (from Fever Zone .wrapper-card + .wrapper-card--main + .wrapper-card--elevation-100) */
 .settings__content {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  flex: 1 1 0;
+  gap: 1.5rem;
+  min-width: 0;
   padding: 1rem;
   background-color: #fff;
   border-radius: 0.5rem;
