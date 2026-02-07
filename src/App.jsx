@@ -15,6 +15,7 @@ function App() {
   const [activePage, setActivePage] = useState('dashboard') // Start at dashboard
   const [selectedPatronId, setSelectedPatronId] = useState(null)
   const [selectedOpportunityId, setSelectedOpportunityId] = useState(null)
+  const [initialOfficerFilter, setInitialOfficerFilter] = useState(null)
 
   const handleSelectPatron = (patronId) => {
     setSelectedPatronId(patronId)
@@ -36,6 +37,11 @@ function App() {
     setActivePage('opportunities')
   }
 
+  const handleNavigateToOpportunitiesForOfficer = (officerId) => {
+    setInitialOfficerFilter(officerId)
+    setActivePage('opportunities')
+  }
+
   const renderPage = () => {
     switch (activePage) {
       case 'dashboard':
@@ -49,7 +55,12 @@ function App() {
       case 'campaigns':
         return <CampaignManagement />
       case 'patrons':
-        return <PatronsList onSelectPatron={handleSelectPatron} />
+        return (
+          <PatronsList 
+            onSelectPatron={handleSelectPatron} 
+            onNavigateToOpportunitiesForOfficer={handleNavigateToOpportunitiesForOfficer}
+          />
+        )
       case 'patron':
         return (
           <PatronProfile 
@@ -64,6 +75,8 @@ function App() {
           <Opportunities 
             onSelectOpportunity={handleSelectOpportunity}
             onSelectPatron={handleSelectPatron}
+            initialOfficerFilter={initialOfficerFilter}
+            onClearInitialFilter={() => setInitialOfficerFilter(null)}
           />
         )
       case 'opportunity':

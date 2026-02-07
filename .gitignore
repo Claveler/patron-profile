@@ -1,1 +1,14 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Vercel
 .vercel
+
+# IDE
+.cursor/
+
+# OS files
+.DS_Store

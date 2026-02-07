@@ -64,10 +64,38 @@ function MembershipsTab({
   if (!membershipData) {
     return (
       <div className="memberships-tab">
-        <div className="memberships-tab__empty">
-          <i className="fa-solid fa-id-card"></i>
-          <h3>No Membership</h3>
-          <p>This patron is not currently a member.</p>
+        <div className="memberships-tab__main">
+          <div className="memberships-tab__left">
+            <div className="memberships-tab__card wrapper-card">
+              <div className="memberships-tab__card-header">
+                <h4 className="memberships-tab__card-title">Membership Overview</h4>
+              </div>
+              <div className="memberships-tab__card-empty">
+                <i className="fa-solid fa-id-card"></i>
+                <p>No active membership</p>
+              </div>
+            </div>
+          </div>
+          <div className="memberships-tab__right">
+            <div className="memberships-tab__card wrapper-card">
+              <div className="memberships-tab__card-header">
+                <h4 className="memberships-tab__card-title">Beneficiaries</h4>
+              </div>
+              <div className="memberships-tab__card-empty">
+                <i className="fa-solid fa-user-group"></i>
+                <p>No beneficiaries</p>
+              </div>
+            </div>
+            <div className="memberships-tab__card wrapper-card">
+              <div className="memberships-tab__card-header">
+                <h4 className="memberships-tab__card-title">Membership History</h4>
+              </div>
+              <div className="memberships-tab__card-empty">
+                <i className="fa-solid fa-clock-rotate-left"></i>
+                <p>No history available</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     )

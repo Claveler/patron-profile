@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { QRCodeSVG } from 'qrcode.react'
 import UpgradeModal from '../UpgradeModal/UpgradeModal'
 import { formatDate } from '../../data/patrons'
+import { getInitials } from '../../utils/getInitials'
 import './MembershipOverview.css'
 
 // Category display names, order, and icon colors (from PRD: Membership Perks Management)
@@ -121,7 +122,9 @@ function MembershipOverview({ membership, patronName, patronEmail, patronPhoto, 
                   {patronPhoto ? (
                     <img src={patronPhoto} alt={patronName} />
                   ) : (
-                    <div className="membership-overview__card-photo-placeholder" />
+                    <div className="membership-overview__card-photo-placeholder">
+                      <span className="membership-overview__card-photo-initials">{getInitials(patronName)}</span>
+                    </div>
                   )}
                 </div>
                 <p className="membership-overview__patron-name">{patronName}</p>

@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { PIPELINE_STAGES, PROBABILITY_OPTIONS, addOpportunity } from '../../data/opportunities'
 import { getActiveCampaigns, getAllStaff } from '../../data/campaigns'
 import { searchPatrons, getPatronById, getPatronDisplayName } from '../../data/patrons'
+import { getInitials } from '../../utils/getInitials'
 import './OpportunityModal.css'
 
 function OpportunityModal({ 
@@ -266,16 +267,15 @@ function OpportunityModal({
               </label>
               {selectedPatron ? (
                 <div className="opportunity-modal__patron-selected">
-                  {selectedPatron.photo && (
+                  {selectedPatron.photo ? (
                     <img 
                       src={selectedPatron.photo} 
                       alt="" 
                       className="opportunity-modal__patron-avatar"
                     />
-                  )}
-                  {!selectedPatron.photo && (
+                  ) : (
                     <div className="opportunity-modal__patron-avatar opportunity-modal__patron-avatar--placeholder">
-                      <i className="fa-solid fa-user"></i>
+                      <span className="opportunity-modal__patron-avatar-initials">{getInitials(selectedPatron.name)}</span>
                     </div>
                   )}
                   <div className="opportunity-modal__patron-info">
@@ -323,7 +323,7 @@ function OpportunityModal({
                             <img src={patron.photo} alt="" className="opportunity-modal__patron-avatar--sm" />
                           ) : (
                             <div className="opportunity-modal__patron-avatar--sm opportunity-modal__patron-avatar--placeholder">
-                              <i className="fa-solid fa-user"></i>
+                              <span className="opportunity-modal__patron-avatar-initials">{getInitials(patron.name)}</span>
                             </div>
                           )}
                           <div className="opportunity-modal__patron-option-info">

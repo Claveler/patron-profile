@@ -3,7 +3,7 @@ import MovesManagement from '../MovesManagement/MovesManagement'
 import OpportunitiesList from '../OpportunitiesList/OpportunitiesList'
 import './Opportunities.css'
 
-function Opportunities({ onSelectOpportunity, onSelectPatron }) {
+function Opportunities({ onSelectOpportunity, onSelectPatron, initialOfficerFilter, onClearInitialFilter }) {
   const [activeView, setActiveView] = useState('pipeline')
 
   return (
@@ -46,12 +46,16 @@ function Opportunities({ onSelectOpportunity, onSelectPatron }) {
                 onNavigateToPatron={onSelectPatron}
                 onSelectOpportunity={onSelectOpportunity}
                 embedded={true}
+                initialAssigneeFilter={initialOfficerFilter}
+                onClearInitialFilter={onClearInitialFilter}
               />
             ) : (
               <OpportunitiesList 
                 onSelectOpportunity={onSelectOpportunity}
                 onSelectPatron={onSelectPatron}
                 embedded={true}
+                initialAssigneeFilter={initialOfficerFilter}
+                onClearInitialFilter={onClearInitialFilter}
               />
             )}
           </div>

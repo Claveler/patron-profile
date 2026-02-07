@@ -1,6 +1,7 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect, useRef } from 'react'
 import { patrons, patronTags, engagementLevels, giftOfficers, patronSources, isManagedProspect, formatRelativeDate, getActivePatrons, getPatronOrigin, getPrimaryMembershipForPatron } from '../../data/patrons'
 import { getStaffNameById } from '../../data/campaigns'
+import { getInitials } from '../../utils/getInitials'
 import PatronModal from '../../components/PatronModal/PatronModal'
 import AssignPortfolioModal from '../../components/AssignPortfolioModal/AssignPortfolioModal'
 import './PatronsList.css'
@@ -24,7 +25,7 @@ const formatCurrency = (amount) => {
   }).format(amount)
 }
 
-function PatronsList({ onSelectPatron }) {
+function PatronsList({ onSelectPatron, onNavigateToOpportunitiesForOfficer }) {
   const [searchTerm, setSearchTerm] = useState('')
   const [sortField, setSortField] = useState('createdDate')
   const [sortDirection, setSortDirection] = useState('desc') // newest first
@@ -32,6 +33,20 @@ function PatronsList({ onSelectPatron }) {
   const [showPatronModal, setShowPatronModal] = useState(false)
   const [showArchived, setShowArchived] = useState(false)
   const [assigningPatron, setAssigningPatron] = useState(null) // { id, name }
+  const [ownerPopover, setOwnerPopover] = useState(null) // { officerId, officerName, rect }
+  const ownerPopoverRef = useRef(null)
+
+  // Close owner popover on click outside
+  useEffect(() => {
+    if (!ownerPopover) return
+    const handleClickOutside = (e) => {
+      if (ownerPopoverRef.current && !ownerPopoverRef.current.contains(e.target)) {
+        setOwnerPopover(null)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [ownerPopover])
 
   // Filter state
   const [showFilters, setShowFilters] = useState(false)
@@ -216,7 +231,9 @@ function PatronsList({ onSelectPatron }) {
     const membership = getPrimaryMembershipForPatron(patron.id)
     const tier = membership?.tier || null
     const cardStyle = membership?.cardStyle || null
-    return { tier, cardStyle }
+    const patronRole = membership?.patronRole || null
+    const patronRoleLabel = membership?.patronRoleLabel || null
+    return { tier, cardStyle, patronRole, patronRoleLabel }
   }
 
   const getEngagementLabel = (levelId) => {
@@ -243,12 +260,39 @@ function PatronsList({ onSelectPatron }) {
     if (openMenuId) setOpenMenuId(null)
   }
 
+  // Handle clicking a gift officer name to show popover
+  const handleOwnerClick = (e, officerId) => {
+    e.stopPropagation()
+    const officerName = getStaffNameById(officerId)
+    if (ownerPopover && ownerPopover.officerId === officerId) {
+      setOwnerPopover(null)
+      return
+    }
+    const rect = e.currentTarget.getBoundingClientRect()
+    setOwnerPopover({ officerId, officerName, rect })
+  }
+
+  // Filter patrons by the clicked officer
+  const handleFilterByOfficer = (officerId) => {
+    setFilterOwner(officerId)
+    setShowFilters(true)
+    setOwnerPopover(null)
+  }
+
+  // Navigate to opportunities filtered by the clicked officer
+  const handleViewOpportunitiesForOfficer = (officerId) => {
+    setOwnerPopover(null)
+    if (onNavigateToOpportunitiesForOfficer) {
+      onNavigateToOpportunitiesForOfficer(officerId)
+    }
+  }
+
   // Export filtered patrons to CSV
   const handleExportCSV = () => {
     const headers = [
       'First Name', 'Last Name', 'Email', 'Phone', 'Address',
       'Membership Tier', 'Lifetime Value', 'Donation Count', 'Last Donation',
-      'Tags', 'Owner', 'Engagement', 'Source', 'Patron Since'
+      'Tags', 'Gift Officer', 'Engagement', 'Source', 'Patron Since'
     ]
     const rows = filteredPatrons.map(p => [
       p.firstName,
@@ -315,7 +359,7 @@ function PatronsList({ onSelectPatron }) {
             <i className="fa-solid fa-magnifying-glass patrons-list__search-icon"></i>
             <input
               type="text"
-              placeholder="Search by name or owner"
+              placeholder="Search by name or gift officer"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="patrons-list__search-input"
@@ -422,9 +466,9 @@ function PatronsList({ onSelectPatron }) {
                 </select>
               </div>
 
-              {/* Owner - dropdown */}
+              {/* Gift Officer - dropdown */}
               <div className="patrons-list__filter-group">
-                <label className="patrons-list__filter-label">Owner</label>
+                <label className="patrons-list__filter-label">Gift Officer</label>
                 <select
                   className="patrons-list__filter-select"
                   value={filterOwner}
@@ -552,7 +596,7 @@ function PatronsList({ onSelectPatron }) {
             )}
             {filterOwner !== 'all' && (
               <span className="patrons-list__chip">
-                Owner: {getStaffNameById(filterOwner)}
+                Gift Officer: {getStaffNameById(filterOwner)}
                 <button className="patrons-list__chip-remove" onClick={() => setFilterOwner('all')}>
                   <i className="fa-solid fa-xmark"></i>
                 </button>
@@ -619,7 +663,7 @@ function PatronsList({ onSelectPatron }) {
                   <i className={`fa-solid fa-sort patrons-list__sort-icon ${sortField === 'membershipTier' ? 'patrons-list__sort-icon--active' : ''}`}></i>
                 </th>
                 <th className="patrons-list__th">Tags</th>
-                <th className="patrons-list__th">Owner</th>
+                <th className="patrons-list__th">Gift Officer</th>
                 <th 
                   className="patrons-list__th patrons-list__th--sortable"
                   onClick={() => handleSort('createdDate')}
@@ -643,7 +687,7 @@ function PatronsList({ onSelectPatron }) {
                 const isArchived = patron.status === 'archived'
                 const isNew = isRecentlyAdded(patron.createdDate)
                 const origin = getPatronOrigin(patron.source)
-                const { tier: membershipTier, cardStyle: membershipCardStyle } = getMembershipInfo(patron)
+                const { tier: membershipTier, cardStyle: membershipCardStyle, patronRole, patronRoleLabel } = getMembershipInfo(patron)
                 const tags = patron.tags || []
                 const displayTags = tags.slice(0, 2)
                 const remainingTags = tags.length - 2
@@ -664,7 +708,7 @@ function PatronsList({ onSelectPatron }) {
                           />
                         ) : (
                           <div className={`patrons-list__avatar patrons-list__avatar--placeholder ${isArchived ? 'patrons-list__avatar--archived' : ''}`}>
-                            <i className="fa-solid fa-user"></i>
+                            <span className="patrons-list__avatar-initials">{getInitials(`${patron.firstName} ${patron.lastName}`)}</span>
                           </div>
                         )}
                         <div className="patrons-list__name-wrapper">
@@ -698,6 +742,10 @@ function PatronsList({ onSelectPatron }) {
                             borderColor: membershipCardStyle.backgroundColor
                           } : undefined}
                         >
+                          <i 
+                            className={`fa-solid ${patronRole === 'primary' ? 'fa-star' : 'fa-user-plus'} patrons-list__membership-role-icon`}
+                            title={patronRoleLabel || (patronRole === 'primary' ? 'Primary Member' : 'Beneficiary')}
+                          ></i>
                           {membershipTier}
                         </span>
                       ) : (
@@ -718,7 +766,12 @@ function PatronsList({ onSelectPatron }) {
                     </td>
                     <td className="patrons-list__td patrons-list__td--owner">
                       {patron.assignedToId ? (
-                        <span className="patrons-list__owner">{getStaffNameById(patron.assignedToId)}</span>
+                        <button
+                          className="patrons-list__owner patrons-list__owner--clickable"
+                          onClick={(e) => handleOwnerClick(e, patron.assignedToId)}
+                        >
+                          {getStaffNameById(patron.assignedToId)}
+                        </button>
                       ) : (
                         <button 
                           className="patrons-list__assign-btn"
@@ -779,7 +832,7 @@ function PatronsList({ onSelectPatron }) {
                   filterMembership !== 'all' && 'Membership',
                   filterEngagement.length > 0 && 'Engagement',
                   filterType !== 'all' && 'Type',
-                  filterOwner !== 'all' && 'Owner',
+                  filterOwner !== 'all' && 'Gift Officer',
                   filterSource !== 'all' && 'Source',
                   (filterLtvMin !== '' || filterLtvMax !== '') && 'LTV',
                   filterLastDonation !== 'all' && 'Last Donation',
@@ -789,6 +842,36 @@ function PatronsList({ onSelectPatron }) {
           </span>
         </div>
       </div>
+
+      {/* Owner Popover */}
+      {ownerPopover && (
+        <div 
+          className="patrons-list__owner-popover"
+          ref={ownerPopoverRef}
+          style={{
+            top: ownerPopover.rect.bottom + window.scrollY + 4,
+            left: ownerPopover.rect.left + window.scrollX,
+          }}
+        >
+          <div className="patrons-list__owner-popover-header">
+            {ownerPopover.officerName}
+          </div>
+          <button
+            className="patrons-list__owner-popover-item"
+            onClick={() => handleFilterByOfficer(ownerPopover.officerId)}
+          >
+            <i className="fa-solid fa-filter"></i>
+            Filter patrons by this gift officer
+          </button>
+          <button
+            className="patrons-list__owner-popover-item"
+            onClick={() => handleViewOpportunitiesForOfficer(ownerPopover.officerId)}
+          >
+            <i className="fa-solid fa-bullseye"></i>
+            View opportunities
+          </button>
+        </div>
+      )}
 
       {/* Patron Modal */}
       <PatronModal

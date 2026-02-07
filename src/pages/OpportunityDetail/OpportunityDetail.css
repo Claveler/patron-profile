@@ -1,149 +1,286 @@
-/* Opportunity Detail Page */
+/* Opportunity Detail Page - Fever / Patron Profile style */
 
 .opportunity-detail {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
-  padding: var(--space-6);
-  max-width: 1400px;
-  margin: 0 auto;
+  min-height: 100%;
 }
 
-/* Header */
+/* ============================================
+   DARK HEADER BANNER
+   Matches patron-profile__header pattern
+   ============================================ */
+
 .opportunity-detail__header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  background-color: var(--color-background-dark);
+  padding: var(--space-4) var(--space-6);
+  color: var(--color-text-inverse);
 }
 
-.opportunity-detail__back {
+.opportunity-detail__breadcrumb {
   display: flex;
   align-items: center;
   gap: var(--space-2);
-  color: var(--color-text-secondary);
+  margin-bottom: var(--space-2);
+}
+
+.opportunity-detail__breadcrumb-section {
   font-size: var(--font-size-sm);
-  transition: color var(--transition-fast);
+  opacity: 0.7;
 }
 
-.opportunity-detail__back:hover {
-  color: var(--color-primary);
+.opportunity-detail__breadcrumb-separator {
+  font-size: 10px;
+  opacity: 0.5;
 }
 
-.opportunity-detail__actions {
-  display: flex;
-  gap: var(--space-2);
-}
-
-.opportunity-detail__btn {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-2) var(--space-4);
-  border-radius: var(--radius-full);
+.opportunity-detail__breadcrumb-link {
   font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-semibold);
-  transition: all var(--transition-fast);
+  color: var(--color-text-inverse);
+  opacity: 0.7;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-family: var(--font-family);
+  transition: opacity var(--transition-fast);
 }
 
-.opportunity-detail__btn--primary {
-  background-color: var(--color-primary);
-  color: var(--color-white);
-}
-
-.opportunity-detail__btn--primary:hover {
-  background-color: var(--color-primary-700);
-}
-
-.opportunity-detail__btn--secondary {
-  background-color: var(--color-gray-100);
-  color: var(--color-text-primary);
-}
-
-.opportunity-detail__btn--secondary:hover {
-  background-color: var(--color-gray-200);
-}
-
-/* Content layout */
-.opportunity-detail__content {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: var(--space-5);
-}
-
-/* Main section */
-.opportunity-detail__main {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-5);
-}
-
-/* Title section */
-.opportunity-detail__title-section {
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: var(--space-5);
+.opportunity-detail__breadcrumb-link:hover {
+  opacity: 1;
+  text-decoration: underline;
 }
 
 .opportunity-detail__title-row {
   display: flex;
   align-items: center;
   gap: var(--space-3);
-  margin-bottom: var(--space-2);
 }
 
 .opportunity-detail__title {
-  font-size: var(--font-size-xl);
+  font-size: var(--font-size-3xl);
   font-weight: var(--font-weight-bold);
-  color: var(--color-text-primary);
   margin: 0;
 }
 
-.opportunity-detail__status {
+/* Stage / Status Badge */
+.opportunity-detail__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
   padding: var(--space-1) var(--space-3);
   border-radius: var(--radius-full);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
 }
 
-.opportunity-detail__status--won {
-  background-color: var(--color-success-50, #ecfdf5);
-  color: var(--color-success);
+.opportunity-detail__badge--stage {
+  background-color: var(--color-primary);
+  color: var(--color-text-inverse);
 }
 
-.opportunity-detail__status--lost {
-  background-color: var(--color-error-100);
-  color: var(--color-danger);
+.opportunity-detail__badge--won {
+  background-color: var(--color-success);
+  color: var(--color-text-inverse);
 }
 
-.opportunity-detail__patron {
+.opportunity-detail__badge--lost {
+  background-color: var(--color-danger);
+  color: var(--color-text-inverse);
+}
+
+/* ============================================
+   MAIN CONTAINER
+   ============================================ */
+
+.opportunity-detail__container {
+  padding: var(--space-6);
+}
+
+/* ============================================
+   INFO BOX
+   Matches PatronInfoBox card pattern
+   ============================================ */
+
+.opportunity-detail__infobox {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-5);
+}
+
+.opportunity-detail__infobox-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3) var(--space-6);
+}
+
+.opportunity-detail__infobox-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.opportunity-detail__infobox-label {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
   display: flex;
   align-items: center;
-  gap: var(--space-2);
-  color: var(--color-primary);
-  font-size: var(--font-size-sm);
-  margin: 0 0 var(--space-2) 0;
-  cursor: pointer;
+  gap: var(--space-1);
 }
 
-.opportunity-detail__patron:hover {
+.opportunity-detail__infobox-label i {
+  font-size: 10px;
+  width: 14px;
+  text-align: center;
+}
+
+.opportunity-detail__infobox-value {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
+.opportunity-detail__infobox-value--link {
+  color: var(--color-primary);
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.opportunity-detail__infobox-value--link:hover {
   text-decoration: underline;
 }
 
-.opportunity-detail__description {
-  color: var(--color-text-secondary);
-  font-size: var(--font-size-sm);
-  margin: 0;
+.opportunity-detail__infobox-value--amount {
+  color: var(--color-success);
+  font-size: var(--font-size-base);
 }
 
-/* Stepper */
+/* ============================================
+   ACTIONS BUTTON & DROPDOWN
+   Matches PatronInfoBox Actions pattern
+   ============================================ */
+
+.opportunity-detail__actions-wrapper {
+  position: relative;
+  flex-shrink: 0;
+  align-self: flex-start;
+}
+
+.opportunity-detail__actions-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  border: none;
+  transition: background-color var(--transition-fast);
+  white-space: nowrap;
+}
+
+.opportunity-detail__actions-btn:hover {
+  background-color: var(--color-primary-700);
+}
+
+.opportunity-detail__actions-dropdown {
+  position: absolute;
+  top: calc(100% + var(--space-2));
+  right: 0;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  z-index: 100;
+  min-width: 220px;
+  padding: var(--space-1) 0;
+}
+
+.opportunity-detail__actions-dropdown button {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-family);
+  transition: background-color var(--transition-fast);
+  text-align: left;
+}
+
+.opportunity-detail__actions-dropdown button:hover {
+  background-color: var(--color-neutral-100);
+}
+
+.opportunity-detail__actions-dropdown button i {
+  width: 16px;
+  text-align: center;
+  color: var(--color-text-muted);
+}
+
+.opportunity-detail__actions-dropdown-won {
+  color: var(--color-success) !important;
+}
+
+.opportunity-detail__actions-dropdown-won i {
+  color: var(--color-success) !important;
+}
+
+.opportunity-detail__actions-dropdown-lost {
+  color: var(--color-danger) !important;
+}
+
+.opportunity-detail__actions-dropdown-lost i {
+  color: var(--color-danger) !important;
+}
+
+.opportunity-detail__actions-divider {
+  height: 1px;
+  background-color: var(--color-border-light);
+  margin: var(--space-1) 0;
+}
+
+.opportunity-detail__edit-actions {
+  display: flex;
+  gap: var(--space-2);
+}
+
+/* ============================================
+   CONTENT WRAPPER
+   Matches patron-profile__tabs-wrapper pattern
+   ============================================ */
+
+.opportunity-detail__content-wrapper {
+  background-color: var(--color-surface);
+  border-radius: var(--radius-md);
+  margin-top: var(--space-6);
+  border: 1px solid var(--color-border);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+/* ============================================
+   PIPELINE STEPPER
+   ============================================ */
+
 .opportunity-detail__stepper {
   display: flex;
   align-items: center;
   padding: var(--space-4);
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  background-color: var(--color-neutral-100);
+  border-radius: var(--radius-md);
 }
 
 .opportunity-detail__stage {
@@ -161,7 +298,7 @@
   left: calc(50% + 20px);
   width: calc(100% - 40px);
   height: 2px;
-  background-color: var(--color-gray-200);
+  background-color: var(--color-neutral-300);
 }
 
 .opportunity-detail__stage--completed:not(:last-child)::after {
@@ -175,7 +312,7 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background-color: var(--color-gray-200);
+  background-color: var(--color-neutral-200);
   color: var(--color-text-secondary);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
@@ -203,15 +340,17 @@
   font-weight: var(--font-weight-semibold);
 }
 
-/* Metrics */
+/* ============================================
+   METRICS
+   ============================================ */
+
 .opportunity-detail__metrics {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: var(--space-4);
   padding: var(--space-4);
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  background-color: var(--color-neutral-100);
+  border-radius: var(--radius-md);
 }
 
 .opportunity-detail__metric {
@@ -244,6 +383,7 @@
   border-radius: var(--radius-sm);
   font-size: var(--font-size-sm);
   width: 100%;
+  font-family: var(--font-family);
 }
 
 .opportunity-detail__input:focus {
@@ -251,12 +391,17 @@
   border-color: var(--color-primary);
 }
 
-/* Sections */
+/* ============================================
+   SECTIONS (Next Action, Contact, Activity)
+   ============================================ */
+
 .opportunity-detail__section {
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: var(--space-4);
+  padding: var(--space-4) 0;
+  border-top: 1px solid var(--color-border-light);
+}
+
+.opportunity-detail__section:last-child {
+  padding-bottom: 0;
 }
 
 .opportunity-detail__section-title {
@@ -324,103 +469,18 @@
   align-items: center;
   gap: var(--space-2);
   padding: var(--space-2) var(--space-3);
-  background-color: var(--color-gray-100);
+  background-color: var(--color-neutral-100);
   color: var(--color-text-primary);
   border-radius: var(--radius-md);
   font-size: var(--font-size-sm);
   transition: background-color var(--transition-fast);
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-family);
 }
 
 .opportunity-detail__log-contact-btn:hover {
-  background-color: var(--color-gray-200);
-}
-
-/* Close actions */
-.opportunity-detail__close-actions {
-  display: flex;
-  gap: var(--space-3);
-  padding: var(--space-4);
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-}
-
-.opportunity-detail__btn--advance {
-  background-color: var(--color-primary);
-  color: var(--color-white);
-  flex: 1;
-}
-
-.opportunity-detail__btn--advance:hover {
-  background-color: var(--color-primary-700);
-}
-
-.opportunity-detail__btn--won {
-  background-color: var(--color-success-50, #ecfdf5);
-  color: var(--color-success);
-}
-
-.opportunity-detail__btn--won:hover {
-  background-color: var(--color-success);
-  color: var(--color-white);
-}
-
-.opportunity-detail__btn--lost {
-  background-color: var(--color-error-100);
-  color: var(--color-danger);
-}
-
-.opportunity-detail__btn--lost:hover {
-  background-color: var(--color-danger);
-  color: var(--color-white);
-}
-
-/* Sidebar */
-.opportunity-detail__sidebar {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
-}
-
-.opportunity-detail__card {
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: var(--space-4);
-}
-
-.opportunity-detail__card-title {
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text-primary);
-  margin: 0 0 var(--space-3) 0;
-}
-
-.opportunity-detail__details {
-  margin: 0;
-}
-
-.opportunity-detail__detail {
-  display: flex;
-  justify-content: space-between;
-  padding: var(--space-2) 0;
-  border-bottom: 1px solid var(--color-border-light, #eef1f3);
-}
-
-.opportunity-detail__detail:last-child {
-  border-bottom: none;
-}
-
-.opportunity-detail__detail dt {
-  font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
-}
-
-.opportunity-detail__detail dd {
-  font-size: var(--font-size-sm);
-  color: var(--color-text-primary);
-  font-weight: var(--font-weight-medium);
-  margin: 0;
+  background-color: var(--color-neutral-200);
 }
 
 /* Activity placeholder */
@@ -451,7 +511,46 @@
   margin-top: var(--space-1);
 }
 
-/* Not found */
+/* ============================================
+   BUTTONS (shared)
+   ============================================ */
+
+.opportunity-detail__btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  transition: all var(--transition-fast);
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-family);
+}
+
+.opportunity-detail__btn--primary {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+.opportunity-detail__btn--primary:hover {
+  background-color: var(--color-primary-700);
+}
+
+.opportunity-detail__btn--secondary {
+  background-color: var(--color-neutral-100);
+  color: var(--color-text-primary);
+}
+
+.opportunity-detail__btn--secondary:hover {
+  background-color: var(--color-neutral-200);
+}
+
+/* ============================================
+   NOT FOUND STATE
+   ============================================ */
+
 .opportunity-detail__not-found {
   display: flex;
   flex-direction: column;
@@ -479,22 +578,49 @@
   margin: 0;
 }
 
-/* Responsive */
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
 @media (max-width: 1024px) {
-  .opportunity-detail__content {
-    grid-template-columns: 1fr;
-  }
-  
   .opportunity-detail__metrics {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .opportunity-detail__infobox-grid {
+    grid-template-columns: 1fr 1fr;
   }
 }
 
 @media (max-width: 768px) {
-  .opportunity-detail {
+  .opportunity-detail__header {
+    padding: var(--space-3) var(--space-4);
+  }
+
+  .opportunity-detail__container {
     padding: var(--space-4);
   }
-  
+
+  .opportunity-detail__title {
+    font-size: var(--font-size-xl);
+  }
+
+  .opportunity-detail__infobox {
+    flex-direction: column;
+  }
+
+  .opportunity-detail__infobox-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .opportunity-detail__content-wrapper {
+    padding: var(--space-4);
+  }
+
+  .opportunity-detail__metrics {
+    grid-template-columns: 1fr 1fr;
+  }
+
   .opportunity-detail__stepper {
     flex-wrap: wrap;
     gap: var(--space-3);
@@ -503,8 +629,9 @@
   .opportunity-detail__stage:not(:last-child)::after {
     display: none;
   }
-  
-  .opportunity-detail__close-actions {
+
+  .opportunity-detail__contact-info {
     flex-direction: column;
+    align-items: flex-start;
   }
 }

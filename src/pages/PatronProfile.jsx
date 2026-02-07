@@ -469,6 +469,7 @@ function PatronProfile({ patronId, onBack, onSelectOpportunity, onSelectPatron }
           onArchive={handleArchive}
           onRestore={handleRestore}
           onUpdateTags={handleUpdateTags}
+          onNavigateToPatron={onSelectPatron}
         />
 
         {/* Tab Section */}

@@ -1,16 +1,21 @@
 import { useState, useRef, useEffect } from 'react'
-import { patronTags, addCustomTag, getPrimaryMembershipForPatron, formatDate } from '../../data/patrons'
+import { patronTags, addCustomTag, getPrimaryMembershipForPatron, formatDate, getHouseholdForPatron, getHouseholdMembers } from '../../data/patrons'
+import { getInitials } from '../../utils/getInitials'
 import './PatronInfoBox.css'
 
-function PatronInfoBox({ patron, isManaged, onCreateOpportunity, onAddActivity, onArchive, onRestore, onUpdateTags }) {
+function PatronInfoBox({ patron, isManaged, onCreateOpportunity, onAddActivity, onArchive, onRestore, onUpdateTags, onNavigateToPatron }) {
   const membership = getPrimaryMembershipForPatron(patron.id)
+  const household = getHouseholdForPatron(patron.id)
+  const householdMembers = household ? getHouseholdMembers(household.id) : []
   const getTagLabel = (tagId) => {
     return patronTags.find(t => t.id === tagId)?.label || tagId
   }
   const [actionsOpen, setActionsOpen] = useState(false)
   const [tagsPopoverOpen, setTagsPopoverOpen] = useState(false)
   const [tagSearchTerm, setTagSearchTerm] = useState('')
+  const [householdPopoverOpen, setHouseholdPopoverOpen] = useState(false)
   const tagsPopoverRef = useRef(null)
+  const householdPopoverRef = useRef(null)
   
   // Tags display logic - show 1 tag + count
   const allTags = patron.tags || []
@@ -40,6 +45,19 @@ function PatronInfoBox({ patron, isManaged, onCreateOpportunity, onAddActivity, 
     }
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [tagsPopoverOpen])
+
+  // Close household popover when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (householdPopoverRef.current && !householdPopoverRef.current.contains(e.target)) {
+        setHouseholdPopoverOpen(false)
+      }
+    }
+    if (householdPopoverOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [householdPopoverOpen])
 
   // Tag management handlers
   const handleRemoveTag = (tagId) => {
@@ -112,7 +130,7 @@ function PatronInfoBox({ patron, isManaged, onCreateOpportunity, onAddActivity, 
             <img src={patron.photo} alt={`${patron.firstName} ${patron.lastName}`} />
           ) : (
             <div className="patron-info-box__photo-placeholder">
-              <i className="fa-solid fa-user"></i>
+              <span className="patron-info-box__photo-initials">{getInitials(`${patron.firstName} ${patron.lastName}`)}</span>
             </div>
           )}
         </div>
@@ -122,13 +140,80 @@ function PatronInfoBox({ patron, isManaged, onCreateOpportunity, onAddActivity, 
             {' '}
             <span className="patron-info-box__name-last">{patron.lastName}</span>
           </h2>
-          {patron.household && (
-            <div className="patron-info-box__household">
-              <a href="#" className="patron-info-box__household-link">
-                {patron.household.name}
-              </a>
-              {patron.household.verified && (
+          {household && (
+            <div className="patron-info-box__household" ref={householdPopoverRef}>
+              <button 
+                className="patron-info-box__household-link"
+                onClick={() => setHouseholdPopoverOpen(!householdPopoverOpen)}
+              >
+                <i className="fa-solid fa-house-chimney patron-info-box__household-icon"></i>
+                {household.name}
+              </button>
+              {household.verified && (
                 <i className="fa-solid fa-badge-check patron-info-box__verified"></i>
+              )}
+              {householdPopoverOpen && (
+                <div className="patron-info-box__household-popover">
+                  <div className="patron-info-box__household-popover-header">
+                    <span className="patron-info-box__household-popover-title">{household.name}</span>
+                    {household.verified && (
+                      <i className="fa-solid fa-badge-check patron-info-box__household-popover-badge"></i>
+                    )}
+                    <button 
+                      className="patron-info-box__household-popover-close"
+                      onClick={() => setHouseholdPopoverOpen(false)}
+                    >
+                      <i className="fa-solid fa-xmark"></i>
+                    </button>
+                  </div>
+                  {household.address && (
+                    <div className="patron-info-box__household-popover-address">
+                      <i className="fa-solid fa-location-dot"></i>
+                      <span>{household.address}</span>
+                    </div>
+                  )}
+                  <div className="patron-info-box__household-popover-members">
+                    {householdMembers.map((member) => {
+                      const isCurrentPatron = member.patronId === patron.id
+                      return (
+                        <div 
+                          key={member.id}
+                          className={`patron-info-box__household-member ${isCurrentPatron ? 'patron-info-box__household-member--current' : 'patron-info-box__household-member--clickable'}`}
+                          onClick={() => {
+                            if (!isCurrentPatron && onNavigateToPatron) {
+                              setHouseholdPopoverOpen(false)
+                              onNavigateToPatron(member.patronId)
+                            }
+                          }}
+                        >
+                          <div className="patron-info-box__household-member-avatar">
+                            {member.patron.photo ? (
+                              <img src={member.patron.photo} alt={member.patron.name} />
+                            ) : (
+                              <span>{getInitials(member.patron.name)}</span>
+                            )}
+                          </div>
+                          <div className="patron-info-box__household-member-info">
+                            <span className="patron-info-box__household-member-name">
+                              {member.patron.name}
+                            </span>
+                            <span className="patron-info-box__household-member-role">{member.role}</span>
+                          </div>
+                          {member.isPrimary && (
+                            <span className="patron-info-box__household-member-primary" title="Primary contact">
+                              <i className="fa-solid fa-star"></i>
+                            </span>
+                          )}
+                          {!isCurrentPatron && (
+                            <span className="patron-info-box__household-member-arrow">
+                              <i className="fa-solid fa-chevron-right"></i>
+                            </span>
+                          )}
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
               )}
             </div>
           )}
@@ -252,6 +337,13 @@ function PatronInfoBox({ patron, isManaged, onCreateOpportunity, onAddActivity, 
             <span>
               {membership.programme ? `${membership.programme} - ` : ''}
               {membership.tier || 'Member'}
+            </span>
+            <span 
+              className={`patron-info-box__membership-role ${membership.patronRole === 'primary' ? 'patron-info-box__membership-role--primary' : 'patron-info-box__membership-role--beneficiary'}`}
+              title={membership.patronRoleLabel || (membership.patronRole === 'primary' ? 'Primary Member' : 'Beneficiary')}
+            >
+              <i className={`fa-solid ${membership.patronRole === 'primary' ? 'fa-star' : 'fa-user-plus'}`}></i>
+              {membership.patronRole === 'primary' ? 'Primary' : (membership.patronRoleLabel || 'Beneficiary')}
             </span>
           </div>
           {membership.startDate && (

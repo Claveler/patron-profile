@@ -89,10 +89,7 @@ export const patrons = [
     phone: '(555) 123-4567',
     address: '789 Pine Rd, Austin, TX 73301',
     tags: ['major-donor', 'donor', 'board-member'],
-    household: {
-      name: 'Collingwood Family',
-      verified: true
-    },
+    householdId: 'hh-collingwood',
     // MANAGED PROSPECT - has assignedToId (opportunities tracked separately)
     assignedToId: 'lj',
     engagement: {
@@ -228,6 +225,7 @@ export const patrons = [
     email: 'paul.fairfax@outlook.com',
     phone: '(555) 111-2222',
     tags: ['donor', 'corporate'],
+    householdId: 'hh-fairfax',
     // NO assignedToId - General Constituent
     // NO prospect data - not in pipeline
     engagement: {
@@ -357,7 +355,7 @@ export const patrons = [
     id: 'jake-thompson',
     firstName: 'Jake',
     lastName: 'Thompson',
-    photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face',
+    photo: null,
     email: 'jake_thompson@gmail.com',
     phone: '(555) 234-5678',
     tags: ['prospect'],
@@ -393,6 +391,7 @@ export const patrons = [
     email: 'sophia1234@gmail.com',
     phone: '(555) 345-6789',
     tags: ['donor'],
+    householdId: 'hh-taylor-thomas',
     assignedToId: 'es',
     engagement: {
       level: 'cold',
@@ -425,6 +424,7 @@ export const patrons = [
     email: 'lucas_taylor@yahoo.com',
     phone: '(555) 456-7890',
     tags: ['donor'],
+    householdId: 'hh-taylor-thomas',
     assignedToId: 'lj',
     engagement: {
       level: 'warm',
@@ -489,6 +489,7 @@ export const patrons = [
     email: 'samantha_itsme@gmail.com',
     phone: '(555) 678-9012',
     tags: ['major-donor', 'donor'],
+    householdId: 'hh-martinez-carter',
     assignedToId: 'es',
     engagement: {
       level: 'on-fire',
@@ -521,6 +522,7 @@ export const patrons = [
     email: 'johnsonmchl@microsoft.com',
     phone: '(555) 789-0123',
     tags: ['donor', 'corporate'],
+    householdId: 'hh-martinez-carter',
     assignedToId: 'es',
     engagement: {
       level: 'warm',
@@ -685,7 +687,7 @@ export const patrons = [
     id: 'david-chen',
     firstName: 'David',
     lastName: 'Chen',
-    photo: 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=150&h=150&fit=crop&crop=face',
+    photo: null,
     email: 'd.chen@company.com',
     phone: '(555) 333-4444',
     tags: ['donor'],
@@ -793,10 +795,7 @@ export const patrons = [
     address: '789 Pine Rd, Austin, TX 73301',
     tags: ['donor'],
     recordStatus: 'active',
-    household: {
-      name: 'Collingwood Family',
-      verified: true
-    },
+    householdId: 'hh-collingwood',
     // No assignedToId - not individually managed, but part of household
     engagement: {
       level: 'warm',
@@ -842,10 +841,7 @@ export const patrons = [
     dateOfBirth: '2012-03-15', // 13 years old
     tags: [],
     recordStatus: 'active',
-    household: {
-      name: 'Collingwood Family',
-      verified: true
-    },
+    householdId: 'hh-collingwood',
     // No assignedToId - dependent/minor
     engagement: {
       level: 'cool',
@@ -1027,7 +1023,7 @@ export const patrons = [
     id: 'sarah-blackwood',
     firstName: 'Sarah',
     lastName: 'Blackwood',
-    photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face',
+    photo: null,
     email: 'sarah.blackwood@outlook.com',
     phone: '(512) 555-3005',
     tags: ['prospect'],
@@ -1241,6 +1237,7 @@ export const patrons = [
     email: 'elizabeth.fairfax@outlook.com',
     phone: '(555) 111-2223',
     tags: ['donor'],
+    householdId: 'hh-fairfax',
     assignedToId: 'lj',
     engagement: {
       level: 'warm',
@@ -2578,6 +2575,101 @@ export const getPendingAcknowledgments = (patronId) => {
   return ACKNOWLEDGMENTS.filter(a => a.patronId === patronId && a.status === 'pending')
 }
 
+// ============================================
+// HOUSEHOLDS
+// ============================================
+
+export const HOUSEHOLDS = [
+  {
+    id: 'hh-collingwood',
+    name: 'Collingwood Family',
+    formalSalutation: 'Mr. Anderson & Mrs. Sarah Collingwood',
+    informalSalutation: 'Anderson & Sarah',
+    address: '789 Pine Rd, Austin, TX 73301',
+    primaryContactId: 'anderson-collingwood',
+    verified: true,
+    createdDate: '2024-06-15'
+  },
+  {
+    id: 'hh-fairfax',
+    name: 'Fairfax Family',
+    formalSalutation: 'Mr. Paul & Mrs. Elizabeth Fairfax',
+    informalSalutation: 'Paul & Elizabeth',
+    address: '234 Elm St, Austin, TX 73302',
+    primaryContactId: 'paul-fairfax',
+    verified: true,
+    createdDate: '2024-09-01'
+  },
+  {
+    id: 'hh-martinez-carter',
+    name: 'Martinez-Carter Family',
+    formalSalutation: 'Mr. John Martinez & Mrs. Samantha Carter',
+    informalSalutation: 'John & Samantha',
+    address: '567 Oak Ave, Austin, TX 73303',
+    primaryContactId: 'john-martinez',
+    verified: false,
+    createdDate: '2025-01-10'
+  },
+  {
+    id: 'hh-taylor-thomas',
+    name: 'Taylor-Thomas Family',
+    formalSalutation: 'Mr. Lucas Taylor & Ms. Sophia Thomas',
+    informalSalutation: 'Lucas & Sophia',
+    address: '890 Maple Dr, Austin, TX 73304',
+    primaryContactId: 'lucas-taylor',
+    verified: true,
+    createdDate: '2025-03-20'
+  }
+]
+
+export const HOUSEHOLD_MEMBERS = [
+  // Collingwood Family
+  { id: 'hhm-1', householdId: 'hh-collingwood', patronId: 'anderson-collingwood', role: 'Head', isPrimary: true, joinedDate: '2024-06-15' },
+  { id: 'hhm-2', householdId: 'hh-collingwood', patronId: 'sarah-collingwood', role: 'Spouse', isPrimary: false, joinedDate: '2024-06-15' },
+  { id: 'hhm-3', householdId: 'hh-collingwood', patronId: 'emma-collingwood', role: 'Child', isPrimary: false, joinedDate: '2024-06-15' },
+  // Fairfax Family
+  { id: 'hhm-4', householdId: 'hh-fairfax', patronId: 'paul-fairfax', role: 'Head', isPrimary: true, joinedDate: '2024-09-01' },
+  { id: 'hhm-5', householdId: 'hh-fairfax', patronId: 'elizabeth-fairfax', role: 'Spouse', isPrimary: false, joinedDate: '2024-09-01' },
+  // Martinez-Carter Family
+  { id: 'hhm-6', householdId: 'hh-martinez-carter', patronId: 'john-martinez', role: 'Head', isPrimary: true, joinedDate: '2025-01-10' },
+  { id: 'hhm-7', householdId: 'hh-martinez-carter', patronId: 'samantha-carter', role: 'Spouse', isPrimary: false, joinedDate: '2025-01-10' },
+  // Taylor-Thomas Family
+  { id: 'hhm-8', householdId: 'hh-taylor-thomas', patronId: 'lucas-taylor', role: 'Head', isPrimary: true, joinedDate: '2025-03-20' },
+  { id: 'hhm-9', householdId: 'hh-taylor-thomas', patronId: 'sophia-thomas', role: 'Spouse', isPrimary: false, joinedDate: '2025-03-20' }
+]
+
+// Household helper functions
+export const getHouseholdById = (id) => {
+  if (!id) return null
+  return HOUSEHOLDS.find(h => h.id === id) || null
+}
+
+export const getHouseholdForPatron = (patronId) => {
+  if (!patronId) return null
+  const membership = HOUSEHOLD_MEMBERS.find(m => m.patronId === patronId)
+  if (!membership) return null
+  return getHouseholdById(membership.householdId)
+}
+
+export const getHouseholdMembers = (householdId) => {
+  if (!householdId) return []
+  const members = HOUSEHOLD_MEMBERS.filter(m => m.householdId === householdId)
+  return members.map(m => {
+    const patron = patrons.find(p => p.id === m.patronId)
+    return {
+      ...m,
+      patron: patron ? {
+        id: patron.id,
+        firstName: patron.firstName,
+        lastName: patron.lastName,
+        name: `${patron.firstName} ${patron.lastName}`,
+        email: patron.email,
+        photo: patron.photo
+      } : null
+    }
+  }).filter(m => m.patron !== null)
+}
+
 // Relationships (CRM connections between patrons)
 export const patronRelationships = [
   // Anderson's relationships
@@ -2668,6 +2760,81 @@ export const patronRelationships = [
     endDate: null,
     notes: 'Robert Chen - handles estate planning',
     externalContact: { name: 'Robert Chen', company: 'Collingwood Wealth Management', initials: 'RC' }
+  },
+  // Fairfax household relationships
+  {
+    id: 'rel-8',
+    fromPatronId: 'paul-fairfax',
+    toPatronId: 'elizabeth-fairfax',
+    type: 'household',
+    role: 'Spouse',
+    reciprocalRole: 'Spouse',
+    isPrimary: true,
+    startDate: null,
+    endDate: null,
+    notes: null
+  },
+  {
+    id: 'rel-9',
+    fromPatronId: 'elizabeth-fairfax',
+    toPatronId: 'paul-fairfax',
+    type: 'household',
+    role: 'Spouse',
+    reciprocalRole: 'Spouse',
+    isPrimary: true,
+    startDate: null,
+    endDate: null,
+    notes: null
+  },
+  // Martinez-Carter household relationships
+  {
+    id: 'rel-10',
+    fromPatronId: 'john-martinez',
+    toPatronId: 'samantha-carter',
+    type: 'household',
+    role: 'Spouse',
+    reciprocalRole: 'Spouse',
+    isPrimary: true,
+    startDate: null,
+    endDate: null,
+    notes: null
+  },
+  {
+    id: 'rel-11',
+    fromPatronId: 'samantha-carter',
+    toPatronId: 'john-martinez',
+    type: 'household',
+    role: 'Spouse',
+    reciprocalRole: 'Spouse',
+    isPrimary: true,
+    startDate: null,
+    endDate: null,
+    notes: null
+  },
+  // Taylor-Thomas household relationships
+  {
+    id: 'rel-12',
+    fromPatronId: 'lucas-taylor',
+    toPatronId: 'sophia-thomas',
+    type: 'household',
+    role: 'Spouse',
+    reciprocalRole: 'Spouse',
+    isPrimary: true,
+    startDate: null,
+    endDate: null,
+    notes: null
+  },
+  {
+    id: 'rel-13',
+    fromPatronId: 'sophia-thomas',
+    toPatronId: 'lucas-taylor',
+    type: 'household',
+    role: 'Spouse',
+    reciprocalRole: 'Spouse',
+    isPrimary: true,
+    startDate: null,
+    endDate: null,
+    notes: null
   }
 ]
 

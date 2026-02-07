@@ -108,6 +108,17 @@
   font-weight: var(--font-weight-medium);
 }
 
+/* "Viewing" Badge */
+.beneficiaries__viewing-badge {
+  display: inline-flex;
+  padding: 1px 6px;
+  background: var(--color-primary-100);
+  color: var(--color-primary-700);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+}
+
 .beneficiaries__role {
   display: flex;
   align-items: center;

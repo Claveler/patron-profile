@@ -851,33 +851,190 @@ Following museum industry conventions (Blackbaud, Tessitura, Bloomerang), the pl
 
 ---
 
-## Phased Rollout
+## MVP Delivery Epics
 
-### Phase 1: Demoable Vision (Q1 2026)
-- Patron creation through Fever accounts (online purchases)
-- Basic patron profile with PII and contact info
-- Transaction history (tickets, orders) - no chart
-- Attendance tracking
-- Basic search/filtering
-- Patron category and wealth insight placeholders
-- Mobile responsive view
+The MVP is structured as four sequential epics. Each epic is independently demoable and builds on the previous one. Together they deliver a complete fundraising CRM that enriches Fever's ticketing data with donor management capabilities for individual patrons.
 
-### Phase 2: Enhanced Fundraising Profile
-- Manual patron creation with account linking
-- Onsite patron creation with opt-in
-- Giving summary with chart visualization
-- Donation history in timeline
-- Membership tracking and renewal reminders
-- Relationships/family connections (individual only)
-- Engagement scoring (manual)
-- Action shortcuts (email, call)
+### Epic 1: Patron Data Platform
 
-### Phase 3: Advanced CRM & Automation
-- User ownership and internal assignment
-- Full DonorSearch wealth screening integration
-- AI/Smart Tips with recommendations
-- Full activity logging with manual entries
-- Advanced filtering and donor segmentation
+The foundation. A searchable, filterable database of patrons enriched with Fever ticketing data. Delivers the core value proposition: "See everything about a patron in one place."
+
+**Primary user**: Gift officer, development coordinator
+
+**Features:**
+- Patron List page (search, filter, sort, columns, CSV export, archive toggle)
+- Patron creation (manual modal + Fever account linking)
+- Patron Info Box (photo, contact info, household popover, actions dropdown)
+- Patron profile header (breadcrumb, managed prospect vs. general constituent badge)
+- Households entity and household member popover with cross-profile navigation
+- Relationships summary (household, professional, external contacts)
+- Tagging system (system + custom tags, popover UI for add/remove)
+- Archive / restore (soft delete with banner and restore action)
+- Engagement panel (level indicator, visit stats, 12-month activity heatmap with TTM toggle)
+- Activity Timeline (compact variant on Summary tab, full variant on Timeline tab)
+- Settings page (tag management: create, edit, delete, usage counts)
+- Add to Portfolio bar (promote general constituent to managed prospect)
+- Assign Portfolio modal
+
+### Epic 2: Giving & Membership Management
+
+The financial relationship layer. Tracks all money in (gifts, pledges, recurring) and membership lifecycle. Requires the DCAP hierarchy data model (Fund > Campaign > Appeal) as reference data for gift attribution.
+
+**Primary user**: Gift officer, membership coordinator
+
+**Features:**
+- DCAP hierarchy data model (Funds, Campaigns, Appeals as reference data for dropdowns)
+- Giving Summary on Summary tab (lifetime value, hybrid chart, fund/campaign attribution, transaction highlights)
+- Giving Tab -- dedicated full-width tab with:
+  - Pledges panel (total pledged, paid, balance, pledge cards with progress)
+  - Recurring panel (monthly equivalent, profile cards with payment method, next date)
+  - Gift History table (sortable, paginated, type badges, acknowledgment status)
+  - Acknowledgments panel (pending vs. sent, summary stats, send actions)
+- Gift recording modal (amount, type, DCAP attribution, soft credits)
+- Membership tab:
+  - Membership card (CR80 ratio, QR code, tier styling, tenure badge)
+  - Key stats (period, renewal countdown, auto-renew status, payment method)
+  - Benefits by category (Access, Discounts, Complimentary)
+  - Usage tracking (progress bars for limited benefits, counts for unlimited)
+- Membership beneficiaries (add/remove with household relationship linking)
+- Membership history timeline
+- Early access events (member-exclusive access windows with status badges)
+- Upgrade modal (tier comparison, email workflow)
+- Documents tab (tax summary with preview, document history, in-kind donations)
+
+### Epic 3: Fundraising Pipeline
+
+The active cultivation workflow. How gift officers manage their portfolio of opportunities through the major gift cycle.
+
+**Primary user**: Gift officer, major gifts manager
+
+**Features:**
+- Opportunity creation modal (patron, ask amount, stage, campaign, fund, probability)
+- Opportunity detail page (full view with pipeline stepper + edit mode)
+- Opportunities list page (table view with filters: stage, assignee, campaign)
+- Pipeline / Moves Management Kanban (5 stages: Identification > Qualification > Cultivation > Solicitation > Stewardship, HTML5 drag-and-drop, filters by assignee and campaign)
+- Close as Won modal (records gift, links to opportunity)
+- Close as Lost (with reason tracking)
+- Log Contact / Activity modal (creates INTERACTION record: phone, email, meeting, etc.)
+- Alert banner on patron profile (overdue pledge payments, pending acknowledgments)
+- Opportunities panel on patron profile sidebar (for managed prospects: active opportunities, pipeline value summary, closed opportunities)
+
+### Epic 4: Campaign Intelligence & Dashboard
+
+The management reporting layer. How development directors track strategic fundraising goals and team performance.
+
+**Primary user**: Development director, VP of advancement
+
+**Features:**
+- Campaign Management page (card-based grid dashboard)
+- Campaign cards (goal progress bar, total raised, donor count, gift count, avg gift, timeline)
+- Status grouping (active vs. completed campaigns)
+- Filters by status and by fund
+- Aggregate totals (total goal, total raised, overall progress across all campaigns)
+- Expandable appeals with ROI breakdown (raised vs. cost per appeal)
+- Fundraising Dashboard:
+  - Quick stats cards (open opportunities, pipeline value, weighted pipeline, managed prospects)
+  - Pipeline overview (stage-by-stage breakdown with counts and values)
+  - Closing soon (opportunities closing within 30 days)
+  - Follow-ups needed (opportunities with no contact in 14+ days)
+  - Quick actions (links to Add Patron, New Opportunity, View Campaigns, Pipeline Board)
+  - Patron summary (total patrons, managed, general constituent counts)
+  - Gift officer filter (filter all dashboard data by assigned relationship manager)
+
+---
+
+## Out of Scope for MVP
+
+The following features are explicitly deferred beyond MVP. For each, a rationale is provided along with guidance on when it becomes necessary.
+
+### Corporate / Organization Patron Profiles
+
+**Decision**: The MVP focuses exclusively on individual patron management.
+
+**Rationale**:
+1. **Fever account constraint**: Every patron record has a 1:1 link to a Fever user account, which is inherently an individual person. Fever user accounts generate the behavioral data (ticket purchases, event attendance, engagement history) that powers the patron profile. There is no concept of a "corporate Fever account" -- organizations don't buy tickets or attend events through the Fever app; their employees do, each with their own accounts.
+2. **Target market fit**: The primary customers -- performing arts venues, museums, and cultural institutions using Fever for ticketing -- have overwhelmingly individual donor bases. A mid-size venue might have 5-10 corporate sponsors versus hundreds or thousands of individual donors. Corporate sponsorship deals at this tier are typically managed offline by the development director.
+3. **Current workaround**: Corporate contacts are represented as individual patrons tagged with `corporate` or `foundation`. Sponsorship opportunities are tracked through that contact person's profile.
+
+**When to build**: When targeting larger institutions (major symphony orchestras, flagship museums, university advancement offices) where corporate and foundation giving represents 30-50% of revenue.
+
+**Future architecture**: Organizations should be a **separate entity** from patrons (not a unified constituent with a `type` field), because organizations cannot link to Fever user accounts and have fundamentally different profile content. An `AFFILIATIONS` join table would link individual patrons to organizations (with role, title, isPrimaryContact).
+
+### Wealth Screening / DonorSearch Integration
+
+**Current state**: Placeholder `WealthInsights` component with static demo data.
+
+**Why defer**: Requires a paid third-party API contract (DonorSearch, iWave, or WealthEngine). Most mid-size venues don't subscribe to these services. The placeholder demonstrates the vision without the integration cost.
+
+**When to build**: When customers request prospect research capabilities or when a DonorSearch partnership is established.
+
+### AI / Smart Tips
+
+**Current state**: `SmartTips` component with hardcoded recommendations.
+
+**Why defer**: Requires LLM integration, prompt engineering, and content guardrails. High engineering effort for a feature that is impressive in demos but not a daily workflow driver.
+
+**When to build**: When the data platform is mature enough to generate meaningful personalized recommendations (sufficient gift history, interaction data, and engagement patterns).
+
+### Import Data Processing
+
+**Current state**: 3-step UI mockup in Settings (source selection, field mapping, preview). No actual data processing.
+
+**Why defer**: Real data migration from Blackbaud/Tessitura exports requires field mapping validation, deduplication, error handling, and rollback capabilities. Every source system's export format is different. This is a *services engagement* (white-glove onboarding), not a self-service product feature for MVP.
+
+**When to build**: When onboarding volume justifies productizing the migration process.
+
+### Financial / ERP Integration
+
+**Why defer**: GL mapping and QuickBooks/Sage Intacct/Blackbaud Financial Edge sync is accounting infrastructure. Venues at the target size often don't have an ERP -- they use QuickBooks or a spreadsheet. This is an enterprise feature.
+
+**When to build**: When targeting organizations with dedicated finance teams that require automated reconciliation.
+
+### Grant & Foundation Tracking
+
+**Why defer**: Grant management (application deadlines, deliverables, compliance reporting, funder requirements) is a specialized workflow for organizations that receive NEA/NEH or large foundation grants. Most Fever-sized venues don't manage grants through their CRM.
+
+**When to build**: Same tier as corporate patrons -- when moving upmarket to larger cultural institutions.
+
+### Event / Gala Table Seating
+
+**Current state**: `MemberEvents` component shows early access events. No table seating or gala management.
+
+**Why defer**: Drag-and-drop table seating is a complex, specialized UI. More importantly, Fever already handles event management. The CRM should *show* event attendance (which it does via the Fever data link), not replicate event management.
+
+**When to build**: Only if Fever's native event tools don't cover gala-specific needs (table assignments, sponsorship tiers, paddle raises).
+
+### Custom Reporting / LYBUNT-SYBUNT
+
+**Current state**: Dashboard with basic aggregate stats. CSV export from Patrons List.
+
+**Why defer**: Custom report builders are massive engineering investments (query builder UI, saved reports, scheduled delivery, export formats). LYBUNT/SYBUNT (Last/Some Year But Not This year) lapsed donor identification is valuable but can be approximated with list filters.
+
+**When to build**: When customers outgrow the dashboard + CSV export workflow and need board-ready reports.
+
+### Email Sending / Communication Tools
+
+**Current state**: Only `mailto:` links that open the user's default email client.
+
+**Why defer**: Building email sending, templates, tracking, open/click analytics, and deliverability management is an entire product. Venues already have email tools (Mailchimp, Constant Contact, Fever's own communication features). The CRM should *log* communications, not *send* them.
+
+**When to build**: Consider lightweight integration (log emails sent via Fever comms) rather than building a send engine.
+
+### PDF Generation
+
+**Current state**: "Download PDF" button on tax summary with no implementation.
+
+**Why defer**: Real PDF generation requires a server-side rendering pipeline (Puppeteer, wkhtmltopdf, or a PDF service). For MVP, staff can use the browser's native print function to save pages as PDF.
+
+**When to build**: When tax receipt delivery becomes a high-volume workflow requiring automated generation.
+
+### Settings: General, Users, Integrations
+
+**Current state**: Disabled placeholder tabs in Settings page. Only Tags and Import Data (mockup) are active.
+
+**Why defer**: "Users" requires an authentication and authorization system. "Integrations" requires API infrastructure. "General" has nothing meaningful to configure yet. Tags management is sufficient for MVP.
+
+**When to build**: Users/permissions when multi-user access control is needed. Integrations when third-party connections (DonorSearch, email, ERP) are built.
 
 ---
 
@@ -1410,6 +1567,7 @@ Patrons like Anderson Collingwood can appear in both the general Patron Profile 
 - Updated: February 6, 2026 (Dashboard and Patrons List - documented all implemented features including gift officer filtering, membership tier column, relative dates)
 - Updated: February 6, 2026 (Activity Heatmap - 12-month engagement visualization with TTM toggle)
 - Updated: February 6, 2026 (Import Data Wizard - 3-step mockup for Blackbaud, Tessitura, and CSV imports)
+- Updated: February 7, 2026 (MVP Scope Restructure - replaced Phase 1/2/3 rollout with 4 delivery epics: Patron Data Platform, Giving & Membership Management, Fundraising Pipeline, Campaign Intelligence & Dashboard; consolidated all out-of-scope features with rationale and "when to build" guidance)
 - Product Manager: Andres Clavel
 - Designer: Pablo Rubio Retolaza
 - Tech Lead: Victor Almaraz Sanchez

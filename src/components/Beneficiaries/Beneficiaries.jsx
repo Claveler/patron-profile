@@ -1,3 +1,4 @@
+import { getInitials } from '../../utils/getInitials'
 import './Beneficiaries.css'
 
 // Role icons mapping (membership entitlement roles)
@@ -35,17 +36,6 @@ function Beneficiaries({
   
   const getRoleIcon = (role) => roleIcons[role] || roleIcons.default
   
-  // Get initials from name
-  const getInitials = (name) => {
-    if (!name) return '??'
-    return name
-      .split(' ')
-      .map(part => part.charAt(0))
-      .join('')
-      .toUpperCase()
-      .substring(0, 2)
-  }
-
   // Normalize beneficiary data (support both new and legacy formats)
   const normalizedBeneficiaries = beneficiaries.map(b => {
     // New format: has patron object

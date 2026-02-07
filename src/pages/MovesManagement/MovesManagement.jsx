@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import OpportunityCard from '../../components/OpportunityCard/OpportunityCard'
 import OpportunityModal from '../../components/OpportunityModal/OpportunityModal'
 import { 
@@ -29,17 +29,25 @@ const formatCurrency = (amount) => {
   }).format(amount)
 }
 
-function MovesManagement({ onNavigateToPatron, onSelectOpportunity, embedded = false }) {
+function MovesManagement({ onNavigateToPatron, onSelectOpportunity, embedded = false, initialAssigneeFilter, onClearInitialFilter }) {
   const [opportunities, setOpportunities] = useState(
     initialOpportunities.filter(opp => opp.status === 'open')
   )
-  const [filterOfficer, setFilterOfficer] = useState('all')
+  const [filterOfficer, setFilterOfficer] = useState(initialAssigneeFilter || 'all')
   const [filterCampaign, setFilterCampaign] = useState('all')
   const [draggedOpportunity, setDraggedOpportunity] = useState(null)
   
   // Create opportunity modal state
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [createDefaultStage, setCreateDefaultStage] = useState(null)
+
+  // Sync officer filter when initial filter changes (e.g. navigating from PatronsList)
+  useEffect(() => {
+    if (initialAssigneeFilter) {
+      setFilterOfficer(initialAssigneeFilter)
+      if (onClearInitialFilter) onClearInitialFilter()
+    }
+  }, [initialAssigneeFilter])
 
   const assignees = getAssignees()
   const campaigns = getCampaigns()

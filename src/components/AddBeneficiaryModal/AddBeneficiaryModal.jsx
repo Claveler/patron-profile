@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { searchPatrons, addBeneficiaryToMembership, addPatron } from '../../data/patrons'
+import { getInitials } from '../../utils/getInitials'
 import './AddBeneficiaryModal.css'
 
 // Membership roles (entitlement-based)
@@ -151,16 +152,6 @@ function AddBeneficiaryModal({
   }
 
   if (!isOpen) return null
-
-  const getInitials = (name) => {
-    if (!name) return '??'
-    return name
-      .split(' ')
-      .map(part => part.charAt(0))
-      .join('')
-      .toUpperCase()
-      .substring(0, 2)
-  }
 
   return (
     <div className="add-beneficiary-modal__overlay" onClick={onClose}>

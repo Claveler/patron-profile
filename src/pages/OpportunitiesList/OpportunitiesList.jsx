@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import OpportunityCard from '../../components/OpportunityCard/OpportunityCard'
 import OpportunityModal from '../../components/OpportunityModal/OpportunityModal'
 import { 
@@ -24,16 +24,24 @@ const formatCurrency = (amount) => {
   }).format(amount)
 }
 
-function OpportunitiesList({ onSelectOpportunity, onSelectPatron, embedded = false }) {
+function OpportunitiesList({ onSelectOpportunity, onSelectPatron, embedded = false, initialAssigneeFilter, onClearInitialFilter }) {
   // Filters
   const [stageFilter, setStageFilter] = useState('all')
   const [campaignFilter, setCampaignFilter] = useState('all')
-  const [assigneeFilter, setAssigneeFilter] = useState('all')
+  const [assigneeFilter, setAssigneeFilter] = useState(initialAssigneeFilter || 'all')
   const [statusFilter, setStatusFilter] = useState('open')
   const [searchQuery, setSearchQuery] = useState('')
   
   // Modal state
   const [showCreateModal, setShowCreateModal] = useState(false)
+
+  // Sync assignee filter when initial filter changes (e.g. navigating from PatronsList)
+  useEffect(() => {
+    if (initialAssigneeFilter) {
+      setAssigneeFilter(initialAssigneeFilter)
+      if (onClearInitialFilter) onClearInitialFilter()
+    }
+  }, [initialAssigneeFilter])
   
   // Refresh trigger - incremented when a new opportunity is created to force useMemo recalculation
   const [refreshKey, setRefreshKey] = useState(0)
