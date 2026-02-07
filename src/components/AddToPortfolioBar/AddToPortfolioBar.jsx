@@ -27,8 +27,7 @@ function AddToPortfolioBar({ patron, onAddToPortfolio }) {
           className="add-to-portfolio-bar__btn"
           onClick={handleClick}
         >
-          <i className="fa-solid fa-plus"></i>
-          Add to Portfolio
+          Add to portfolio
         </button>
       </div>
     </div>

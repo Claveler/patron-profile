@@ -72,7 +72,7 @@
   color: var(--color-text-primary);
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   cursor: pointer;
   min-width: 180px;
   appearance: none;
@@ -102,7 +102,7 @@
 .dashboard__stat-card {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   padding: 16px;
   display: flex;
   align-items: center;
@@ -112,7 +112,7 @@
 .dashboard__stat-icon {
   width: 48px;
   height: 48px;
-  border-radius: 10px;
+  border-radius: var(--radius-lg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -148,7 +148,7 @@
 
 .dashboard__stat-value {
   font-size: 24px;
-  font-weight: 700;
+  font-weight: 600;
   color: var(--color-text-primary);
   line-height: 1;
 }
@@ -163,6 +163,7 @@
   display: grid;
   grid-template-columns: 2fr 1fr;
   gap: 24px;
+  align-items: start;
 }
 
 .dashboard__column {
@@ -175,7 +176,7 @@
 .dashboard__card {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   overflow: hidden;
 }
 
@@ -269,20 +270,20 @@
   color: var(--color-text-tertiary);
   background: var(--color-background);
   padding: 2px 6px;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
 }
 
 .dashboard__pipeline-stage-bar {
   height: 8px;
   background: var(--color-background);
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   overflow: hidden;
 }
 
 .dashboard__pipeline-stage-fill {
   height: 100%;
   background: var(--color-primary);
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   transition: width 0.3s ease;
 }
 
@@ -325,7 +326,7 @@
 
 .dashboard__list-item-title {
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--color-text-primary);
 }
 
@@ -389,14 +390,14 @@
 
 .dashboard__task-patron {
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--color-text-primary);
 }
 
 .dashboard__task-days {
   font-size: 12px;
   color: var(--color-warning);
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .dashboard__task-days--overdue {
@@ -438,7 +439,7 @@
   padding: 16px 12px;
   background: var(--color-background);
   border: 1px solid var(--color-border);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   cursor: pointer;
   transition: all 0.15s ease;
   font-size: 12px;
@@ -472,7 +473,7 @@
 
 .dashboard__summary-stat-value {
   font-size: 24px;
-  font-weight: 700;
+  font-weight: 600;
   color: var(--color-text-primary);
 }
 

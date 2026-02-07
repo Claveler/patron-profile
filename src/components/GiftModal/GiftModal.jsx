@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import { getActiveCampaigns, getFunds, getAppealsForCampaign, getAllStaff, GIFT_TYPES } from '../../data/campaigns'
+import { getActiveCampaigns, getFunds, getAppealsForCampaign, getAllStaff, GIFT_TYPES, getStaffNameById } from '../../data/campaigns'
+import { addGift } from '../../data/patrons'
 import './GiftModal.css'
 
 function GiftModal({ 
@@ -57,10 +58,10 @@ function GiftModal({
           appealId: '',
           paymentReference: '',
           notes: prefillData.notes || '',
-          solicitor: prefillData.assignedTo || '',
+          solicitor: prefillData.assignedToId ? getStaffNameById(prefillData.assignedToId) : '',
           influencer: '',
         })
-        setShowSoftCredits(!!prefillData.assignedTo)
+        setShowSoftCredits(!!prefillData.assignedToId)
       } else {
         setFormData({
           amount: '',
@@ -158,22 +159,40 @@ function GiftModal({
       const campaign = campaigns.find(c => c.id === formData.campaignId)
       const appeal = appeals.find(a => a.id === formData.appealId)
       
-      const giftData = {
-        id: `gift-${Date.now()}`,
+      // Build soft credits array from solicitor/influencer
+      const softCredits = []
+      if (formData.solicitor) {
+        softCredits.push({ patronId: null, name: getStaffNameById(formData.solicitor), type: 'solicitor' })
+      }
+      if (formData.influencer) {
+        softCredits.push({ patronId: null, name: getStaffNameById(formData.influencer), type: 'influencer' })
+      }
+
+      // Persist to the GIFTS array
+      const newGift = addGift({
         patronId,
-        patronName,
         amount: parseFloat(formData.amount),
         date: formData.date,
+        type: 'donation',
+        description: formData.notes || `${formData.giftType} gift`,
+        fundId: formData.fundId || null,
+        campaignId: formData.campaignId || null,
+        appealId: formData.appealId || null,
+        deductible: parseFloat(formData.amount),
+        benefitsValue: 0,
+        softCredits,
+      })
+
+      // Build the legacy-format object for onSuccess callback (backward compat)
+      const giftData = {
+        ...newGift,
+        patronName,
         giftType: formData.giftType,
         fund: fund ? { id: fund.id, name: fund.name } : null,
         campaign: campaign ? { id: campaign.id, name: campaign.name } : null,
         appeal: appeal ? { id: appeal.id, name: appeal.name } : null,
         paymentReference: formData.paymentReference,
         notes: formData.notes,
-        softCredits: {
-          solicitor: formData.solicitor || null,
-          influencer: formData.influencer || null,
-        },
       }
       
       // Simulate network delay
@@ -447,7 +466,7 @@ function GiftModal({
               ) : (
                 <>
                   <i className="fa-solid fa-check"></i>
-                  Record Gift
+                  Record gift
                 </>
               )}
             </button>

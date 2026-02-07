@@ -1,0 +1,249 @@
+/* PledgesPanel */
+
+.pledges-panel {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+}
+
+/* Header */
+.pledges-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-3);
+}
+
+.pledges-panel__title {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.pledges-panel__count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  background-color: var(--color-primary-100);
+  color: var(--color-primary-700);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* Stats */
+.pledges-panel__stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-2);
+  padding: var(--space-3);
+  background-color: var(--color-background);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-3);
+}
+
+.pledges-panel__stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.pledges-panel__stat-value {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.pledges-panel__stat-label {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+/* List */
+.pledges-panel__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* Card */
+.pledges-panel__card {
+  padding: var(--space-3);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-surface);
+}
+
+.pledges-panel__card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-2);
+}
+
+.pledges-panel__card-amount {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+/* Status badges */
+.pledges-panel__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.pledges-panel__badge--active {
+  background-color: var(--color-success-100);
+  color: var(--color-success-700);
+}
+
+.pledges-panel__badge--fulfilled {
+  background-color: var(--color-primary-100);
+  color: var(--color-primary-700);
+}
+
+.pledges-panel__badge--cancelled {
+  background-color: var(--color-neutral-100);
+  color: var(--color-neutral-600);
+}
+
+.pledges-panel__badge--delinquent {
+  background-color: var(--color-error-100);
+  color: var(--color-error-700);
+}
+
+/* Designation */
+.pledges-panel__card-designation {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: var(--space-3);
+}
+
+.pledges-panel__card-campaign {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+}
+
+.pledges-panel__card-fund {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+}
+
+/* Progress bar */
+.pledges-panel__progress {
+  margin-bottom: var(--space-3);
+}
+
+.pledges-panel__progress-bar {
+  height: 6px;
+  background-color: var(--color-neutral-200);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin-bottom: 4px;
+}
+
+.pledges-panel__progress-fill {
+  height: 100%;
+  background-color: var(--color-success);
+  border-radius: var(--radius-full);
+  transition: width var(--transition-base);
+}
+
+.pledges-panel__progress-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+/* Details row */
+.pledges-panel__card-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-bottom: var(--space-2);
+}
+
+.pledges-panel__detail {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+}
+
+.pledges-panel__detail i {
+  font-size: 10px;
+  color: var(--color-text-muted);
+}
+
+/* Assignee */
+.pledges-panel__card-assignee {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-1);
+}
+
+.pledges-panel__card-assignee i {
+  font-size: 10px;
+  color: var(--color-text-muted);
+}
+
+/* Notes */
+.pledges-panel__card-notes {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-1);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  font-style: italic;
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--color-border-light);
+}
+
+.pledges-panel__card-notes i {
+  font-size: 10px;
+  margin-top: 2px;
+}
+
+/* Empty state */
+.pledges-panel__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-6) var(--space-4);
+  text-align: center;
+  color: var(--color-text-muted);
+}
+
+.pledges-panel__empty i {
+  font-size: var(--font-size-2xl);
+  margin-bottom: var(--space-2);
+  opacity: 0.5;
+}
+
+.pledges-panel__empty p {
+  font-size: var(--font-size-sm);
+  margin: 0;
+}

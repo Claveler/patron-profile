@@ -1,4 +1,4 @@
-import { isManagedProspect } from '../../data/patrons'
+import { isManagedProspect, getPrimaryMembershipForPatron, getPendingAcknowledgments, getPledgesByPatronId } from '../../data/patrons'
 import './AlertBanner.css'
 
 // Calculate days since a date
@@ -10,7 +10,19 @@ const getDaysSince = (dateStr) => {
   return Math.floor(diffTime / (1000 * 60 * 60 * 24))
 }
 
+// Format currency for alert messages
+const formatCurrency = (amount) => {
+  if (!amount) return '$0'
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(amount)
+}
+
 function AlertBanner({ patron }) {
+  const membership = getPrimaryMembershipForPatron(patron.id)
   const alerts = []
   const isManaged = isManagedProspect(patron)
 
@@ -32,15 +44,49 @@ function AlertBanner({ patron }) {
   }
 
   // Check for renewal approaching - Universal alert (all patrons)
-  if (patron.membership?.daysToRenewal <= 14 && !patron.membership?.autoRenewal) {
+  if (membership?.daysToRenewal <= 14 && !membership?.autoRenewal) {
     alerts.push({
       id: 'renewal-approaching',
-      type: patron.membership.daysToRenewal <= 7 ? 'warning' : 'info',
+      type: membership.daysToRenewal <= 7 ? 'warning' : 'info',
       icon: 'fa-circle-info',
       title: 'Renewal approaching',
-      message: `${patron.membership.daysToRenewal} days to renewal`,
+      message: `${membership.daysToRenewal} days to renewal`,
       action: 'Send renewal reminder',
       actionLabel: 'Remind',
+      isPipeline: false
+    })
+  }
+
+  // Check for pending acknowledgments
+  const pendingAcks = getPendingAcknowledgments(patron.id)
+  if (pendingAcks.length > 0) {
+    alerts.push({
+      id: 'pending-acknowledgments',
+      type: 'info',
+      icon: 'fa-envelope-open-text',
+      title: `${pendingAcks.length} gift${pendingAcks.length > 1 ? 's' : ''} awaiting acknowledgment`,
+      message: 'Send thank-you letters to maintain donor relations',
+      action: 'Review & Send',
+      actionLabel: 'Review',
+      isPipeline: false
+    })
+  }
+
+  // Check for overdue pledge payments
+  const pledges = getPledgesByPatronId(patron.id)
+  const overduePledges = pledges.filter(p => {
+    if (p.status !== 'active') return false
+    return new Date(p.nextPaymentDate) < new Date()
+  })
+  if (overduePledges.length > 0) {
+    alerts.push({
+      id: 'overdue-pledge',
+      type: 'warning',
+      icon: 'fa-file-invoice-dollar',
+      title: 'Pledge payment overdue',
+      message: `${formatCurrency(overduePledges[0].amount)} pledge has a past-due installment`,
+      action: 'Record Payment',
+      actionLabel: 'Record',
       isPipeline: false
     })
   }

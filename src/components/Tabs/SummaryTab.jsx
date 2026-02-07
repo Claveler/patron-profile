@@ -5,7 +5,7 @@ import EngagementPanel from '../EngagementPanel/EngagementPanel'
 import WealthInsights from '../WealthInsights/WealthInsights'
 import SmartTips from '../SmartTips/SmartTips'
 import RelationshipsSummary from '../RelationshipsSummary/RelationshipsSummary'
-import { isManagedProspect } from '../../data/patrons'
+import { isManagedProspect, getGiftsByPatronId, getInteractionsByPatronId } from '../../data/patrons'
 import './SummaryTab.css'
 
 function SummaryTab({ 
@@ -25,7 +25,8 @@ function SummaryTab({
         <div className="summary-tab__left">
           <GivingSummary giving={patron.giving} />
           <ActivityTimeline 
-            gifts={patron.giving?.gifts || []} 
+            gifts={getGiftsByPatronId(patron.id)} 
+            activities={getInteractionsByPatronId(patron.id)}
             onAddActivity={onLogActivity}
             onRecordGift={onRecordGift}
           />

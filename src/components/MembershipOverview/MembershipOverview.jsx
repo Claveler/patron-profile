@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { QRCodeSVG } from 'qrcode.react'
 import UpgradeModal from '../UpgradeModal/UpgradeModal'
+import { formatDate } from '../../data/patrons'
 import './MembershipOverview.css'
 
 // Category display names, order, and icon colors (from PRD: Membership Perks Management)
@@ -18,7 +19,7 @@ const paymentIcons = {
   default: 'fa-credit-card'
 }
 
-function MembershipOverview({ membership, patronName, patronEmail }) {
+function MembershipOverview({ membership, patronName, patronEmail, patronPhoto, isPrimary = true }) {
   // IMPORTANT: All hooks must be called before any early returns (Rules of Hooks)
   const [showUpgradeModal, setShowUpgradeModal] = useState(false)
   
@@ -82,12 +83,8 @@ function MembershipOverview({ membership, patronName, patronEmail }) {
   // Calculate period progress percentage
   const calculatePeriodProgress = () => {
     if (!membership.periodStart || !membership.validUntil) return 0
-    const parseDate = (dateStr) => {
-      const [day, month, year] = dateStr.split('/')
-      return new Date(year, month - 1, day)
-    }
-    const start = parseDate(membership.periodStart)
-    const end = parseDate(membership.validUntil)
+    const start = new Date(membership.periodStart)
+    const end = new Date(membership.validUntil)
     const now = new Date()
     const totalDays = (end - start) / (1000 * 60 * 60 * 24)
     const elapsedDays = (now - start) / (1000 * 60 * 60 * 24)
@@ -114,39 +111,38 @@ function MembershipOverview({ membership, patronName, patronEmail }) {
             <div 
               className="membership-overview__card"
               style={{ 
-                backgroundColor: membership.cardStyle?.backgroundColor || '#1a5a5a',
+                backgroundColor: membership.cardStyle?.backgroundColor || '#4a4a4a',
                 color: membership.cardStyle?.textColor || '#ffffff'
               }}
             >
-              {/* Tenure Badge */}
-              {membership.memberYears >= 1 && (
-                <div className="membership-overview__tenure-badge">
-                  <i className="fa-solid fa-award"></i>
-                  <span>{membership.memberYears}-YEAR MEMBER</span>
+              {/* Header: photo + name */}
+              <div className="membership-overview__card-header">
+                <div className="membership-overview__card-photo">
+                  {patronPhoto ? (
+                    <img src={patronPhoto} alt={patronName} />
+                  ) : (
+                    <div className="membership-overview__card-photo-placeholder" />
+                  )}
                 </div>
-              )}
-              
+                <p className="membership-overview__patron-name">{patronName}</p>
+              </div>
+
+              {/* Content: info left, QR right */}
               <div className="membership-overview__card-content">
                 <div className="membership-overview__card-info">
-                  <h3 className="membership-overview__membership-name">
-                    {membership.programme} - {membership.tier}
-                  </h3>
-                  <p className="membership-overview__patron-name">{patronName}</p>
+                  <span className="membership-overview__tier-tag">{membership.tier}</span>
                   <p className="membership-overview__card-id">ID: {membership.patronId}</p>
-                  <p className="membership-overview__card-valid">Valid until: {membership.validUntil}</p>
-                  
-                  <span className={`membership-overview__status membership-overview__status--${membership.status}`}>
-                    {membership.status === 'active' ? 'Active' : 'Inactive'}
-                  </span>
+                  <p className="membership-overview__card-valid">Valid until: {formatDate(membership.validUntil)}</p>
                 </div>
                 
                 <div className="membership-overview__qr-container">
                   <QRCodeSVG 
                     value={qrValue}
-                    size={70}
+                    size={200}
                     bgColor="transparent"
                     fgColor={membership.cardStyle?.textColor || '#ffffff'}
                     level="M"
+                    style={{ width: '100%', height: '100%' }}
                   />
                 </div>
               </div>
@@ -165,13 +161,13 @@ function MembershipOverview({ membership, patronName, patronEmail }) {
                 />
               </div>
               <div className="membership-overview__period-dates">
-                <span>{membership.periodStart}</span>
-                <span>{membership.validUntil}</span>
+                <span>{formatDate(membership.periodStart)}</span>
+                <span>{formatDate(membership.validUntil)}</span>
               </div>
             </div>
             
-            {/* Upgrade CTA */}
-            {membership.upgradeEligible && membership.upgradeComparison && (
+            {/* Upgrade CTA (only for primary members) */}
+            {isPrimary && membership.upgradeEligible && membership.upgradeComparison && (
               <button 
                 className="membership-overview__upgrade-cta"
                 onClick={() => setShowUpgradeModal(true)}
@@ -215,11 +211,6 @@ function MembershipOverview({ membership, patronName, patronEmail }) {
           
           {/* COLUMN 2 (RIGHT): Benefits */}
           <div className="membership-overview__benefits-col">
-            <div className="membership-overview__benefits-header">
-              <span>Benefits</span>
-              <span>Usage</span>
-            </div>
-            
             <div className="membership-overview__benefits-list">
               {groupBenefitsByCategory().map(([category, benefits]) => (
                 <div key={category} className="membership-overview__benefit-category">

@@ -95,7 +95,7 @@ Best regards`
         {/* Header */}
         <div className="upgrade-modal__header">
           <div className="upgrade-modal__header-content">
-            <h2 className="upgrade-modal__title">Upgrade your membership</h2>
+            <h2 className="upgrade-modal__title">Upgrade Membership</h2>
             <p className="upgrade-modal__subtitle">
               <span className="upgrade-modal__tier upgrade-modal__tier--current">{currentTier}</span>
               <i className="fa-solid fa-arrow-right upgrade-modal__arrow"></i>
@@ -192,7 +192,7 @@ Best regards`
             </button>
             <button className="upgrade-modal__btn upgrade-modal__btn--primary" onClick={handleSendEmail}>
               <i className="fa-solid fa-envelope"></i>
-              Send Payment Link via Email
+              Send payment link via email
             </button>
           </div>
         </div>

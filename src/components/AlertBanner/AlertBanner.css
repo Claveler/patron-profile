@@ -2,14 +2,14 @@
 
 .alert-banner {
   position: relative;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   margin-bottom: var(--space-4);
   overflow: hidden;
 }
 
 /* Info variant - blue */
 .alert-banner--info {
-  background-color: #e6f4ff;
+  background-color: var(--color-primary-100);
 }
 
 /* Warning variant - amber */
@@ -27,11 +27,11 @@
 }
 
 .alert-banner--info .alert-banner__accent-bar {
-  background-color: #0068b0;
+  background-color: var(--color-primary-700);
 }
 
 .alert-banner--warning .alert-banner__accent-bar {
-  background-color: #b06800;
+  background-color: var(--color-warning-700);
 }
 
 /* Body content */
@@ -54,11 +54,11 @@
 }
 
 .alert-banner--info .alert-banner__icon {
-  color: #0068b0;
+  color: var(--color-primary-700);
 }
 
 .alert-banner--warning .alert-banner__icon {
-  color: #b06800;
+  color: var(--color-warning-700);
 }
 
 .alert-banner__icon i {
@@ -82,15 +82,15 @@
   font-size: 16px;
   font-weight: 600;
   font-family: 'Montserrat', sans-serif;
-  line-height: 24px;
+  line-height: 1.4;
 }
 
 .alert-banner--info .alert-banner__title {
-  color: #0068b0;
+  color: var(--color-primary-700);
 }
 
 .alert-banner--warning .alert-banner__title {
-  color: #b06800;
+  color: var(--color-warning-700);
 }
 
 /* Pipeline badge */
@@ -100,10 +100,10 @@
   gap: 4px;
   padding: 2px 8px;
   background-color: rgba(0, 104, 176, 0.1);
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   font-size: 10px;
   font-weight: 600;
-  color: #0068b0;
+  color: var(--color-primary-700);
   letter-spacing: 0.5px;
 }
 
@@ -115,16 +115,16 @@
 .alert-banner__message {
   font-size: 16px;
   font-family: 'Montserrat', sans-serif;
-  line-height: 24px;
+  line-height: 1.4;
   margin: 0;
 }
 
 .alert-banner--info .alert-banner__message {
-  color: #0068b0;
+  color: var(--color-primary-700);
 }
 
 .alert-banner--warning .alert-banner__message {
-  color: #b06800;
+  color: var(--color-warning-700);
 }
 
 .alert-banner__action-hint {
@@ -143,8 +143,8 @@
   font-size: 14px;
   font-weight: 600;
   font-family: 'Montserrat', sans-serif;
-  border-radius: 64px;
-  border: 2px solid #ccd2d8;
+  border-radius: var(--radius-full);
+  border: 2px solid var(--color-border);
   background: transparent;
   cursor: pointer;
   transition: all var(--transition-fast);
@@ -153,23 +153,23 @@
 }
 
 .alert-banner--info .alert-banner__action-btn {
-  color: #0079ca;
-  border-color: #ccd2d8;
+  color: var(--color-primary-600);
+  border-color: var(--color-border);
 }
 
 .alert-banner--info .alert-banner__action-btn:hover {
   background-color: rgba(0, 121, 202, 0.1);
-  border-color: #0079ca;
+  border-color: var(--color-primary-600);
 }
 
 .alert-banner--warning .alert-banner__action-btn {
-  color: #b06800;
-  border-color: #ccd2d8;
+  color: var(--color-warning-700);
+  border-color: var(--color-border);
 }
 
 .alert-banner--warning .alert-banner__action-btn:hover {
   background-color: rgba(176, 104, 0, 0.1);
-  border-color: #b06800;
+  border-color: var(--color-warning-700);
 }
 
 /* Responsive */
@@ -190,6 +190,6 @@
   .alert-banner__title,
   .alert-banner__message {
     font-size: 14px;
-    line-height: 20px;
+    line-height: 1.4;
   }
 }

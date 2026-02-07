@@ -110,6 +110,28 @@
   box-shadow: 0 0 0 2px var(--color-primary-100);
 }
 
+/* Create Button (toolbar) */
+.moves-management__create-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border: none;
+  border-radius: var(--radius-full);
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+  white-space: nowrap;
+}
+
+.moves-management__create-btn:hover {
+  background-color: var(--color-primary-600);
+}
+
 /* ============================================
    KANBAN BOARD
    ============================================ */
@@ -125,8 +147,7 @@
 /* Columns */
 .moves-management__column {
   flex: 1;
-  min-width: 260px;
-  max-width: 320px;
+  min-width: 0;
   background: var(--color-background);
   border-radius: var(--radius-lg);
   display: flex;
@@ -149,8 +170,15 @@
 .moves-management__column-title {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: var(--space-2);
   margin-bottom: var(--space-1);
+}
+
+.moves-management__column-title-left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
 }
 
 .moves-management__column-name {
@@ -166,6 +194,34 @@
   font-weight: var(--font-weight-semibold);
   padding: 2px 8px;
   border-radius: var(--radius-full);
+}
+
+/* Per-column add button */
+.moves-management__column-add {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 11px;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.moves-management__column-add:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background: var(--color-primary-50, var(--color-neutral-50));
+  transform: scale(1.1);
+}
+
+.moves-management__column-add:active {
+  transform: scale(1);
 }
 
 .moves-management__column-value {
@@ -219,12 +275,6 @@
 /* ============================================
    RESPONSIVE
    ============================================ */
-
-@media (max-width: 1400px) {
-  .moves-management__column {
-    min-width: 220px;
-  }
-}
 
 @media (max-width: 1200px) {
   .moves-management__board {

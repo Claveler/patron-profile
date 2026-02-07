@@ -22,7 +22,7 @@ export const CAMPAIGNS = [
   {
     id: 'annual-2026',
     name: '2026 Annual Fund',
-    fund: { id: 'annual-operating', name: 'Annual Operating Fund' },
+    fundId: 'annual-operating',
     status: 'active',
     goal: 500000,
     raised: 215000,
@@ -31,7 +31,7 @@ export const CAMPAIGNS = [
     avgGift: 1150,
     startDate: '2026-01-01',
     endDate: '2026-12-31',
-    manager: 'Jennifer Martinez',
+    managerId: 'jm',
     appeals: [
       { id: 'year-end-mailer', name: 'Year-End Direct Mail', raised: 85000, cost: 12000, responses: 234 },
       { id: 'spring-gala', name: 'Spring Gala 2026', raised: 95000, cost: 25000, responses: 156 },
@@ -42,7 +42,7 @@ export const CAMPAIGNS = [
   {
     id: 'building-future',
     name: 'Building the Future',
-    fund: { id: 'capital-building', name: 'Capital Building Fund' },
+    fundId: 'capital-building',
     status: 'active',
     goal: 50000000,
     raised: 2750000,
@@ -51,7 +51,7 @@ export const CAMPAIGNS = [
     avgGift: 43651,
     startDate: '2025-01-01',
     endDate: '2028-12-31',
-    manager: 'Liam Johnson',
+    managerId: 'lj',
     appeals: [
       { id: 'capital-kickoff', name: 'Campaign Kickoff', raised: 1500000, cost: 45000, responses: 28 },
       { id: 'leadership-gifts', name: 'Leadership Gifts Circle', raised: 1000000, cost: 8000, responses: 12 },
@@ -61,7 +61,7 @@ export const CAMPAIGNS = [
   {
     id: 'education-2026',
     name: 'Education Initiative 2026',
-    fund: { id: 'education', name: 'Education Programs Fund' },
+    fundId: 'education',
     status: 'active',
     goal: 150000,
     raised: 67500,
@@ -70,7 +70,7 @@ export const CAMPAIGNS = [
     avgGift: 603,
     startDate: '2026-01-01',
     endDate: '2026-12-31',
-    manager: 'Robert Brown',
+    managerId: 'rb',
     appeals: [
       { id: 'school-partnership', name: 'School Partnership Drive', raised: 42000, cost: 3500, responses: 67 },
       { id: 'summer-camp', name: 'Summer Camp Sponsorships', raised: 25500, cost: 1500, responses: 45 },
@@ -79,7 +79,7 @@ export const CAMPAIGNS = [
   {
     id: 'spring-gala-2026',
     name: 'Spring Gala 2026',
-    fund: { id: 'annual-operating', name: 'Annual Operating Fund' },
+    fundId: 'annual-operating',
     status: 'active',
     goal: 200000,
     raised: 45000,
@@ -88,7 +88,7 @@ export const CAMPAIGNS = [
     avgGift: 3000,
     startDate: '2026-01-01',
     endDate: '2026-04-30',
-    manager: 'Jennifer Martinez',
+    managerId: 'jm',
     appeals: [
       { id: 'gala-sponsorship', name: 'Sponsorship Packages', raised: 35000, cost: 2000, responses: 8 },
       { id: 'gala-tickets', name: 'Ticket Sales', raised: 10000, cost: 500, responses: 40 },
@@ -97,7 +97,7 @@ export const CAMPAIGNS = [
   {
     id: 'impressionist-2026',
     name: 'Impressionist Exhibition 2026',
-    fund: { id: 'exhibitions', name: 'Exhibitions Fund' },
+    fundId: 'exhibitions',
     status: 'active',
     goal: 100000,
     raised: 25000,
@@ -106,7 +106,7 @@ export const CAMPAIGNS = [
     avgGift: 2500,
     startDate: '2026-01-01',
     endDate: '2026-08-31',
-    manager: 'Robert Brown',
+    managerId: 'rb',
     appeals: [
       { id: 'exhibition-sponsor', name: 'Exhibition Sponsorship', raised: 25000, cost: 1000, responses: 8 },
     ]
@@ -114,7 +114,7 @@ export const CAMPAIGNS = [
   {
     id: 'legacy-society',
     name: 'Legacy Society',
-    fund: { id: 'endowment', name: 'Endowment Fund' },
+    fundId: 'endowment',
     status: 'active',
     goal: 1000000,
     raised: 350000,
@@ -123,7 +123,7 @@ export const CAMPAIGNS = [
     avgGift: 19444,
     startDate: '2025-01-01',
     endDate: '2027-12-31',
-    manager: 'Jennifer Martinez',
+    managerId: 'jm',
     appeals: [
       { id: 'planned-giving', name: 'Planned Giving Program', raised: 200000, cost: 5000, responses: 12 },
       { id: 'bequest-society', name: 'Bequest Society', raised: 150000, cost: 2000, responses: 6 },
@@ -132,7 +132,7 @@ export const CAMPAIGNS = [
   {
     id: 'annual-2025',
     name: '2025 Annual Fund',
-    fund: { id: 'annual-operating', name: 'Annual Operating Fund' },
+    fundId: 'annual-operating',
     status: 'completed',
     goal: 450000,
     raised: 459000,
@@ -141,7 +141,7 @@ export const CAMPAIGNS = [
     avgGift: 1114,
     startDate: '2025-01-01',
     endDate: '2025-12-31',
-    manager: 'Jennifer Martinez',
+    managerId: 'jm',
     appeals: [
       { id: 'year-end-2025', name: 'Year-End 2025', raised: 180000, cost: 11000, responses: 289 },
       { id: 'spring-2025', name: 'Spring Appeal 2025', raised: 150000, cost: 8000, responses: 203 },
@@ -151,7 +151,7 @@ export const CAMPAIGNS = [
   {
     id: 'emergency-2024',
     name: 'Emergency Relief Fund',
-    fund: { id: 'restricted', name: 'Restricted Funds' },
+    fundId: 'restricted',
     status: 'completed',
     goal: 100000,
     raised: 127500,
@@ -160,7 +160,7 @@ export const CAMPAIGNS = [
     avgGift: 478,
     startDate: '2024-06-01',
     endDate: '2024-12-31',
-    manager: 'Amanda Lee',
+    managerId: 'al',
     appeals: [
       { id: 'emergency-email', name: 'Emergency Email Appeal', raised: 87500, cost: 200, responses: 198 },
       { id: 'matching-grant', name: 'Matching Grant Challenge', raised: 40000, cost: 500, responses: 69 },
@@ -192,6 +192,10 @@ export const STAFF = [
   { id: 'jm', initials: 'JM', name: 'Jennifer Martinez', role: 'Director of Development' },
   { id: 'rb', initials: 'RB', name: 'Robert Brown', role: 'Gift Officer' },
   { id: 'al', initials: 'AL', name: 'Amanda Lee', role: 'Gift Officer' },
+  { id: 'es', initials: 'ES', name: 'Emma Smith', role: 'Gift Officer' },
+  { id: 'eg', initials: 'EG', name: 'Ethan Garcia', role: 'Gift Officer' },
+  { id: 'sa', initials: 'SA', name: 'Sophia Anderson', role: 'Gift Officer' },
+  { id: 'lt', initials: 'LT', name: 'Lucas Thomas', role: 'Gift Officer' },
 ]
 
 // =============================================================================
@@ -207,14 +211,14 @@ export const getFundById = (id) => FUNDS.find(f => f.id === id)
 // Get all campaigns
 export const getAllCampaigns = () => CAMPAIGNS
 
-// Get active campaigns only
-export const getActiveCampaigns = () => CAMPAIGNS.filter(c => c.status === 'active')
+// Get active campaigns only (with resolved fund/manager for display)
+export const getActiveCampaigns = () => CAMPAIGNS.filter(c => c.status === 'active').map(resolveCampaign)
 
 // Get campaign by ID
 export const getCampaignById = (id) => CAMPAIGNS.find(c => c.id === id)
 
 // Get campaigns for a specific fund
-export const getCampaignsForFund = (fundId) => CAMPAIGNS.filter(c => c.fund.id === fundId)
+export const getCampaignsForFund = (fundId) => CAMPAIGNS.filter(c => c.fundId === fundId)
 
 // Get appeals for a campaign
 export const getAppealsForCampaign = (campaignId) => {
@@ -224,23 +228,76 @@ export const getAppealsForCampaign = (campaignId) => {
 
 // Get unique funds from campaigns (for filters)
 export const getUniqueFunds = () => {
-  const funds = new Map()
+  const fundIds = new Set()
+  const result = []
   CAMPAIGNS.forEach(c => {
-    if (!funds.has(c.fund.id)) {
-      funds.set(c.fund.id, c.fund)
+    if (!fundIds.has(c.fundId)) {
+      fundIds.add(c.fundId)
+      const fund = getFundById(c.fundId)
+      if (fund) result.push(fund)
     }
   })
-  return Array.from(funds.values())
+  return result
 }
+
+// Resolve a campaign with its fund and manager names for display
+export const resolveCampaign = (campaign) => {
+  if (!campaign) return null
+  const fund = getFundById(campaign.fundId)
+  const manager = getStaffById(campaign.managerId)
+  return {
+    ...campaign,
+    fund: fund || { id: campaign.fundId, name: campaign.fundId },
+    manager: manager ? manager.name : campaign.managerId,
+  }
+}
+
+// Get all campaigns with resolved fund/manager names
+export const getAllCampaignsResolved = () => CAMPAIGNS.map(resolveCampaign)
 
 // Get all staff
 export const getAllStaff = () => STAFF
+
+// Get staff by ID
+export const getStaffById = (id) => STAFF.find(s => s.id === id)
 
 // Get staff by initials
 export const getStaffByInitials = (initials) => STAFF.find(s => s.initials === initials)
 
 // Get staff by name
 export const getStaffByName = (name) => STAFF.find(s => s.name === name)
+
+// Resolve staff name from ID (convenience for display)
+export const getStaffNameById = (id) => {
+  const s = STAFF.find(staff => staff.id === id)
+  return s ? s.name : id // Fallback to raw ID if not found
+}
+
+// Resolve staff initials from ID
+export const getStaffInitialsById = (id) => {
+  const s = STAFF.find(staff => staff.id === id)
+  return s ? s.initials : (id || '').toUpperCase().substring(0, 2)
+}
+
+// Resolve fund name from ID
+export const getFundNameById = (id) => {
+  const f = FUNDS.find(fund => fund.id === id)
+  return f ? f.name : id
+}
+
+// Resolve campaign name from ID
+export const getCampaignNameById = (id) => {
+  const c = CAMPAIGNS.find(camp => camp.id === id)
+  return c ? c.name : id
+}
+
+// Resolve appeal name from campaign ID + appeal ID
+export const getAppealNameById = (campaignId, appealId) => {
+  const campaign = CAMPAIGNS.find(c => c.id === campaignId)
+  if (!campaign) return appealId
+  const appeal = campaign.appeals.find(a => a.id === appealId)
+  return appeal ? appeal.name : appealId
+}
 
 // Format currency
 export const formatCurrency = (amount, compact = false) => {

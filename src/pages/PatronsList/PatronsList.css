@@ -99,7 +99,7 @@
   padding: var(--space-2) var(--space-3);
   background-color: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-full);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   color: var(--color-primary);
@@ -116,7 +116,7 @@
   background-color: var(--color-primary);
   color: var(--color-text-inverse);
   border: none;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-full);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   cursor: pointer;
@@ -238,32 +238,25 @@
   text-align: center;
 }
 
+.patrons-list__td--membership {
+  text-align: center;
+}
+
 .patrons-list__membership {
-  display: inline-block;
-  padding: var(--space-1) var(--space-2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 48px;
+  padding: 2px var(--space-1);
   border-radius: var(--radius-sm);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-semibold);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.patrons-list__membership--gold {
-  background-color: #FEF3C7;
-  border: 1px solid #F59E0B;
-  color: #92400E;
-}
-
-.patrons-list__membership--silver {
-  background-color: #F3F4F6;
-  border: 1px solid #9CA3AF;
-  color: #4B5563;
-}
-
-.patrons-list__membership--basic {
-  background-color: #FEF3E2;
-  border: 1px solid #D97706;
-  color: #78350F;
+  border: 1px solid currentColor;
+  background: transparent;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-regular);
+  text-transform: none;
+  letter-spacing: 0;
+  line-height: 16px;
+  white-space: nowrap;
 }
 
 .patrons-list__membership--none {
@@ -340,7 +333,7 @@
   gap: 4px;
   background: transparent;
   border: 1px dashed var(--color-border);
-  border-radius: 999px;
+  border-radius: var(--radius-full);
   color: var(--color-text-muted);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
@@ -373,7 +366,7 @@
 }
 
 .patrons-list__engagement--hot {
-  color: #E74C3C;
+  color: var(--color-engagement-hot);
 }
 
 .patrons-list__engagement--on-fire {
@@ -480,7 +473,7 @@
   color: white;
   background-color: var(--color-success);
   padding: 2px 6px;
-  border-radius: 10px;
+  border-radius: var(--radius-full);
   flex-shrink: 0;
 }
 
@@ -490,7 +483,7 @@
 }
 
 .patrons-list__row--new:hover {
-  background-color: #dcfce7;
+  background-color: var(--color-success-200);
 }
 
 /* Origin Indicator (Fever vs Manual) */
@@ -520,10 +513,10 @@
   transform: translateX(-50%);
   background-color: var(--color-text-primary);
   color: white;
-  font-size: 11px;
-  font-weight: 500;
+  font-size: 12px;
+  font-weight: 600;
   padding: 4px 8px;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   white-space: nowrap;
   opacity: 0;
   visibility: hidden;
@@ -560,13 +553,13 @@
 .patrons-list__archived-badge {
   display: inline-flex;
   align-items: center;
-  font-size: 10px;
-  font-weight: 500;
+  font-size: 12px;
+  font-weight: 600;
   color: var(--color-text-tertiary);
   background-color: var(--color-background);
   border: 1px solid var(--color-border);
   padding: 1px 6px;
-  border-radius: 10px;
+  border-radius: var(--radius-full);
   width: fit-content;
 }
 
@@ -615,5 +608,290 @@
   
   .patrons-list__td--email {
     display: none;
+  }
+}
+
+/* ============================================
+   FILTER PANEL
+   ============================================ */
+
+.patrons-list__filter-panel {
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4) var(--space-5);
+  margin-bottom: var(--space-4);
+}
+
+.patrons-list__filter-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-4) var(--space-5);
+}
+
+.patrons-list__filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.patrons-list__filter-label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-text-muted);
+}
+
+.patrons-list__filter-select {
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  font-family: var(--font-family);
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: border-color var(--transition-fast);
+  appearance: auto;
+}
+
+.patrons-list__filter-select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.patrons-list__filter-checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-3);
+}
+
+.patrons-list__filter-checkbox {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.patrons-list__filter-checkbox input {
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+  accent-color: var(--color-primary);
+}
+
+.patrons-list__filter-range {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.patrons-list__filter-input {
+  flex: 1;
+  min-width: 0;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  font-family: var(--font-family);
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  transition: border-color var(--transition-fast);
+}
+
+.patrons-list__filter-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.patrons-list__filter-input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.patrons-list__filter-range-sep {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  flex-shrink: 0;
+}
+
+/* Hide number input spin buttons */
+.patrons-list__filter-input[type="number"]::-webkit-inner-spin-button,
+.patrons-list__filter-input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.patrons-list__filter-input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.patrons-list__filter-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: var(--space-3);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-border-light);
+}
+
+.patrons-list__filter-clear {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+
+.patrons-list__filter-clear:hover {
+  color: var(--color-danger);
+  background-color: var(--color-error-100);
+}
+
+/* Filter button active state */
+.patrons-list__filter-btn--active {
+  border-color: var(--color-primary);
+  background-color: var(--color-primary-100);
+  color: var(--color-primary-700);
+}
+
+/* ============================================
+   ACTIVE FILTER CHIPS
+   ============================================ */
+
+.patrons-list__chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.patrons-list__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-2) var(--space-1) var(--space-3);
+  background-color: var(--color-primary-100);
+  color: var(--color-primary-800);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  white-space: nowrap;
+  line-height: 1.4;
+}
+
+.patrons-list__chip-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  background: none;
+  border: none;
+  color: var(--color-primary-600);
+  cursor: pointer;
+  border-radius: var(--radius-full);
+  padding: 0;
+  font-size: 10px;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.patrons-list__chip-remove:hover {
+  background-color: var(--color-primary-200);
+  color: var(--color-primary-900);
+}
+
+.patrons-list__chips-clear {
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.patrons-list__chips-clear:hover {
+  color: var(--color-danger);
+}
+
+/* ============================================
+   EXPORT BUTTON
+   ============================================ */
+
+.patrons-list__export-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.patrons-list__export-btn:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background-color: var(--color-primary-100);
+}
+
+.patrons-list__export-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.patrons-list__export-btn:disabled:hover {
+  border-color: var(--color-border);
+  color: var(--color-text-secondary);
+  background-color: var(--color-surface);
+}
+
+/* ============================================
+   FOOTER FILTER SUMMARY
+   ============================================ */
+
+.patrons-list__count-filters {
+  color: var(--color-primary-600);
+  font-weight: var(--font-weight-medium);
+}
+
+/* ============================================
+   RESPONSIVE - FILTER PANEL
+   ============================================ */
+
+@media (max-width: 1024px) {
+  .patrons-list__filter-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .patrons-list__filter-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .patrons-list__filter-panel {
+    padding: var(--space-3) var(--space-4);
   }
 }

@@ -6,13 +6,13 @@
   left: 0;
   right: 0;
   height: 4.5rem;
-  background-color: #06232c;
+  background-color: var(--color-background-dark);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding-inline: 1rem;
   z-index: 1000;
-  border-bottom: 1px solid #536b75;
+  border-bottom: 1px solid var(--color-neutral-600);
   gap: 1rem;
 }
 
@@ -32,17 +32,17 @@
   width: 2.75rem;
   height: 2.75rem;
   padding: 0;
-  color: #ffffff;
+  color: var(--color-text-inverse);
   background-color: transparent;
   border: 0;
   outline: none;
   font-size: 1.25rem;
-  border-radius: 0.5rem;
+  border-radius: var(--radius-md);
   transition: background-color 0.2s;
 }
 
 .header__menu-toggle:hover {
-  background-color: #000405;
+  background-color: var(--color-neutral-800);
 }
 
 .header__logo {
@@ -71,29 +71,29 @@
   height: 2rem;
   padding-inline: 0.75rem;
   background-color: transparent;
-  color: #ffffff;
-  border: 0.125rem solid #f2f3f3;
-  border-radius: 4rem;
+  color: var(--color-text-inverse);
+  border: 0.125rem solid var(--color-background);
+  border-radius: var(--radius-full);
   font-size: 0.875rem;
   font-weight: 600;
-  line-height: 1.25rem;
+  line-height: 1.25;
   cursor: pointer;
   white-space: nowrap;
   transition: border-color 0.2s;
 }
 
 .header__create-btn:hover {
-  border-color: #ffffff;
+  border-color: var(--color-text-inverse);
 }
 
 .header__user-menu {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: #ffffff;
+  color: var(--color-text-inverse);
   text-decoration: none;
   font-size: 1rem;
-  line-height: 1.5rem;
+  line-height: 1.4;
   background: transparent;
   padding: 0;
   border: 0;
@@ -111,7 +111,7 @@
 .header__user-name {
   font-size: 1rem;
   font-weight: 400;
-  color: #ffffff;
+  color: var(--color-text-inverse);
   max-width: 11.25rem;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -120,8 +120,8 @@
 
 .header__user-org {
   font-size: 0.75rem;
-  line-height: 1rem;
-  color: #a7b2ba;
+  line-height: 1.25;
+  color: var(--color-neutral-400);
   max-width: 11.25rem;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -130,6 +130,6 @@
 
 .header__user-icon {
   font-size: 1.75rem;
-  line-height: 2rem;
-  color: #ffffff;
+  line-height: 1.25;
+  color: var(--color-text-inverse);
 }

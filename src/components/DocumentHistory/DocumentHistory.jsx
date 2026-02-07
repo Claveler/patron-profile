@@ -1,26 +1,12 @@
 import { useState } from 'react'
+import { formatDate } from '../../data/patrons'
 import './DocumentHistory.css'
 
 function DocumentHistory({ summaries, receipts, inKindDonations }) {
   const [activeSection, setActiveSection] = useState('history')
   const [typeFilter, setTypeFilter] = useState('all')
 
-  const formatDate = (dateStr) => {
-    // Handle both DD/MM/YYYY and YYYY-MM-DD formats
-    if (dateStr.includes('/')) {
-      const [day, month, year] = dateStr.split('/')
-      return new Date(year, month - 1, day).toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric'
-      })
-    }
-    return new Date(dateStr).toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric'
-    })
-  }
+  // formatDate imported from shared utility
 
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('en-US', {

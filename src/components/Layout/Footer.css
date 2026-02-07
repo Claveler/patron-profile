@@ -1,8 +1,8 @@
 /* Footer Component */
 
 .footer {
-  background-color: #06232c;
-  color: #ffffff;
+  background-color: var(--color-background-dark);
+  color: var(--color-text-inverse);
   display: flex;
   flex-direction: column;
   padding: 32px 28px 23px;
@@ -44,14 +44,14 @@
 }
 
 .info-column__title {
-  color: #ffffff;
+  color: var(--color-text-inverse);
   font-size: 0.875rem;
-  font-weight: 700;
+  font-weight: 600;
   margin: 0 0 6px;
 }
 
 .info-column__link {
-  color: #ffffff;
+  color: var(--color-text-inverse);
   display: block;
   margin: 0 0 4px;
   font-size: 0.75rem;
@@ -64,7 +64,7 @@
 
 /* Separator line */
 .footer__separator {
-  border-bottom: 1px solid #788890;
+  border-bottom: 1px solid var(--color-neutral-500);
   margin-top: 22px;
   width: 100%;
 }
@@ -76,7 +76,7 @@
   justify-content: space-between;
   width: 100%;
   margin-top: 16px;
-  color: #788890;
+  color: var(--color-neutral-500);
   font-size: 0.625rem;
 }
 

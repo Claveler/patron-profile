@@ -139,7 +139,7 @@
   color: var(--color-text-secondary);
   background: var(--color-neutral-100);
   padding: 2px var(--space-2);
-  border-radius: 100px;
+  border-radius: var(--radius-full);
 }
 
 .membership-history__programme {

@@ -94,7 +94,7 @@ function MembershipsTab({
             <i className="fa-solid fa-user-group"></i>
             <div className="memberships-tab__role-banner-text">
               <span className="memberships-tab__role-banner-title">
-                You are a {patronRoleLabel?.toLowerCase() || 'beneficiary'} on this membership
+                This patron is {/^[aeiou]/i.test(patronRoleLabel || '') ? 'an' : 'a'} {patronRoleLabel?.toLowerCase() || 'beneficiary'} on this membership
               </span>
               {primaryPatron && (
                 <span className="memberships-tab__role-banner-primary">
@@ -112,7 +112,7 @@ function MembershipsTab({
           </div>
           <div className="memberships-tab__role-banner-info">
             <i className="fa-solid fa-info-circle"></i>
-            Contact the primary account holder for payment or upgrade options.
+            Membership changes must be made from the primary member's profile.
           </div>
         </div>
       )}
@@ -125,6 +125,7 @@ function MembershipsTab({
             membership={currentMembership} 
             patronName={patronName || (currentPatron ? `${currentPatron.firstName} ${currentPatron.lastName}` : '')} 
             patronEmail={patronEmail || currentPatron?.email}
+            patronPhoto={currentPatron?.photo}
             isPrimary={isPrimary}
           />
           

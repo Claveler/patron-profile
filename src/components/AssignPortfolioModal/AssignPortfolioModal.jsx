@@ -13,7 +13,7 @@ function AssignPortfolioModal({
 }) {
   // Form state
   const [formData, setFormData] = useState({
-    assignedTo: '',
+    assignedToId: '',
     createOpportunity: false,
     opportunityName: '',
     askAmount: '',
@@ -31,7 +31,7 @@ function AssignPortfolioModal({
   useEffect(() => {
     if (isOpen) {
       setFormData({
-        assignedTo: '',
+        assignedToId: '',
         createOpportunity: false,
         opportunityName: '',
         askAmount: '',
@@ -85,8 +85,8 @@ function AssignPortfolioModal({
   const validateForm = () => {
     const newErrors = {}
     
-    if (!formData.assignedTo) {
-      newErrors.assignedTo = 'Please select a gift officer'
+    if (!formData.assignedToId) {
+      newErrors.assignedToId = 'Please select a gift officer'
     }
     
     // Validate opportunity fields if checkbox is checked
@@ -115,10 +115,10 @@ function AssignPortfolioModal({
     
     try {
       // Get staff member details
-      const staffMember = staff.find(s => s.name === formData.assignedTo)
+      const staffMember = staff.find(s => s.id === formData.assignedToId)
       
       // Assign patron to gift officer
-      const updatedPatron = assignPatronToOfficer(patronId, formData.assignedTo)
+      const updatedPatron = assignPatronToOfficer(patronId, formData.assignedToId)
       
       let newOpportunity = null
       
@@ -137,8 +137,7 @@ function AssignPortfolioModal({
           probability: 25,
           stage: 'identification',
           nextAction: 'Initial discovery call',
-          assignedTo: formData.assignedTo,
-          assignedToInitials: staffMember?.initials || formData.assignedTo.split(' ').map(n => n[0]).join(''),
+          assignedToId: formData.assignedToId,
         }
         
         newOpportunity = addOpportunity(opportunityData)
@@ -202,19 +201,19 @@ function AssignPortfolioModal({
             </label>
             <select
               id="assign-officer"
-              name="assignedTo"
-              className={`assign-modal__select ${errors.assignedTo ? 'assign-modal__select--error' : ''}`}
-              value={formData.assignedTo}
+              name="assignedToId"
+              className={`assign-modal__select ${errors.assignedToId ? 'assign-modal__select--error' : ''}`}
+              value={formData.assignedToId}
               onChange={handleInputChange}
             >
               <option value="">Select a gift officer...</option>
               {staff.map(s => (
-                <option key={s.id} value={s.name}>
+                <option key={s.id} value={s.id}>
                   {s.name} ({s.role})
                 </option>
               ))}
             </select>
-            {errors.assignedTo && <span className="assign-modal__error">{errors.assignedTo}</span>}
+            {errors.assignedToId && <span className="assign-modal__error">{errors.assignedToId}</span>}
           </div>
           
           {/* Create Opportunity Checkbox */}
@@ -334,7 +333,7 @@ function AssignPortfolioModal({
             ) : (
               <>
                 <i className="fa-solid fa-user-plus"></i>
-                {formData.createOpportunity ? 'Assign & Create Opportunity' : 'Assign to Portfolio'}
+                {formData.createOpportunity ? 'Assign & create opportunity' : 'Assign to portfolio'}
               </>
             )}
           </button>

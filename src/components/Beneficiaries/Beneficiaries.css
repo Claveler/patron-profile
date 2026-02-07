@@ -26,7 +26,7 @@
   color: var(--color-text-tertiary);
   background: var(--color-neutral-100);
   padding: var(--space-1) var(--space-2);
-  border-radius: 100px;
+  border-radius: var(--radius-full);
 }
 
 .beneficiaries__list {

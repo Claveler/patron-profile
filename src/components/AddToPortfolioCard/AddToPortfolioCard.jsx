@@ -57,8 +57,7 @@ function AddToPortfolioCard({ patron, onAddToPortfolio }) {
           className="add-to-portfolio-card__action-btn"
           onClick={onAddToPortfolio}
         >
-          <i className="fa-solid fa-plus"></i>
-          Add to Portfolio
+          Add to portfolio
         </button>
       </div>
     </div>

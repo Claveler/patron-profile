@@ -59,7 +59,7 @@
   color: var(--color-text-primary);
 }
 
-.patron-info-box__name-first {
+.patron-info-box__name-last {
   font-weight: var(--font-weight-semibold);
 }
 

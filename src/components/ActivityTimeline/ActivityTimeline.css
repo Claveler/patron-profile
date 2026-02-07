@@ -252,7 +252,7 @@
 .activity-timeline__details {
   margin-top: var(--space-2);
   padding: var(--space-4);
-  background-color: #fafbfb;
+  background-color: var(--color-background);
   border-radius: var(--radius-md);
 }
 
@@ -414,4 +414,16 @@
   .activity-timeline__date {
     font-size: var(--font-size-xs);
   }
+}
+
+/* Full-page variant */
+.activity-timeline--full {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+}
+
+.activity-timeline--full .activity-timeline__title {
+  font-size: var(--font-size-lg);
 }

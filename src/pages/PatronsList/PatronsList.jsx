@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
-import { patrons, patronTags, engagementLevels, isManagedProspect, formatRelativeDate, getActivePatrons, getPatronOrigin } from '../../data/patrons'
+import { patrons, patronTags, engagementLevels, giftOfficers, patronSources, isManagedProspect, formatRelativeDate, getActivePatrons, getPatronOrigin, getPrimaryMembershipForPatron } from '../../data/patrons'
+import { getStaffNameById } from '../../data/campaigns'
 import PatronModal from '../../components/PatronModal/PatronModal'
 import AssignPortfolioModal from '../../components/AssignPortfolioModal/AssignPortfolioModal'
 import './PatronsList.css'
@@ -32,6 +33,50 @@ function PatronsList({ onSelectPatron }) {
   const [showArchived, setShowArchived] = useState(false)
   const [assigningPatron, setAssigningPatron] = useState(null) // { id, name }
 
+  // Filter state
+  const [showFilters, setShowFilters] = useState(false)
+  const [filterTags, setFilterTags] = useState([])              // array of tag IDs
+  const [filterMembership, setFilterMembership] = useState('all') // 'all' | 'Gold' | 'Silver' | 'Basic' | 'none'
+  const [filterEngagement, setFilterEngagement] = useState([])    // array of level IDs
+  const [filterType, setFilterType] = useState('all')             // 'all' | 'managed' | 'general'
+  const [filterOwner, setFilterOwner] = useState('all')           // 'all' | officer name
+  const [filterSource, setFilterSource] = useState('all')         // 'all' | source ID
+  const [filterLtvMin, setFilterLtvMin] = useState('')            // string for input
+  const [filterLtvMax, setFilterLtvMax] = useState('')
+  const [filterLastDonation, setFilterLastDonation] = useState('all') // 'all' | '30' | '90' | '365' | 'over365' | 'never'
+
+  // Count active filters
+  const activeFilterCount = useMemo(() => {
+    let count = 0
+    if (filterTags.length > 0) count++
+    if (filterMembership !== 'all') count++
+    if (filterEngagement.length > 0) count++
+    if (filterType !== 'all') count++
+    if (filterOwner !== 'all') count++
+    if (filterSource !== 'all') count++
+    if (filterLtvMin !== '' || filterLtvMax !== '') count++
+    if (filterLastDonation !== 'all') count++
+    return count
+  }, [filterTags, filterMembership, filterEngagement, filterType, filterOwner, filterSource, filterLtvMin, filterLtvMax, filterLastDonation])
+
+  // Clear all filters
+  const handleClearAllFilters = () => {
+    setFilterTags([])
+    setFilterMembership('all')
+    setFilterEngagement([])
+    setFilterType('all')
+    setFilterOwner('all')
+    setFilterSource('all')
+    setFilterLtvMin('')
+    setFilterLtvMax('')
+    setFilterLastDonation('all')
+  }
+
+  // Toggle a value in an array filter
+  const toggleArrayFilter = (arr, setArr, value) => {
+    setArr(prev => prev.includes(value) ? prev.filter(v => v !== value) : [...prev, value])
+  }
+
   // Filter and sort patrons
   const filteredPatrons = useMemo(() => {
     // Start with active patrons or all patrons based on toggle
@@ -44,8 +89,71 @@ function PatronsList({ onSelectPatron }) {
         patron.firstName.toLowerCase().includes(term) ||
         patron.lastName.toLowerCase().includes(term) ||
         patron.email.toLowerCase().includes(term) ||
-        (patron.assignedTo && patron.assignedTo.toLowerCase().includes(term))
+        (patron.assignedToId && getStaffNameById(patron.assignedToId).toLowerCase().includes(term))
       )
+    }
+
+    // Filter by tags (OR match - patron must have at least one of the selected tags)
+    if (filterTags.length > 0) {
+      result = result.filter(p => filterTags.some(t => (p.tags || []).includes(t)))
+    }
+
+    // Filter by membership tier
+    if (filterMembership !== 'all') {
+      result = result.filter(p =>
+        filterMembership === 'none'
+          ? !p.membership?.tier
+          : p.membership?.tier === filterMembership
+      )
+    }
+
+    // Filter by engagement level
+    if (filterEngagement.length > 0) {
+      result = result.filter(p => filterEngagement.includes(p.engagement?.level || 'cold'))
+    }
+
+    // Filter by patron type (managed prospect vs general constituent)
+    if (filterType !== 'all') {
+      result = result.filter(p =>
+        filterType === 'managed' ? isManagedProspect(p) : !isManagedProspect(p)
+      )
+    }
+
+    // Filter by owner / gift officer
+    if (filterOwner !== 'all') {
+      result = result.filter(p => p.assignedToId === filterOwner)
+    }
+
+    // Filter by source
+    if (filterSource !== 'all') {
+      result = result.filter(p => p.source === filterSource)
+    }
+
+    // Filter by lifetime value range
+    if (filterLtvMin !== '') {
+      result = result.filter(p => (p.giving?.lifetimeValue || 0) >= Number(filterLtvMin))
+    }
+    if (filterLtvMax !== '') {
+      result = result.filter(p => (p.giving?.lifetimeValue || 0) <= Number(filterLtvMax))
+    }
+
+    // Filter by last donation date
+    if (filterLastDonation !== 'all') {
+      const now = new Date()
+      result = result.filter(p => {
+        const lastDonation = p.giving?.lastDonation
+        if (filterLastDonation === 'never') {
+          return !lastDonation
+        }
+        if (!lastDonation) return false
+        const donationDate = new Date(lastDonation)
+        const diffDays = Math.floor((now - donationDate) / (1000 * 60 * 60 * 24))
+        if (filterLastDonation === '30') return diffDays <= 30
+        if (filterLastDonation === '90') return diffDays <= 90
+        if (filterLastDonation === '365') return diffDays <= 365
+        if (filterLastDonation === 'over365') return diffDays > 365
+        return true
+      })
     }
     
     // Sort
@@ -89,7 +197,7 @@ function PatronsList({ onSelectPatron }) {
     })
     
     return result
-  }, [searchTerm, sortField, sortDirection, showArchived])
+  }, [searchTerm, sortField, sortDirection, showArchived, filterTags, filterMembership, filterEngagement, filterType, filterOwner, filterSource, filterLtvMin, filterLtvMax, filterLastDonation])
 
   const handleSort = (field) => {
     if (sortField === field) {
@@ -104,8 +212,11 @@ function PatronsList({ onSelectPatron }) {
     return patronTags.find(t => t.id === tagId) || { id: tagId, label: tagId }
   }
 
-  const getMembershipTier = (patron) => {
-    return patron.membership?.tier || null
+  const getMembershipInfo = (patron) => {
+    const membership = getPrimaryMembershipForPatron(patron.id)
+    const tier = membership?.tier || null
+    const cardStyle = membership?.cardStyle || null
+    return { tier, cardStyle }
   }
 
   const getEngagementLabel = (levelId) => {
@@ -130,6 +241,51 @@ function PatronsList({ onSelectPatron }) {
   // Close menu when clicking outside
   const handleTableClick = () => {
     if (openMenuId) setOpenMenuId(null)
+  }
+
+  // Export filtered patrons to CSV
+  const handleExportCSV = () => {
+    const headers = [
+      'First Name', 'Last Name', 'Email', 'Phone', 'Address',
+      'Membership Tier', 'Lifetime Value', 'Donation Count', 'Last Donation',
+      'Tags', 'Owner', 'Engagement', 'Source', 'Patron Since'
+    ]
+    const rows = filteredPatrons.map(p => [
+      p.firstName,
+      p.lastName,
+      p.email || '',
+      p.phone || '',
+      p.address || '',
+      p.membership?.tier || 'None',
+      p.giving?.lifetimeValue || 0,
+      p.giving?.giftCount || 0,
+      p.giving?.lastDonation || '',
+      (p.tags || []).map(t => {
+        const tag = patronTags.find(pt => pt.id === t)
+        return tag ? tag.label : t
+      }).join('; '),
+      (p.assignedToId ? getStaffNameById(p.assignedToId) : ''),
+      p.engagement?.level || 'cold',
+      p.source || '',
+      p.createdDate || ''
+    ])
+    const csvContent = [headers, ...rows]
+      .map(row => row.map(val => {
+        const str = String(val)
+        return str.includes(',') || str.includes('"') || str.includes('\n')
+          ? `"${str.replace(/"/g, '""')}"`
+          : str
+      }).join(','))
+      .join('\n')
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `patrons-export-${new Date().toISOString().split('T')[0]}.csv`
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
   }
 
   // Handle new patron creation success
@@ -174,19 +330,267 @@ function PatronsList({ onSelectPatron }) {
               />
               <span>Show archived</span>
             </label>
-            <button className="patrons-list__filter-btn">
+            <button
+              className="patrons-list__export-btn"
+              onClick={handleExportCSV}
+              disabled={filteredPatrons.length === 0}
+            >
+              <i className="fa-solid fa-download"></i>
+              Export ({filteredPatrons.length})
+            </button>
+            <button
+              className={`patrons-list__filter-btn ${activeFilterCount > 0 ? 'patrons-list__filter-btn--active' : ''}`}
+              onClick={() => setShowFilters(!showFilters)}
+            >
               <i className="fa-solid fa-sliders"></i>
-              Filters
+              Filters{activeFilterCount > 0 ? ` (${activeFilterCount})` : ''}
             </button>
             <button 
               className="patrons-list__add-btn"
               onClick={() => setShowPatronModal(true)}
             >
-              <i className="fa-solid fa-plus"></i>
               Add new patron
             </button>
           </div>
         </div>
+
+        {/* Filter Panel */}
+        {showFilters && (
+          <div className="patrons-list__filter-panel">
+            <div className="patrons-list__filter-grid">
+              {/* Tags - multi-select checkboxes */}
+              <div className="patrons-list__filter-group">
+                <label className="patrons-list__filter-label">Tags</label>
+                <div className="patrons-list__filter-checkbox-group">
+                  {patronTags.map(tag => (
+                    <label key={tag.id} className="patrons-list__filter-checkbox">
+                      <input
+                        type="checkbox"
+                        checked={filterTags.includes(tag.id)}
+                        onChange={() => toggleArrayFilter(filterTags, setFilterTags, tag.id)}
+                      />
+                      <span>{tag.label}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Membership - single select */}
+              <div className="patrons-list__filter-group">
+                <label className="patrons-list__filter-label">Membership</label>
+                <select
+                  className="patrons-list__filter-select"
+                  value={filterMembership}
+                  onChange={(e) => setFilterMembership(e.target.value)}
+                >
+                  <option value="all">All</option>
+                  <option value="Gold">Gold</option>
+                  <option value="Silver">Silver</option>
+                  <option value="Basic">Basic</option>
+                  <option value="none">No membership</option>
+                </select>
+              </div>
+
+              {/* Engagement - multi-select checkboxes */}
+              <div className="patrons-list__filter-group">
+                <label className="patrons-list__filter-label">Engagement</label>
+                <div className="patrons-list__filter-checkbox-group">
+                  {engagementLevels.map(level => (
+                    <label key={level.id} className="patrons-list__filter-checkbox">
+                      <input
+                        type="checkbox"
+                        checked={filterEngagement.includes(level.id)}
+                        onChange={() => toggleArrayFilter(filterEngagement, setFilterEngagement, level.id)}
+                      />
+                      <span>{level.label}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Patron Type - single select */}
+              <div className="patrons-list__filter-group">
+                <label className="patrons-list__filter-label">Patron Type</label>
+                <select
+                  className="patrons-list__filter-select"
+                  value={filterType}
+                  onChange={(e) => setFilterType(e.target.value)}
+                >
+                  <option value="all">All</option>
+                  <option value="managed">Managed Prospect</option>
+                  <option value="general">General Constituent</option>
+                </select>
+              </div>
+
+              {/* Owner - dropdown */}
+              <div className="patrons-list__filter-group">
+                <label className="patrons-list__filter-label">Owner</label>
+                <select
+                  className="patrons-list__filter-select"
+                  value={filterOwner}
+                  onChange={(e) => setFilterOwner(e.target.value)}
+                >
+                  <option value="all">All</option>
+                  {giftOfficers.map(officer => (
+                    <option key={officer.id} value={officer.id}>{officer.name}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Source - dropdown */}
+              <div className="patrons-list__filter-group">
+                <label className="patrons-list__filter-label">Source</label>
+                <select
+                  className="patrons-list__filter-select"
+                  value={filterSource}
+                  onChange={(e) => setFilterSource(e.target.value)}
+                >
+                  <option value="all">All</option>
+                  {patronSources.map(source => (
+                    <option key={source.id} value={source.id}>{source.label}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Lifetime Value - range */}
+              <div className="patrons-list__filter-group">
+                <label className="patrons-list__filter-label">Lifetime Value</label>
+                <div className="patrons-list__filter-range">
+                  <input
+                    type="number"
+                    className="patrons-list__filter-input"
+                    placeholder="Min"
+                    value={filterLtvMin}
+                    onChange={(e) => setFilterLtvMin(e.target.value)}
+                    min="0"
+                  />
+                  <span className="patrons-list__filter-range-sep">–</span>
+                  <input
+                    type="number"
+                    className="patrons-list__filter-input"
+                    placeholder="Max"
+                    value={filterLtvMax}
+                    onChange={(e) => setFilterLtvMax(e.target.value)}
+                    min="0"
+                  />
+                </div>
+              </div>
+
+              {/* Last Donation - dropdown */}
+              <div className="patrons-list__filter-group">
+                <label className="patrons-list__filter-label">Last Donation</label>
+                <select
+                  className="patrons-list__filter-select"
+                  value={filterLastDonation}
+                  onChange={(e) => setFilterLastDonation(e.target.value)}
+                >
+                  <option value="all">Any time</option>
+                  <option value="30">Last 30 days</option>
+                  <option value="90">Last 90 days</option>
+                  <option value="365">Last year</option>
+                  <option value="over365">Over 1 year ago</option>
+                  <option value="never">Never donated</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Clear all */}
+            {activeFilterCount > 0 && (
+              <div className="patrons-list__filter-actions">
+                <button
+                  className="patrons-list__filter-clear"
+                  onClick={handleClearAllFilters}
+                >
+                  <i className="fa-solid fa-xmark"></i>
+                  Clear all filters
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Active Filter Chips */}
+        {activeFilterCount > 0 && (
+          <div className="patrons-list__chips">
+            {filterTags.length > 0 && (
+              <span className="patrons-list__chip">
+                Tags: {filterTags.map(t => {
+                  const tag = patronTags.find(pt => pt.id === t)
+                  return tag ? tag.label : t
+                }).join(', ')}
+                <button className="patrons-list__chip-remove" onClick={() => setFilterTags([])}>
+                  <i className="fa-solid fa-xmark"></i>
+                </button>
+              </span>
+            )}
+            {filterMembership !== 'all' && (
+              <span className="patrons-list__chip">
+                Membership: {filterMembership === 'none' ? 'None' : filterMembership}
+                <button className="patrons-list__chip-remove" onClick={() => setFilterMembership('all')}>
+                  <i className="fa-solid fa-xmark"></i>
+                </button>
+              </span>
+            )}
+            {filterEngagement.length > 0 && (
+              <span className="patrons-list__chip">
+                Engagement: {filterEngagement.map(e => {
+                  const level = engagementLevels.find(l => l.id === e)
+                  return level ? level.label : e
+                }).join(', ')}
+                <button className="patrons-list__chip-remove" onClick={() => setFilterEngagement([])}>
+                  <i className="fa-solid fa-xmark"></i>
+                </button>
+              </span>
+            )}
+            {filterType !== 'all' && (
+              <span className="patrons-list__chip">
+                Type: {filterType === 'managed' ? 'Managed Prospect' : 'General Constituent'}
+                <button className="patrons-list__chip-remove" onClick={() => setFilterType('all')}>
+                  <i className="fa-solid fa-xmark"></i>
+                </button>
+              </span>
+            )}
+            {filterOwner !== 'all' && (
+              <span className="patrons-list__chip">
+                Owner: {getStaffNameById(filterOwner)}
+                <button className="patrons-list__chip-remove" onClick={() => setFilterOwner('all')}>
+                  <i className="fa-solid fa-xmark"></i>
+                </button>
+              </span>
+            )}
+            {filterSource !== 'all' && (
+              <span className="patrons-list__chip">
+                Source: {patronSources.find(s => s.id === filterSource)?.label || filterSource}
+                <button className="patrons-list__chip-remove" onClick={() => setFilterSource('all')}>
+                  <i className="fa-solid fa-xmark"></i>
+                </button>
+              </span>
+            )}
+            {(filterLtvMin !== '' || filterLtvMax !== '') && (
+              <span className="patrons-list__chip">
+                LTV: {filterLtvMin !== '' ? formatCurrency(Number(filterLtvMin)) : '$0'}
+                {' – '}
+                {filterLtvMax !== '' ? formatCurrency(Number(filterLtvMax)) : 'any'}
+                <button className="patrons-list__chip-remove" onClick={() => { setFilterLtvMin(''); setFilterLtvMax('') }}>
+                  <i className="fa-solid fa-xmark"></i>
+                </button>
+              </span>
+            )}
+            {filterLastDonation !== 'all' && (
+              <span className="patrons-list__chip">
+                Last Donation: {
+                  { '30': 'Last 30 days', '90': 'Last 90 days', '365': 'Last year', 'over365': 'Over 1 year ago', 'never': 'Never' }[filterLastDonation]
+                }
+                <button className="patrons-list__chip-remove" onClick={() => setFilterLastDonation('all')}>
+                  <i className="fa-solid fa-xmark"></i>
+                </button>
+              </span>
+            )}
+            <button className="patrons-list__chips-clear" onClick={handleClearAllFilters}>
+              Clear all
+            </button>
+          </div>
+        )}
 
         {/* Table */}
         <div className="patrons-list__table-wrapper" onClick={handleTableClick}>
@@ -239,7 +643,7 @@ function PatronsList({ onSelectPatron }) {
                 const isArchived = patron.status === 'archived'
                 const isNew = isRecentlyAdded(patron.createdDate)
                 const origin = getPatronOrigin(patron.source)
-                const membershipTier = getMembershipTier(patron)
+                const { tier: membershipTier, cardStyle: membershipCardStyle } = getMembershipInfo(patron)
                 const tags = patron.tags || []
                 const displayTags = tags.slice(0, 2)
                 const remainingTags = tags.length - 2
@@ -287,7 +691,13 @@ function PatronsList({ onSelectPatron }) {
                     </td>
                     <td className="patrons-list__td patrons-list__td--membership">
                       {membershipTier ? (
-                        <span className={`patrons-list__membership patrons-list__membership--${membershipTier.toLowerCase()}`}>
+                        <span 
+                          className="patrons-list__membership"
+                          style={membershipCardStyle ? {
+                            color: membershipCardStyle.backgroundColor,
+                            borderColor: membershipCardStyle.backgroundColor
+                          } : undefined}
+                        >
                           {membershipTier}
                         </span>
                       ) : (
@@ -307,8 +717,8 @@ function PatronsList({ onSelectPatron }) {
                       </div>
                     </td>
                     <td className="patrons-list__td patrons-list__td--owner">
-                      {patron.assignedTo ? (
-                        <span className="patrons-list__owner">{patron.assignedTo}</span>
+                      {patron.assignedToId ? (
+                        <span className="patrons-list__owner">{getStaffNameById(patron.assignedToId)}</span>
                       ) : (
                         <button 
                           className="patrons-list__assign-btn"
@@ -317,7 +727,6 @@ function PatronsList({ onSelectPatron }) {
                             setAssigningPatron({ id: patron.id, name: `${patron.firstName} ${patron.lastName}` })
                           }}
                         >
-                          <i className="fa-solid fa-plus"></i>
                           Assign
                         </button>
                       )}
@@ -363,6 +772,20 @@ function PatronsList({ onSelectPatron }) {
           <span className="patrons-list__count">
             Showing {filteredPatrons.length} of {showArchived ? patrons.length : getActivePatrons().length} patrons
             {showArchived && ` (including archived)`}
+            {activeFilterCount > 0 && (
+              <span className="patrons-list__count-filters">
+                {' '} | Filtered by: {[
+                  filterTags.length > 0 && 'Tags',
+                  filterMembership !== 'all' && 'Membership',
+                  filterEngagement.length > 0 && 'Engagement',
+                  filterType !== 'all' && 'Type',
+                  filterOwner !== 'all' && 'Owner',
+                  filterSource !== 'all' && 'Source',
+                  (filterLtvMin !== '' || filterLtvMax !== '') && 'LTV',
+                  filterLastDonation !== 'all' && 'Last Donation',
+                ].filter(Boolean).join(', ')}
+              </span>
+            )}
           </span>
         </div>
       </div>

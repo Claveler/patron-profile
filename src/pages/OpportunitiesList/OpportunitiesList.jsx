@@ -9,6 +9,8 @@ import {
   PIPELINE_STAGES,
   getPipelineTotals
 } from '../../data/opportunities'
+import { getStaffById, getCampaignNameById } from '../../data/campaigns'
+import { getPatronById, getPatronDisplayName } from '../../data/patrons'
 import './OpportunitiesList.css'
 
 // Format currency
@@ -32,10 +34,23 @@ function OpportunitiesList({ onSelectOpportunity, onSelectPatron, embedded = fal
   
   // Modal state
   const [showCreateModal, setShowCreateModal] = useState(false)
+  
+  // Refresh trigger - incremented when a new opportunity is created to force useMemo recalculation
+  const [refreshKey, setRefreshKey] = useState(0)
 
   // Get filter options
   const campaigns = getCampaigns()
   const assignees = getAssignees()
+
+  // Resolve assignee IDs to staff objects for display
+  const assigneeOptions = useMemo(() => {
+    return assignees.map(id => getStaffById(id)).filter(Boolean)
+  }, [assignees])
+
+  // Resolve campaign IDs to display objects
+  const campaignOptions = useMemo(() => {
+    return campaigns.map(id => ({ id, name: getCampaignNameById(id) }))
+  }, [campaigns])
 
   // Filter opportunities
   const filteredOpportunities = useMemo(() => {
@@ -48,24 +63,26 @@ function OpportunitiesList({ onSelectOpportunity, onSelectPatron, embedded = fal
       if (stageFilter !== 'all' && opp.stage !== stageFilter) return false
       
       // Campaign filter
-      if (campaignFilter !== 'all' && opp.campaign?.id !== campaignFilter) return false
+      if (campaignFilter !== 'all' && opp.campaignId !== campaignFilter) return false
       
       // Assignee filter
-      if (assigneeFilter !== 'all' && opp.assignedToInitials !== assigneeFilter) return false
+      if (assigneeFilter !== 'all' && opp.assignedToId !== assigneeFilter) return false
       
       // Search query
       if (searchQuery) {
         const query = searchQuery.toLowerCase()
+        const patron = getPatronById(opp.patronId)
+        const patronName = patron ? getPatronDisplayName(patron) : ''
         return (
           opp.name.toLowerCase().includes(query) ||
-          opp.patronName.toLowerCase().includes(query) ||
+          patronName.toLowerCase().includes(query) ||
           (opp.description && opp.description.toLowerCase().includes(query))
         )
       }
       
       return true
     })
-  }, [stageFilter, campaignFilter, assigneeFilter, statusFilter, searchQuery])
+  }, [stageFilter, campaignFilter, assigneeFilter, statusFilter, searchQuery, refreshKey])
 
   // Calculate stats
   const stats = useMemo(() => {
@@ -83,7 +100,7 @@ function OpportunitiesList({ onSelectOpportunity, onSelectPatron, embedded = fal
         return acc
       }, {})
     }
-  }, [])
+  }, [refreshKey])
 
   const handleOpportunityClick = (opportunity) => {
     if (onSelectOpportunity) {
@@ -102,8 +119,8 @@ function OpportunitiesList({ onSelectOpportunity, onSelectPatron, embedded = fal
   }
 
   const handleOpportunityCreated = (newOpportunity) => {
-    console.log('Created opportunity:', newOpportunity)
-    // In a real app, this would refresh the list
+    // Increment refresh key to force useMemo recalculation with the newly added opportunity
+    setRefreshKey(prev => prev + 1)
   }
 
   return (
@@ -163,7 +180,7 @@ function OpportunitiesList({ onSelectOpportunity, onSelectPatron, embedded = fal
                 className="opportunities-list__filter"
               >
                 <option value="all">All Campaigns</option>
-                {campaigns.map(campaign => (
+                {campaignOptions.map(campaign => (
                   <option key={campaign.id} value={campaign.id}>{campaign.name}</option>
                 ))}
               </select>
@@ -174,9 +191,9 @@ function OpportunitiesList({ onSelectOpportunity, onSelectPatron, embedded = fal
                 className="opportunities-list__filter"
               >
                 <option value="all">All Assignees</option>
-                {assignees.map(assignee => (
-                  <option key={assignee.initials} value={assignee.initials}>
-                    {assignee.name}
+                {assigneeOptions.map(staff => (
+                  <option key={staff.id} value={staff.id}>
+                    {staff.name}
                   </option>
                 ))}
               </select>

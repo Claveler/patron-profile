@@ -1,3 +1,5 @@
+import { formatDate, getPatronById, getPatronDisplayName } from '../../data/patrons'
+import { getStaffNameById, getStaffInitialsById, getCampaignNameById } from '../../data/campaigns'
 import './OpportunityCard.css'
 
 // Format currency
@@ -46,6 +48,9 @@ function OpportunityCard({
   className = ''
 }) {
   if (!opportunity) return null
+
+  const patron = getPatronById(opportunity.patronId)
+  const patronName = patron ? getPatronDisplayName(patron) : 'Unknown'
 
   const daysSinceContact = getDaysSince(opportunity.lastContact)
   const contactStatus = getContactStatus(daysSinceContact)
@@ -117,7 +122,7 @@ function OpportunityCard({
             onClick={handlePatronClick}
             title="View patron profile"
           >
-            {opportunity.patronName}
+            {patronName}
           </span>
         )}
         <div className="opportunity-card__contact">
@@ -135,16 +140,19 @@ function OpportunityCard({
           </div>
         )}
         <div className="opportunity-card__footer">
-          <span className="opportunity-card__assignee" title={opportunity.assignedTo}>
-            {opportunity.assignedToInitials}
+          <span className="opportunity-card__assignee" title={getStaffNameById(opportunity.assignedToId)}>
+            {getStaffInitialsById(opportunity.assignedToId)}
           </span>
-          {opportunity.campaign && (
-            <span className="opportunity-card__campaign" title={opportunity.campaign.name}>
-              {opportunity.campaign.name.length > 15 
-                ? opportunity.campaign.name.substring(0, 15) + '...' 
-                : opportunity.campaign.name}
-            </span>
-          )}
+          {opportunity.campaignId && (() => {
+            const campaignName = getCampaignNameById(opportunity.campaignId)
+            return (
+              <span className="opportunity-card__campaign" title={campaignName}>
+                {campaignName.length > 15 
+                  ? campaignName.substring(0, 15) + '...' 
+                  : campaignName}
+              </span>
+            )
+          })()}
         </div>
       </div>
     )
@@ -164,7 +172,7 @@ function OpportunityCard({
               className="opportunity-card__patron"
               onClick={handlePatronClick}
             >
-              {opportunity.patronName}
+              {patronName}
             </span>
           )}
         </div>
@@ -176,10 +184,10 @@ function OpportunityCard({
           <span className="opportunity-card__probability">{opportunity.probability}%</span>
         )}
         <span className="opportunity-card__expected">
-          {opportunity.expectedClose || '—'}
+          {opportunity.expectedClose ? formatDate(opportunity.expectedClose) : '—'}
         </span>
         <span className="opportunity-card__assignee-full">
-          {opportunity.assignedTo}
+          {getStaffNameById(opportunity.assignedToId)}
         </span>
       </div>
       {opportunity.nextAction && !isClosed && (

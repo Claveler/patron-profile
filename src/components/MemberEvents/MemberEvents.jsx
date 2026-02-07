@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { formatDate } from '../../data/patrons'
 import './MemberEvents.css'
 
 function MemberEvents({ events }) {
@@ -19,15 +20,7 @@ function MemberEvents({ events }) {
     ? allEvents 
     : allEvents.filter(e => e.type === activeFilter)
   
-  // Format date
-  const formatDate = (dateString) => {
-    const date = new Date(dateString)
-    return date.toLocaleDateString('en-US', { 
-      month: 'short', 
-      day: 'numeric', 
-      year: 'numeric' 
-    })
-  }
+  // formatDate imported from shared utility
   
   // Get days until event
   const getDaysUntil = (dateString) => {

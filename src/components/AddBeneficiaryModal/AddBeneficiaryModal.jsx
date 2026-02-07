@@ -2,7 +2,14 @@ import { useState, useEffect, useRef } from 'react'
 import { searchPatrons, addBeneficiaryToMembership, addPatron } from '../../data/patrons'
 import './AddBeneficiaryModal.css'
 
-const roleOptions = [
+// Membership roles (entitlement-based)
+const membershipRoleOptions = [
+  { id: 'additional_adult', label: 'Additional Adult' },
+  { id: 'dependent', label: 'Dependent' }
+]
+
+// CRM relationship types (personal connections)
+const relationshipOptions = [
   { id: 'spouse', label: 'Spouse / Partner' },
   { id: 'child', label: 'Child' },
   { id: 'parent', label: 'Parent' },
@@ -21,8 +28,9 @@ function AddBeneficiaryModal({
   const [searchQuery, setSearchQuery] = useState('')
   const [searchResults, setSearchResults] = useState([])
   const [selectedPatron, setSelectedPatron] = useState(null)
-  const [selectedRole, setSelectedRole] = useState('')
-  const [customRole, setCustomRole] = useState('')
+  const [selectedMembershipRole, setSelectedMembershipRole] = useState('')
+  const [selectedRelationship, setSelectedRelationship] = useState('')
+  const [customRelationship, setCustomRelationship] = useState('')
   const [createRelationship, setCreateRelationship] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
@@ -44,8 +52,9 @@ function AddBeneficiaryModal({
       setSearchQuery('')
       setSearchResults([])
       setSelectedPatron(null)
-      setSelectedRole('')
-      setCustomRole('')
+      setSelectedMembershipRole('')
+      setSelectedRelationship('')
+      setCustomRelationship('')
       setCreateRelationship(true)
       setError('')
       setNewPatron({ firstName: '', lastName: '', email: '', dateOfBirth: '' })
@@ -104,22 +113,31 @@ function AddBeneficiaryModal({
   }
 
   const handleAssignSubmit = () => {
-    if (!selectedRole) {
-      setError('Please select a relationship type')
+    if (!selectedMembershipRole) {
+      setError('Please select a membership role')
+      return
+    }
+
+    if (createRelationship && !selectedRelationship) {
+      setError('Please select a relationship type or uncheck the household relationship option')
       return
     }
 
     setIsLoading(true)
     setError('')
 
-    const roleLabel = selectedRole === 'other' ? customRole : 
-      roleOptions.find(r => r.id === selectedRole)?.label.split(' /')[0] || selectedRole
+    // Build relationship object (separate from membership role)
+    const relationship = createRelationship ? {
+      create: true,
+      type: selectedRelationship === 'other' ? customRelationship :
+        relationshipOptions.find(r => r.id === selectedRelationship)?.label.split(' /')[0] || selectedRelationship
+    } : null
 
     const result = addBeneficiaryToMembership(
       membershipId,
       selectedPatron.id,
-      roleLabel,
-      createRelationship
+      selectedMembershipRole,
+      relationship
     )
 
     setIsLoading(false)
@@ -202,7 +220,6 @@ function AddBeneficiaryModal({
                           </span>
                         </div>
                         <button className="add-beneficiary-modal__result-add">
-                          <i className="fa-solid fa-plus"></i>
                           Add
                         </button>
                       </li>
@@ -225,8 +242,7 @@ function AddBeneficiaryModal({
                 className="add-beneficiary-modal__create-btn"
                 onClick={handleCreateNew}
               >
-                <i className="fa-solid fa-plus"></i>
-                Create New Patron
+                Create new patron
               </button>
             </>
           )}
@@ -329,36 +345,28 @@ function AddBeneficiaryModal({
                 </div>
               </div>
 
+              {/* Membership Role (required) */}
               <div className="add-beneficiary-modal__role-section">
                 <label className="add-beneficiary-modal__role-label">
-                  Relationship to {primaryPatronName || 'primary account holder'}:
+                  Add as:
                 </label>
                 <div className="add-beneficiary-modal__role-options">
-                  {roleOptions.map(role => (
+                  {membershipRoleOptions.map(role => (
                     <label key={role.id} className="add-beneficiary-modal__role-option">
                       <input
                         type="radio"
-                        name="role"
+                        name="membershipRole"
                         value={role.id}
-                        checked={selectedRole === role.id}
-                        onChange={e => setSelectedRole(e.target.value)}
+                        checked={selectedMembershipRole === role.id}
+                        onChange={e => setSelectedMembershipRole(e.target.value)}
                       />
                       <span>{role.label}</span>
                     </label>
                   ))}
                 </div>
-
-                {selectedRole === 'other' && (
-                  <input
-                    type="text"
-                    className="add-beneficiary-modal__custom-role"
-                    placeholder="Enter relationship type"
-                    value={customRole}
-                    onChange={e => setCustomRole(e.target.value)}
-                  />
-                )}
               </div>
 
+              {/* Household Relationship (optional) */}
               <label className="add-beneficiary-modal__checkbox">
                 <input
                   type="checkbox"
@@ -370,6 +378,38 @@ function AddBeneficiaryModal({
                   <small>Links these patrons in CRM for gift crediting</small>
                 </span>
               </label>
+
+              {createRelationship && (
+                <div className="add-beneficiary-modal__role-section">
+                  <label className="add-beneficiary-modal__role-label">
+                    Relationship to {primaryPatronName || 'primary member'}:
+                  </label>
+                  <div className="add-beneficiary-modal__role-options">
+                    {relationshipOptions.map(rel => (
+                      <label key={rel.id} className="add-beneficiary-modal__role-option">
+                        <input
+                          type="radio"
+                          name="relationship"
+                          value={rel.id}
+                          checked={selectedRelationship === rel.id}
+                          onChange={e => setSelectedRelationship(e.target.value)}
+                        />
+                        <span>{rel.label}</span>
+                      </label>
+                    ))}
+                  </div>
+
+                  {selectedRelationship === 'other' && (
+                    <input
+                      type="text"
+                      className="add-beneficiary-modal__custom-role"
+                      placeholder="Enter relationship type"
+                      value={customRelationship}
+                      onChange={e => setCustomRelationship(e.target.value)}
+                    />
+                  )}
+                </div>
+              )}
 
               {error && (
                 <div className="add-beneficiary-modal__error">
@@ -387,7 +427,7 @@ function AddBeneficiaryModal({
                   onClick={handleAssignSubmit}
                   disabled={isLoading}
                 >
-                  {isLoading ? 'Adding...' : 'Add as Beneficiary'}
+                  {isLoading ? 'Adding...' : 'Add as beneficiary'}
                 </button>
               </div>
             </>

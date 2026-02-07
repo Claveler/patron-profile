@@ -37,7 +37,7 @@
   margin: 0;
 }
 
-/* Container - just padding */
+/* Container - outer padding */
 .settings__container {
   padding: var(--space-6);
 }
@@ -46,26 +46,28 @@
 .settings__wrapper {
   display: grid;
   grid-template-columns: 14rem 1fr;
-  gap: 0;
+  gap: 1rem;
+  align-items: start;
+  padding: var(--space-6);
   background-color: var(--color-surface);
   border-radius: var(--radius-md);
   border: 1px solid var(--color-border);
-  align-items: start;
 }
 
-/* Navigation Sidebar - inside wrapper */
+/* Navigation Sidebar - its own card (from Fever Zone .sidebar-nav) */
 .settings__nav {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
   gap: 0.5rem;
-  padding: var(--space-4);
-  border: none;
-  border-right: 1px solid var(--color-border);
-  border-radius: 0;
-  background: transparent;
+  padding: 0.5rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-background);
+  background: var(--color-surface);
   height: fit-content;
+  position: sticky;
+  top: 80px;
 }
 
 /* Nav Item (from Fever Zone .sidebar-nav__item) */
@@ -75,26 +77,30 @@
   align-self: stretch;
   gap: 0.5rem;
   padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
+  border: none;
+  border-radius: var(--radius-md);
   font-size: var(--font-size-sm);
   color: inherit;
   text-decoration: none;
   font-weight: 400;
   cursor: pointer;
+  background: none;
+  text-align: left;
+  width: 100%;
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .settings__nav-item:hover {
-  background: #e6f4ff;
+  background: var(--color-primary-100);
 }
 
 .settings__nav-item--active {
-  background: #e6f4ff;
+  background: var(--color-primary-100);
   font-weight: 600;
 }
 
 .settings__nav-item--active:hover {
-  background: #e6f4ff;
+  background: var(--color-primary-100);
 }
 
 .settings__nav-item--disabled {
@@ -109,18 +115,17 @@
   flex: 1 1 0;
   gap: 1.5rem;
   min-width: 0;
-  /* No card styling - sections have their own cards */
   background: transparent;
   border: none;
   box-shadow: none;
 }
 
-/* Section - inside wrapper card */
+/* Section - its own card (from Fever Zone .wrapper-card) */
 .settings__section {
-  background: transparent;
-  border: none;
-  border-radius: 0;
-  box-shadow: none;
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-lg);
   padding: var(--space-6);
 }
 
@@ -173,7 +178,7 @@
   background: var(--color-primary);
   color: var(--color-white);
   border: none;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-full);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   cursor: pointer;
@@ -384,15 +389,6 @@
 /* ==================== */
 /* IMPORT DATA WIZARD   */
 /* ==================== */
-
-/* Nav item as button */
-.settings__nav-item {
-  border: none;
-  background: none;
-  text-align: left;
-  cursor: pointer;
-  width: 100%;
-}
 
 /* Wizard Step Indicator */
 .settings__wizard-steps {
@@ -637,7 +633,7 @@
   align-items: center;
   gap: var(--space-2);
   padding: var(--space-3) var(--space-5);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-full);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   cursor: pointer;

@@ -20,7 +20,7 @@ function WealthInsights({ insights }) {
           <i className="fa-solid fa-chart-pie"></i>
           <p>No wealth data available</p>
           <button className="wealth-insights__request-btn">
-            Request Screening
+            Request screening
           </button>
         </div>
       </div>

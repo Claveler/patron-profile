@@ -5,7 +5,7 @@ import {
   PIPELINE_STAGES,
   opportunities 
 } from '../../data/opportunities'
-import { patrons, isManagedProspect } from '../../data/patrons'
+import { patrons, isManagedProspect, getPatronById, getPatronDisplayName } from '../../data/patrons'
 import { getAllStaff } from '../../data/campaigns'
 import './Dashboard.css'
 
@@ -52,7 +52,7 @@ function Dashboard({ onNavigateToPatron, onNavigateToOpportunity, onNavigateToPa
   const filteredOpportunities = useMemo(() => {
     const openOpps = getOpenOpportunities()
     if (!selectedOfficer) return openOpps
-    return openOpps.filter(opp => opp.assignedTo === selectedOfficer)
+    return openOpps.filter(opp => opp.assignedToId === selectedOfficer)
   }, [selectedOfficer])
   
   // Pipeline totals (filtered)
@@ -102,7 +102,7 @@ function Dashboard({ onNavigateToPatron, onNavigateToOpportunity, onNavigateToPa
   const stats = useMemo(() => {
     // Filter patrons by assigned officer if one is selected
     const filteredPatrons = selectedOfficer 
-      ? patrons.filter(p => p.assignedTo === selectedOfficer)
+      ? patrons.filter(p => p.assignedToId === selectedOfficer)
       : patrons
     
     const managedProspects = selectedOfficer
@@ -113,7 +113,7 @@ function Dashboard({ onNavigateToPatron, onNavigateToOpportunity, onNavigateToPa
     
     // Filter won opportunities by officer if selected
     const wonOpportunities = selectedOfficer
-      ? opportunities.filter(opp => opp.status === 'won' && opp.assignedTo === selectedOfficer)
+      ? opportunities.filter(opp => opp.status === 'won' && opp.assignedToId === selectedOfficer)
       : opportunities.filter(opp => opp.status === 'won')
     const ytdGiving = wonOpportunities.reduce((sum, opp) => sum + opp.askAmount, 0)
     
@@ -152,7 +152,7 @@ function Dashboard({ onNavigateToPatron, onNavigateToOpportunity, onNavigateToPa
           >
             <option value="">All Gift Officers</option>
             {staff.map(s => (
-              <option key={s.id} value={s.name}>{s.name}</option>
+              <option key={s.id} value={s.id}>{s.name}</option>
             ))}
           </select>
         </div>
@@ -270,7 +270,7 @@ function Dashboard({ onNavigateToPatron, onNavigateToOpportunity, onNavigateToPa
                   >
                     <div className="dashboard__list-item-main">
                       <span className="dashboard__list-item-title">{opp.name}</span>
-                      <span className="dashboard__list-item-subtitle">{opp.patronName}</span>
+                      <span className="dashboard__list-item-subtitle">{(() => { const p = getPatronById(opp.patronId); return p ? getPatronDisplayName(p) : 'Unknown' })()}</span>
                     </div>
                     <div className="dashboard__list-item-meta">
                       <span className="dashboard__list-item-amount">{formatCurrency(opp.askAmount)}</span>
@@ -310,7 +310,7 @@ function Dashboard({ onNavigateToPatron, onNavigateToOpportunity, onNavigateToPa
                     onClick={() => onNavigateToOpportunity && onNavigateToOpportunity(opp.id)}
                   >
                     <div className="dashboard__task-header">
-                      <span className="dashboard__task-patron">{opp.patronName}</span>
+                      <span className="dashboard__task-patron">{(() => { const p = getPatronById(opp.patronId); return p ? getPatronDisplayName(p) : 'Unknown' })()}</span>
                       <span className={`dashboard__task-days ${opp.daysSinceContact > 30 ? 'dashboard__task-days--overdue' : ''}`}>
                         {opp.daysSinceContact}d ago
                       </span>

@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { getOpportunityById, PIPELINE_STAGES, updateOpportunityStage, closeOpportunityAsLost } from '../../data/opportunities'
+import { formatDate, getPatronById, getPatronDisplayName } from '../../data/patrons'
+import { getStaffNameById, getFundNameById, getCampaignNameById } from '../../data/campaigns'
 import ActivityModal from '../../components/ActivityModal/ActivityModal'
 import CloseWonModal from '../../components/CloseWonModal/CloseWonModal'
 import './OpportunityDetail.css'
@@ -15,12 +17,7 @@ const formatCurrency = (amount) => {
   }).format(amount)
 }
 
-// Format date
-const formatDate = (dateStr) => {
-  if (!dateStr) return '—'
-  const date = new Date(dateStr)
-  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-}
+// formatDate imported from shared utility
 
 // Days since a date
 const getDaysSince = (dateStr) => {
@@ -65,6 +62,10 @@ function OpportunityDetail({ opportunityId, onBack, onNavigateToPatron }) {
   const currentStageIndex = PIPELINE_STAGES.findIndex(s => s.id === opportunity.stage)
   const daysSinceContact = getDaysSince(opportunity.lastContact)
   const isClosed = opportunity.status === 'won' || opportunity.status === 'lost'
+
+  // Resolve display names from normalized IDs
+  const patron = getPatronById(opportunity.patronId)
+  const patronName = patron ? getPatronDisplayName(patron) : opportunity.patronId
 
   const handleSave = () => {
     // In a real app, this would save to backend
@@ -177,7 +178,7 @@ function OpportunityDetail({ opportunityId, onBack, onNavigateToPatron }) {
               onClick={handlePatronClick}
             >
               <i className="fa-solid fa-user"></i>
-              {opportunity.patronName}
+              {patronName}
             </p>
             {opportunity.description && (
               <p className="opportunity-detail__description">{opportunity.description}</p>
@@ -317,7 +318,7 @@ function OpportunityDetail({ opportunityId, onBack, onNavigateToPatron }) {
                 onClick={handleLogContact}
               >
                 <i className="fa-solid fa-phone"></i>
-                Log Contact
+                Log contact
               </button>
             </div>
           </div>
@@ -331,7 +332,7 @@ function OpportunityDetail({ opportunityId, onBack, onNavigateToPatron }) {
                   onClick={handleAdvanceStage}
                 >
                   <i className="fa-solid fa-forward"></i>
-                  Advance to {PIPELINE_STAGES[currentStageIndex + 1]?.label}
+                  Advance to {PIPELINE_STAGES[currentStageIndex + 1]?.label.toLowerCase()}
                 </button>
               )}
               <button 
@@ -339,14 +340,14 @@ function OpportunityDetail({ opportunityId, onBack, onNavigateToPatron }) {
                 onClick={handleCloseWon}
               >
                 <i className="fa-solid fa-check-circle"></i>
-                Close as Won
+                Close as won
               </button>
               <button 
                 className="opportunity-detail__btn opportunity-detail__btn--lost"
                 onClick={handleCloseLost}
               >
                 <i className="fa-solid fa-times-circle"></i>
-                Close as Lost
+                Close as lost
               </button>
             </div>
           )}
@@ -360,15 +361,15 @@ function OpportunityDetail({ opportunityId, onBack, onNavigateToPatron }) {
             <dl className="opportunity-detail__details">
               <div className="opportunity-detail__detail">
                 <dt>Campaign</dt>
-                <dd>{opportunity.campaign?.name || '—'}</dd>
+                <dd>{opportunity.campaignId ? getCampaignNameById(opportunity.campaignId) : '—'}</dd>
               </div>
               <div className="opportunity-detail__detail">
                 <dt>Fund</dt>
-                <dd>{opportunity.fund?.name || '—'}</dd>
+                <dd>{opportunity.fundId ? getFundNameById(opportunity.fundId) : '—'}</dd>
               </div>
               <div className="opportunity-detail__detail">
                 <dt>Assigned To</dt>
-                <dd>{opportunity.assignedTo}</dd>
+                <dd>{getStaffNameById(opportunity.assignedToId)}</dd>
               </div>
               <div className="opportunity-detail__detail">
                 <dt>Created</dt>
@@ -389,12 +390,13 @@ function OpportunityDetail({ opportunityId, onBack, onNavigateToPatron }) {
             </dl>
           </div>
 
-          {/* Activity card - placeholder */}
+          {/* Activity card */}
           <div className="opportunity-detail__card">
             <h3 className="opportunity-detail__card-title">Recent Activity</h3>
             <div className="opportunity-detail__activity-placeholder">
-              <i className="fa-solid fa-list"></i>
-              <p>Activity timeline coming soon</p>
+              <i className="fa-solid fa-clipboard-list"></i>
+              <p>No activity logged for this opportunity yet.</p>
+              <span className="opportunity-detail__activity-hint">Use "Log contact" to record interactions.</span>
             </div>
           </div>
         </div>
@@ -406,7 +408,7 @@ function OpportunityDetail({ opportunityId, onBack, onNavigateToPatron }) {
         onClose={() => setShowActivityModal(false)}
         onSuccess={handleActivitySuccess}
         patronId={opportunity?.patronId}
-        patronName={opportunity?.patronName}
+        patronName={patronName}
         opportunityId={opportunityId}
         opportunityName={opportunity?.name}
       />

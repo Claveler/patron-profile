@@ -187,7 +187,7 @@
 .tax-summary__type-badge {
   display: inline-block;
   padding: 2px 6px;
-  border-radius: 100px;
+  border-radius: var(--radius-full);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
   margin-right: var(--space-2);
@@ -231,7 +231,7 @@
   border-radius: var(--radius-md);
   font-size: var(--font-size-xs);
   color: var(--color-info-700);
-  line-height: var(--line-height-relaxed);
+  line-height: 1.4;
 }
 
 .tax-summary__benefits-note i {
@@ -261,7 +261,7 @@
 .tax-summary__legal {
   font-size: var(--font-size-xs);
   color: var(--color-text-tertiary);
-  line-height: var(--line-height-relaxed);
+  line-height: 1.4;
 }
 
 .tax-summary__legal p {

@@ -1,8 +1,9 @@
 import { useState, useRef, useEffect } from 'react'
-import { patronTags, addCustomTag } from '../../data/patrons'
+import { patronTags, addCustomTag, getPrimaryMembershipForPatron, formatDate } from '../../data/patrons'
 import './PatronInfoBox.css'
 
 function PatronInfoBox({ patron, isManaged, onCreateOpportunity, onAddActivity, onArchive, onRestore, onUpdateTags }) {
+  const membership = getPrimaryMembershipForPatron(patron.id)
   const getTagLabel = (tagId) => {
     return patronTags.find(t => t.id === tagId)?.label || tagId
   }
@@ -201,7 +202,6 @@ function PatronInfoBox({ patron, isManaged, onCreateOpportunity, onAddActivity, 
                             className="patron-info-box__tags-popover-suggestion patron-info-box__tags-popover-suggestion--create"
                             onClick={handleCreateAndAddTag}
                           >
-                            <i className="fa-solid fa-plus"></i>
                             Create "{tagSearchTerm}"
                           </button>
                         )}
@@ -245,26 +245,26 @@ function PatronInfoBox({ patron, isManaged, onCreateOpportunity, onAddActivity, 
       </div>
 
       {/* Membership Info - Only show if membership data exists */}
-      {patron.membership && (
+      {membership && (
         <div className="patron-info-box__section patron-info-box__membership">
           <div className="patron-info-box__info-item">
             <i className="fa-solid fa-address-card patron-info-box__info-icon"></i>
             <span>
-              {patron.membership.programme ? `${patron.membership.programme} - ` : ''}
-              {patron.membership.tier || 'Member'}
+              {membership.programme ? `${membership.programme} - ` : ''}
+              {membership.tier || 'Member'}
             </span>
           </div>
-          {patron.membership.memberSince && (
+          {membership.startDate && (
             <div className="patron-info-box__info-item">
               <i className="fa-solid fa-calendar-day patron-info-box__info-icon"></i>
-              <span>Member since {patron.membership.memberSince}</span>
+              <span>Member since {formatDate(membership.startDate)}</span>
             </div>
           )}
-          {patron.membership.daysToRenewal !== undefined && (
+          {membership.daysToRenewal !== undefined && (
             <div className="patron-info-box__info-item">
               <i className="fa-solid fa-clock-rotate-left patron-info-box__info-icon"></i>
-              <span>{patron.membership.daysToRenewal} days to renewal</span>
-              {patron.membership.daysToRenewal < 180 && (
+              <span>{membership.daysToRenewal} days to renewal</span>
+              {membership.daysToRenewal < 180 && (
                 <i className="fa-solid fa-triangle-exclamation patron-info-box__warning" title="Renewal approaching"></i>
               )}
             </div>
@@ -293,8 +293,7 @@ function PatronInfoBox({ patron, isManaged, onCreateOpportunity, onAddActivity, 
                 Change Category
               </button>
               <button className="patron-info-box__dropdown-item" onClick={handleAddActivity}>
-                <i className="fa-solid fa-plus"></i>
-                Add Activity
+                Add activity
               </button>
               <button className="patron-info-box__dropdown-item">
                 <i className="fa-solid fa-link"></i>
@@ -311,7 +310,7 @@ function PatronInfoBox({ patron, isManaged, onCreateOpportunity, onAddActivity, 
               {isManaged && (
                 <button className="patron-info-box__dropdown-item" onClick={handleCreateOpportunity}>
                   <i className="fa-solid fa-bullseye"></i>
-                  Create Opportunity
+                  Create opportunity
                 </button>
               )}
               <div className="patron-info-box__dropdown-divider"></div>

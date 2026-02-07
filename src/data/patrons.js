@@ -4,25 +4,21 @@
  * Terminology:
  * - MANAGED PROSPECT: A patron with an assigned relationship manager (owner) 
  *   who is in someone's portfolio. They may have 0, 1, or many opportunities.
- *   Has: assignedTo field
+ *   Has: assignedToId field (references STAFF by id)
  * 
  * - GENERAL CONSTITUENT: A patron in the database who is not being actively 
  *   managed through individual relationship management. Handled via automated
  *   campaigns and appeals.
- *   Has: No assignedTo field
+ *   Has: No assignedToId field
  * 
  * NOTE: Pipeline stages are tracked on OPPORTUNITIES, not patrons.
  * See opportunities.js for pipeline data.
  */
 
 // Gift Officers / Relationship Managers
-export const giftOfficers = [
-  { id: 'liam-johnson', name: 'Liam Johnson' },
-  { id: 'emma-smith', name: 'Emma Smith' },
-  { id: 'ethan-garcia', name: 'Ethan Garcia' },
-  { id: 'sophia-anderson', name: 'Sophia Anderson' },
-  { id: 'lucas-thomas', name: 'Lucas Thomas' },
-]
+// DEPRECATED: Use STAFF from campaigns.js as the single source of truth.
+// This alias is kept for backwards compatibility during migration.
+export { STAFF as giftOfficers } from './campaigns'
 
 // Patron tags (for segmentation)
 export const patronTags = [
@@ -80,7 +76,7 @@ export const getPatronOrigin = (source) => {
  */
 export const patrons = [
   // ============================================
-  // MANAGED PROSPECTS (have assignedTo + prospect)
+  // MANAGED PROSPECTS (have assignedToId + prospect)
   // ============================================
   
   // Anderson Collingwood - FULL DATA (our main demo patron)
@@ -97,12 +93,12 @@ export const patrons = [
       name: 'Collingwood Family',
       verified: true
     },
-    // MANAGED PROSPECT - has assignedTo (opportunities tracked separately)
-    assignedTo: 'Liam Johnson',
+    // MANAGED PROSPECT - has assignedToId (opportunities tracked separately)
+    assignedToId: 'lj',
     engagement: {
       level: 'on-fire',
       visits: 54,
-      lastVisit: '19/11/2025',
+      lastVisit: '2025-11-19',
       activityHistory: [
         { month: '2025-02', weeks: [
           { activities: [{ type: 'attendance', count: 1 }] },
@@ -178,94 +174,6 @@ export const patrons = [
         ]}
       ]
     },
-    membership: {
-      status: 'active',
-      programme: 'General Membership',
-      tier: 'Gold',
-      memberSince: '12/02/2023',
-      currentPeriod: '12 February 2026',
-      periodType: 'yearly',
-      daysToRenewal: 9,
-      price: 145.99,
-      totalSavings: 248.40,
-      patronId: 'anderson-collingwood',
-      membershipId: 'MEM-2023-001',
-      periodStart: '12/02/2025',
-      validUntil: '12/02/2026',
-      cardStyle: {
-        backgroundColor: '#B8860B',
-        textColor: '#ffffff',
-        accentColor: '#D4AF37'
-      },
-      autoRenewal: true,
-      paymentMethod: {
-        type: 'visa',
-        last4: '4242'
-      },
-      memberYears: 2,
-      upgradeEligible: true,
-      upgradeTier: 'Platinum',
-      benefits: [
-        { category: 'access', title: 'Unlimited visits', description: 'to all exhibits', usage: { used: 34, limit: null, resetDate: null }, icon: 'fa-ticket' },
-        { category: 'access', title: 'Priority entry', description: 'skip the line', usage: null, icon: 'fa-forward' },
-        { category: 'discount', title: 'Bring a friend for free', description: 'every visit', usage: { used: 3, limit: 5, resetDate: '12/02/2026' }, icon: 'fa-user-plus' },
-        { category: 'discount', title: '20% off special events', description: "your ticket and friend's ticket", usage: null, icon: 'fa-percent' },
-        { category: 'discount', title: '10% F&B discount', description: 'at all venue restaurants', usage: { used: 12, limit: null, resetDate: null }, icon: 'fa-utensils' },
-        { category: 'complimentary', title: 'Welcome pack', description: 'Paradox tote + exclusive goodies', usage: { used: 1, limit: 1, resetDate: null }, icon: 'fa-gift' }
-      ],
-      memberEvents: {
-        earlyAccess: [
-          { id: 1, name: 'Halloween Night Special', date: '2026-10-31', memberAccess: '2026-10-15', publicAccess: '2026-10-22', status: 'upcoming', image: 'https://images.unsplash.com/photo-1509557965875-b88c97052f0e?w=100&h=60&fit=crop' },
-          { id: 3, name: 'Spring Gala 2026', date: '2026-04-20', memberAccess: '2026-03-01', publicAccess: '2026-03-15', status: 'unlocked', image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=100&h=60&fit=crop' },
-          { id: 4, name: 'Summer Concert Series', date: '2026-07-04', memberAccess: '2026-06-01', publicAccess: '2026-06-15', status: 'upcoming', image: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=100&h=60&fit=crop' }
-        ],
-        memberOnly: [
-          { id: 2, name: 'VIP Wine Tasting Evening', date: '2026-03-15', image: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=100&h=60&fit=crop', exclusive: true },
-          { id: 5, name: 'Members Evening: Behind the Scenes', date: '2026-02-28', image: 'https://images.unsplash.com/photo-1518998053901-5348d3961a04?w=100&h=60&fit=crop', exclusive: true },
-          { id: 6, name: 'Curator Talk: Modern Art', date: '2026-03-22', image: 'https://images.unsplash.com/photo-1577083288073-40892c0860a4?w=100&h=60&fit=crop', exclusive: true }
-        ]
-      },
-      usageAnalytics: {
-        overallPercentage: 67,
-        categories: [
-          { name: 'Admissions', used: 34, available: 'unlimited', percentage: 100 },
-          { name: 'Guest Passes', used: 3, available: 5, percentage: 60 },
-          { name: 'F&B Discounts', used: 12, available: 'unlimited', percentage: 100 },
-          { name: 'Event Discounts', used: 2, available: 'unlimited', percentage: 100 }
-        ],
-        unusedBenefits: ['Welcome pack', 'Priority entry'],
-        mostUsed: 'Admissions'
-      },
-      beneficiaries: [
-        { id: 1, name: 'Anderson Collingwood', role: 'Primary', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face' },
-        { id: 2, name: 'Sarah Collingwood', role: 'Spouse', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=40&h=40&fit=crop&crop=face' },
-        { id: 3, name: 'Emma Collingwood', role: 'Child', avatar: null }
-      ],
-      membershipHistory: [
-        { date: '2023-12-02', event: 'Joined', tier: 'Silver', programme: 'General Membership' },
-        { date: '2024-06-15', event: 'Upgraded', tier: 'Gold', programme: 'General Membership' },
-        { date: '2024-12-02', event: 'Renewed', tier: 'Gold', programme: 'General Membership' },
-        { date: '2025-12-02', event: 'Renewed', tier: 'Gold', programme: 'General Membership' }
-      ],
-      upgradeComparison: {
-        currentTier: 'Gold',
-        upgradeTier: 'Platinum',
-        upgradePrice: 249.99,
-        priceDifference: 104.00,
-        improvements: [
-          { feature: 'Guest passes', current: '5/year', upgrade: 'Unlimited' },
-          { feature: 'F&B Discount', current: '10%', upgrade: '25%' },
-          { feature: 'Parking', current: 'Not included', upgrade: 'Free valet' },
-          { feature: 'Event discounts', current: '20%', upgrade: '35%' }
-        ],
-        newPerks: [
-          'Exclusive member lounge access',
-          'Complimentary coat check',
-          'Early access to all events',
-          'Personal concierge service'
-        ]
-      }
-    },
     giving: {
       lifetimeValue: 3222.50,
       donations: 1975.00,
@@ -273,13 +181,6 @@ export const patrons = [
       giftCount: 6,
       averageGift: 329.17,
       lastDonation: '2025-12-15',
-      gifts: [
-        { id: 'gift-001', date: '2025-12-15', amount: 1000.00, type: 'donation', description: 'Year-End Major Gift', fund: { id: 'annual-operating', name: 'Annual Operating Fund' }, campaign: { id: 'annual-2026', name: '2026 Annual Fund' }, appeal: { id: 'year-end-mailer', name: 'Year-End Direct Mail' }, deductible: 1000.00, benefitsValue: 0, softCredits: [{ patronId: '999', name: 'Margaret Williams', type: 'solicitor' }] },
-        { id: 'gift-002', date: '2025-06-15', amount: 500.00, type: 'donation', description: 'Spring Gala Donation', fund: { id: 'education', name: 'Education Programs' }, campaign: { id: 'annual-2026', name: '2026 Annual Fund' }, appeal: { id: 'spring-gala-2025', name: 'Spring Gala 2025' }, deductible: 400.00, benefitsValue: 100.00, softCredits: [] },
-        { id: 'gift-003', date: '2025-12-02', amount: 145.99, type: 'membership', description: 'Gold Membership Renewal', fund: { id: 'annual-operating', name: 'Annual Operating Fund' }, campaign: { id: 'annual-2026', name: '2026 Annual Fund' }, appeal: { id: 'membership-renewal', name: 'Membership Renewal' }, deductible: 95.99, benefitsValue: 50.00, softCredits: [] },
-        { id: 'gift-004', date: '2025-03-22', amount: 750.00, type: 'donation', description: 'Building Campaign Gift', fund: { id: 'capital-building', name: 'Capital Building Fund' }, campaign: { id: 'building-future', name: 'Building the Future' }, appeal: { id: 'capital-appeal', name: 'Capital Campaign Appeal' }, deductible: 750.00, benefitsValue: 0, softCredits: [{ patronId: '888', name: 'Robert Chen', type: 'influencer' }] },
-        { id: 'gift-005', date: '2024-11-18', amount: 250.00, type: 'donation', description: 'Online Donation', fund: { id: 'annual-operating', name: 'Annual Operating Fund' }, campaign: { id: 'annual-2025', name: '2025 Annual Fund' }, appeal: { id: 'website-donate', name: 'Website Donate Button' }, deductible: 250.00, benefitsValue: 0, softCredits: [] }
-      ],
       byFund: {
         'annual-operating': { name: 'Annual Operating', total: 1895.99, count: 3 },
         'education': { name: 'Education Programs', total: 500.00, count: 1 },
@@ -291,9 +192,9 @@ export const patrons = [
         'annual-2025': { name: '2025 Annual Fund', total: 250.00, count: 1, goal: 450000 }
       },
       byYear: { 2025: { total: 2895.99, count: 4 }, 2024: { total: 250.00, count: 1 } },
-      firstTransaction: { amount: 250.00, date: '18/11/2024' },
-      lastTransaction: { amount: 1000.00, date: '15/12/2025' },
-      largestTransaction: { amount: 1000.00, date: '15/12/2025' }
+      firstTransaction: { amount: 250.00, date: '2024-11-18' },
+      lastTransaction: { amount: 1000.00, date: '2025-12-15' },
+      largestTransaction: { amount: 1000.00, date: '2025-12-15' }
     },
     wealthInsights: {
       propensityScore: 'DSI-3',
@@ -302,15 +203,15 @@ export const patrons = [
     taxDocuments: {
       organization: { name: 'Paradox Museum', ein: '12-3456789', address: '123 Museum Way, Austin, TX 78701' },
       yearEndSummaries: [
-        { year: 2025, generated: '01/15/2026', sent: true, sentDate: '01/15/2026', method: 'email' },
-        { year: 2024, generated: '01/12/2025', sent: true, sentDate: '01/12/2025', method: 'email' }
+        { year: 2025, generated: '2026-01-15', sent: true, sentDate: '2026-01-15', method: 'email' },
+        { year: 2024, generated: '2025-01-12', sent: true, sentDate: '2025-01-12', method: 'email' }
       ],
       receipts: [
-        { id: 1, date: '12/15/2025', type: 'donation', description: 'Year-End Major Gift', amount: 1000.00, deductible: 1000.00, benefitsValue: 0, campaign: '2026 Annual Fund', appeal: 'Year-End Direct Mail' },
-        { id: 2, date: '06/15/2025', type: 'donation', description: 'Spring Gala Donation', amount: 500.00, deductible: 400.00, benefitsValue: 100.00, campaign: '2026 Annual Fund', appeal: 'Spring Gala 2025' },
-        { id: 3, date: '12/02/2025', type: 'membership', description: 'Gold Membership Renewal', amount: 145.99, deductible: 95.99, benefitsValue: 50.00, campaign: '2026 Annual Fund', appeal: 'Membership Renewal' },
-        { id: 4, date: '03/22/2025', type: 'donation', description: 'Building Campaign Gift', amount: 750.00, deductible: 750.00, benefitsValue: 0, campaign: 'Building the Future', appeal: 'Capital Campaign Appeal' },
-        { id: 5, date: '11/18/2024', type: 'donation', description: 'Online Donation', amount: 250.00, deductible: 250.00, benefitsValue: 0, campaign: '2025 Annual Fund', appeal: 'Website Donate Button' }
+        { id: 1, date: '2025-12-15', type: 'donation', description: 'Year-End Major Gift', amount: 1000.00, deductible: 1000.00, benefitsValue: 0, campaign: '2026 Annual Fund', appeal: 'Year-End Direct Mail' },
+        { id: 2, date: '2025-06-15', type: 'donation', description: 'Spring Gala Donation', amount: 500.00, deductible: 400.00, benefitsValue: 100.00, campaign: '2026 Annual Fund', appeal: 'Spring Gala 2025' },
+        { id: 3, date: '2025-12-02', type: 'membership', description: 'Gold Membership Renewal', amount: 145.99, deductible: 95.99, benefitsValue: 50.00, campaign: '2026 Annual Fund', appeal: 'Membership Renewal' },
+        { id: 4, date: '2025-03-22', type: 'donation', description: 'Building Campaign Gift', amount: 750.00, deductible: 750.00, benefitsValue: 0, campaign: 'Building the Future', appeal: 'Capital Campaign Appeal' },
+        { id: 5, date: '2024-11-18', type: 'donation', description: 'Online Donation', amount: 250.00, deductible: 250.00, benefitsValue: 0, campaign: '2025 Annual Fund', appeal: 'Website Donate Button' }
       ],
       inKindDonations: []
     },
@@ -327,12 +228,12 @@ export const patrons = [
     email: 'paul.fairfax@outlook.com',
     phone: '(555) 111-2222',
     tags: ['donor', 'corporate'],
-    // NO assignedTo - General Constituent
+    // NO assignedToId - General Constituent
     // NO prospect data - not in pipeline
     engagement: {
       level: 'cool',
       visits: 6,
-      lastVisit: '15/11/2025',
+      lastVisit: '2025-11-15',
       activityHistory: [
         { month: '2025-02', weeks: [
           { activities: [] },
@@ -409,112 +310,6 @@ export const patrons = [
       ]
     },
     giving: { lifetimeValue: 1850, donations: 1200, revenue: 650, lastDonation: '2025-09-10' },
-    membership: {
-      status: 'active',
-      programme: 'General Membership',
-      tier: 'Silver',
-      memberSince: '27/02/2024',
-      currentPeriod: '27 February 2026',
-      periodType: 'yearly',
-      daysToRenewal: 21,
-      price: 89.99,
-      totalSavings: 42.50,
-      patronId: 'paul-fairfax',
-      membershipId: 'MEM-2024-047',
-      periodStart: '27/02/2025',
-      validUntil: '27/02/2026',
-      // Silver card styling - professional gray/silver tones
-      cardStyle: {
-        backgroundColor: '#5C6B7A',
-        textColor: '#ffffff',
-        accentColor: '#B8C5D1'
-      },
-      autoRenewal: false,
-      paymentMethod: {
-        type: 'mastercard',
-        last4: '8832'
-      },
-      memberYears: 1,
-      upgradeEligible: true,
-      upgradeTier: 'Gold',
-      benefits: [
-        { 
-          category: 'access', 
-          title: 'Unlimited visits', 
-          description: 'to all standard exhibits',
-          usage: { used: 6, limit: null, resetDate: null },
-          icon: 'fa-ticket'
-        },
-        { 
-          category: 'discount', 
-          title: 'Bring a friend for free', 
-          description: 'twice per year',
-          usage: { used: 0, limit: 2, resetDate: '27/02/2026' },
-          icon: 'fa-user-plus'
-        },
-        { 
-          category: 'discount', 
-          title: '10% off special events', 
-          description: 'your ticket only',
-          usage: null,
-          icon: 'fa-percent'
-        },
-        { 
-          category: 'discount', 
-          title: '5% F&B discount', 
-          description: 'at main café',
-          usage: { used: 2, limit: null, resetDate: null },
-          icon: 'fa-utensils'
-        }
-      ],
-      memberEvents: {
-        earlyAccess: [
-          {
-            id: 1,
-            name: 'Spring Gala 2026',
-            date: '2026-04-20',
-            memberAccess: '2026-03-15',
-            publicAccess: '2026-03-25',
-            status: 'upcoming',
-            image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=100&h=60&fit=crop'
-          }
-        ],
-        memberOnly: []
-      },
-      usageAnalytics: {
-        overallPercentage: 35,
-        categories: [
-          { name: 'Admissions', used: 6, available: 'unlimited', percentage: 40 },
-          { name: 'Guest Passes', used: 0, available: 2, percentage: 0 },
-          { name: 'F&B Discounts', used: 2, available: 'unlimited', percentage: 25 }
-        ],
-        unusedBenefits: ['Event discounts', 'Guest passes'],
-        mostUsed: 'Admissions'
-      },
-      beneficiaries: [
-        { id: 1, name: 'Paul Fairfax', role: 'Primary', avatar: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=40&h=40&fit=crop&crop=face' }
-      ],
-      membershipHistory: [
-        { date: '2024-02-27', event: 'Joined', tier: 'Silver', programme: 'General Membership' },
-        { date: '2025-02-27', event: 'Renewed', tier: 'Silver', programme: 'General Membership' }
-      ],
-      upgradeComparison: {
-        currentTier: 'Silver',
-        upgradeTier: 'Gold',
-        upgradePrice: 145.99,
-        priceDifference: 56.00,
-        improvements: [
-          { feature: 'Guest passes', current: '2/year', upgrade: '5/year' },
-          { feature: 'F&B Discount', current: '5%', upgrade: '10%' },
-          { feature: 'Event discounts', current: '10%', upgrade: '20%' }
-        ],
-        newPerks: [
-          'Priority entry',
-          'Welcome pack with tote bag',
-          'Access to special exhibits'
-        ]
-      }
-    },
     address: '742 Maple Avenue, Boston, MA 02108',
     // Tax documents for Documents tab
     taxDocuments: {
@@ -526,7 +321,7 @@ export const patrons = [
       receipts: [
         { 
           id: 1, 
-          date: '27/02/2025', 
+          date: '2025-02-27', 
           type: 'membership', 
           description: 'Silver Membership Renewal', 
           amount: 89.99, 
@@ -537,7 +332,7 @@ export const patrons = [
         },
         { 
           id: 2, 
-          date: '27/02/2024', 
+          date: '2024-02-27', 
           type: 'membership', 
           description: 'Silver Membership - Initial', 
           amount: 89.99, 
@@ -548,8 +343,8 @@ export const patrons = [
         }
       ],
       yearEndSummaries: [
-        { id: 1, year: 2025, generated: '15/01/2026', sent: false },
-        { id: 2, year: 2024, generated: '10/01/2025', sent: true, sentDate: '12/01/2025' }
+        { id: 1, year: 2025, generated: '2026-01-15', sent: false },
+        { id: 2, year: 2024, generated: '2025-01-10', sent: true, sentDate: '2025-01-12' }
       ],
       inKindDonations: []
     },
@@ -566,11 +361,11 @@ export const patrons = [
     email: 'jake_thompson@gmail.com',
     phone: '(555) 234-5678',
     tags: ['prospect'],
-    assignedTo: 'Liam Johnson',
+    assignedToId: 'lj',
     engagement: {
       level: 'cold',
       visits: 3,
-      lastVisit: '01/10/2025',
+      lastVisit: '2025-10-01',
       activityHistory: [
         { month: '2025-02', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
         { month: '2025-03', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
@@ -598,11 +393,11 @@ export const patrons = [
     email: 'sophia1234@gmail.com',
     phone: '(555) 345-6789',
     tags: ['donor'],
-    assignedTo: 'Emma Smith',
+    assignedToId: 'es',
     engagement: {
       level: 'cold',
       visits: 8,
-      lastVisit: '12/10/2025',
+      lastVisit: '2025-10-12',
       activityHistory: [
         { month: '2025-02', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
         { month: '2025-03', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
@@ -630,11 +425,11 @@ export const patrons = [
     email: 'lucas_taylor@yahoo.com',
     phone: '(555) 456-7890',
     tags: ['donor'],
-    assignedTo: 'Liam Johnson',
+    assignedToId: 'lj',
     engagement: {
       level: 'warm',
       visits: 22,
-      lastVisit: '20/10/2025',
+      lastVisit: '2025-10-20',
       activityHistory: [
         { month: '2025-02', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }] },
         { month: '2025-03', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 2 }] }, { activities: [] }, { activities: [{ type: 'purchase', count: 1, value: 45 }] }] },
@@ -651,57 +446,6 @@ export const patrons = [
       ]
     },
     giving: { lifetimeValue: 2800, donations: 1500, revenue: 1300, lastDonation: '2025-10-20' },
-    membership: {
-      status: 'active',
-      programme: 'General Membership',
-      tier: 'Silver',
-      memberSince: '10/11/2024',
-      currentPeriod: '10 March 2026',
-      periodType: 'yearly',
-      daysToRenewal: 45,
-      price: 89.99,
-      totalSavings: 18.50,
-      patronId: 'sophia-thomas',
-      membershipId: 'MEM-2024-312',
-      periodStart: '10/03/2025',
-      validUntil: '10/03/2026',
-      cardStyle: {
-        backgroundColor: '#5C6B7A',
-        textColor: '#ffffff',
-        accentColor: '#B8C5D1'
-      },
-      autoRenewal: false,
-      paymentMethod: {
-        type: 'visa',
-        last4: '7721'
-      },
-      memberYears: 1,
-      upgradeEligible: true,
-      upgradeTier: 'Gold',
-      benefits: [
-        { category: 'access', title: 'Unlimited visits', description: 'to all standard exhibits', usage: { used: 8, limit: null, resetDate: null }, icon: 'fa-ticket' },
-        { category: 'discount', title: 'Bring a friend for free', description: 'twice per year', usage: { used: 1, limit: 2, resetDate: '10/03/2026' }, icon: 'fa-user-plus' },
-        { category: 'discount', title: '10% off special events', description: 'your ticket only', usage: null, icon: 'fa-percent' },
-        { category: 'discount', title: '5% F&B discount', description: 'at main café', usage: { used: 2, limit: null, resetDate: null }, icon: 'fa-utensils' }
-      ],
-      usageAnalytics: {
-        overallPercentage: 25,
-        categories: [
-          { name: 'Admissions', used: 8, available: 'unlimited', percentage: 30 },
-          { name: 'Guest Passes', used: 1, available: 2, percentage: 50 },
-          { name: 'F&B Discounts', used: 2, available: 'unlimited', percentage: 15 }
-        ],
-        unusedBenefits: ['Event discounts'],
-        mostUsed: 'Admissions'
-      },
-      beneficiaries: [
-        { id: 1, name: 'Sophia Thomas', role: 'Primary', avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&fit=crop&crop=face' }
-      ],
-      membershipHistory: [
-        { date: '2024-11-10', event: 'Joined', tier: 'Silver', programme: 'General Membership' },
-        { date: '2025-03-10', event: 'Renewed', tier: 'Silver', programme: 'General Membership' }
-      ]
-    },
     source: 'import',
     createdDate: '2024-08-20'
   },
@@ -713,11 +457,11 @@ export const patrons = [
     email: 'anderava@gmail.com',
     phone: '(555) 567-8901',
     tags: ['donor', 'volunteer'],
-    assignedTo: 'Liam Johnson',
+    assignedToId: 'lj',
     engagement: {
       level: 'hot',
       visits: 45,
-      lastVisit: '01/11/2025',
+      lastVisit: '2025-11-01',
       activityHistory: [
         { month: '2025-02', weeks: [{ activities: [{ type: 'attendance', count: 2 }] }, { activities: [{ type: 'purchase', count: 1, value: 65 }] }, { activities: [{ type: 'attendance', count: 3 }] }, { activities: [{ type: 'attendance', count: 1 }] }] },
         { month: '2025-03', weeks: [{ activities: [{ type: 'attendance', count: 2 }] }, { activities: [{ type: 'donation', count: 1, value: 1000 }] }, { activities: [{ type: 'attendance', count: 2 }] }, { activities: [{ type: 'attendance', count: 3 }, { type: 'purchase', count: 1, value: 45 }] }] },
@@ -745,11 +489,11 @@ export const patrons = [
     email: 'samantha_itsme@gmail.com',
     phone: '(555) 678-9012',
     tags: ['major-donor', 'donor'],
-    assignedTo: 'Emma Smith',
+    assignedToId: 'es',
     engagement: {
       level: 'on-fire',
       visits: 67,
-      lastVisit: '15/10/2025',
+      lastVisit: '2025-10-15',
       activityHistory: [
         { month: '2025-02', weeks: [{ activities: [{ type: 'attendance', count: 3 }, { type: 'donation', count: 1, value: 10000 }] }, { activities: [{ type: 'attendance', count: 2 }] }, { activities: [{ type: 'attendance', count: 4 }, { type: 'purchase', count: 2, value: 125 }] }, { activities: [{ type: 'attendance', count: 2 }] }] },
         { month: '2025-03', weeks: [{ activities: [{ type: 'attendance', count: 3 }] }, { activities: [{ type: 'attendance', count: 2 }, { type: 'donation', count: 1, value: 15000 }] }, { activities: [{ type: 'attendance', count: 4 }] }, { activities: [{ type: 'attendance', count: 3 }, { type: 'purchase', count: 1, value: 89 }] }] },
@@ -777,11 +521,11 @@ export const patrons = [
     email: 'johnsonmchl@microsoft.com',
     phone: '(555) 789-0123',
     tags: ['donor', 'corporate'],
-    assignedTo: 'Emma Smith',
+    assignedToId: 'es',
     engagement: {
       level: 'warm',
       visits: 18,
-      lastVisit: '10/11/2025',
+      lastVisit: '2025-11-10',
       activityHistory: [
         { month: '2025-02', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }] },
         { month: '2025-03', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 2 }] }, { activities: [] }, { activities: [{ type: 'donation', count: 1, value: 500 }] }] },
@@ -798,62 +542,6 @@ export const patrons = [
       ]
     },
     giving: { lifetimeValue: 3200, donations: 2000, revenue: 1200, lastDonation: '2025-11-10' },
-    membership: {
-      status: 'active',
-      programme: 'General Membership',
-      tier: 'Gold',
-      memberSince: '15/03/2023',
-      currentPeriod: '15 June 2026',
-      periodType: 'yearly',
-      daysToRenewal: 120,
-      price: 145.99,
-      totalSavings: 412.50,
-      patronId: 'samantha-carter',
-      membershipId: 'MEM-2023-089',
-      periodStart: '15/06/2025',
-      validUntil: '15/06/2026',
-      cardStyle: {
-        backgroundColor: '#B8860B',
-        textColor: '#ffffff',
-        accentColor: '#D4AF37'
-      },
-      autoRenewal: true,
-      paymentMethod: {
-        type: 'amex',
-        last4: '1008'
-      },
-      memberYears: 3,
-      upgradeEligible: false,
-      benefits: [
-        { category: 'access', title: 'Unlimited visits', description: 'to all exhibits', usage: { used: 67, limit: null, resetDate: null }, icon: 'fa-ticket' },
-        { category: 'access', title: 'Priority entry', description: 'skip the line', usage: null, icon: 'fa-forward' },
-        { category: 'discount', title: 'Bring a friend for free', description: 'every visit', usage: { used: 4, limit: 5, resetDate: '15/06/2026' }, icon: 'fa-user-plus' },
-        { category: 'discount', title: '20% off special events', description: "your ticket and friend's ticket", usage: null, icon: 'fa-percent' },
-        { category: 'discount', title: '10% F&B discount', description: 'at all venue restaurants', usage: { used: 25, limit: null, resetDate: null }, icon: 'fa-utensils' },
-        { category: 'complimentary', title: 'Welcome pack', description: 'Paradox tote + exclusive goodies', usage: { used: 1, limit: 1, resetDate: null }, icon: 'fa-gift' }
-      ],
-      usageAnalytics: {
-        overallPercentage: 85,
-        categories: [
-          { name: 'Admissions', used: 67, available: 'unlimited', percentage: 95 },
-          { name: 'Guest Passes', used: 4, available: 5, percentage: 80 },
-          { name: 'F&B Discounts', used: 25, available: 'unlimited', percentage: 85 },
-          { name: 'Event Discounts', used: 3, available: 'unlimited', percentage: 60 }
-        ],
-        unusedBenefits: ['Priority entry'],
-        mostUsed: 'Admissions'
-      },
-      beneficiaries: [
-        { id: 1, name: 'Samantha Carter', role: 'Primary', avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=40&h=40&fit=crop&crop=face' },
-        { id: 2, name: 'Michael Carter', role: 'Spouse', avatar: null }
-      ],
-      membershipHistory: [
-        { date: '2023-03-15', event: 'Joined', tier: 'Silver', programme: 'General Membership' },
-        { date: '2023-09-01', event: 'Upgraded', tier: 'Gold', programme: 'General Membership' },
-        { date: '2024-06-15', event: 'Renewed', tier: 'Gold', programme: 'General Membership' },
-        { date: '2025-06-15', event: 'Renewed', tier: 'Gold', programme: 'General Membership' }
-      ]
-    },
     source: 'import',
     createdDate: '2024-09-10'
   },
@@ -865,11 +553,11 @@ export const patrons = [
     email: 'mia_wilson1960@gmail.com',
     phone: '(555) 890-1234',
     tags: ['donor'],
-    assignedTo: 'Sophia Anderson',
+    assignedToId: 'sa',
     engagement: {
       level: 'on-fire',
       visits: 52,
-      lastVisit: '30/10/2025',
+      lastVisit: '2025-10-30',
       activityHistory: [
         { month: '2025-02', weeks: [{ activities: [{ type: 'attendance', count: 2 }, { type: 'donation', count: 1, value: 5000 }] }, { activities: [{ type: 'attendance', count: 3 }] }, { activities: [{ type: 'attendance', count: 2 }, { type: 'purchase', count: 1, value: 95 }] }, { activities: [{ type: 'attendance', count: 2 }] }] },
         { month: '2025-03', weeks: [{ activities: [{ type: 'attendance', count: 3 }] }, { activities: [{ type: 'attendance', count: 2 }, { type: 'donation', count: 1, value: 10000 }] }, { activities: [{ type: 'attendance', count: 2 }] }, { activities: [{ type: 'attendance', count: 3 }] }] },
@@ -897,11 +585,11 @@ export const patrons = [
     email: 'olibrown@gmail.com',
     phone: '(555) 901-2345',
     tags: ['donor'],
-    assignedTo: 'Lucas Thomas',
+    assignedToId: 'lt',
     engagement: {
       level: 'cool',
       visits: 12,
-      lastVisit: '05/11/2025',
+      lastVisit: '2025-11-05',
       activityHistory: [
         { month: '2025-02', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }, { activities: [] }] },
         { month: '2025-03', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [{ type: 'donation', count: 1, value: 400 }] }] },
@@ -929,11 +617,11 @@ export const patrons = [
     email: 'ethan_davies_1234@gmail.com',
     phone: '(555) 012-3456',
     tags: ['donor'],
-    assignedTo: 'Emma Smith',
+    assignedToId: 'es',
     engagement: {
       level: 'cool',
       visits: 15,
-      lastVisit: '25/10/2025',
+      lastVisit: '2025-10-25',
       activityHistory: [
         { month: '2025-02', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }] },
         { month: '2025-03', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [{ type: 'purchase', count: 1, value: 45 }] }, { activities: [] }] },
@@ -950,64 +638,12 @@ export const patrons = [
       ]
     },
     giving: { lifetimeValue: 950, donations: 250, revenue: 700, lastDonation: '2025-10-25' },
-    membership: {
-      status: 'active',
-      programme: 'General Membership',
-      tier: 'Silver',
-      memberSince: '01/05/2024',
-      currentPeriod: '01 May 2026',
-      periodType: 'yearly',
-      daysToRenewal: 90,
-      price: 89.99,
-      totalSavings: 67.20,
-      patronId: 'olivia-brown',
-      membershipId: 'MEM-2024-156',
-      periodStart: '01/05/2025',
-      validUntil: '01/05/2026',
-      cardStyle: {
-        backgroundColor: '#5C6B7A',
-        textColor: '#ffffff',
-        accentColor: '#B8C5D1'
-      },
-      autoRenewal: true,
-      paymentMethod: {
-        type: 'mastercard',
-        last4: '3344'
-      },
-      memberYears: 2,
-      upgradeEligible: true,
-      upgradeTier: 'Gold',
-      benefits: [
-        { category: 'access', title: 'Unlimited visits', description: 'to all standard exhibits', usage: { used: 12, limit: null, resetDate: null }, icon: 'fa-ticket' },
-        { category: 'discount', title: 'Bring a friend for free', description: 'twice per year', usage: { used: 1, limit: 2, resetDate: '01/05/2026' }, icon: 'fa-user-plus' },
-        { category: 'discount', title: '10% off special events', description: 'your ticket only', usage: null, icon: 'fa-percent' },
-        { category: 'discount', title: '5% F&B discount', description: 'at main café', usage: { used: 4, limit: null, resetDate: null }, icon: 'fa-utensils' }
-      ],
-      usageAnalytics: {
-        overallPercentage: 50,
-        categories: [
-          { name: 'Admissions', used: 12, available: 'unlimited', percentage: 45 },
-          { name: 'Guest Passes', used: 1, available: 2, percentage: 50 },
-          { name: 'F&B Discounts', used: 4, available: 'unlimited', percentage: 35 },
-          { name: 'Event Discounts', used: 1, available: 'unlimited', percentage: 25 }
-        ],
-        unusedBenefits: [],
-        mostUsed: 'Admissions'
-      },
-      beneficiaries: [
-        { id: 1, name: 'Olivia Brown', role: 'Primary', avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=40&h=40&fit=crop&crop=face' }
-      ],
-      membershipHistory: [
-        { date: '2024-05-01', event: 'Joined', tier: 'Silver', programme: 'General Membership' },
-        { date: '2025-05-01', event: 'Renewed', tier: 'Silver', programme: 'General Membership' }
-      ]
-    },
     source: 'import',
     createdDate: '2024-12-01'
   },
 
   // ============================================
-  // GENERAL CONSTITUENTS (no assignedTo)
+  // GENERAL CONSTITUENTS (no assignedToId)
   // These are in the database but not actively managed.
   // They may be promoted to Managed Prospect by assigning
   // them to a relationship manager.
@@ -1025,7 +661,7 @@ export const patrons = [
     engagement: {
       level: 'cool',
       visits: 6,
-      lastVisit: '20/12/2025',
+      lastVisit: '2025-12-20',
       activityHistory: [
         { month: '2025-02', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
         { month: '2025-03', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
@@ -1042,51 +678,6 @@ export const patrons = [
       ]
     },
     giving: { lifetimeValue: 450, donations: 100, revenue: 350, lastDonation: '2025-12-15' },
-    membership: {
-      status: 'active',
-      programme: 'General Membership',
-      tier: 'Basic',
-      memberSince: '25/11/2025',
-      currentPeriod: '25 November 2026',
-      periodType: 'yearly',
-      daysToRenewal: 250,
-      price: 49.99,
-      totalSavings: 24.00,
-      patronId: 'rachel-kim',
-      membershipId: 'MEM-2025-589',
-      periodStart: '25/11/2025',
-      validUntil: '25/11/2026',
-      cardStyle: {
-        backgroundColor: '#8B7355',
-        textColor: '#ffffff',
-        accentColor: '#A89070'
-      },
-      autoRenewal: false,
-      paymentMethod: {
-        type: 'mastercard',
-        last4: '6622'
-      },
-      memberYears: 1,
-      upgradeEligible: true,
-      upgradeTier: 'Silver',
-      benefits: [
-        { category: 'access', title: 'Unlimited visits', description: 'to all standard exhibits', usage: { used: 6, limit: null, resetDate: null }, icon: 'fa-ticket' }
-      ],
-      usageAnalytics: {
-        overallPercentage: 40,
-        categories: [
-          { name: 'Admissions', used: 6, available: 'unlimited', percentage: 40 }
-        ],
-        unusedBenefits: [],
-        mostUsed: 'Admissions'
-      },
-      beneficiaries: [
-        { id: 1, name: 'Rachel Kim', role: 'Primary', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=40&h=40&fit=crop&crop=face' }
-      ],
-      membershipHistory: [
-        { date: '2025-11-25', event: 'Joined', tier: 'Basic', programme: 'General Membership' }
-      ]
-    },
     createdDate: '2026-02-03',
     source: 'ticket'
   },
@@ -1102,7 +693,7 @@ export const patrons = [
     engagement: {
       level: 'cold',
       visits: 2,
-      lastVisit: '05/09/2025',
+      lastVisit: '2025-09-05',
       activityHistory: [
         { month: '2025-02', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
         { month: '2025-03', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
@@ -1134,7 +725,7 @@ export const patrons = [
     engagement: {
       level: 'warm',
       visits: 18,
-      lastVisit: '28/01/2026',
+      lastVisit: '2026-01-28',
       activityHistory: [
         { month: '2025-02', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
         { month: '2025-03', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
@@ -1151,57 +742,6 @@ export const patrons = [
       ]
     },
     giving: { lifetimeValue: 620, donations: 150, revenue: 470, lastDonation: '2026-01-20' },
-    membership: {
-      status: 'active',
-      programme: 'General Membership',
-      tier: 'Silver',
-      memberSince: '15/10/2025',
-      currentPeriod: '15 April 2026',
-      periodType: 'yearly',
-      daysToRenewal: 60,
-      price: 89.99,
-      totalSavings: 95.40,
-      patronId: 'maria-santos',
-      membershipId: 'MEM-2025-421',
-      periodStart: '15/10/2025',
-      validUntil: '15/10/2026',
-      cardStyle: {
-        backgroundColor: '#5C6B7A',
-        textColor: '#ffffff',
-        accentColor: '#B8C5D1'
-      },
-      autoRenewal: true,
-      paymentMethod: {
-        type: 'visa',
-        last4: '9156'
-      },
-      memberYears: 1,
-      upgradeEligible: true,
-      upgradeTier: 'Gold',
-      benefits: [
-        { category: 'access', title: 'Unlimited visits', description: 'to all standard exhibits', usage: { used: 18, limit: null, resetDate: null }, icon: 'fa-ticket' },
-        { category: 'discount', title: 'Bring a friend for free', description: 'twice per year', usage: { used: 2, limit: 2, resetDate: '15/10/2026' }, icon: 'fa-user-plus' },
-        { category: 'discount', title: '10% off special events', description: 'your ticket only', usage: null, icon: 'fa-percent' },
-        { category: 'discount', title: '5% F&B discount', description: 'at main café', usage: { used: 6, limit: null, resetDate: null }, icon: 'fa-utensils' }
-      ],
-      usageAnalytics: {
-        overallPercentage: 70,
-        categories: [
-          { name: 'Admissions', used: 18, available: 'unlimited', percentage: 70 },
-          { name: 'Guest Passes', used: 2, available: 2, percentage: 100 },
-          { name: 'F&B Discounts', used: 6, available: 'unlimited', percentage: 50 },
-          { name: 'Event Discounts', used: 2, available: 'unlimited', percentage: 40 }
-        ],
-        unusedBenefits: [],
-        mostUsed: 'Guest Passes'
-      },
-      beneficiaries: [
-        { id: 1, name: 'Maria Santos', role: 'Primary', avatar: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=40&h=40&fit=crop&crop=face' }
-      ],
-      membershipHistory: [
-        { date: '2025-10-15', event: 'Joined', tier: 'Silver', programme: 'General Membership' }
-      ]
-    },
     createdDate: '2026-02-04',
     source: 'membership'
   },
@@ -1217,7 +757,7 @@ export const patrons = [
     engagement: {
       level: 'cold',
       visits: 1,
-      lastVisit: '10/01/2026',
+      lastVisit: '2026-01-10',
       activityHistory: [
         { month: '2025-02', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
         { month: '2025-03', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
@@ -1257,11 +797,11 @@ export const patrons = [
       name: 'Collingwood Family',
       verified: true
     },
-    // No assignedTo - not individually managed, but part of household
+    // No assignedToId - not individually managed, but part of household
     engagement: {
       level: 'warm',
       visits: 28,
-      lastVisit: '15/01/2026',
+      lastVisit: '2026-01-15',
       activityHistory: [
         { month: '2025-02', weeks: [{ activities: [{ type: 'attendance', count: 2 }] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [{ type: 'attendance', count: 1 }] }] },
         { month: '2025-03', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 2 }] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }] },
@@ -1306,11 +846,11 @@ export const patrons = [
       name: 'Collingwood Family',
       verified: true
     },
-    // No assignedTo - dependent/minor
+    // No assignedToId - dependent/minor
     engagement: {
       level: 'cool',
       visits: 7,
-      lastVisit: '20/12/2025',
+      lastVisit: '2025-12-20',
       activityHistory: [
         { month: '2025-02', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
         { month: '2025-03', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }] },
@@ -1336,6 +876,395 @@ export const patrons = [
     // No separate membership - she's a dependent on Anderson's
     createdDate: '2024-01-15',
     source: 'manual'
+  },
+
+  // =====================================================================
+  // Patrons referenced by opportunities (and pledge demo data)
+  // =====================================================================
+
+  // Eleanor Whitfield - major donor, $100k leadership gift opp (assigned to JM)
+  {
+    id: 'eleanor-whitfield',
+    firstName: 'Eleanor',
+    lastName: 'Whitfield',
+    photo: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face',
+    email: 'eleanor.whitfield@gmail.com',
+    phone: '(512) 555-3001',
+    tags: ['major-donor', 'donor'],
+    assignedToId: 'jm',
+    engagement: {
+      level: 'hot',
+      visits: 34,
+      lastVisit: '2026-01-22',
+      activityHistory: [
+        { month: '2025-02', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [{ type: 'donation', count: 1, value: 5000 }] }, { activities: [{ type: 'attendance', count: 1 }] }] },
+        { month: '2025-03', weeks: [{ activities: [{ type: 'attendance', count: 2 }] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }] },
+        { month: '2025-04', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [{ type: 'purchase', count: 1, value: 120 }] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }] },
+        { month: '2025-05', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [{ type: 'donation', count: 1, value: 10000 }] }, { activities: [{ type: 'attendance', count: 1 }] }] },
+        { month: '2025-06', weeks: [{ activities: [{ type: 'attendance', count: 2 }] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [{ type: 'purchase', count: 1, value: 85 }] }] },
+        { month: '2025-07', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }] },
+        { month: '2025-08', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 2 }] }, { activities: [{ type: 'donation', count: 1, value: 5000 }] }, { activities: [] }] },
+        { month: '2025-09', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [{ type: 'attendance', count: 1 }] }] },
+        { month: '2025-10', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [{ type: 'purchase', count: 1, value: 200 }] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }] },
+        { month: '2025-11', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [{ type: 'donation', count: 1, value: 10000 }] }] },
+        { month: '2025-12', weeks: [{ activities: [{ type: 'attendance', count: 2 }] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }] },
+        { month: '2026-01', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }] }
+      ]
+    },
+    giving: { lifetimeValue: 42500, donations: 35000, revenue: 7500, giftCount: 8, averageGift: 4375, lastDonation: '2025-11-20' },
+    address: '2401 Lake Austin Blvd, Austin, TX 78703',
+    source: 'import',
+    createdDate: '2022-06-15'
+  },
+
+  // Marcus Chen - corporate contact, exhibition sponsorship opp (assigned to RB)
+  {
+    id: 'marcus-chen',
+    firstName: 'Marcus',
+    lastName: 'Chen',
+    photo: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&h=150&fit=crop&crop=face',
+    email: 'marcus.chen@chenenterprises.com',
+    phone: '(512) 555-3002',
+    tags: ['corporate', 'donor'],
+    assignedToId: 'rb',
+    engagement: {
+      level: 'warm',
+      visits: 12,
+      lastVisit: '2026-01-10',
+      activityHistory: [
+        { month: '2025-02', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-03', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-04', weeks: [{ activities: [] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }] },
+        { month: '2025-05', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-06', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }] },
+        { month: '2025-07', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-08', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [{ type: 'purchase', count: 1, value: 250 }] }] },
+        { month: '2025-09', weeks: [{ activities: [] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }] },
+        { month: '2025-10', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-11', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-12', weeks: [{ activities: [] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }] },
+        { month: '2026-01', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }, { activities: [] }] }
+      ]
+    },
+    giving: { lifetimeValue: 18000, donations: 15000, revenue: 3000, giftCount: 3, averageGift: 5000, lastDonation: '2025-09-22' },
+    address: '500 W 5th St, Suite 800, Austin, TX 78701',
+    source: 'manual',
+    createdDate: '2023-03-10'
+  },
+
+  // Patricia Hawthorne - foundation, grant opp (assigned to RB)
+  {
+    id: 'patricia-hawthorne',
+    firstName: 'Patricia',
+    lastName: 'Hawthorne',
+    photo: 'https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=150&h=150&fit=crop&crop=face',
+    email: 'p.hawthorne@hawthornefoundation.org',
+    phone: '(512) 555-3003',
+    tags: ['foundation', 'donor'],
+    assignedToId: 'rb',
+    engagement: {
+      level: 'cool',
+      visits: 5,
+      lastVisit: '2025-12-05',
+      activityHistory: [
+        { month: '2025-02', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-03', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-04', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-05', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-06', weeks: [{ activities: [] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }] },
+        { month: '2025-07', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-08', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-09', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-10', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }] },
+        { month: '2025-11', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-12', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2026-01', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] }
+      ]
+    },
+    giving: { lifetimeValue: 12000, donations: 12000, revenue: 0, giftCount: 2, averageGift: 6000, lastDonation: '2025-06-15' },
+    address: '1200 Barton Springs Rd, Austin, TX 78704',
+    source: 'manual',
+    createdDate: '2024-08-20'
+  },
+
+  // James Morrison - major donor, building campaign (won $75k), assigned to JM
+  {
+    id: 'james-morrison',
+    firstName: 'James',
+    lastName: 'Morrison',
+    photo: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
+    email: 'james.morrison@gmail.com',
+    phone: '(512) 555-3004',
+    tags: ['major-donor', 'donor', 'board-member'],
+    assignedToId: 'jm',
+    engagement: {
+      level: 'hot',
+      visits: 28,
+      lastVisit: '2026-01-30',
+      activityHistory: [
+        { month: '2025-02', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }] },
+        { month: '2025-03', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [{ type: 'donation', count: 1, value: 10000 }] }, { activities: [{ type: 'attendance', count: 1 }] }] },
+        { month: '2025-04', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }] },
+        { month: '2025-05', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 2 }] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }] },
+        { month: '2025-06', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [{ type: 'donation', count: 1, value: 15000 }] }] },
+        { month: '2025-07', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }] },
+        { month: '2025-08', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }] },
+        { month: '2025-09', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }] },
+        { month: '2025-10', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }, { type: 'purchase', count: 1, value: 150 }] }] },
+        { month: '2025-11', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-12', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }] },
+        { month: '2026-01', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [{ type: 'donation', count: 1, value: 75000 }] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }] }
+      ]
+    },
+    giving: { lifetimeValue: 125000, donations: 115000, revenue: 10000, giftCount: 12, averageGift: 9583, lastDonation: '2026-01-15' },
+    address: '3200 Westlake Dr, Austin, TX 78746',
+    source: 'import',
+    createdDate: '2021-04-01'
+  },
+
+  // Sarah Blackwood - new prospect, first major gift opp (assigned to AL)
+  {
+    id: 'sarah-blackwood',
+    firstName: 'Sarah',
+    lastName: 'Blackwood',
+    photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face',
+    email: 'sarah.blackwood@outlook.com',
+    phone: '(512) 555-3005',
+    tags: ['prospect'],
+    assignedToId: 'al',
+    engagement: {
+      level: 'cool',
+      visits: 3,
+      lastVisit: '2026-01-05',
+      activityHistory: [
+        { month: '2025-02', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-03', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-04', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-05', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-06', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-07', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-08', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-09', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-10', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-11', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-12', weeks: [{ activities: [] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }] },
+        { month: '2026-01', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }, { activities: [] }] }
+      ]
+    },
+    giving: { lifetimeValue: 350, donations: 0, revenue: 350, giftCount: 0, lastDonation: null },
+    address: '901 S Congress Ave, Apt 4B, Austin, TX 78704',
+    source: 'ticket',
+    createdDate: '2025-11-01'
+  },
+
+  // William Hartford - planned giving / bequest opp (assigned to JM)
+  {
+    id: 'william-hartford',
+    firstName: 'William',
+    lastName: 'Hartford',
+    photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face',
+    email: 'w.hartford@hartfordlaw.com',
+    phone: '(512) 555-3006',
+    tags: ['major-donor', 'donor'],
+    assignedToId: 'jm',
+    engagement: {
+      level: 'warm',
+      visits: 18,
+      lastVisit: '2026-01-18',
+      activityHistory: [
+        { month: '2025-02', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-03', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [{ type: 'donation', count: 1, value: 5000 }] }] },
+        { month: '2025-04', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-05', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }] },
+        { month: '2025-06', weeks: [{ activities: [] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [{ type: 'donation', count: 1, value: 5000 }] }] },
+        { month: '2025-07', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }] },
+        { month: '2025-08', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-09', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [{ type: 'donation', count: 1, value: 10000 }] }, { activities: [] }] },
+        { month: '2025-10', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }] },
+        { month: '2025-11', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-12', weeks: [{ activities: [] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [{ type: 'donation', count: 1, value: 5000 }] }] },
+        { month: '2026-01', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }, { activities: [] }] }
+      ]
+    },
+    giving: { lifetimeValue: 52000, donations: 45000, revenue: 7000, giftCount: 9, averageGift: 5000, lastDonation: '2025-12-20' },
+    address: '4500 Bee Cave Rd, Austin, TX 78746',
+    source: 'import',
+    createdDate: '2020-11-01'
+  },
+
+  // Diana Rothschild - education program supporter (assigned to AL)
+  {
+    id: 'diana-rothschild',
+    firstName: 'Diana',
+    lastName: 'Rothschild',
+    photo: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face',
+    email: 'diana.rothschild@yahoo.com',
+    phone: '(512) 555-3007',
+    tags: ['donor', 'volunteer'],
+    assignedToId: 'al',
+    engagement: {
+      level: 'warm',
+      visits: 15,
+      lastVisit: '2026-01-28',
+      activityHistory: [
+        { month: '2025-02', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-03', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }] },
+        { month: '2025-04', weeks: [{ activities: [] }, { activities: [{ type: 'donation', count: 1, value: 2000 }] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }] },
+        { month: '2025-05', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }] },
+        { month: '2025-06', weeks: [{ activities: [] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }] },
+        { month: '2025-07', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }] },
+        { month: '2025-08', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-09', weeks: [{ activities: [] }, { activities: [] }, { activities: [{ type: 'donation', count: 1, value: 3000 }] }, { activities: [{ type: 'attendance', count: 1 }] }] },
+        { month: '2025-10', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-11', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-12', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2026-01', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }] }
+      ]
+    },
+    giving: { lifetimeValue: 9500, donations: 8000, revenue: 1500, giftCount: 4, averageGift: 2000, lastDonation: '2025-09-18' },
+    address: '780 Red River St, Austin, TX 78701',
+    source: 'online',
+    createdDate: '2024-02-10'
+  },
+
+  // Theodore Banks - annual renewal donor (won $10k), assigned to RB
+  {
+    id: 'theodore-banks',
+    firstName: 'Theodore',
+    lastName: 'Banks',
+    photo: 'https://images.unsplash.com/photo-1548372290-8d01b6c8e78c?w=150&h=150&fit=crop&crop=face',
+    email: 'ted.banks@bankscapital.com',
+    phone: '(512) 555-3008',
+    tags: ['major-donor', 'donor'],
+    assignedToId: 'rb',
+    engagement: {
+      level: 'warm',
+      visits: 20,
+      lastVisit: '2025-11-28',
+      activityHistory: [
+        { month: '2025-02', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }] },
+        { month: '2025-03', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }] },
+        { month: '2025-04', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [{ type: 'donation', count: 1, value: 2500 }] }, { activities: [] }] },
+        { month: '2025-05', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }] },
+        { month: '2025-06', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }] },
+        { month: '2025-07', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-08', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }] },
+        { month: '2025-09', weeks: [{ activities: [] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [{ type: 'purchase', count: 1, value: 75 }] }] },
+        { month: '2025-10', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }] },
+        { month: '2025-11', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [{ type: 'donation', count: 1, value: 10000 }] }, { activities: [{ type: 'attendance', count: 1 }] }] },
+        { month: '2025-12', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2026-01', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] }
+      ]
+    },
+    giving: { lifetimeValue: 65000, donations: 60000, revenue: 5000, giftCount: 10, averageGift: 6000, lastDonation: '2025-11-15' },
+    address: '1500 S Lamar Blvd, Austin, TX 78704',
+    source: 'import',
+    createdDate: '2019-09-01'
+  },
+
+  // Victoria Sterling - transformational gift prospect ($500k), assigned to JM
+  {
+    id: 'victoria-sterling',
+    firstName: 'Victoria',
+    lastName: 'Sterling',
+    photo: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&h=150&fit=crop&crop=face',
+    email: 'victoria@sterlingfamilyoffice.com',
+    phone: '(512) 555-3009',
+    tags: ['major-donor', 'donor', 'prospect'],
+    assignedToId: 'jm',
+    engagement: {
+      level: 'warm',
+      visits: 10,
+      lastVisit: '2026-01-25',
+      activityHistory: [
+        { month: '2025-02', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-03', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-04', weeks: [{ activities: [] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }] },
+        { month: '2025-05', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }] },
+        { month: '2025-06', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-07', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [{ type: 'donation', count: 1, value: 25000 }] }, { activities: [] }] },
+        { month: '2025-08', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-09', weeks: [{ activities: [] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [{ type: 'attendance', count: 1 }] }] },
+        { month: '2025-10', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }] },
+        { month: '2025-11', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [{ type: 'donation', count: 1, value: 25000 }] }, { activities: [] }] },
+        { month: '2025-12', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }] },
+        { month: '2026-01', weeks: [{ activities: [] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }] }
+      ]
+    },
+    giving: { lifetimeValue: 78000, donations: 75000, revenue: 3000, giftCount: 5, averageGift: 15000, lastDonation: '2025-11-10' },
+    address: '6000 Shepherd Mountain Cv, Austin, TX 78730',
+    source: 'manual',
+    createdDate: '2023-01-20'
+  },
+
+  // Margaret Chen - annual fund prospect ($5k), assigned to LJ
+  {
+    id: 'margaret-chen',
+    firstName: 'Margaret',
+    lastName: 'Chen',
+    photo: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=150&h=150&fit=crop&crop=face',
+    email: 'margaret.chen@utexas.edu',
+    phone: '(512) 555-3010',
+    tags: ['donor', 'prospect'],
+    assignedToId: 'lj',
+    engagement: {
+      level: 'cool',
+      visits: 8,
+      lastVisit: '2025-10-15',
+      activityHistory: [
+        { month: '2025-02', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-03', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-04', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }] },
+        { month: '2025-05', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-06', weeks: [{ activities: [] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }] },
+        { month: '2025-07', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-08', weeks: [{ activities: [] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }] },
+        { month: '2025-09', weeks: [{ activities: [] }, { activities: [{ type: 'donation', count: 1, value: 1000 }] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-10', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }] },
+        { month: '2025-11', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-12', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2026-01', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] }
+      ]
+    },
+    giving: { lifetimeValue: 2800, donations: 2000, revenue: 800, giftCount: 2, averageGift: 1000, lastDonation: '2025-09-10' },
+    address: '2200 Guadalupe St, Austin, TX 78705',
+    source: 'ticket',
+    createdDate: '2024-06-01'
+  },
+
+  // Elizabeth Fairfax - pledges and gifts demo patron (paul-fairfax's wife)
+  {
+    id: 'elizabeth-fairfax',
+    firstName: 'Elizabeth',
+    lastName: 'Fairfax',
+    photo: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=150&h=150&fit=crop&crop=face',
+    email: 'elizabeth.fairfax@outlook.com',
+    phone: '(555) 111-2223',
+    tags: ['donor'],
+    assignedToId: 'lj',
+    engagement: {
+      level: 'warm',
+      visits: 14,
+      lastVisit: '2025-12-10',
+      activityHistory: [
+        { month: '2025-02', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-03', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }] },
+        { month: '2025-04', weeks: [{ activities: [] }, { activities: [] }, { activities: [{ type: 'donation', count: 1, value: 500 }] }, { activities: [{ type: 'attendance', count: 1 }] }] },
+        { month: '2025-05', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }] },
+        { month: '2025-06', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-07', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }] },
+        { month: '2025-08', weeks: [{ activities: [] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }] },
+        { month: '2025-09', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-10', weeks: [{ activities: [] }, { activities: [{ type: 'purchase', count: 1, value: 45 }] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-11', weeks: [{ activities: [] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }] },
+        { month: '2025-12', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [{ type: 'donation', count: 1, value: 200 }] }, { activities: [] }] },
+        { month: '2026-01', weeks: [{ activities: [] }, { activities: [] }, { activities: [] }, { activities: [] }] }
+      ]
+    },
+    giving: { lifetimeValue: 3200, donations: 2700, revenue: 500, giftCount: 3, averageGift: 900, lastDonation: '2025-12-20' },
+    address: '742 Maple Avenue, Boston, MA 02108',
+    source: 'ticket',
+    createdDate: '2024-03-15'
   }
 ]
 
@@ -1343,17 +1272,27 @@ export const patrons = [
 export const getPatronById = (id) => patrons.find(p => p.id === id)
 
 // Helper function to determine if patron is a Managed Prospect
-// A managed prospect has an assignedTo (relationship manager)
-export const isManagedProspect = (patron) => Boolean(patron?.assignedTo)
+// A managed prospect has an assignedToId (relationship manager)
+export const isManagedProspect = (patron) => Boolean(patron?.assignedToId)
 
 // Helper function to get display name
 export const getPatronDisplayName = (patron) => `${patron.firstName} ${patron.lastName}`
 
-// Helper to format date for display
+// Helper to format date for display (expects ISO YYYY-MM-DD input)
 export const formatDate = (dateStr) => {
   if (!dateStr) return '-'
   const date = new Date(dateStr)
+  if (isNaN(date.getTime())) return '-'
   return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+}
+
+// Helper to format date with time (for activity timelines)
+export const formatDateTime = (dateStr) => {
+  if (!dateStr) return '-'
+  const date = new Date(dateStr)
+  if (isNaN(date.getTime())) return '-'
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) +
+    ' - ' + date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })
 }
 
 // Helper to format date as relative time (e.g., "2 days ago", "1 year ago")
@@ -1448,7 +1387,7 @@ export const addPatron = (patronData) => {
     // Optional notes
     notes: patronData.notes || null,
     // No relationship manager by default (General Constituent)
-    assignedTo: patronData.assignedTo || null,
+    assignedToId: patronData.assignedToId || null,
     // Created timestamp
     createdDate: new Date().toISOString().split('T')[0],
     // Source - how they entered the system
@@ -1473,8 +1412,8 @@ export const updatePatron = (id, updates) => {
 }
 
 // Assign patron to gift officer (convert to Managed Prospect)
-export const assignPatronToOfficer = (patronId, assignedTo) => {
-  return updatePatron(patronId, { assignedTo })
+export const assignPatronToOfficer = (patronId, assignedToId) => {
+  return updatePatron(patronId, { assignedToId })
 }
 
 // Archive a patron (soft delete)
@@ -1559,12 +1498,26 @@ export const getTagUsageCount = (tagId) => {
 // MEMBERSHIP MODEL - SEPARATE ENTITIES
 // ============================================
 
-// Tier beneficiary limits
-export const tierLimits = {
-  'Basic': 1,
-  'Silver': 2,
-  'Gold': 4,
-  'Platinum': Infinity
+// Tier configuration (styling + limits)
+// In production, this data lives at the membership programme/tier config level in Fever Zone.
+// Card styling is set per-tier (not per-member) via the tier creation UI's "Look & Feel" section.
+export const tierConfig = {
+  'Basic': {
+    beneficiaryLimit: 1,
+    cardStyle: { backgroundColor: '#8B7355', textColor: '#ffffff', accentColor: '#A89070' }
+  },
+  'Silver': {
+    beneficiaryLimit: 2,
+    cardStyle: { backgroundColor: '#5C6B7A', textColor: '#ffffff', accentColor: '#B8C5D1' }
+  },
+  'Gold': {
+    beneficiaryLimit: 4,
+    cardStyle: { backgroundColor: '#B8860B', textColor: '#ffffff', accentColor: '#D4AF37' }
+  },
+  'Platinum': {
+    beneficiaryLimit: Infinity,
+    cardStyle: { backgroundColor: '#2C2C2C', textColor: '#ffffff', accentColor: '#E5E4E2' }
+  }
 }
 
 // Memberships as first-class entities
@@ -1582,8 +1535,8 @@ export const memberships = [
     
     // MembershipOverview required properties
     membershipId: 'MEM-2023-001',  // For QR code display
-    periodStart: '02/12/2025',     // DD/MM/YYYY format for progress bar
-    validUntil: '02/12/2026',      // DD/MM/YYYY format for progress bar
+    periodStart: '2025-12-02',     // For progress bar display
+    validUntil: '2026-12-02',      // For progress bar display
     daysToRenewal: 300,            // For churn risk calculation
     
     // Auto-renewal
@@ -1592,12 +1545,7 @@ export const memberships = [
     paymentMethod: { type: 'visa', last4: '4242' },
     memberYears: 2,
     
-    // Card styling
-    cardStyle: {
-      backgroundColor: '#1a5a5a',
-      textColor: '#ffffff',
-      accentColor: '#ffeb3b'
-    },
+    // Card styling resolved from tierConfig at query time (not stored per-member)
     
     // Usage analytics
     usageAnalytics: {
@@ -1638,7 +1586,7 @@ export const memberships = [
     benefits: [
       { category: 'access', title: 'Unlimited visits', description: 'to all exhibits', usage: { used: 47, limit: null, resetDate: null }, icon: 'fa-ticket' },
       { category: 'access', title: 'Priority entry', description: 'skip the line', usage: null, icon: 'fa-forward' },
-      { category: 'discount', title: 'Bring a friend for free', description: 'every visit', usage: { used: 3, limit: 5, resetDate: '12/02/2026' }, icon: 'fa-user-plus' },
+      { category: 'discount', title: 'Bring a friend for free', description: 'every visit', usage: { used: 3, limit: 5, resetDate: '2026-02-12' }, icon: 'fa-user-plus' },
       { category: 'discount', title: '20% off special events', description: "your ticket and friend's ticket", usage: null, icon: 'fa-percent' },
       { category: 'discount', title: '10% F&B discount', description: 'at all venue restaurants', usage: { used: 12, limit: null, resetDate: null }, icon: 'fa-utensils' },
       { category: 'complimentary', title: 'Welcome pack', description: 'Paradox tote + exclusive goodies', usage: { used: 1, limit: 1, resetDate: null }, icon: 'fa-gift' }
@@ -1672,6 +1620,427 @@ export const memberships = [
       { date: '2024-06-15', event: 'Upgraded', tier: 'Gold', programme: 'General Membership' },
       { date: '2024-12-02', event: 'Renewed', tier: 'Gold', programme: 'General Membership' },
       { date: '2025-12-02', event: 'Renewed', tier: 'Gold', programme: 'General Membership' }
+    ]
+  },
+
+  // paul-fairfax Silver membership
+  {
+    id: 'mem-fairfax-silver',
+    programme: 'General Membership',
+    tier: 'Silver',
+    status: 'active',
+
+    // Date tracking
+    startDate: '2024-02-27',
+    renewalDate: '2026-02-27',
+    expirationDate: '2026-02-27',
+
+    // MembershipOverview required properties
+    membershipId: 'MEM-2024-047',
+    periodStart: '2025-02-27',
+    validUntil: '2026-02-27',
+    daysToRenewal: 21,
+
+    // Auto-renewal
+    autoRenew: false,
+    autoRenewal: false,
+    paymentMethod: { type: 'mastercard', last4: '8832' },
+    memberYears: 1,
+
+    // Upgrade options
+    upgradeEligible: true,
+    upgradeTier: 'Gold',
+    upgradeComparison: {
+      currentTier: 'Silver',
+      upgradeTier: 'Gold',
+      upgradePrice: 145.99,
+      priceDifference: 56.00,
+      improvements: [
+        { feature: 'Guest passes', current: '2/year', upgrade: '5/year' },
+        { feature: 'F&B Discount', current: '5%', upgrade: '10%' },
+        { feature: 'Event discounts', current: '10%', upgrade: '20%' }
+      ],
+      newPerks: [
+        'Priority entry',
+        'Welcome pack with tote bag',
+        'Access to special exhibits'
+      ]
+    },
+
+    // Benefits with usage tracking
+    benefits: [
+      { 
+        category: 'access', 
+        title: 'Unlimited visits', 
+        description: 'to all standard exhibits',
+        usage: { used: 6, limit: null, resetDate: null },
+        icon: 'fa-ticket'
+      },
+      { 
+        category: 'discount', 
+        title: 'Bring a friend for free', 
+        description: 'twice per year',
+        usage: { used: 0, limit: 2, resetDate: '2026-02-27' },
+        icon: 'fa-user-plus'
+      },
+      { 
+        category: 'discount', 
+        title: '10% off special events', 
+        description: 'your ticket only',
+        usage: null,
+        icon: 'fa-percent'
+      },
+      { 
+        category: 'discount', 
+        title: '5% F&B discount', 
+        description: 'at main café',
+        usage: { used: 2, limit: null, resetDate: null },
+        icon: 'fa-utensils'
+      }
+    ],
+
+    // Member events
+    memberEvents: {
+      earlyAccess: [
+        {
+          id: 1,
+          name: 'Spring Gala 2026',
+          date: '2026-04-20',
+          memberAccess: '2026-03-15',
+          publicAccess: '2026-03-25',
+          status: 'upcoming',
+          image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=100&h=60&fit=crop'
+        }
+      ],
+      memberOnly: []
+    },
+
+    // Usage analytics
+    usageAnalytics: {
+      overallPercentage: 35,
+      categories: [
+        { name: 'Admissions', used: 6, available: 'unlimited', percentage: 40 },
+        { name: 'Guest Passes', used: 0, available: 2, percentage: 0 },
+        { name: 'F&B Discounts', used: 2, available: 'unlimited', percentage: 25 }
+      ],
+      unusedBenefits: ['Event discounts', 'Guest passes'],
+      mostUsed: 'Admissions'
+    },
+
+    // Membership history
+    membershipHistory: [
+      { date: '2024-02-27', event: 'Joined', tier: 'Silver', programme: 'General Membership' },
+      { date: '2025-02-27', event: 'Renewed', tier: 'Silver', programme: 'General Membership' }
+    ],
+
+    // Legacy alias for history
+    history: [
+      { date: '2024-02-27', event: 'Joined', tier: 'Silver', programme: 'General Membership' },
+      { date: '2025-02-27', event: 'Renewed', tier: 'Silver', programme: 'General Membership' }
+    ]
+  },
+
+  // lucas-taylor Silver membership
+  {
+    id: 'mem-taylor-silver',
+    programme: 'General Membership',
+    tier: 'Silver',
+    status: 'active',
+
+    // Date tracking
+    startDate: '2024-11-10',
+    renewalDate: '2026-03-10',
+    expirationDate: '2026-03-10',
+
+    // MembershipOverview required properties
+    membershipId: 'MEM-2024-312',
+    periodStart: '2025-03-10',
+    validUntil: '2026-03-10',
+    daysToRenewal: 45,
+
+    // Auto-renewal
+    autoRenew: false,
+    autoRenewal: false,
+    paymentMethod: { type: 'visa', last4: '7721' },
+    memberYears: 1,
+
+    // Upgrade options
+    upgradeEligible: true,
+    upgradeTier: 'Gold',
+
+    // Benefits with usage tracking
+    benefits: [
+      { category: 'access', title: 'Unlimited visits', description: 'to all standard exhibits', usage: { used: 8, limit: null, resetDate: null }, icon: 'fa-ticket' },
+      { category: 'discount', title: 'Bring a friend for free', description: 'twice per year', usage: { used: 1, limit: 2, resetDate: '2026-03-10' }, icon: 'fa-user-plus' },
+      { category: 'discount', title: '10% off special events', description: 'your ticket only', usage: null, icon: 'fa-percent' },
+      { category: 'discount', title: '5% F&B discount', description: 'at main café', usage: { used: 2, limit: null, resetDate: null }, icon: 'fa-utensils' }
+    ],
+
+    // Usage analytics
+    usageAnalytics: {
+      overallPercentage: 25,
+      categories: [
+        { name: 'Admissions', used: 8, available: 'unlimited', percentage: 30 },
+        { name: 'Guest Passes', used: 1, available: 2, percentage: 50 },
+        { name: 'F&B Discounts', used: 2, available: 'unlimited', percentage: 15 }
+      ],
+      unusedBenefits: ['Event discounts'],
+      mostUsed: 'Admissions'
+    },
+
+    // Membership history
+    membershipHistory: [
+      { date: '2024-11-10', event: 'Joined', tier: 'Silver', programme: 'General Membership' },
+      { date: '2025-03-10', event: 'Renewed', tier: 'Silver', programme: 'General Membership' }
+    ],
+
+    // Legacy alias for history
+    history: [
+      { date: '2024-11-10', event: 'Joined', tier: 'Silver', programme: 'General Membership' },
+      { date: '2025-03-10', event: 'Renewed', tier: 'Silver', programme: 'General Membership' }
+    ]
+  },
+
+  // john-martinez Gold membership
+  {
+    id: 'mem-martinez-gold',
+    programme: 'General Membership',
+    tier: 'Gold',
+    status: 'active',
+
+    // Date tracking
+    startDate: '2023-03-15',
+    renewalDate: '2026-06-15',
+    expirationDate: '2026-06-15',
+
+    // MembershipOverview required properties
+    membershipId: 'MEM-2023-089',
+    periodStart: '2025-06-15',
+    validUntil: '2026-06-15',
+    daysToRenewal: 120,
+
+    // Auto-renewal
+    autoRenew: true,
+    autoRenewal: true,
+    paymentMethod: { type: 'amex', last4: '1008' },
+    memberYears: 2,
+
+    // Upgrade options
+    upgradeEligible: true,
+    upgradeTier: 'Platinum',
+
+    // Benefits with usage tracking
+    benefits: [
+      { category: 'access', title: 'Unlimited visits', description: 'to all exhibits', usage: { used: 67, limit: null, resetDate: null }, icon: 'fa-ticket' },
+      { category: 'access', title: 'Priority entry', description: 'skip the line', usage: null, icon: 'fa-forward' },
+      { category: 'discount', title: 'Bring a friend for free', description: 'every visit', usage: { used: 4, limit: 5, resetDate: '2026-06-15' }, icon: 'fa-user-plus' },
+      { category: 'discount', title: '20% off special events', description: "your ticket and friend's ticket", usage: null, icon: 'fa-percent' },
+      { category: 'discount', title: '10% F&B discount', description: 'at all venue restaurants', usage: { used: 25, limit: null, resetDate: null }, icon: 'fa-utensils' },
+      { category: 'complimentary', title: 'Welcome pack', description: 'Paradox tote + exclusive goodies', usage: { used: 1, limit: 1, resetDate: null }, icon: 'fa-gift' }
+    ],
+
+    // Usage analytics
+    usageAnalytics: {
+      overallPercentage: 85,
+      categories: [
+        { name: 'Admissions', used: 67, available: 'unlimited', percentage: 95 },
+        { name: 'Guest Passes', used: 4, available: 5, percentage: 80 },
+        { name: 'F&B Discounts', used: 25, available: 'unlimited', percentage: 85 },
+        { name: 'Event Discounts', used: 3, available: 'unlimited', percentage: 60 }
+      ],
+      unusedBenefits: ['Priority entry'],
+      mostUsed: 'Admissions'
+    },
+
+    // Membership history
+    membershipHistory: [
+      { date: '2023-03-15', event: 'Joined', tier: 'Silver', programme: 'General Membership' },
+      { date: '2023-09-01', event: 'Upgraded', tier: 'Gold', programme: 'General Membership' },
+      { date: '2024-06-15', event: 'Renewed', tier: 'Gold', programme: 'General Membership' },
+      { date: '2025-06-15', event: 'Renewed', tier: 'Gold', programme: 'General Membership' }
+    ],
+
+    // Legacy alias for history
+    history: [
+      { date: '2023-03-15', event: 'Joined', tier: 'Silver', programme: 'General Membership' },
+      { date: '2023-09-01', event: 'Upgraded', tier: 'Gold', programme: 'General Membership' },
+      { date: '2024-06-15', event: 'Renewed', tier: 'Gold', programme: 'General Membership' },
+      { date: '2025-06-15', event: 'Renewed', tier: 'Gold', programme: 'General Membership' }
+    ]
+  },
+
+  // ethan-davis Silver membership
+  {
+    id: 'mem-davis-silver',
+    programme: 'General Membership',
+    tier: 'Silver',
+    status: 'active',
+
+    // Date tracking
+    startDate: '2024-05-01',
+    renewalDate: '2026-05-01',
+    expirationDate: '2026-05-01',
+
+    // MembershipOverview required properties
+    membershipId: 'MEM-2024-156',
+    periodStart: '2025-05-01',
+    validUntil: '2026-05-01',
+    daysToRenewal: 90,
+
+    // Auto-renewal
+    autoRenew: true,
+    autoRenewal: true,
+    paymentMethod: { type: 'mastercard', last4: '3344' },
+    memberYears: 1,
+
+    // Upgrade options
+    upgradeEligible: true,
+    upgradeTier: 'Gold',
+
+    // Benefits with usage tracking
+    benefits: [
+      { category: 'access', title: 'Unlimited visits', description: 'to all standard exhibits', usage: { used: 12, limit: null, resetDate: null }, icon: 'fa-ticket' },
+      { category: 'discount', title: 'Bring a friend for free', description: 'twice per year', usage: { used: 1, limit: 2, resetDate: '2026-05-01' }, icon: 'fa-user-plus' },
+      { category: 'discount', title: '10% off special events', description: 'your ticket only', usage: null, icon: 'fa-percent' },
+      { category: 'discount', title: '5% F&B discount', description: 'at main café', usage: { used: 4, limit: null, resetDate: null }, icon: 'fa-utensils' }
+    ],
+
+    // Usage analytics
+    usageAnalytics: {
+      overallPercentage: 50,
+      categories: [
+        { name: 'Admissions', used: 12, available: 'unlimited', percentage: 45 },
+        { name: 'Guest Passes', used: 1, available: 2, percentage: 50 },
+        { name: 'F&B Discounts', used: 4, available: 'unlimited', percentage: 35 },
+        { name: 'Event Discounts', used: 1, available: 'unlimited', percentage: 25 }
+      ],
+      unusedBenefits: [],
+      mostUsed: 'Admissions'
+    },
+
+    // Membership history
+    membershipHistory: [
+      { date: '2024-05-01', event: 'Joined', tier: 'Silver', programme: 'General Membership' },
+      { date: '2025-05-01', event: 'Renewed', tier: 'Silver', programme: 'General Membership' }
+    ],
+
+    // Legacy alias for history
+    history: [
+      { date: '2024-05-01', event: 'Joined', tier: 'Silver', programme: 'General Membership' },
+      { date: '2025-05-01', event: 'Renewed', tier: 'Silver', programme: 'General Membership' }
+    ]
+  },
+
+  // rachel-kim Basic membership
+  {
+    id: 'mem-kim-basic',
+    programme: 'General Membership',
+    tier: 'Basic',
+    status: 'active',
+
+    // Date tracking
+    startDate: '2025-11-25',
+    renewalDate: '2026-11-25',
+    expirationDate: '2026-11-25',
+
+    // MembershipOverview required properties
+    membershipId: 'MEM-2025-589',
+    periodStart: '2025-11-25',
+    validUntil: '2026-11-25',
+    daysToRenewal: 250,
+
+    // Auto-renewal
+    autoRenew: false,
+    autoRenewal: false,
+    paymentMethod: { type: 'mastercard', last4: '6622' },
+    memberYears: 0,
+
+    // Upgrade options
+    upgradeEligible: true,
+    upgradeTier: 'Silver',
+
+    // Benefits with usage tracking
+    benefits: [
+      { category: 'access', title: 'Unlimited visits', description: 'to all standard exhibits', usage: { used: 6, limit: null, resetDate: null }, icon: 'fa-ticket' }
+    ],
+
+    // Usage analytics
+    usageAnalytics: {
+      overallPercentage: 40,
+      categories: [
+        { name: 'Admissions', used: 6, available: 'unlimited', percentage: 40 }
+      ],
+      unusedBenefits: [],
+      mostUsed: 'Admissions'
+    },
+
+    // Membership history
+    membershipHistory: [
+      { date: '2025-11-25', event: 'Joined', tier: 'Basic', programme: 'General Membership' }
+    ],
+
+    // Legacy alias for history
+    history: [
+      { date: '2025-11-25', event: 'Joined', tier: 'Basic', programme: 'General Membership' }
+    ]
+  },
+  // maria-santos Silver membership
+  {
+    id: 'mem-santos-silver',
+    programme: 'General Membership',
+    tier: 'Silver',
+    status: 'active',
+
+    // Date tracking
+    startDate: '2025-10-15',
+    renewalDate: '2026-10-15',
+    expirationDate: '2026-10-15',
+
+    // MembershipOverview required properties
+    membershipId: 'MEM-2025-421',
+    periodStart: '2025-10-15',
+    validUntil: '2026-10-15',
+    daysToRenewal: 60,
+
+    // Auto-renewal
+    autoRenew: true,
+    autoRenewal: true,
+    paymentMethod: { type: 'visa', last4: '9156' },
+    memberYears: 1,
+
+    // Usage analytics
+    usageAnalytics: {
+      overallPercentage: 70,
+      categories: [
+        { name: 'Admissions', used: 18, available: 'unlimited', percentage: 70 },
+        { name: 'Guest Passes', used: 2, available: 2, percentage: 100 },
+        { name: 'F&B Discounts', used: 6, available: 'unlimited', percentage: 50 },
+        { name: 'Event Discounts', used: 2, available: 'unlimited', percentage: 40 }
+      ],
+      unusedBenefits: [],
+      mostUsed: 'Guest Passes'
+    },
+
+    // Upgrade options
+    upgradeEligible: true,
+    upgradeTier: 'Gold',
+
+    // Benefits with usage tracking
+    benefits: [
+      { category: 'access', title: 'Unlimited visits', description: 'to all standard exhibits', usage: { used: 18, limit: null, resetDate: null }, icon: 'fa-ticket' },
+      { category: 'discount', title: 'Bring a friend for free', description: 'twice per year', usage: { used: 2, limit: 2, resetDate: '2026-10-15' }, icon: 'fa-user-plus' },
+      { category: 'discount', title: '10% off special events', description: 'your ticket only', usage: null, icon: 'fa-percent' },
+      { category: 'discount', title: '5% F&B discount', description: 'at main café', usage: { used: 6, limit: null, resetDate: null }, icon: 'fa-utensils' }
+    ],
+
+    // Membership history
+    membershipHistory: [
+      { date: '2025-10-15', event: 'Joined', tier: 'Silver', programme: 'General Membership' }
+    ],
+
+    // Legacy alias for history
+    history: [
+      { date: '2025-10-15', event: 'Joined', tier: 'Silver', programme: 'General Membership' }
     ]
   }
 ]
@@ -1710,6 +2079,96 @@ export const membershipBeneficiaries = [
     addedDate: '2024-01-15',
     removedDate: null,
     status: 'active'
+  },
+  {
+    id: 'mb-4',
+    membershipId: 'mem-fairfax-silver',
+    patronId: 'paul-fairfax',
+    role: 'primary',
+    roleLabel: 'Primary Member',
+    canManage: true,
+    addedDate: '2024-02-27',
+    status: 'active'
+  },
+  {
+    id: 'mb-5',
+    membershipId: 'mem-taylor-silver',
+    patronId: 'lucas-taylor',
+    role: 'primary',
+    roleLabel: 'Primary Member',
+    canManage: true,
+    addedDate: '2024-11-10',
+    status: 'active'
+  },
+  {
+    id: 'mb-6',
+    membershipId: 'mem-taylor-silver',
+    patronId: 'sophia-thomas',
+    role: 'additional_adult',
+    roleLabel: 'Additional Adult',
+    canManage: false,
+    addedDate: '2024-11-10',
+    status: 'active'
+  },
+  {
+    id: 'mb-7',
+    membershipId: 'mem-martinez-gold',
+    patronId: 'john-martinez',
+    role: 'primary',
+    roleLabel: 'Primary Member',
+    canManage: true,
+    addedDate: '2023-03-15',
+    status: 'active'
+  },
+  {
+    id: 'mb-8',
+    membershipId: 'mem-martinez-gold',
+    patronId: 'samantha-carter',
+    role: 'additional_adult',
+    roleLabel: 'Additional Adult',
+    canManage: false,
+    addedDate: '2023-06-01',
+    status: 'active'
+  },
+  {
+    id: 'mb-9',
+    membershipId: 'mem-davis-silver',
+    patronId: 'ethan-davis',
+    role: 'primary',
+    roleLabel: 'Primary Member',
+    canManage: true,
+    addedDate: '2024-05-01',
+    status: 'active'
+  },
+  {
+    id: 'mb-10',
+    membershipId: 'mem-davis-silver',
+    patronId: 'olivia-brown',
+    role: 'additional_adult',
+    roleLabel: 'Additional Adult',
+    canManage: false,
+    addedDate: '2024-05-15',
+    status: 'active'
+  },
+  {
+    id: 'mb-11',
+    membershipId: 'mem-kim-basic',
+    patronId: 'rachel-kim',
+    role: 'primary',
+    roleLabel: 'Primary Member',
+    canManage: true,
+    addedDate: '2025-11-25',
+    status: 'active'
+  },
+  {
+    id: 'mb-12',
+    membershipId: 'mem-santos-silver',
+    patronId: 'maria-santos',
+    role: 'primary',
+    roleLabel: 'Primary Member',
+    canManage: true,
+    addedDate: '2025-10-15',
+    status: 'active'
   }
 ]
 
@@ -1728,6 +2187,396 @@ export const membershipUsage = [
   { id: 'usage-8', membershipId: 'mem-anderson-gold', patronId: 'emma-collingwood', benefitType: 'guest_pass', quantity: 0 },
   { id: 'usage-9', membershipId: 'mem-anderson-gold', patronId: 'emma-collingwood', benefitType: 'fb_discount', quantity: 0 },
 ]
+
+// =============================================================================
+// GIFTS (top-level entity with patronId foreign keys)
+// =============================================================================
+
+export const GIFTS = [
+  // Existing one-time donations (pledgeId/recurringProfileId = null)
+  { id: 'gift-001', patronId: 'anderson-collingwood', date: '2025-12-15', amount: 1000.00, type: 'donation', description: 'Year-End Major Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'year-end-mailer', deductible: 1000.00, benefitsValue: 0, softCredits: [{ patronId: '999', name: 'Margaret Williams', type: 'solicitor' }], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-002', patronId: 'anderson-collingwood', date: '2025-06-15', amount: 500.00, type: 'donation', description: 'Spring Gala Donation', fundId: 'education', campaignId: 'annual-2026', appealId: 'spring-gala-2025', deductible: 400.00, benefitsValue: 100.00, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-003', patronId: 'anderson-collingwood', date: '2025-12-02', amount: 145.99, type: 'membership', description: 'Gold Membership Renewal', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'membership-renewal', deductible: 95.99, benefitsValue: 50.00, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-005', patronId: 'anderson-collingwood', date: '2024-11-18', amount: 250.00, type: 'donation', description: 'Online Donation', fundId: 'annual-operating', campaignId: 'annual-2025', appealId: 'website-donate', deductible: 250.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+
+  // Pledge payments (linked to pledge-001: $5,000 Building Campaign pledge)
+  { id: 'gift-004', patronId: 'anderson-collingwood', date: '2025-06-15', amount: 750.00, type: 'pledge-payment', description: 'Building Campaign - Q1 Payment', fundId: 'capital-building', campaignId: 'building-future', appealId: 'leadership-gifts', deductible: 750.00, benefitsValue: 0, softCredits: [{ patronId: '888', name: 'Robert Chen', type: 'influencer' }], pledgeId: 'pledge-001', recurringProfileId: null },
+  { id: 'gift-006', patronId: 'anderson-collingwood', date: '2025-09-15', amount: 1250.00, type: 'pledge-payment', description: 'Building Campaign - Q2 Payment', fundId: 'capital-building', campaignId: 'building-future', appealId: 'leadership-gifts', deductible: 1250.00, benefitsValue: 0, softCredits: [], pledgeId: 'pledge-001', recurringProfileId: null },
+
+  // Recurring payments (linked to rec-001: $100/month Annual Fund sustainer)
+  { id: 'gift-007', patronId: 'anderson-collingwood', date: '2025-11-15', amount: 100.00, type: 'recurring', description: 'Monthly Sustainer - Nov 2025', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: null, deductible: 100.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: 'rec-001' },
+  { id: 'gift-008', patronId: 'anderson-collingwood', date: '2025-12-15', amount: 100.00, type: 'recurring', description: 'Monthly Sustainer - Dec 2025', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: null, deductible: 100.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: 'rec-001' },
+  { id: 'gift-009', patronId: 'anderson-collingwood', date: '2026-01-15', amount: 100.00, type: 'recurring', description: 'Monthly Sustainer - Jan 2026', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: null, deductible: 100.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: 'rec-001' },
+
+  // Elizabeth Fairfax - pledge payment + donation
+  { id: 'gift-010', patronId: 'elizabeth-fairfax', date: '2025-04-15', amount: 500.00, type: 'pledge-payment', description: 'Annual Fund Pledge - Q1 Payment', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'spring-gala-2025', deductible: 500.00, benefitsValue: 0, softCredits: [], pledgeId: 'pledge-002', recurringProfileId: null },
+  { id: 'gift-011', patronId: 'elizabeth-fairfax', date: '2025-12-20', amount: 200.00, type: 'donation', description: 'Year-End Online Donation', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'year-end-mailer', deductible: 200.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+]
+
+// Get all gifts for a patron
+export const getGiftsByPatronId = (patronId) => {
+  return GIFTS.filter(g => g.patronId === patronId)
+}
+
+// Add a new gift to the store
+export const addGift = (giftData) => {
+  const newGift = {
+    id: giftData.id || `gift-${Date.now()}`,
+    patronId: giftData.patronId,
+    date: giftData.date || new Date().toISOString().split('T')[0],
+    amount: giftData.amount,
+    type: giftData.type || 'donation',
+    description: giftData.description || '',
+    fundId: giftData.fundId || null,
+    campaignId: giftData.campaignId || null,
+    appealId: giftData.appealId || null,
+    deductible: giftData.deductible ?? giftData.amount,
+    benefitsValue: giftData.benefitsValue ?? 0,
+    softCredits: giftData.softCredits || [],
+    pledgeId: giftData.pledgeId || null,
+    recurringProfileId: giftData.recurringProfileId || null,
+  }
+  GIFTS.push(newGift)
+  return newGift
+}
+
+// Resolve a gift with display names for DCAP references
+export const resolveGift = (gift) => {
+  if (!gift) return null
+  return gift
+}
+
+// =============================================================================
+// PLEDGES (multi-payment commitments)
+// =============================================================================
+
+export const PLEDGES = [
+  {
+    id: 'pledge-001',
+    patronId: 'anderson-collingwood',
+    amount: 5000.00,
+    balance: 3000.00,
+    totalPaid: 2000.00,
+    startDate: '2025-06-01',
+    endDate: '2026-06-01',
+    frequency: 'quarterly',
+    nextPaymentDate: '2026-03-01',
+    status: 'active',
+    fundId: 'capital-building',
+    campaignId: 'building-future',
+    appealId: 'leadership-gifts',
+    assignedToId: 'lj',
+    notes: 'Committed at leadership dinner. Quarterly installments.',
+    createdDate: '2025-06-01',
+  },
+  // Elizabeth Fairfax - overdue pledge (triggers alert)
+  {
+    id: 'pledge-002',
+    patronId: 'elizabeth-fairfax',
+    amount: 2500.00,
+    balance: 2000.00,
+    totalPaid: 500.00,
+    startDate: '2025-04-01',
+    endDate: '2026-04-01',
+    frequency: 'quarterly',
+    nextPaymentDate: '2025-10-01',
+    status: 'active',
+    fundId: 'annual-operating',
+    campaignId: 'annual-2026',
+    appealId: 'spring-gala-2025',
+    assignedToId: 'lj',
+    notes: 'Pledged at Spring Gala. Quarterly installments.',
+    createdDate: '2025-04-01',
+  },
+]
+
+// Get all pledges for a patron
+export const getPledgesByPatronId = (patronId) => {
+  return PLEDGES.filter(p => p.patronId === patronId)
+}
+
+// Get all gift payments linked to a pledge
+export const getPaymentsForPledge = (pledgeId) => {
+  return GIFTS.filter(g => g.pledgeId === pledgeId)
+}
+
+// Get the remaining balance on a pledge (computed from linked payments)
+export const getPledgeBalance = (pledgeId) => {
+  const pledge = PLEDGES.find(p => p.id === pledgeId)
+  if (!pledge) return 0
+  const paid = getPaymentsForPledge(pledgeId).reduce((sum, g) => sum + g.amount, 0)
+  return pledge.amount - paid
+}
+
+// =============================================================================
+// RECURRING PROFILES (sustainer / monthly donor schedules)
+// =============================================================================
+
+export const RECURRING_PROFILES = [
+  {
+    id: 'rec-001',
+    patronId: 'anderson-collingwood',
+    amount: 100.00,
+    frequency: 'monthly',
+    startDate: '2025-01-15',
+    nextDate: '2026-02-15',
+    endDate: null,
+    status: 'active',
+    fundId: 'annual-operating',
+    campaignId: 'annual-2026',
+    paymentMethod: { type: 'visa', last4: '4242' },
+    totalGiven: 1300.00,
+    giftCount: 13,
+    createdDate: '2025-01-15',
+  },
+]
+
+// Get all recurring profiles for a patron
+export const getRecurringProfilesByPatronId = (patronId) => {
+  return RECURRING_PROFILES.filter(r => r.patronId === patronId)
+}
+
+// Get all gift payments linked to a recurring profile
+export const getPaymentsForRecurringProfile = (profileId) => {
+  return GIFTS.filter(g => g.recurringProfileId === profileId)
+}
+
+// =============================================================================
+// GIFT ALLOCATIONS (split designations across multiple funds)
+// =============================================================================
+
+export const GIFT_ALLOCATIONS = [
+  // gift-001 ($1,000 Year-End Major Gift) split across two funds
+  { id: 'alloc-001', giftId: 'gift-001', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'year-end-mailer', amount: 700.00 },
+  { id: 'alloc-002', giftId: 'gift-001', fundId: 'education', campaignId: 'annual-2026', appealId: 'year-end-mailer', amount: 300.00 },
+]
+
+// Get all allocations for a gift
+export const getAllocationsForGift = (giftId) => {
+  return GIFT_ALLOCATIONS.filter(a => a.giftId === giftId)
+}
+
+// Check if a gift has split designations
+export const isGiftSplit = (giftId) => {
+  return GIFT_ALLOCATIONS.some(a => a.giftId === giftId)
+}
+
+// =============================================================================
+// INTERACTIONS (CRM activity / communication log)
+// =============================================================================
+
+export const INTERACTIONS = [
+  {
+    id: 'int-001',
+    patronId: 'anderson-collingwood',
+    opportunityId: null,
+    type: 'phone',
+    direction: 'outbound',
+    date: '2025-10-19T11:20:00',
+    description: 'Follow-up after recent donation',
+    details: {
+      notes: 'Discussed upcoming gala. Very enthusiastic about building campaign. Mentioned interest in naming opportunity.',
+      duration: '15 min',
+      outcome: 'Positive - will attend gala'
+    },
+    staffId: 'lj',
+    createdDate: '2025-10-19',
+  },
+  {
+    id: 'int-002',
+    patronId: 'anderson-collingwood',
+    opportunityId: null,
+    type: 'email',
+    direction: 'outbound',
+    date: '2025-08-26T10:00:00',
+    description: 'Thank-you message after Summer Concert',
+    details: {
+      to: 'anderson.collingwood@email.com',
+      subject: 'Thank you for joining us at the Summer Concert!',
+      content: 'Personal thank-you with photos from the event.',
+    },
+    staffId: 'lj',
+    createdDate: '2025-08-26',
+  },
+  {
+    id: 'int-003',
+    patronId: 'anderson-collingwood',
+    opportunityId: null,
+    type: 'event',
+    direction: null,
+    date: '2025-08-24T18:30:00',
+    description: 'Attended Summer Concert Series VIP Reception',
+    details: {
+      venue: 'Paradox Museum - Rooftop Terrace',
+      guests: 2,
+      table: 'VIP Table 3'
+    },
+    staffId: null,
+    createdDate: '2025-08-24',
+  },
+  {
+    id: 'int-004',
+    patronId: 'anderson-collingwood',
+    opportunityId: null,
+    type: 'meeting',
+    direction: null,
+    date: '2025-07-10T14:00:00',
+    description: 'Portfolio review lunch meeting',
+    details: {
+      notes: 'Reviewed giving history and discussed building campaign pledge structure. Anderson prefers quarterly payments.',
+      duration: '1 hr 15 min',
+      outcome: 'Agreed to $5,000 pledge over 4 quarters',
+      location: 'The Capital Grille, Austin'
+    },
+    staffId: 'lj',
+    createdDate: '2025-07-10',
+  },
+  {
+    id: 'int-005',
+    patronId: 'anderson-collingwood',
+    opportunityId: null,
+    type: 'note',
+    direction: null,
+    date: '2025-06-02T09:00:00',
+    description: 'Building campaign pledge confirmed',
+    details: {
+      notes: 'Pledge form received. $5,000 over 4 quarters starting Q2 2025. First payment processed.',
+    },
+    staffId: 'lj',
+    createdDate: '2025-06-02',
+  },
+  {
+    id: 'int-006',
+    patronId: 'anderson-collingwood',
+    opportunityId: null,
+    type: 'email',
+    direction: 'inbound',
+    date: '2025-04-15T08:30:00',
+    description: 'Inquiry about building campaign naming opportunities',
+    details: {
+      to: 'development@paradoxmuseum.org',
+      subject: 'Re: Building the Future Campaign',
+      content: 'Anderson replied to campaign brochure asking about gallery naming levels.',
+    },
+    staffId: null,
+    createdDate: '2025-04-15',
+  },
+  {
+    id: 'int-007',
+    patronId: 'anderson-collingwood',
+    opportunityId: null,
+    type: 'ticket',
+    direction: null,
+    date: '2025-03-08T19:00:00',
+    description: 'Purchased Spring Gala tickets',
+    details: {
+      event: 'Spring Gala 2025',
+      quantity: 4,
+      ticketType: 'VIP Table'
+    },
+    amount: 800.00,
+    staffId: null,
+    createdDate: '2025-03-08',
+  },
+  {
+    id: 'int-008',
+    patronId: 'anderson-collingwood',
+    opportunityId: null,
+    type: 'phone',
+    direction: 'outbound',
+    date: '2025-01-20T10:00:00',
+    description: 'New year check-in call',
+    details: {
+      notes: 'Wished happy new year. Confirmed recurring monthly gift is processing correctly. Mentioned upcoming Spring Gala.',
+      duration: '10 min',
+      outcome: 'Positive - interested in Spring Gala'
+    },
+    staffId: 'lj',
+    createdDate: '2025-01-20',
+  },
+]
+
+// Get all interactions for a patron
+export const getInteractionsByPatronId = (patronId) => {
+  return INTERACTIONS.filter(i => i.patronId === patronId)
+}
+
+// Get interactions linked to an opportunity
+export const getInteractionsByOpportunityId = (opportunityId) => {
+  return INTERACTIONS.filter(i => i.opportunityId === opportunityId)
+}
+
+// Get recent interactions for a patron (sorted newest first, optional limit)
+export const getRecentInteractions = (patronId, limit = 10) => {
+  return getInteractionsByPatronId(patronId)
+    .sort((a, b) => new Date(b.date) - new Date(a.date))
+    .slice(0, limit)
+}
+
+// Add a new interaction
+export const addInteraction = (data) => {
+  const newInteraction = {
+    id: data.id || `int-${Date.now()}`,
+    patronId: data.patronId,
+    opportunityId: data.opportunityId || null,
+    type: data.type,
+    direction: data.direction || null,
+    date: data.date || new Date().toISOString(),
+    description: data.description || '',
+    details: data.details || {},
+    staffId: data.staffId || null,
+    createdDate: new Date().toISOString().split('T')[0],
+  }
+  INTERACTIONS.push(newInteraction)
+  return newInteraction
+}
+
+// =============================================================================
+// ACKNOWLEDGMENTS (gift thank-you and receipt tracking)
+// =============================================================================
+
+export const ACKNOWLEDGMENTS = [
+  // gift-001: Year-End Major Gift ($1,000) - fully acknowledged
+  { id: 'ack-001', giftId: 'gift-001', patronId: 'anderson-collingwood', type: 'thank-you-letter', method: 'email', status: 'sent', date: '2025-12-16', staffId: 'lj', templateUsed: 'major-gift-thanks', notes: null },
+  { id: 'ack-002', giftId: 'gift-001', patronId: 'anderson-collingwood', type: 'tax-receipt', method: 'email', status: 'sent', date: '2025-12-16', staffId: null, templateUsed: 'standard-receipt', notes: null },
+
+  // gift-002: Spring Gala Donation ($500) - acknowledged
+  { id: 'ack-003', giftId: 'gift-002', patronId: 'anderson-collingwood', type: 'thank-you-email', method: 'email', status: 'sent', date: '2025-06-16', staffId: 'lj', templateUsed: 'event-gift-thanks', notes: null },
+  { id: 'ack-004', giftId: 'gift-002', patronId: 'anderson-collingwood', type: 'tax-receipt', method: 'email', status: 'sent', date: '2025-06-16', staffId: null, templateUsed: 'standard-receipt', notes: null },
+
+  // gift-004: Building Campaign Q1 Payment ($750) - acknowledged
+  { id: 'ack-005', giftId: 'gift-004', patronId: 'anderson-collingwood', type: 'thank-you-letter', method: 'email', status: 'sent', date: '2025-06-16', staffId: 'lj', templateUsed: 'pledge-payment-thanks', notes: null },
+
+  // gift-006: Building Campaign Q2 Payment ($1,250) - PENDING acknowledgment
+  { id: 'ack-006', giftId: 'gift-006', patronId: 'anderson-collingwood', type: 'thank-you-letter', method: 'email', status: 'pending', date: null, staffId: 'lj', templateUsed: 'pledge-payment-thanks', notes: 'Queued for next batch' },
+
+  // gift-005: Online Donation ($250) - acknowledged
+  { id: 'ack-007', giftId: 'gift-005', patronId: 'anderson-collingwood', type: 'thank-you-email', method: 'email', status: 'sent', date: '2024-11-19', staffId: null, templateUsed: 'online-auto-thanks', notes: 'Auto-generated' },
+
+  // Elizabeth Fairfax - gift-010 acknowledged, gift-011 PENDING
+  { id: 'ack-008', giftId: 'gift-010', patronId: 'elizabeth-fairfax', type: 'thank-you-letter', method: 'email', status: 'sent', date: '2025-04-16', staffId: 'lj', templateUsed: 'pledge-payment-thanks', notes: null },
+  { id: 'ack-009', giftId: 'gift-011', patronId: 'elizabeth-fairfax', type: 'thank-you-email', method: 'email', status: 'pending', date: null, staffId: 'lj', templateUsed: 'online-auto-thanks', notes: 'Queued for batch processing' },
+]
+
+// Get all acknowledgments for a gift
+export const getAcknowledgmentsByGiftId = (giftId) => {
+  return ACKNOWLEDGMENTS.filter(a => a.giftId === giftId)
+}
+
+// Get all acknowledgments for a patron
+export const getAcknowledgmentsByPatronId = (patronId) => {
+  return ACKNOWLEDGMENTS.filter(a => a.patronId === patronId)
+}
+
+// Check if a gift has been acknowledged (at least one sent acknowledgment)
+export const isGiftAcknowledged = (giftId) => {
+  return ACKNOWLEDGMENTS.some(a => a.giftId === giftId && a.status === 'sent')
+}
+
+// Get pending acknowledgments for a patron
+export const getPendingAcknowledgments = (patronId) => {
+  return ACKNOWLEDGMENTS.filter(a => a.patronId === patronId && a.status === 'pending')
+}
 
 // Relationships (CRM connections between patrons)
 export const patronRelationships = [
@@ -1838,8 +2687,11 @@ export const getMembershipsByPatronId = (patronId) => {
     .map(link => {
       const membership = memberships.find(m => m.id === link.membershipId)
       if (!membership) return null
+      // Resolve tier-level styling from tierConfig (card colors are per-tier, not per-member)
+      const tierCfg = tierConfig[membership.tier] || {}
       return {
         ...membership,
+        cardStyle: tierCfg.cardStyle || membership.cardStyle,
         patronId: patronId,  // Add patron ID for QR code in MembershipOverview
         patronRole: link.role,
         patronRoleLabel: link.roleLabel,
@@ -1848,6 +2700,13 @@ export const getMembershipsByPatronId = (patronId) => {
       }
     })
     .filter(Boolean) // Remove any null entries
+}
+
+// Get the primary membership for a patron (convenience wrapper)
+// Returns the first membership where the patron is a beneficiary, with tier styling resolved
+export const getPrimaryMembershipForPatron = (patronId) => {
+  const patronMemberships = getMembershipsByPatronId(patronId)
+  return patronMemberships.length > 0 ? patronMemberships[0] : null
 }
 
 // Get all beneficiaries for a membership (with full patron data)
@@ -1913,7 +2772,7 @@ export const getMembershipSlotInfo = (membershipId) => {
     mb => mb.membershipId === membershipId && mb.status === 'active'
   )
   
-  const limit = tierLimits[membership.tier] || 1
+  const limit = tierConfig[membership.tier]?.beneficiaryLimit || 1
   
   return {
     used: activeBeneficiaries.length,

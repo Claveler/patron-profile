@@ -1,16 +1,25 @@
 import './Beneficiaries.css'
 
-// Role icons mapping
+// Role icons mapping (membership entitlement roles)
 const roleIcons = {
+  'Primary Member': 'fa-star',
+  'Additional Adult': 'fa-user',
+  'Dependent': 'fa-child',
+  // Legacy fallbacks
   'Primary': 'fa-star',
-  'Spouse': 'fa-heart',
-  'Child': 'fa-child',
-  'Guest': 'fa-user-plus',
-  'Parent': 'fa-user',
-  'Daughter': 'fa-child',
-  'Son': 'fa-child',
-  'Partner': 'fa-heart',
   'default': 'fa-user'
+}
+
+// Map legacy relationship-based role labels to membership entitlement roles
+const legacyRoleMap = {
+  'Spouse': 'Additional Adult',
+  'Partner': 'Additional Adult',
+  'Child': 'Dependent',
+  'Daughter': 'Dependent',
+  'Son': 'Dependent',
+  'Guest': 'Additional Adult',
+  'Parent': 'Additional Adult',
+  'Sibling': 'Additional Adult'
 }
 
 function Beneficiaries({ 
@@ -53,15 +62,16 @@ function Beneficiaries({
         isPrimaryRole: b.role === 'primary'
       }
     }
-    // Legacy format: direct properties
+    // Legacy format: direct properties -- map relationship labels to membership roles
+    const mappedRoleLabel = legacyRoleMap[b.role] || b.role
     return {
       id: b.id,
       patronId: null,
       name: b.name,
       email: null,
       photo: b.avatar,
-      role: b.role?.toLowerCase() === 'primary' ? 'primary' : 'beneficiary',
-      roleLabel: b.role,
+      role: b.role?.toLowerCase() === 'primary' ? 'primary' : 'additional_adult',
+      roleLabel: mappedRoleLabel,
       isCurrentPatron: false,
       isPrimaryRole: b.role === 'Primary'
     }
@@ -110,7 +120,7 @@ function Beneficiaries({
               <span className="beneficiaries__name">
                 {person.name}
                 {person.isCurrentPatron && (
-                  <span className="beneficiaries__you-badge">You</span>
+                  <span className="beneficiaries__viewing-badge">Viewing</span>
                 )}
               </span>
               <span className="beneficiaries__role">

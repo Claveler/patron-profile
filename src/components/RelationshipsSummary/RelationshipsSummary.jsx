@@ -35,8 +35,7 @@ function RelationshipsSummary({ patronId, onNavigateToPatron }) {
           <p>No relationships recorded yet.</p>
         </div>
         <button className="relationships-summary__add">
-          <i className="fa-solid fa-plus"></i>
-          Add Relationship
+          Add relationship
         </button>
       </div>
     )
@@ -88,8 +87,7 @@ function RelationshipsSummary({ patronId, onNavigateToPatron }) {
       </div>
 
       <button className="relationships-summary__add">
-        <i className="fa-solid fa-plus"></i>
-        Add Relationship
+        Add relationship
       </button>
     </div>
   )

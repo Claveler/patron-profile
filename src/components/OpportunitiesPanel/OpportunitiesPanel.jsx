@@ -90,8 +90,7 @@ function OpportunitiesPanel({
               className="opportunities-panel__create-btn"
               onClick={handleCreateClick}
             >
-              <i className="fa-solid fa-plus"></i>
-              Create Opportunity
+              Create opportunity
             </button>
           </div>
         ) : (

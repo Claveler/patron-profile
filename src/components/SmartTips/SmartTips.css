@@ -66,7 +66,7 @@
 
 .ai-insights__summary-intro {
   font-size: var(--font-size-sm);
-  line-height: 1.25rem;
+  line-height: 1.4;
   color: var(--color-text-primary);
   margin: 0;
 }
@@ -78,7 +78,7 @@
 
 .ai-insights__summary-item {
   font-size: var(--font-size-sm);
-  line-height: 1.25rem;
+  line-height: 1.4;
   color: var(--color-text-primary);
 }
 
@@ -121,7 +121,7 @@
 
 .ai-insights__tip-description {
   font-size: var(--font-size-sm);
-  line-height: 1.25rem;
+  line-height: 1.4;
   color: var(--color-text-secondary);
   margin: 0;
 }

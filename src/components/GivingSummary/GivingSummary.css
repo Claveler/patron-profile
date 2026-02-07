@@ -261,11 +261,11 @@
 }
 
 .giving-summary__bar--donations {
-  background-color: #FFDAAC;
+  background-color: var(--color-chart-donations);
 }
 
 .giving-summary__bar--revenue {
-  background-color: #CBE8FF;
+  background-color: var(--color-chart-revenue);
 }
 
 /* Bar Tooltip */
@@ -298,11 +298,11 @@
 }
 
 .giving-summary__area--donations {
-  fill: #FFDAAC;
+  fill: var(--color-chart-donations);
 }
 
 .giving-summary__area--revenue {
-  fill: #CBE8FF;
+  fill: var(--color-chart-revenue);
 }
 
 /* Lines */

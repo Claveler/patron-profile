@@ -1,11 +1,13 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import OpportunityCard from '../../components/OpportunityCard/OpportunityCard'
+import OpportunityModal from '../../components/OpportunityModal/OpportunityModal'
 import { 
   opportunities as initialOpportunities, 
   PIPELINE_STAGES,
   getAssignees,
   getCampaigns 
 } from '../../data/opportunities'
+import { getStaffById, getCampaignNameById } from '../../data/campaigns'
 import './MovesManagement.css'
 
 // Calculate days since last contact
@@ -34,14 +36,28 @@ function MovesManagement({ onNavigateToPatron, onSelectOpportunity, embedded = f
   const [filterOfficer, setFilterOfficer] = useState('all')
   const [filterCampaign, setFilterCampaign] = useState('all')
   const [draggedOpportunity, setDraggedOpportunity] = useState(null)
+  
+  // Create opportunity modal state
+  const [showCreateModal, setShowCreateModal] = useState(false)
+  const [createDefaultStage, setCreateDefaultStage] = useState(null)
 
   const assignees = getAssignees()
   const campaigns = getCampaigns()
 
+  // Resolve assignee IDs to staff objects for display
+  const assigneeOptions = useMemo(() => {
+    return assignees.map(id => getStaffById(id)).filter(Boolean)
+  }, [assignees])
+
+  // Resolve campaign IDs to display objects
+  const campaignOptions = useMemo(() => {
+    return campaigns.map(id => ({ id, name: getCampaignNameById(id) }))
+  }, [campaigns])
+
   // Filter opportunities
   const filteredOpportunities = opportunities.filter(opp => {
-    if (filterOfficer !== 'all' && opp.assignedToInitials !== filterOfficer) return false
-    if (filterCampaign !== 'all' && opp.campaign?.id !== filterCampaign) return false
+    if (filterOfficer !== 'all' && opp.assignedToId !== filterOfficer) return false
+    if (filterCampaign !== 'all' && opp.campaignId !== filterCampaign) return false
     return true
   })
 
@@ -96,6 +112,19 @@ function MovesManagement({ onNavigateToPatron, onSelectOpportunity, embedded = f
       onNavigateToPatron(patronId)
     }
   }
+  
+  // Create opportunity handlers
+  const handleCreateClick = (defaultStage = null) => {
+    setCreateDefaultStage(defaultStage)
+    setShowCreateModal(true)
+  }
+  
+  const handleOpportunityCreated = (newOpportunity) => {
+    // Add the new opportunity to local state so it appears immediately
+    if (newOpportunity.status === 'open') {
+      setOpportunities(prev => [...prev, newOpportunity])
+    }
+  }
 
   return (
     <div className={`moves-management ${embedded ? 'moves-management--embedded' : ''}`}>
@@ -131,9 +160,9 @@ function MovesManagement({ onNavigateToPatron, onSelectOpportunity, embedded = f
               onChange={(e) => setFilterOfficer(e.target.value)}
             >
               <option value="all">All Staff</option>
-              {assignees.map(assignee => (
-                <option key={assignee.initials} value={assignee.initials}>
-                  {assignee.name} ({assignee.initials})
+              {assigneeOptions.map(staff => (
+                <option key={staff.id} value={staff.id}>
+                  {staff.name} ({staff.initials})
                 </option>
               ))}
             </select>
@@ -148,12 +177,19 @@ function MovesManagement({ onNavigateToPatron, onSelectOpportunity, embedded = f
               onChange={(e) => setFilterCampaign(e.target.value)}
             >
               <option value="all">All Campaigns</option>
-              {campaigns.map(campaign => (
+              {campaignOptions.map(campaign => (
                 <option key={campaign.id} value={campaign.id}>
                   {campaign.name}
                 </option>
               ))}
             </select>
+            
+            <button 
+              className="moves-management__create-btn"
+              onClick={() => handleCreateClick()}
+            >
+              Create opportunity
+            </button>
           </div>
         </div>
 
@@ -169,10 +205,21 @@ function MovesManagement({ onNavigateToPatron, onSelectOpportunity, embedded = f
             {/* Column Header */}
             <div className="moves-management__column-header">
               <div className="moves-management__column-title">
-                <span className="moves-management__column-name">{stage.label}</span>
-                <span className="moves-management__column-count">
-                  {getOpportunitiesForStage(stage.id).length}
-                </span>
+                <div className="moves-management__column-title-left">
+                  <span className="moves-management__column-name">{stage.label}</span>
+                  <span className="moves-management__column-count">
+                    {getOpportunitiesForStage(stage.id).length}
+                  </span>
+                </div>
+                {stage.id !== 'stewardship' && (
+                  <button
+                    className="moves-management__column-add"
+                    onClick={() => handleCreateClick(stage.id)}
+                    title={`Create opportunity in ${stage.label}`}
+                  >
+                    <i className="fa-solid fa-plus"></i>
+                  </button>
+                )}
               </div>
               <div className="moves-management__column-value">
                 {formatCurrency(getStageTotalValue(stage.id))}
@@ -209,6 +256,14 @@ function MovesManagement({ onNavigateToPatron, onSelectOpportunity, embedded = f
         ))}
         </div>
       </div>
+      
+      {/* Create Opportunity Modal */}
+      <OpportunityModal
+        isOpen={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
+        onSuccess={handleOpportunityCreated}
+        defaultStage={createDefaultStage}
+      />
     </div>
   )
 }

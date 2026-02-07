@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { getOpportunityById, closeOpportunityAsWon } from '../../data/opportunities'
+import { getPatronById, getPatronDisplayName, addGift } from '../../data/patrons'
 import './CloseWonModal.css'
 
 function CloseWonModal({ 
@@ -69,6 +70,11 @@ function CloseWonModal({
     try {
       const result = closeOpportunityAsWon(opportunityId, amount, notes || null)
       
+      // Persist the gift to the GIFTS array
+      if (result.gift) {
+        addGift(result.gift)
+      }
+
       // Simulate network delay
       await new Promise(resolve => setTimeout(resolve, 500))
       
@@ -117,7 +123,7 @@ function CloseWonModal({
             </div>
             <div className="close-won-modal__summary-row">
               <span className="close-won-modal__summary-label">Patron</span>
-              <span className="close-won-modal__summary-value">{opportunity.patronName}</span>
+              <span className="close-won-modal__summary-value">{(() => { const p = getPatronById(opportunity.patronId); return p ? getPatronDisplayName(p) : 'Unknown' })()}</span>
             </div>
             <div className="close-won-modal__summary-row">
               <span className="close-won-modal__summary-label">Campaign</span>
@@ -205,7 +211,7 @@ function CloseWonModal({
             ) : (
               <>
                 <i className="fa-solid fa-check"></i>
-                Confirm & Create Gift
+                Confirm & create gift
               </>
             )}
           </button>

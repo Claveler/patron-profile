@@ -1,6 +1,7 @@
+import { getStaffNameById } from '../../data/campaigns'
 import './TabNavigation.css'
 
-function TabNavigation({ tabs, activeTab, onTabChange, assignedTo, onAssign }) {
+function TabNavigation({ tabs, activeTab, onTabChange, assignedToId, onAssign }) {
   return (
     <div className="tab-navigation">
       <div className="tab-navigation__tabs">
@@ -15,11 +16,11 @@ function TabNavigation({ tabs, activeTab, onTabChange, assignedTo, onAssign }) {
         ))}
       </div>
       
-      {assignedTo ? (
+      {assignedToId ? (
         <div className="tab-navigation__assigned">
           <span className="tab-navigation__assigned-label">Assigned To:</span>
           <a href="#" className="tab-navigation__assigned-link">
-            {assignedTo}
+            {getStaffNameById(assignedToId)}
             <i className="fa-solid fa-arrow-up-right-from-square"></i>
           </a>
         </div>
@@ -27,7 +28,6 @@ function TabNavigation({ tabs, activeTab, onTabChange, assignedTo, onAssign }) {
         <div className="tab-navigation__assigned">
           <span className="tab-navigation__assigned-label">Assigned To:</span>
           <button className="tab-navigation__assign-btn" onClick={onAssign}>
-            <i className="fa-solid fa-plus"></i>
             Assign
           </button>
         </div>

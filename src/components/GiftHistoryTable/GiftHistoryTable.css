@@ -1,0 +1,212 @@
+/* GiftHistoryTable */
+
+.gift-history {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+}
+
+/* Header */
+.gift-history__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-3);
+}
+
+.gift-history__title {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.gift-history__count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  background-color: var(--color-primary-100);
+  color: var(--color-primary-700);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+}
+
+.gift-history__total {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-secondary);
+}
+
+/* Table wrapper */
+.gift-history__table-wrapper {
+  overflow-x: auto;
+}
+
+/* Table */
+.gift-history__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-sm);
+}
+
+.gift-history__table thead {
+  border-bottom: 2px solid var(--color-border);
+}
+
+.gift-history__table th {
+  text-align: left;
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+
+.gift-history__th-right {
+  text-align: right !important;
+}
+
+.gift-history__th-center {
+  text-align: center !important;
+}
+
+.gift-history__table td {
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--color-border-light);
+  color: var(--color-text-primary);
+  vertical-align: middle;
+}
+
+.gift-history__table tbody tr:hover {
+  background-color: var(--color-background);
+}
+
+.gift-history__date {
+  white-space: nowrap;
+  color: var(--color-text-secondary) !important;
+  font-size: var(--font-size-xs) !important;
+}
+
+.gift-history__description {
+  max-width: 240px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gift-history__fund {
+  font-size: var(--font-size-xs) !important;
+  color: var(--color-text-secondary) !important;
+  white-space: nowrap;
+}
+
+.gift-history__amount {
+  text-align: right;
+  font-weight: var(--font-weight-semibold);
+  white-space: nowrap;
+}
+
+/* Type badges */
+.gift-history__type-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 7px;
+  border-radius: var(--radius-full);
+  font-size: 10px;
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.gift-history__type-badge--donation {
+  background-color: var(--color-success-100);
+  color: var(--color-success-700);
+}
+
+.gift-history__type-badge--membership {
+  background-color: var(--color-primary-100);
+  color: var(--color-primary-700);
+}
+
+.gift-history__type-badge--pledge {
+  background-color: var(--color-warning-100);
+  color: var(--color-warning-700);
+}
+
+.gift-history__type-badge--recurring {
+  background-color: var(--color-accent);
+  background-color: rgba(111, 65, 215, 0.1);
+  color: var(--color-accent);
+}
+
+/* Acknowledgment icons */
+.gift-history__ack-cell {
+  text-align: center;
+}
+
+.gift-history__ack--acknowledged {
+  color: var(--color-success);
+  font-size: var(--font-size-base);
+}
+
+.gift-history__ack--pending {
+  color: var(--color-warning);
+  font-size: var(--font-size-base);
+}
+
+.gift-history__ack--none {
+  color: var(--color-neutral-300);
+  font-size: var(--font-size-sm);
+}
+
+/* Load more */
+.gift-history__load-more {
+  display: block;
+  width: 100%;
+  padding: var(--space-2) var(--space-4);
+  margin-top: var(--space-3);
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.gift-history__load-more:hover {
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+}
+
+/* Empty state */
+.gift-history__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-6) var(--space-4);
+  text-align: center;
+  color: var(--color-text-muted);
+}
+
+.gift-history__empty i {
+  font-size: var(--font-size-2xl);
+  margin-bottom: var(--space-2);
+  opacity: 0.5;
+}
+
+.gift-history__empty p {
+  font-size: var(--font-size-sm);
+  margin: 0;
+}

@@ -60,22 +60,22 @@
 }
 
 .opportunity-card__stage--blue {
-  background-color: var(--color-primary-50, #e6f4ff);
+  background-color: var(--color-primary-100);
   color: var(--color-primary);
 }
 
 .opportunity-card__stage--purple {
   background-color: #f3e8ff;
-  color: #7c3aed;
+  color: var(--color-accent);
 }
 
 .opportunity-card__stage--orange {
   background-color: #fff7ed;
-  color: #ea580c;
+  color: var(--color-warning);
 }
 
 .opportunity-card__stage--green {
-  background-color: var(--color-success-50, #ecfdf5);
+  background-color: var(--color-success-100);
   color: var(--color-success);
 }
 

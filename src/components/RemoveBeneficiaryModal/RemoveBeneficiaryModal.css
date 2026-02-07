@@ -157,7 +157,7 @@
   padding: var(--space-2) var(--space-4);
   background: none;
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-full);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   color: var(--color-text-secondary);
@@ -173,7 +173,7 @@
   padding: var(--space-2) var(--space-4);
   background: var(--color-error);
   border: none;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-full);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   color: white;

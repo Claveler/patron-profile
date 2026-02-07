@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { formatDateTime } from '../../data/patrons'
+import { getFundNameById, getCampaignNameById, getAppealNameById } from '../../data/campaigns'
 import './ActivityTimeline.css'
 
 // Activity type configurations
@@ -13,6 +15,16 @@ const activityTypes = {
     title: 'Membership',
     filter: 'gifts'
   },
+  'pledge-payment': {
+    icon: 'fa-file-invoice-dollar',
+    title: 'Pledge Payment',
+    filter: 'gifts'
+  },
+  recurring: {
+    icon: 'fa-rotate',
+    title: 'Recurring Gift',
+    filter: 'gifts'
+  },
   phone: {
     icon: 'fa-phone',
     title: 'Phone call',
@@ -21,6 +33,11 @@ const activityTypes = {
   email: {
     icon: 'fa-envelope',
     title: 'Email',
+    filter: 'communications'
+  },
+  meeting: {
+    icon: 'fa-handshake',
+    title: 'Meeting',
     filter: 'communications'
   },
   event: {
@@ -37,6 +54,21 @@ const activityTypes = {
     icon: 'fa-note-sticky',
     title: 'Note Added',
     filter: 'communications'
+  },
+  letter: {
+    icon: 'fa-envelope-open-text',
+    title: 'Letter',
+    filter: 'communications'
+  },
+  visit: {
+    icon: 'fa-door-open',
+    title: 'Visit',
+    filter: 'events'
+  },
+  task: {
+    icon: 'fa-list-check',
+    title: 'Task',
+    filter: 'communications'
   }
 }
 
@@ -51,95 +83,38 @@ const formatCurrency = (amount) => {
   }).format(amount)
 }
 
-// Format date
-const formatDate = (dateStr) => {
-  if (!dateStr) return ''
-  const date = new Date(dateStr)
-  return date.toLocaleDateString('en-US', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric'
-  }) + ' - ' + date.toLocaleTimeString('en-US', {
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: true
-  })
-}
+// Format date - use shared utility
+const formatDate = formatDateTime
 
-// Mock activity data (combines donations + other activities)
-const mockActivities = [
-  {
-    id: 'act-1',
-    type: 'phone',
-    description: 'Follow-up after recent donation',
-    date: '2025-10-19T11:20:00',
-    details: {
-      notes: 'Discussed upcoming gala and potential major gift.',
-      duration: '15 minutes',
-      outcome: 'Positive - will attend gala'
-    }
-  },
-  {
-    id: 'act-2',
-    type: 'email',
-    description: 'Thank-you message after event',
-    date: '2025-08-26T10:00:00',
-    details: {
-      to: 'Anderson Collingwood',
-      subject: 'Thank you for joining us at the Impressionism & Light opening',
-      attachment: 'exhibition_leaflet.pdf',
-      content: `Dear Anderson,
-
-We sincerely appreciate your recent visit! Thank you for choosing us. We hope you enjoy the opening and look forward to serving you again soon.
-
-Best regards,
-Liam Johnson`
-    }
-  },
-  {
-    id: 'act-3',
-    type: 'ticket',
-    description: '2x Adult - Picasso and the Portrait',
-    date: '2025-08-25T10:50:00',
-    amount: 45,
-    details: {
-      event: 'Picasso and the Portrait',
-      quantity: 2,
-      ticketType: 'Adult'
-    }
-  },
-  {
-    id: 'act-4',
-    type: 'event',
-    description: 'Opening of Women in Modern Art',
-    date: '2025-06-05T13:45:00',
-    details: {
-      venue: 'Main Gallery',
-      guests: 2,
-      table: 'VIP Section'
-    }
-  }
-]
-
-function ActivityTimeline({ gifts = [], activities = mockActivities, onAddActivity, onRecordGift }) {
+function ActivityTimeline({ gifts = [], activities = [], onAddActivity, onRecordGift }) {
   const [expandedItem, setExpandedItem] = useState(null)
   const [filter, setFilter] = useState('all')
   const [visibleCount, setVisibleCount] = useState(6)
 
+  // Map gift.type to activity type key
+  const getGiftActivityType = (gift) => {
+    if (gift.type === 'pledge-payment') return 'pledge-payment'
+    if (gift.type === 'recurring') return 'recurring'
+    if (gift.type === 'membership') return 'membership'
+    return 'donation'
+  }
+
   // Convert gifts to activity format and merge with other activities
   const giftActivities = gifts.map(gift => ({
     id: gift.id,
-    type: gift.type === 'membership' ? 'membership' : 'donation',
+    type: getGiftActivityType(gift),
     description: gift.description,
     date: gift.date,
     amount: gift.amount,
     details: {
-      fund: gift.fund,
-      campaign: gift.campaign,
-      appeal: gift.appeal,
+      fund: gift.fundId ? { id: gift.fundId, name: getFundNameById(gift.fundId) } : null,
+      campaign: gift.campaignId ? { id: gift.campaignId, name: getCampaignNameById(gift.campaignId) } : null,
+      appeal: gift.appealId ? { id: gift.appealId, name: getAppealNameById(gift.campaignId, gift.appealId) } : null,
       softCredits: gift.softCredits,
       deductible: gift.deductible,
-      benefitsValue: gift.benefitsValue
+      benefitsValue: gift.benefitsValue,
+      pledgeId: gift.pledgeId,
+      recurringProfileId: gift.recurringProfileId,
     }
   }))
 
@@ -207,11 +182,11 @@ function ActivityTimeline({ gifts = [], activities = mockActivities, onAddActivi
         <div className="activity-timeline__actions">
           {onRecordGift && (
             <button className="activity-timeline__record-gift-btn" onClick={onRecordGift}>
-              Record Gift
+              Record gift
             </button>
           )}
           <button className="activity-timeline__add-btn" onClick={handleAddActivity}>
-            Add Activity
+            Add activity
           </button>
         </div>
       </div>
@@ -294,6 +269,8 @@ function ActivityDetails({ activity }) {
   switch (type) {
     case 'donation':
     case 'membership':
+    case 'pledge-payment':
+    case 'recurring':
       return (
         <div className="activity-details activity-details--donation">
           {details.fund && (
@@ -363,8 +340,15 @@ function ActivityDetails({ activity }) {
       )
 
     case 'phone':
+    case 'meeting':
       return (
         <div className="activity-details activity-details--phone">
+          {details.location && (
+            <div className="activity-details__row">
+              <span className="activity-details__label">Location:</span>
+              <span className="activity-details__value">{details.location}</span>
+            </div>
+          )}
           {details.duration && (
             <div className="activity-details__row">
               <span className="activity-details__label">Duration:</span>

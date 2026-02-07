@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { formatDate } from '../../data/patrons'
 import './TaxSummary.css'
 
 function TaxSummary({ 
@@ -36,14 +37,7 @@ function TaxSummary({
     }).format(amount)
   }
 
-  const formatDate = (dateStr) => {
-    const [day, month, year] = dateStr.split('/')
-    return new Date(year, month - 1, day).toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric'
-    })
-  }
+  // formatDate imported from shared utility
 
   // Group receipts by type
   const membershipReceipts = receipts.filter(r => r.type === 'membership')

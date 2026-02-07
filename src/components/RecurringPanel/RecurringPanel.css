@@ -1,0 +1,198 @@
+/* RecurringPanel */
+
+.recurring-panel {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+}
+
+/* Header */
+.recurring-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-3);
+}
+
+.recurring-panel__title {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.recurring-panel__count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  background-color: var(--color-primary-100);
+  color: var(--color-primary-700);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* Summary */
+.recurring-panel__summary {
+  display: flex;
+  padding: var(--space-3);
+  background-color: var(--color-background);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-3);
+}
+
+.recurring-panel__summary-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.recurring-panel__summary-value {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.recurring-panel__summary-label {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+/* List */
+.recurring-panel__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* Card */
+.recurring-panel__card {
+  padding: var(--space-3);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-surface);
+}
+
+.recurring-panel__card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-2);
+}
+
+.recurring-panel__card-amount-row {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+}
+
+.recurring-panel__card-amount {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.recurring-panel__card-frequency {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+/* Status badges */
+.recurring-panel__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.recurring-panel__badge--active {
+  background-color: var(--color-success-100);
+  color: var(--color-success-700);
+}
+
+.recurring-panel__badge--paused {
+  background-color: var(--color-warning-100);
+  color: var(--color-warning-700);
+}
+
+.recurring-panel__badge--cancelled {
+  background-color: var(--color-neutral-100);
+  color: var(--color-neutral-600);
+}
+
+.recurring-panel__badge--completed {
+  background-color: var(--color-primary-100);
+  color: var(--color-primary-700);
+}
+
+/* Designation */
+.recurring-panel__card-designation {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: var(--space-3);
+}
+
+.recurring-panel__card-campaign {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+}
+
+.recurring-panel__card-fund {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+}
+
+/* Details */
+.recurring-panel__card-details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.recurring-panel__detail {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+}
+
+.recurring-panel__detail i {
+  width: 14px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+
+/* Empty state */
+.recurring-panel__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-6) var(--space-4);
+  text-align: center;
+  color: var(--color-text-muted);
+}
+
+.recurring-panel__empty i {
+  font-size: var(--font-size-2xl);
+  margin-bottom: var(--space-2);
+  opacity: 0.5;
+}
+
+.recurring-panel__empty p {
+  font-size: var(--font-size-sm);
+  margin: 0;
+}

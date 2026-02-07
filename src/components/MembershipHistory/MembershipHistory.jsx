@@ -1,3 +1,4 @@
+import { formatDate } from '../../data/patrons'
 import './MembershipHistory.css'
 
 // Event type icons and colors
@@ -20,15 +21,7 @@ function MembershipHistory({ history }) {
   
   const getEventConfig = (event) => eventConfig[event] || eventConfig.default
   
-  // Format date
-  const formatDate = (dateString) => {
-    const date = new Date(dateString)
-    return date.toLocaleDateString('en-US', { 
-      month: 'short', 
-      day: 'numeric', 
-      year: 'numeric' 
-    })
-  }
+  // formatDate imported from shared utility
   
   // Calculate membership tenure
   const getYearsAgo = (dateString) => {

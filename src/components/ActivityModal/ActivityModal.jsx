@@ -149,7 +149,7 @@ function ActivityModal({
         {/* Header */}
         <div className="activity-modal__header">
           <div className="activity-modal__header-content">
-            <h2 className="activity-modal__title">Log Activity</h2>
+            <h2 className="activity-modal__title">Log activity</h2>
             {patronName && (
               <p className="activity-modal__subtitle">
                 <i className="fa-solid fa-user"></i>
@@ -329,7 +329,7 @@ function ActivityModal({
             ) : (
               <>
                 <i className={`fa-solid ${selectedType?.icon || 'fa-plus'}`}></i>
-                Log {selectedType?.name || 'Activity'}
+                Log {selectedType?.name?.toLowerCase() || 'activity'}
               </>
             )}
           </button>

@@ -6,7 +6,6 @@ export const opportunities = [
   {
     id: 'opp-001',
     patronId: 'anderson-collingwood',
-    patronName: 'Anderson Collingwood',
     
     name: 'New Wing Major Gift',
     description: 'Multi-year pledge for capital campaign',
@@ -19,11 +18,10 @@ export const opportunities = [
     nextAction: 'Follow up re: gallery tour',
     lastContact: '2026-01-15',
     
-    fund: { id: 'capital-building', name: 'Capital Building Fund' },
-    campaign: { id: 'building-future', name: 'Building the Future' },
+    fundId: 'capital-building',
+    campaignId: 'building-future',
     
-    assignedTo: 'Liam Johnson',
-    assignedToInitials: 'LJ',
+    assignedToId: 'lj',
     
     status: 'open',
     closedDate: null,
@@ -34,7 +32,6 @@ export const opportunities = [
   {
     id: 'opp-002',
     patronId: 'anderson-collingwood',
-    patronName: 'Anderson Collingwood',
     
     name: 'Spring Gala Table Sponsor',
     description: 'Table sponsorship for Spring Gala 2026',
@@ -47,11 +44,10 @@ export const opportunities = [
     nextAction: 'Send formal sponsorship invitation',
     lastContact: '2026-01-20',
     
-    fund: { id: 'annual-operating', name: 'Annual Operating Fund' },
-    campaign: { id: 'spring-gala-2026', name: 'Spring Gala 2026' },
+    fundId: 'annual-operating',
+    campaignId: 'spring-gala-2026',
     
-    assignedTo: 'Liam Johnson',
-    assignedToInitials: 'LJ',
+    assignedToId: 'lj',
     
     status: 'open',
     closedDate: null,
@@ -64,7 +60,6 @@ export const opportunities = [
   {
     id: 'opp-003',
     patronId: 'eleanor-whitfield',
-    patronName: 'Eleanor Whitfield',
     
     name: 'Annual Fund Leadership Gift',
     description: 'Leadership level annual fund commitment',
@@ -77,11 +72,10 @@ export const opportunities = [
     nextAction: 'Schedule lunch meeting',
     lastContact: '2026-02-01',
     
-    fund: { id: 'annual-operating', name: 'Annual Operating Fund' },
-    campaign: { id: 'annual-2026', name: '2026 Annual Fund' },
+    fundId: 'annual-operating',
+    campaignId: 'annual-2026',
     
-    assignedTo: 'Jennifer Martinez',
-    assignedToInitials: 'JM',
+    assignedToId: 'jm',
     
     status: 'open',
     closedDate: null,
@@ -94,7 +88,6 @@ export const opportunities = [
   {
     id: 'opp-004',
     patronId: 'marcus-chen',
-    patronName: 'Marcus Chen',
     
     name: 'Exhibition Sponsorship',
     description: 'Corporate sponsorship for Impressionist exhibition',
@@ -107,11 +100,10 @@ export const opportunities = [
     nextAction: 'Send exhibition catalog',
     lastContact: '2026-01-28',
     
-    fund: { id: 'exhibitions', name: 'Exhibitions Fund' },
-    campaign: { id: 'impressionist-2026', name: 'Impressionist Exhibition 2026' },
+    fundId: 'exhibitions',
+    campaignId: 'impressionist-2026',
     
-    assignedTo: 'Robert Brown',
-    assignedToInitials: 'RB',
+    assignedToId: 'rb',
     
     status: 'open',
     closedDate: null,
@@ -124,7 +116,6 @@ export const opportunities = [
   {
     id: 'opp-005',
     patronId: 'patricia-hawthorne',
-    patronName: 'Patricia Hawthorne',
     
     name: 'Foundation Grant',
     description: 'Grant from Hawthorne Family Foundation',
@@ -137,11 +128,10 @@ export const opportunities = [
     nextAction: 'Research foundation giving history',
     lastContact: '2025-12-20',
     
-    fund: { id: 'education', name: 'Education Programs' },
-    campaign: { id: 'annual-2026', name: '2026 Annual Fund' },
+    fundId: 'education',
+    campaignId: 'annual-2026',
     
-    assignedTo: 'Robert Brown',
-    assignedToInitials: 'RB',
+    assignedToId: 'rb',
     
     status: 'open',
     closedDate: null,
@@ -154,7 +144,6 @@ export const opportunities = [
   {
     id: 'opp-006',
     patronId: 'james-morrison',
-    patronName: 'James Morrison',
     
     name: 'Major Gift - Building Campaign',
     description: 'Major gift pledge for new wing',
@@ -167,11 +156,10 @@ export const opportunities = [
     nextAction: 'Thank you call for pledge',
     lastContact: '2026-02-03',
     
-    fund: { id: 'capital-building', name: 'Capital Building Fund' },
-    campaign: { id: 'building-future', name: 'Building the Future' },
+    fundId: 'capital-building',
+    campaignId: 'building-future',
     
-    assignedTo: 'Jennifer Martinez',
-    assignedToInitials: 'JM',
+    assignedToId: 'jm',
     
     status: 'won',
     closedDate: '2026-01-15',
@@ -184,7 +172,6 @@ export const opportunities = [
   {
     id: 'opp-007',
     patronId: 'sarah-blackwood',
-    patronName: 'Sarah Blackwood',
     
     name: 'First Major Gift',
     description: 'Identified through wealth screening',
@@ -197,11 +184,10 @@ export const opportunities = [
     nextAction: 'Review wealth screening results',
     lastContact: '2026-01-10',
     
-    fund: { id: 'annual-operating', name: 'Annual Operating Fund' },
-    campaign: { id: 'annual-2026', name: '2026 Annual Fund' },
+    fundId: 'annual-operating',
+    campaignId: 'annual-2026',
     
-    assignedTo: 'Amanda Lee',
-    assignedToInitials: 'AL',
+    assignedToId: 'al',
     
     status: 'open',
     closedDate: null,
@@ -214,7 +200,6 @@ export const opportunities = [
   {
     id: 'opp-008',
     patronId: 'william-hartford',
-    patronName: 'William Hartford',
     
     name: 'Planned Giving - Bequest',
     description: 'Bequest intention for estate planning',
@@ -227,11 +212,10 @@ export const opportunities = [
     nextAction: 'Prepare ask proposal',
     lastContact: '2026-01-25',
     
-    fund: { id: 'endowment', name: 'Endowment Fund' },
-    campaign: { id: 'legacy-society', name: 'Legacy Society' },
+    fundId: 'endowment',
+    campaignId: 'legacy-society',
     
-    assignedTo: 'Jennifer Martinez',
-    assignedToInitials: 'JM',
+    assignedToId: 'jm',
     
     status: 'open',
     closedDate: null,
@@ -244,7 +228,6 @@ export const opportunities = [
   {
     id: 'opp-009',
     patronId: 'diana-rothschild',
-    patronName: 'Diana Rothschild',
     
     name: 'Education Program Support',
     description: 'Support for youth education initiatives',
@@ -257,11 +240,10 @@ export const opportunities = [
     nextAction: 'Initial qualification call',
     lastContact: '2026-02-04',
     
-    fund: { id: 'education', name: 'Education Programs' },
-    campaign: { id: 'annual-2026', name: '2026 Annual Fund' },
+    fundId: 'education',
+    campaignId: 'annual-2026',
     
-    assignedTo: 'Amanda Lee',
-    assignedToInitials: 'AL',
+    assignedToId: 'al',
     
     status: 'open',
     closedDate: null,
@@ -274,7 +256,6 @@ export const opportunities = [
   {
     id: 'opp-010',
     patronId: 'theodore-banks',
-    patronName: 'Theodore Banks',
     
     name: 'Annual Renewal',
     description: 'Annual major gift renewal',
@@ -287,11 +268,10 @@ export const opportunities = [
     nextAction: 'Annual stewardship report',
     lastContact: '2025-11-15',
     
-    fund: { id: 'annual-operating', name: 'Annual Operating Fund' },
-    campaign: { id: 'annual-2026', name: '2026 Annual Fund' },
+    fundId: 'annual-operating',
+    campaignId: 'annual-2026',
     
-    assignedTo: 'Robert Brown',
-    assignedToInitials: 'RB',
+    assignedToId: 'rb',
     
     status: 'won',
     closedDate: '2025-11-30',
@@ -304,7 +284,6 @@ export const opportunities = [
   {
     id: 'opp-011',
     patronId: 'victoria-sterling',
-    patronName: 'Victoria Sterling',
     
     name: 'Transformational Gift',
     description: 'Potential naming opportunity',
@@ -317,11 +296,10 @@ export const opportunities = [
     nextAction: 'Board member introduction',
     lastContact: '2026-01-30',
     
-    fund: { id: 'capital-building', name: 'Capital Building Fund' },
-    campaign: { id: 'building-future', name: 'Building the Future' },
+    fundId: 'capital-building',
+    campaignId: 'building-future',
     
-    assignedTo: 'Jennifer Martinez',
-    assignedToInitials: 'JM',
+    assignedToId: 'jm',
     
     status: 'open',
     closedDate: null,
@@ -334,7 +312,6 @@ export const opportunities = [
   {
     id: 'opp-012',
     patronId: 'margaret-chen',
-    patronName: 'Margaret Chen',
     
     name: 'Annual Fund Gift',
     description: 'Annual giving commitment',
@@ -347,11 +324,10 @@ export const opportunities = [
     nextAction: 'Review wealth screening',
     lastContact: '2025-10-05',
     
-    fund: { id: 'annual-operating', name: 'Annual Operating Fund' },
-    campaign: { id: 'annual-2026', name: '2026 Annual Fund' },
+    fundId: 'annual-operating',
+    campaignId: 'annual-2026',
     
-    assignedTo: 'Liam Johnson',
-    assignedToInitials: 'LJ',
+    assignedToId: 'lj',
     
     status: 'open',
     closedDate: null,
@@ -383,33 +359,34 @@ export const getOpportunityById = (id) => {
   return opportunities.find(opp => opp.id === id)
 }
 
-export const getOpportunitiesByAssignee = (assignedTo) => {
-  return opportunities.filter(opp => opp.assignedTo === assignedTo && opp.status === 'open')
+export const getOpportunitiesByAssignee = (assignedToId) => {
+  return opportunities.filter(opp => opp.assignedToId === assignedToId && opp.status === 'open')
 }
 
 // Get unique campaigns from opportunities
 export const getCampaigns = () => {
-  const campaignMap = new Map()
+  const campaignSet = new Set()
+  const campaignIds = []
   opportunities.forEach(opp => {
-    if (opp.campaign && !campaignMap.has(opp.campaign.id)) {
-      campaignMap.set(opp.campaign.id, opp.campaign)
+    if (opp.campaignId && !campaignSet.has(opp.campaignId)) {
+      campaignSet.add(opp.campaignId)
+      campaignIds.push(opp.campaignId)
     }
   })
-  return Array.from(campaignMap.values())
+  return campaignIds
 }
 
 // Get unique assignees from opportunities
 export const getAssignees = () => {
-  const assigneeMap = new Map()
+  const assigneeSet = new Set()
+  const assigneeIds = []
   opportunities.forEach(opp => {
-    if (!assigneeMap.has(opp.assignedToInitials)) {
-      assigneeMap.set(opp.assignedToInitials, {
-        initials: opp.assignedToInitials,
-        name: opp.assignedTo
-      })
+    if (opp.assignedToId && !assigneeSet.has(opp.assignedToId)) {
+      assigneeSet.add(opp.assignedToId)
+      assigneeIds.push(opp.assignedToId)
     }
   })
-  return Array.from(assigneeMap.values())
+  return assigneeIds
 }
 
 // Calculate pipeline totals
@@ -441,6 +418,24 @@ export const PROBABILITY_OPTIONS = [
 ]
 
 // =============================================================================
+// RESOLVE FUNCTION (hydrates IDs into display names for UI consumption)
+// =============================================================================
+
+// Resolve opportunity with display names for UI consumption
+// Accepts optional resolver functions to avoid circular imports
+export const resolveOpportunity = (opp, { getPatronName, getStaffName, getStaffInitials, getFundName, getCampaignName } = {}) => {
+  if (!opp) return null
+  return {
+    ...opp,
+    patronName: getPatronName ? getPatronName(opp.patronId) : opp.patronId,
+    assignedTo: getStaffName ? getStaffName(opp.assignedToId) : opp.assignedToId,
+    assignedToInitials: getStaffInitials ? getStaffInitials(opp.assignedToId) : opp.assignedToId,
+    fund: { id: opp.fundId, name: getFundName ? getFundName(opp.fundId) : opp.fundId },
+    campaign: { id: opp.campaignId, name: getCampaignName ? getCampaignName(opp.campaignId) : opp.campaignId },
+  }
+}
+
+// =============================================================================
 // MUTATION FUNCTIONS (Mock - for demo purposes)
 // =============================================================================
 
@@ -452,7 +447,6 @@ export const addOpportunity = (opportunityData) => {
   const newOpportunity = {
     id: generateId(),
     patronId: opportunityData.patronId,
-    patronName: opportunityData.patronName,
     
     name: opportunityData.name,
     description: opportunityData.description || '',
@@ -465,11 +459,10 @@ export const addOpportunity = (opportunityData) => {
     nextAction: opportunityData.nextAction || '',
     lastContact: new Date().toISOString().split('T')[0],
     
-    fund: opportunityData.fund,
-    campaign: opportunityData.campaign,
+    fundId: opportunityData.fundId,
+    campaignId: opportunityData.campaignId,
     
-    assignedTo: opportunityData.assignedTo,
-    assignedToInitials: opportunityData.assignedToInitials || opportunityData.assignedTo?.split(' ').map(n => n[0]).join(''),
+    assignedToId: opportunityData.assignedToId,
     
     status: 'open',
     closedDate: null,
@@ -522,11 +515,10 @@ export const closeOpportunityAsWon = (id, actualAmount = null, notes = null) => 
     gift: {
       id: `gift-${Date.now()}`,
       patronId: opportunity.patronId,
-      patronName: opportunity.patronName,
       amount: actualAmount || opportunity.askAmount,
       date: new Date().toISOString().split('T')[0],
-      fund: opportunity.fund,
-      campaign: opportunity.campaign,
+      fundId: opportunity.fundId,
+      campaignId: opportunity.campaignId,
       opportunityId: id,
       type: 'donation',
     }
@@ -542,8 +534,8 @@ export const closeOpportunityAsLost = (id, reason = null) => {
   })
 }
 
-// Log contact (updates lastContact and optionally nextAction)
-export const logContact = (id, contactDate, nextAction = null) => {
+// Log contact (updates lastContact and optionally nextAction, creates INTERACTION record)
+export const logContact = (id, contactDate, nextAction = null, interactionData = null) => {
   const updates = {
     lastContact: contactDate || new Date().toISOString().split('T')[0],
   }
@@ -552,5 +544,18 @@ export const logContact = (id, contactDate, nextAction = null) => {
     updates.nextAction = nextAction
   }
   
-  return updateOpportunity(id, updates)
+  const updatedOpp = updateOpportunity(id, updates)
+
+  // Also create an INTERACTION record if interaction data is provided
+  if (interactionData && updatedOpp) {
+    // Lazy import to avoid circular dependency
+    const { addInteraction } = require('./patrons')
+    addInteraction({
+      ...interactionData,
+      patronId: updatedOpp.patronId,
+      opportunityId: id,
+    })
+  }
+
+  return updatedOpp
 }

@@ -222,26 +222,21 @@ function Settings() {
             className={`settings__nav-item ${activeSection === 'tags' ? 'settings__nav-item--active' : ''}`}
             onClick={() => setActiveSection('tags')}
           >
-            <i className="fa-solid fa-tags"></i>
             Tags
           </button>
           <button 
             className={`settings__nav-item ${activeSection === 'import' ? 'settings__nav-item--active' : ''}`}
             onClick={() => { setActiveSection('import'); setImportStep(1); setSelectedSource(null); }}
           >
-            <i className="fa-solid fa-file-import"></i>
             Import Data
           </button>
           <button className="settings__nav-item settings__nav-item--disabled" disabled>
-            <i className="fa-solid fa-gear"></i>
             General
           </button>
           <button className="settings__nav-item settings__nav-item--disabled" disabled>
-            <i className="fa-solid fa-users"></i>
             Users
           </button>
           <button className="settings__nav-item settings__nav-item--disabled" disabled>
-            <i className="fa-solid fa-plug"></i>
             Integrations
           </button>
         </nav>
@@ -275,8 +270,7 @@ function Settings() {
                 onClick={handleCreateTag}
                 disabled={!newTagLabel.trim()}
               >
-                <i className="fa-solid fa-plus"></i>
-                Create Tag
+                Create tag
               </button>
             </div>
 
@@ -603,7 +597,7 @@ function Settings() {
                   </button>
                   <button 
                     className="settings__import-btn settings__import-btn--primary settings__import-btn--success"
-                    onClick={() => alert('Import functionality coming soon! This is a mockup preview.')}
+                    onClick={() => alert('Import preview complete. In production, this would begin the data import process.')}
                   >
                     <i className="fa-solid fa-check"></i>
                     Start Import
