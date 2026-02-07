@@ -37,16 +37,22 @@
   margin: 0;
 }
 
-/* Container - grid parent for nav + content */
+/* Container - just padding */
 .settings__container {
+  padding: var(--space-6);
+}
+
+/* Wrapper - white card containing nav + content */
+.settings__wrapper {
   display: grid;
   grid-template-columns: 14rem 1fr;
   gap: 1rem;
-  padding: var(--space-6);
-  align-items: start;
+  background-color: var(--color-surface);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
 }
 
-/* Navigation Sidebar - its own card (from Fever Zone .sidebar-nav) */
+/* Navigation Sidebar - inside wrapper, no separate card styling */
 .settings__nav {
   display: flex;
   flex-direction: column;
@@ -54,12 +60,7 @@
   align-items: flex-start;
   gap: 0.5rem;
   padding: 0.5rem;
-  border-radius: 0.5rem;
-  border: 1px solid #f2f3f3;
-  background: #fff;
-  height: fit-content;
-  position: sticky;
-  top: 80px;
+  border-right: 1px solid var(--color-border);
 }
 
 /* Nav Item (from Fever Zone .sidebar-nav__item) */
@@ -96,21 +97,20 @@
   pointer-events: none;
 }
 
-/* Content Area - its own card (from Fever Zone .wrapper-card + .wrapper-card--main + .wrapper-card--elevation-100) */
+/* Content Area - flex container for sections (from Fever Zone .wrapper-card--main) */
 .settings__content {
   display: flex;
   flex-direction: column;
   flex: 1 1 0;
   gap: 1.5rem;
   min-width: 0;
-  padding: 1rem;
-  background-color: #fff;
-  border-radius: 0.5rem;
-  border: 1px solid #ccd2d8;
-  box-shadow: 0 3px 3px rgba(0, 70, 121, 0.2);
+  /* No card styling - sections have their own cards */
+  background: transparent;
+  border: none;
+  box-shadow: none;
 }
 
-/* Section */
+/* Section - no separate card styling */
 .settings__section {
   padding: var(--space-6);
 }

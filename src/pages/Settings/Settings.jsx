@@ -215,8 +215,9 @@ function Settings() {
 
       {/* Main Content */}
       <div className="settings__container">
-        {/* Navigation Sidebar */}
-        <nav className="settings__nav">
+        <div className="settings__wrapper">
+          {/* Navigation Sidebar */}
+          <nav className="settings__nav">
           <button 
             className={`settings__nav-item ${activeSection === 'tags' ? 'settings__nav-item--active' : ''}`}
             onClick={() => setActiveSection('tags')}
@@ -612,6 +613,7 @@ function Settings() {
             )}
           </section>
           )}
+        </div>
         </div>
       </div>
     </div>
