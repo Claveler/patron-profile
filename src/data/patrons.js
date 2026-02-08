@@ -83,7 +83,7 @@ export const patrons = [
   
   // Anderson Collingwood - FULL DATA (our main demo patron)
   {
-    id: 'anderson-collingwood',
+    id: '7962415',
     firstName: 'Anderson',
     lastName: 'Collingwood',
     photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
@@ -229,7 +229,7 @@ export const patrons = [
 
   // Paul Fairfax - FULL DATA (General Constituent demo patron)
   {
-    id: 'paul-fairfax',
+    id: '7962416',
     firstName: 'Paul',
     lastName: 'Fairfax',
     photo: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150&h=150&fit=crop&crop=face',
@@ -364,7 +364,7 @@ export const patrons = [
 
   // Other Managed Prospects (simplified data for list view)
   {
-    id: 'jake-thompson',
+    id: '7962417',
     firstName: 'Jake',
     lastName: 'Thompson',
     photo: null,
@@ -396,7 +396,7 @@ export const patrons = [
     createdDate: '2025-06-15'
   },
   {
-    id: 'sophia-thomas',
+    id: '7962418',
     firstName: 'Sophia',
     lastName: 'Thomas',
     photo: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face',
@@ -437,7 +437,7 @@ export const patrons = [
     createdDate: '2025-04-10'
   },
   {
-    id: 'lucas-taylor',
+    id: '7962419',
     firstName: 'Lucas',
     lastName: 'Taylor',
     photo: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
@@ -478,7 +478,7 @@ export const patrons = [
     createdDate: '2024-08-20'
   },
   {
-    id: 'ava-anderson',
+    id: '7962420',
     firstName: 'Ava',
     lastName: 'Anderson',
     photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face',
@@ -517,7 +517,7 @@ export const patrons = [
     createdDate: '2024-03-15'
   },
   {
-    id: 'samantha-carter',
+    id: '7962421',
     firstName: 'Samantha',
     lastName: 'Carter',
     photo: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face',
@@ -558,7 +558,7 @@ export const patrons = [
     createdDate: '2023-05-01'
   },
   {
-    id: 'john-martinez',
+    id: '7962422',
     firstName: 'John',
     lastName: 'Martinez',
     photo: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&h=150&fit=crop&crop=face',
@@ -599,7 +599,7 @@ export const patrons = [
     createdDate: '2024-09-10'
   },
   {
-    id: 'mia-wilson',
+    id: '7962423',
     firstName: 'Mia',
     lastName: 'Wilson',
     photo: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=150&h=150&fit=crop&crop=face',
@@ -638,7 +638,7 @@ export const patrons = [
     createdDate: '2023-08-20'
   },
   {
-    id: 'olivia-brown',
+    id: '7962424',
     firstName: 'Olivia',
     lastName: 'Brown',
     photo: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&h=150&fit=crop&crop=face',
@@ -677,7 +677,7 @@ export const patrons = [
     createdDate: '2025-01-15'
   },
   {
-    id: 'ethan-davis',
+    id: '7962425',
     firstName: 'Ethan',
     lastName: 'Davis',
     photo: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&h=150&fit=crop&crop=face',
@@ -724,7 +724,7 @@ export const patrons = [
   // ============================================
   
   {
-    id: 'rachel-kim',
+    id: '7962426',
     firstName: 'Rachel',
     lastName: 'Kim',
     photo: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&h=150&fit=crop&crop=face',
@@ -763,7 +763,7 @@ export const patrons = [
     source: 'ticket'
   },
   {
-    id: 'david-chen',
+    id: '7962427',
     firstName: 'David',
     lastName: 'Chen',
     photo: null,
@@ -802,7 +802,7 @@ export const patrons = [
     source: 'online'
   },
   {
-    id: 'maria-santos',
+    id: '7962428',
     firstName: 'Maria',
     lastName: 'Santos',
     photo: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=150&h=150&fit=crop&crop=face',
@@ -841,7 +841,7 @@ export const patrons = [
     source: 'membership'
   },
   {
-    id: 'james-wilson',
+    id: '7962429',
     firstName: 'James',
     lastName: 'Wilson',
     photo: null,
@@ -879,7 +879,7 @@ export const patrons = [
   
   // Sarah Collingwood - Anderson's spouse, beneficiary on his membership
   {
-    id: 'sarah-collingwood',
+    id: '7962430',
     firstName: 'Sarah',
     lastName: 'Collingwood',
     photo: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop&crop=face',
@@ -930,7 +930,7 @@ export const patrons = [
   
   // Emma Collingwood - Anderson's daughter, dependent on his membership
   {
-    id: 'emma-collingwood',
+    id: '7962431',
     firstName: 'Emma',
     lastName: 'Collingwood',
     photo: null,
@@ -979,7 +979,7 @@ export const patrons = [
 
   // Eleanor Whitfield - major donor, $100k leadership gift opp (assigned to JM)
   {
-    id: 'eleanor-whitfield',
+    id: '7962432',
     firstName: 'Eleanor',
     lastName: 'Whitfield',
     photo: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face',
@@ -1021,7 +1021,7 @@ export const patrons = [
 
   // Marcus Chen - corporate contact, exhibition sponsorship opp (assigned to RB)
   {
-    id: 'marcus-chen',
+    id: '7962433',
     firstName: 'Marcus',
     lastName: 'Chen',
     photo: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&h=150&fit=crop&crop=face',
@@ -1063,7 +1063,7 @@ export const patrons = [
 
   // Patricia Hawthorne - foundation, grant opp (assigned to RB)
   {
-    id: 'patricia-hawthorne',
+    id: '7962434',
     firstName: 'Patricia',
     lastName: 'Hawthorne',
     photo: 'https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=150&h=150&fit=crop&crop=face',
@@ -1105,7 +1105,7 @@ export const patrons = [
 
   // James Morrison - major donor, building campaign (won $75k), assigned to JM
   {
-    id: 'james-morrison',
+    id: '7962435',
     firstName: 'James',
     lastName: 'Morrison',
     photo: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
@@ -1147,7 +1147,7 @@ export const patrons = [
 
   // Sarah Blackwood - new prospect, first major gift opp (assigned to AL)
   {
-    id: 'sarah-blackwood',
+    id: '7962436',
     firstName: 'Sarah',
     lastName: 'Blackwood',
     photo: null,
@@ -1182,7 +1182,7 @@ export const patrons = [
 
   // William Hartford - planned giving / bequest opp (assigned to JM)
   {
-    id: 'william-hartford',
+    id: '7962437',
     firstName: 'William',
     lastName: 'Hartford',
     photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face',
@@ -1224,7 +1224,7 @@ export const patrons = [
 
   // Diana Rothschild - education program supporter (assigned to AL)
   {
-    id: 'diana-rothschild',
+    id: '7962438',
     firstName: 'Diana',
     lastName: 'Rothschild',
     photo: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face',
@@ -1266,7 +1266,7 @@ export const patrons = [
 
   // Theodore Banks - annual renewal donor (won $10k), assigned to RB
   {
-    id: 'theodore-banks',
+    id: '7962439',
     firstName: 'Theodore',
     lastName: 'Banks',
     photo: 'https://images.unsplash.com/photo-1548372290-8d01b6c8e78c?w=150&h=150&fit=crop&crop=face',
@@ -1308,7 +1308,7 @@ export const patrons = [
 
   // Victoria Sterling - transformational gift prospect ($500k), assigned to JM
   {
-    id: 'victoria-sterling',
+    id: '7962440',
     firstName: 'Victoria',
     lastName: 'Sterling',
     photo: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&h=150&fit=crop&crop=face',
@@ -1350,7 +1350,7 @@ export const patrons = [
 
   // Margaret Chen - annual fund prospect ($5k), assigned to LJ
   {
-    id: 'margaret-chen',
+    id: '7962441',
     firstName: 'Margaret',
     lastName: 'Chen',
     photo: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=150&h=150&fit=crop&crop=face',
@@ -1392,7 +1392,7 @@ export const patrons = [
 
   // Elizabeth Fairfax - pledges and gifts demo patron (paul-fairfax's wife)
   {
-    id: 'elizabeth-fairfax',
+    id: '7962442',
     firstName: 'Elizabeth',
     lastName: 'Fairfax',
     photo: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=150&h=150&fit=crop&crop=face',
@@ -1429,7 +1429,7 @@ export const patrons = [
   // Thomas Fairfax — Paul's son, exists in the system but not yet linked to household
   // Used during demo to show adding a household relationship
   {
-    id: 'thomas-fairfax',
+    id: '7962443',
     firstName: 'Thomas',
     lastName: 'Fairfax',
     photo: null,
@@ -1519,19 +1519,14 @@ export const formatRelativeDate = (dateString) => {
 // MUTATION FUNCTIONS (Mock - for demo purposes)
 // =============================================================================
 
-// Generate unique ID from name
-const generatePatronId = (firstName, lastName) => {
-  const baseId = `${firstName.toLowerCase()}-${lastName.toLowerCase()}`
-    .replace(/[^a-z-]/g, '')
-  
-  // Check if ID already exists
-  let uniqueId = baseId
-  let counter = 1
-  while (patrons.find(p => p.id === uniqueId)) {
-    uniqueId = `${baseId}-${counter}`
-    counter++
-  }
-  return uniqueId
+// Generate unique 7-digit numeric ID
+const generatePatronId = () => {
+  // Find the highest existing numeric ID and increment
+  const maxId = patrons.reduce((max, p) => {
+    const num = parseInt(p.id, 10)
+    return !isNaN(num) && num > max ? num : max
+  }, 7962443) // Last assigned ID in seed data
+  return String(maxId + 1)
 }
 
 // Generate empty activity history for new patrons (12 months, 4 weeks each)
@@ -1559,7 +1554,7 @@ const generateEmptyActivityHistory = () => {
 // Add new patron
 export const addPatron = (patronData) => {
   const newPatron = {
-    id: generatePatronId(patronData.firstName, patronData.lastName),
+    id: generatePatronId(),
     firstName: patronData.firstName,
     lastName: patronData.lastName,
     photo: null,
@@ -2241,7 +2236,7 @@ export const membershipBeneficiaries = [
   {
     id: 'mb-1',
     membershipId: 'mem-anderson-gold',
-    patronId: 'anderson-collingwood',
+    patronId: '7962415',
     role: 'primary',
     roleLabel: 'Primary',
     canManage: true,
@@ -2253,7 +2248,7 @@ export const membershipBeneficiaries = [
   {
     id: 'mb-2',
     membershipId: 'mem-anderson-gold',
-    patronId: 'sarah-collingwood',
+    patronId: '7962430',
     role: 'additional_adult',
     roleLabel: 'Additional Adult',
     canManage: false,
@@ -2265,7 +2260,7 @@ export const membershipBeneficiaries = [
   {
     id: 'mb-3',
     membershipId: 'mem-anderson-gold',
-    patronId: 'emma-collingwood',
+    patronId: '7962431',
     role: 'dependent',
     roleLabel: 'Dependent',
     canManage: false,
@@ -2277,7 +2272,7 @@ export const membershipBeneficiaries = [
   {
     id: 'mb-4',
     membershipId: 'mem-fairfax-silver',
-    patronId: 'paul-fairfax',
+    patronId: '7962416',
     role: 'primary',
     roleLabel: 'Primary Member',
     canManage: true,
@@ -2288,7 +2283,7 @@ export const membershipBeneficiaries = [
   {
     id: 'mb-5',
     membershipId: 'mem-taylor-silver',
-    patronId: 'lucas-taylor',
+    patronId: '7962419',
     role: 'primary',
     roleLabel: 'Primary Member',
     canManage: true,
@@ -2299,7 +2294,7 @@ export const membershipBeneficiaries = [
   {
     id: 'mb-6',
     membershipId: 'mem-taylor-silver',
-    patronId: 'sophia-thomas',
+    patronId: '7962418',
     role: 'additional_adult',
     roleLabel: 'Additional Adult',
     canManage: false,
@@ -2310,7 +2305,7 @@ export const membershipBeneficiaries = [
   {
     id: 'mb-7',
     membershipId: 'mem-martinez-gold',
-    patronId: 'john-martinez',
+    patronId: '7962422',
     role: 'primary',
     roleLabel: 'Primary Member',
     canManage: true,
@@ -2321,7 +2316,7 @@ export const membershipBeneficiaries = [
   {
     id: 'mb-8',
     membershipId: 'mem-martinez-gold',
-    patronId: 'samantha-carter',
+    patronId: '7962421',
     role: 'additional_adult',
     roleLabel: 'Additional Adult',
     canManage: false,
@@ -2332,7 +2327,7 @@ export const membershipBeneficiaries = [
   {
     id: 'mb-9',
     membershipId: 'mem-davis-silver',
-    patronId: 'ethan-davis',
+    patronId: '7962425',
     role: 'primary',
     roleLabel: 'Primary Member',
     canManage: true,
@@ -2343,7 +2338,7 @@ export const membershipBeneficiaries = [
   {
     id: 'mb-10',
     membershipId: 'mem-davis-silver',
-    patronId: 'olivia-brown',
+    patronId: '7962424',
     role: 'additional_adult',
     roleLabel: 'Additional Adult',
     canManage: false,
@@ -2354,7 +2349,7 @@ export const membershipBeneficiaries = [
   {
     id: 'mb-11',
     membershipId: 'mem-kim-basic',
-    patronId: 'rachel-kim',
+    patronId: '7962426',
     role: 'primary',
     roleLabel: 'Primary Member',
     canManage: true,
@@ -2365,7 +2360,7 @@ export const membershipBeneficiaries = [
   {
     id: 'mb-12',
     membershipId: 'mem-santos-silver',
-    patronId: 'maria-santos',
+    patronId: '7962428',
     role: 'primary',
     roleLabel: 'Primary Member',
     canManage: true,
@@ -2378,17 +2373,17 @@ export const membershipBeneficiaries = [
 // Membership usage tracking (per beneficiary)
 export const membershipUsage = [
   // Anderson's usage
-  { id: 'usage-1', membershipId: 'mem-anderson-gold', patronId: 'anderson-collingwood', benefitType: 'admission', quantity: 12 },
-  { id: 'usage-2', membershipId: 'mem-anderson-gold', patronId: 'anderson-collingwood', benefitType: 'guest_pass', quantity: 1 },
-  { id: 'usage-3', membershipId: 'mem-anderson-gold', patronId: 'anderson-collingwood', benefitType: 'fb_discount', quantity: 4 },
+  { id: 'usage-1', membershipId: 'mem-anderson-gold', patronId: '7962415', benefitType: 'admission', quantity: 12 },
+  { id: 'usage-2', membershipId: 'mem-anderson-gold', patronId: '7962415', benefitType: 'guest_pass', quantity: 1 },
+  { id: 'usage-3', membershipId: 'mem-anderson-gold', patronId: '7962415', benefitType: 'fb_discount', quantity: 4 },
   // Sarah's usage
-  { id: 'usage-4', membershipId: 'mem-anderson-gold', patronId: 'sarah-collingwood', benefitType: 'admission', quantity: 28 },
-  { id: 'usage-5', membershipId: 'mem-anderson-gold', patronId: 'sarah-collingwood', benefitType: 'guest_pass', quantity: 2 },
-  { id: 'usage-6', membershipId: 'mem-anderson-gold', patronId: 'sarah-collingwood', benefitType: 'fb_discount', quantity: 8 },
+  { id: 'usage-4', membershipId: 'mem-anderson-gold', patronId: '7962430', benefitType: 'admission', quantity: 28 },
+  { id: 'usage-5', membershipId: 'mem-anderson-gold', patronId: '7962430', benefitType: 'guest_pass', quantity: 2 },
+  { id: 'usage-6', membershipId: 'mem-anderson-gold', patronId: '7962430', benefitType: 'fb_discount', quantity: 8 },
   // Emma's usage
-  { id: 'usage-7', membershipId: 'mem-anderson-gold', patronId: 'emma-collingwood', benefitType: 'admission', quantity: 7 },
-  { id: 'usage-8', membershipId: 'mem-anderson-gold', patronId: 'emma-collingwood', benefitType: 'guest_pass', quantity: 0 },
-  { id: 'usage-9', membershipId: 'mem-anderson-gold', patronId: 'emma-collingwood', benefitType: 'fb_discount', quantity: 0 },
+  { id: 'usage-7', membershipId: 'mem-anderson-gold', patronId: '7962431', benefitType: 'admission', quantity: 7 },
+  { id: 'usage-8', membershipId: 'mem-anderson-gold', patronId: '7962431', benefitType: 'guest_pass', quantity: 0 },
+  { id: 'usage-9', membershipId: 'mem-anderson-gold', patronId: '7962431', benefitType: 'fb_discount', quantity: 0 },
 ]
 
 // =============================================================================
@@ -2399,171 +2394,171 @@ export const GIFTS = [
   // ── Anderson Collingwood (16 gifts: escalation arc from 2023 to 2026) ──────
 
   // 2023: First touch - joined as Silver member
-  { id: 'gift-001', patronId: 'anderson-collingwood', date: '2023-12-02', amount: 89.99, type: 'membership', description: 'Silver Membership - Initial', fundId: 'annual-operating', campaignId: null, appealId: 'membership-renewal', deductible: 49.99, benefitsValue: 40.00, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-001', patronId: '7962415', date: '2023-12-02', amount: 89.99, type: 'membership', description: 'Silver Membership - Initial', fundId: 'annual-operating', campaignId: null, appealId: 'membership-renewal', deductible: 49.99, benefitsValue: 40.00, softCredits: [], pledgeId: null, recurringProfileId: null },
 
   // 2024: Escalation year - engaged more, upgraded to Gold, gave increasingly
-  { id: 'gift-002', patronId: 'anderson-collingwood', date: '2024-03-15', amount: 500.00, type: 'one-time', description: 'First Annual Gift', fundId: 'annual-operating', campaignId: 'annual-2025', appealId: 'online-2025', deductible: 500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-003', patronId: 'anderson-collingwood', date: '2024-06-20', amount: 750.00, type: 'one-time', description: 'Emergency Relief Gift', fundId: 'restricted', campaignId: 'emergency-2024', appealId: 'emergency-email', deductible: 750.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-004', patronId: 'anderson-collingwood', date: '2024-06-15', amount: 145.99, type: 'membership', description: 'Gold Membership Upgrade', fundId: 'annual-operating', campaignId: 'annual-2025', appealId: 'membership-renewal', deductible: 95.99, benefitsValue: 50.00, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-005', patronId: 'anderson-collingwood', date: '2024-10-15', amount: 1000.00, type: 'one-time', description: 'Fall Campaign Gift', fundId: 'annual-operating', campaignId: 'annual-2025', appealId: 'year-end-2025', deductible: 1000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-006', patronId: 'anderson-collingwood', date: '2024-12-18', amount: 2500.00, type: 'one-time', description: 'Year-End Major Gift', fundId: 'annual-operating', campaignId: 'annual-2025', appealId: 'year-end-2025', deductible: 2500.00, benefitsValue: 0, softCredits: [{ patronId: '999', name: 'Margaret Williams', type: 'solicitor' }], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-002', patronId: '7962415', date: '2024-03-15', amount: 500.00, type: 'one-time', description: 'First Annual Gift', fundId: 'annual-operating', campaignId: 'annual-2025', appealId: 'online-2025', deductible: 500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-003', patronId: '7962415', date: '2024-06-20', amount: 750.00, type: 'one-time', description: 'Emergency Relief Gift', fundId: 'restricted', campaignId: 'emergency-2024', appealId: 'emergency-email', deductible: 750.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-004', patronId: '7962415', date: '2024-06-15', amount: 145.99, type: 'membership', description: 'Gold Membership Upgrade', fundId: 'annual-operating', campaignId: 'annual-2025', appealId: 'membership-renewal', deductible: 95.99, benefitsValue: 50.00, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-005', patronId: '7962415', date: '2024-10-15', amount: 1000.00, type: 'one-time', description: 'Fall Campaign Gift', fundId: 'annual-operating', campaignId: 'annual-2025', appealId: 'year-end-2025', deductible: 1000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-006', patronId: '7962415', date: '2024-12-18', amount: 2500.00, type: 'one-time', description: 'Year-End Major Gift', fundId: 'annual-operating', campaignId: 'annual-2025', appealId: 'year-end-2025', deductible: 2500.00, benefitsValue: 0, softCredits: [{ patronId: '999', name: 'Margaret Williams', type: 'solicitor' }], pledgeId: null, recurringProfileId: null },
 
   // 2025: Major commitment year - pledge, gala sponsorship, recurring sustainer
-  { id: 'gift-007', patronId: 'anderson-collingwood', date: '2025-06-15', amount: 1250.00, type: 'pledge-payment', description: 'Building Campaign - Q1 Payment', fundId: 'capital-building', campaignId: 'building-future', appealId: 'leadership-gifts', deductible: 1250.00, benefitsValue: 0, softCredits: [{ patronId: '888', name: 'Robert Chen', type: 'influencer' }], pledgeId: 'pledge-001', recurringProfileId: null },
-  { id: 'gift-008', patronId: 'anderson-collingwood', date: '2025-06-15', amount: 2500.00, type: 'one-time', description: 'Spring Gala Sponsorship', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'gala-sponsorship', deductible: 2100.00, benefitsValue: 400.00, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-009', patronId: 'anderson-collingwood', date: '2025-09-15', amount: 1250.00, type: 'pledge-payment', description: 'Building Campaign - Q2 Payment', fundId: 'capital-building', campaignId: 'building-future', appealId: 'leadership-gifts', deductible: 1250.00, benefitsValue: 0, softCredits: [], pledgeId: 'pledge-001', recurringProfileId: null },
-  { id: 'gift-010', patronId: 'anderson-collingwood', date: '2025-11-15', amount: 100.00, type: 'recurring', description: 'Monthly Sustainer - Nov 2025', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: null, deductible: 100.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: 'rec-001' },
-  { id: 'gift-011', patronId: 'anderson-collingwood', date: '2025-12-02', amount: 145.99, type: 'membership', description: 'Gold Membership Renewal', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'membership-renewal', deductible: 95.99, benefitsValue: 50.00, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-012', patronId: 'anderson-collingwood', date: '2025-12-15', amount: 100.00, type: 'recurring', description: 'Monthly Sustainer - Dec 2025', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: null, deductible: 100.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: 'rec-001' },
-  { id: 'gift-013', patronId: 'anderson-collingwood', date: '2025-12-15', amount: 1250.00, type: 'pledge-payment', description: 'Building Campaign - Q3 Payment', fundId: 'capital-building', campaignId: 'building-future', appealId: 'leadership-gifts', deductible: 1250.00, benefitsValue: 0, softCredits: [], pledgeId: 'pledge-001', recurringProfileId: null },
-  { id: 'gift-014', patronId: 'anderson-collingwood', date: '2025-12-20', amount: 2500.00, type: 'one-time', description: 'Year-End Major Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'year-end-mailer', deductible: 2500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-007', patronId: '7962415', date: '2025-06-15', amount: 1250.00, type: 'pledge-payment', description: 'Building Campaign - Q1 Payment', fundId: 'capital-building', campaignId: 'building-future', appealId: 'leadership-gifts', deductible: 1250.00, benefitsValue: 0, softCredits: [{ patronId: '888', name: 'Robert Chen', type: 'influencer' }], pledgeId: 'pledge-001', recurringProfileId: null },
+  { id: 'gift-008', patronId: '7962415', date: '2025-06-15', amount: 2500.00, type: 'one-time', description: 'Spring Gala Sponsorship', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'gala-sponsorship', deductible: 2100.00, benefitsValue: 400.00, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-009', patronId: '7962415', date: '2025-09-15', amount: 1250.00, type: 'pledge-payment', description: 'Building Campaign - Q2 Payment', fundId: 'capital-building', campaignId: 'building-future', appealId: 'leadership-gifts', deductible: 1250.00, benefitsValue: 0, softCredits: [], pledgeId: 'pledge-001', recurringProfileId: null },
+  { id: 'gift-010', patronId: '7962415', date: '2025-11-15', amount: 100.00, type: 'recurring', description: 'Monthly Sustainer - Nov 2025', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: null, deductible: 100.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: 'rec-001' },
+  { id: 'gift-011', patronId: '7962415', date: '2025-12-02', amount: 145.99, type: 'membership', description: 'Gold Membership Renewal', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'membership-renewal', deductible: 95.99, benefitsValue: 50.00, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-012', patronId: '7962415', date: '2025-12-15', amount: 100.00, type: 'recurring', description: 'Monthly Sustainer - Dec 2025', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: null, deductible: 100.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: 'rec-001' },
+  { id: 'gift-013', patronId: '7962415', date: '2025-12-15', amount: 1250.00, type: 'pledge-payment', description: 'Building Campaign - Q3 Payment', fundId: 'capital-building', campaignId: 'building-future', appealId: 'leadership-gifts', deductible: 1250.00, benefitsValue: 0, softCredits: [], pledgeId: 'pledge-001', recurringProfileId: null },
+  { id: 'gift-014', patronId: '7962415', date: '2025-12-20', amount: 2500.00, type: 'one-time', description: 'Year-End Major Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'year-end-mailer', deductible: 2500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
 
   // 2026: Continuing momentum
-  { id: 'gift-015', patronId: 'anderson-collingwood', date: '2026-01-15', amount: 100.00, type: 'recurring', description: 'Monthly Sustainer - Jan 2026', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: null, deductible: 100.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: 'rec-001' },
-  { id: 'gift-016', patronId: 'anderson-collingwood', date: '2026-01-28', amount: 2500.00, type: 'one-time', description: 'New Year Major Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'year-end-mailer', deductible: 2500.00, benefitsValue: 0, softCredits: [{ patronId: '999', name: 'Margaret Williams', type: 'solicitor' }], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-015', patronId: '7962415', date: '2026-01-15', amount: 100.00, type: 'recurring', description: 'Monthly Sustainer - Jan 2026', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: null, deductible: 100.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: 'rec-001' },
+  { id: 'gift-016', patronId: '7962415', date: '2026-01-28', amount: 2500.00, type: 'one-time', description: 'New Year Major Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'year-end-mailer', deductible: 2500.00, benefitsValue: 0, softCredits: [{ patronId: '999', name: 'Margaret Williams', type: 'solicitor' }], pledgeId: null, recurringProfileId: null },
 
   // ── Elizabeth Fairfax ──────────────────────────────────────────────────────
-  { id: 'gift-017', patronId: 'elizabeth-fairfax', date: '2025-04-15', amount: 500.00, type: 'pledge-payment', description: 'Annual Fund Pledge - Q1 Payment', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'spring-gala-2025', deductible: 500.00, benefitsValue: 0, softCredits: [], pledgeId: 'pledge-002', recurringProfileId: null },
-  { id: 'gift-018', patronId: 'elizabeth-fairfax', date: '2025-12-20', amount: 200.00, type: 'one-time', description: 'Year-End Online Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'year-end-mailer', deductible: 200.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-017', patronId: '7962442', date: '2025-04-15', amount: 500.00, type: 'pledge-payment', description: 'Annual Fund Pledge - Q1 Payment', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'spring-gala-2025', deductible: 500.00, benefitsValue: 0, softCredits: [], pledgeId: 'pledge-002', recurringProfileId: null },
+  { id: 'gift-018', patronId: '7962442', date: '2025-12-20', amount: 200.00, type: 'one-time', description: 'Year-End Online Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'year-end-mailer', deductible: 200.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
 
   // ── Paul Fairfax (5 gifts: unmanaged donor giving on his own) ──────────
-  { id: 'gift-030', patronId: 'paul-fairfax', date: '2024-02-27', amount: 89.99, type: 'membership', description: 'Silver Membership - Initial', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 49.99, benefitsValue: 40.00, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-031', patronId: 'paul-fairfax', date: '2024-11-18', amount: 500.00, type: 'one-time', description: 'Year-End Online Gift', fundId: 'annual-operating', campaignId: 'annual-2025', appealId: 'online-2025', deductible: 500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-032', patronId: 'paul-fairfax', date: '2025-02-27', amount: 89.99, type: 'membership', description: 'Silver Membership Renewal', fundId: 'annual-operating', campaignId: 'annual-2025', appealId: 'membership-renewal', deductible: 49.99, benefitsValue: 40.00, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-033', patronId: 'paul-fairfax', date: '2025-06-15', amount: 200.00, type: 'one-time', description: 'Spring Gala Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'gala-tickets', deductible: 200.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-034', patronId: 'paul-fairfax', date: '2025-09-10', amount: 500.00, type: 'one-time', description: 'Online Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'online-giving', deductible: 500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-030', patronId: '7962416', date: '2024-02-27', amount: 89.99, type: 'membership', description: 'Silver Membership - Initial', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 49.99, benefitsValue: 40.00, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-031', patronId: '7962416', date: '2024-11-18', amount: 500.00, type: 'one-time', description: 'Year-End Online Gift', fundId: 'annual-operating', campaignId: 'annual-2025', appealId: 'online-2025', deductible: 500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-032', patronId: '7962416', date: '2025-02-27', amount: 89.99, type: 'membership', description: 'Silver Membership Renewal', fundId: 'annual-operating', campaignId: 'annual-2025', appealId: 'membership-renewal', deductible: 49.99, benefitsValue: 40.00, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-033', patronId: '7962416', date: '2025-06-15', amount: 200.00, type: 'one-time', description: 'Spring Gala Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'gala-tickets', deductible: 200.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-034', patronId: '7962416', date: '2025-09-10', amount: 500.00, type: 'one-time', description: 'Online Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'online-giving', deductible: 500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
 
   // ── Samantha Carter (7 gifts: $120K major donor, on-fire engagement) ────
-  { id: 'gift-035', patronId: 'samantha-carter', date: '2025-02-05', amount: 10000.00, type: 'one-time', description: 'Annual Leadership Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'online-giving', deductible: 10000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-036', patronId: 'samantha-carter', date: '2025-03-10', amount: 15000.00, type: 'one-time', description: 'Spring Gala Sponsorship', fundId: 'annual-operating', campaignId: 'spring-gala-2026', appealId: 'gala-sponsorship', deductible: 14000.00, benefitsValue: 1000.00, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-037', patronId: 'samantha-carter', date: '2025-04-18', amount: 5000.00, type: 'one-time', description: 'Education Program Gift', fundId: 'education', campaignId: 'education-2026', appealId: 'school-partnership', deductible: 5000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-038', patronId: 'samantha-carter', date: '2025-05-25', amount: 25000.00, type: 'one-time', description: 'Building Campaign Major Gift', fundId: 'capital-building', campaignId: 'building-future', appealId: 'leadership-gifts', deductible: 25000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-039', patronId: 'samantha-carter', date: '2025-07-12', amount: 20000.00, type: 'one-time', description: 'Summer Leadership Gift', fundId: 'capital-building', campaignId: 'building-future', appealId: 'capital-kickoff', deductible: 20000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-040', patronId: 'samantha-carter', date: '2025-08-28', amount: 15000.00, type: 'one-time', description: 'Exhibition Sponsorship', fundId: 'exhibitions', campaignId: 'impressionist-2026', appealId: null, deductible: 15000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-041', patronId: 'samantha-carter', date: '2025-10-15', amount: 30000.00, type: 'one-time', description: 'Year-End Major Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'year-end-mailer', deductible: 30000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-035', patronId: '7962421', date: '2025-02-05', amount: 10000.00, type: 'one-time', description: 'Annual Leadership Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'online-giving', deductible: 10000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-036', patronId: '7962421', date: '2025-03-10', amount: 15000.00, type: 'one-time', description: 'Spring Gala Sponsorship', fundId: 'annual-operating', campaignId: 'spring-gala-2026', appealId: 'gala-sponsorship', deductible: 14000.00, benefitsValue: 1000.00, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-037', patronId: '7962421', date: '2025-04-18', amount: 5000.00, type: 'one-time', description: 'Education Program Gift', fundId: 'education', campaignId: 'education-2026', appealId: 'school-partnership', deductible: 5000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-038', patronId: '7962421', date: '2025-05-25', amount: 25000.00, type: 'one-time', description: 'Building Campaign Major Gift', fundId: 'capital-building', campaignId: 'building-future', appealId: 'leadership-gifts', deductible: 25000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-039', patronId: '7962421', date: '2025-07-12', amount: 20000.00, type: 'one-time', description: 'Summer Leadership Gift', fundId: 'capital-building', campaignId: 'building-future', appealId: 'capital-kickoff', deductible: 20000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-040', patronId: '7962421', date: '2025-08-28', amount: 15000.00, type: 'one-time', description: 'Exhibition Sponsorship', fundId: 'exhibitions', campaignId: 'impressionist-2026', appealId: null, deductible: 15000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-041', patronId: '7962421', date: '2025-10-15', amount: 30000.00, type: 'one-time', description: 'Year-End Major Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'year-end-mailer', deductible: 30000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
 
   // ── Mia Wilson (7 gifts: $80K major donor) ─────────────────────────────
-  { id: 'gift-042', patronId: 'mia-wilson', date: '2025-02-05', amount: 5000.00, type: 'one-time', description: 'Annual Fund Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'online-giving', deductible: 5000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-043', patronId: 'mia-wilson', date: '2025-03-12', amount: 10000.00, type: 'one-time', description: 'Spring Major Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'spring-gala', deductible: 10000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-044', patronId: 'mia-wilson', date: '2025-04-28', amount: 15000.00, type: 'one-time', description: 'Building Campaign Gift', fundId: 'capital-building', campaignId: 'building-future', appealId: 'leadership-gifts', deductible: 15000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-045', patronId: 'mia-wilson', date: '2025-06-03', amount: 10000.00, type: 'one-time', description: 'Education Endowment Gift', fundId: 'education', campaignId: 'education-2026', appealId: 'school-partnership', deductible: 10000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-046', patronId: 'mia-wilson', date: '2025-07-28', amount: 15000.00, type: 'one-time', description: 'Summer Campaign Gift', fundId: 'capital-building', campaignId: 'building-future', appealId: 'capital-mailer', deductible: 15000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-047', patronId: 'mia-wilson', date: '2025-09-05', amount: 10000.00, type: 'one-time', description: 'Fall Annual Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'online-giving', deductible: 10000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-048', patronId: 'mia-wilson', date: '2025-10-30', amount: 15000.00, type: 'one-time', description: 'Year-End Major Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'year-end-mailer', deductible: 15000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-042', patronId: '7962423', date: '2025-02-05', amount: 5000.00, type: 'one-time', description: 'Annual Fund Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'online-giving', deductible: 5000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-043', patronId: '7962423', date: '2025-03-12', amount: 10000.00, type: 'one-time', description: 'Spring Major Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'spring-gala', deductible: 10000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-044', patronId: '7962423', date: '2025-04-28', amount: 15000.00, type: 'one-time', description: 'Building Campaign Gift', fundId: 'capital-building', campaignId: 'building-future', appealId: 'leadership-gifts', deductible: 15000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-045', patronId: '7962423', date: '2025-06-03', amount: 10000.00, type: 'one-time', description: 'Education Endowment Gift', fundId: 'education', campaignId: 'education-2026', appealId: 'school-partnership', deductible: 10000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-046', patronId: '7962423', date: '2025-07-28', amount: 15000.00, type: 'one-time', description: 'Summer Campaign Gift', fundId: 'capital-building', campaignId: 'building-future', appealId: 'capital-mailer', deductible: 15000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-047', patronId: '7962423', date: '2025-09-05', amount: 10000.00, type: 'one-time', description: 'Fall Annual Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'online-giving', deductible: 10000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-048', patronId: '7962423', date: '2025-10-30', amount: 15000.00, type: 'one-time', description: 'Year-End Major Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'year-end-mailer', deductible: 15000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
 
   // ── James Morrison (12 gifts: $115K board member, multi-year arc) ──────
-  { id: 'gift-049', patronId: 'james-morrison', date: '2021-06-15', amount: 1000.00, type: 'one-time', description: 'First Annual Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 1000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-050', patronId: 'james-morrison', date: '2021-12-20', amount: 1500.00, type: 'one-time', description: 'Year-End Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 1500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-051', patronId: 'james-morrison', date: '2022-06-10', amount: 1500.00, type: 'one-time', description: 'Spring Gala Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 1500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-052', patronId: 'james-morrison', date: '2022-12-18', amount: 2000.00, type: 'one-time', description: 'Year-End Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 2000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-053', patronId: 'james-morrison', date: '2023-06-15', amount: 2000.00, type: 'one-time', description: 'Annual Fund Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 2000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-054', patronId: 'james-morrison', date: '2023-12-20', amount: 2000.00, type: 'one-time', description: 'Year-End Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 2000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-055', patronId: 'james-morrison', date: '2024-06-12', amount: 2000.00, type: 'one-time', description: 'Board Member Annual Gift', fundId: 'annual-operating', campaignId: 'annual-2025', appealId: null, deductible: 2000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-056', patronId: 'james-morrison', date: '2024-09-15', amount: 1500.00, type: 'one-time', description: 'Fall Campaign Gift', fundId: 'annual-operating', campaignId: 'annual-2025', appealId: 'year-end-2025', deductible: 1500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-057', patronId: 'james-morrison', date: '2024-12-18', amount: 1500.00, type: 'one-time', description: 'Year-End Gift', fundId: 'annual-operating', campaignId: 'annual-2025', appealId: 'year-end-2025', deductible: 1500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-058', patronId: 'james-morrison', date: '2025-03-18', amount: 10000.00, type: 'one-time', description: 'Annual Leadership Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'spring-gala', deductible: 10000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-059', patronId: 'james-morrison', date: '2025-06-28', amount: 15000.00, type: 'one-time', description: 'Building Campaign Gift', fundId: 'capital-building', campaignId: 'building-future', appealId: 'leadership-gifts', deductible: 15000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-060', patronId: 'james-morrison', date: '2026-01-15', amount: 75000.00, type: 'one-time', description: 'Building Campaign Major Gift', fundId: 'capital-building', campaignId: 'building-future', appealId: 'capital-kickoff', deductible: 75000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-049', patronId: '7962435', date: '2021-06-15', amount: 1000.00, type: 'one-time', description: 'First Annual Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 1000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-050', patronId: '7962435', date: '2021-12-20', amount: 1500.00, type: 'one-time', description: 'Year-End Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 1500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-051', patronId: '7962435', date: '2022-06-10', amount: 1500.00, type: 'one-time', description: 'Spring Gala Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 1500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-052', patronId: '7962435', date: '2022-12-18', amount: 2000.00, type: 'one-time', description: 'Year-End Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 2000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-053', patronId: '7962435', date: '2023-06-15', amount: 2000.00, type: 'one-time', description: 'Annual Fund Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 2000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-054', patronId: '7962435', date: '2023-12-20', amount: 2000.00, type: 'one-time', description: 'Year-End Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 2000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-055', patronId: '7962435', date: '2024-06-12', amount: 2000.00, type: 'one-time', description: 'Board Member Annual Gift', fundId: 'annual-operating', campaignId: 'annual-2025', appealId: null, deductible: 2000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-056', patronId: '7962435', date: '2024-09-15', amount: 1500.00, type: 'one-time', description: 'Fall Campaign Gift', fundId: 'annual-operating', campaignId: 'annual-2025', appealId: 'year-end-2025', deductible: 1500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-057', patronId: '7962435', date: '2024-12-18', amount: 1500.00, type: 'one-time', description: 'Year-End Gift', fundId: 'annual-operating', campaignId: 'annual-2025', appealId: 'year-end-2025', deductible: 1500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-058', patronId: '7962435', date: '2025-03-18', amount: 10000.00, type: 'one-time', description: 'Annual Leadership Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'spring-gala', deductible: 10000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-059', patronId: '7962435', date: '2025-06-28', amount: 15000.00, type: 'one-time', description: 'Building Campaign Gift', fundId: 'capital-building', campaignId: 'building-future', appealId: 'leadership-gifts', deductible: 15000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-060', patronId: '7962435', date: '2026-01-15', amount: 75000.00, type: 'one-time', description: 'Building Campaign Major Gift', fundId: 'capital-building', campaignId: 'building-future', appealId: 'capital-kickoff', deductible: 75000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
 
   // ── Eleanor Whitfield (8 gifts: $35K, long-tenured major donor) ────────
-  { id: 'gift-061', patronId: 'eleanor-whitfield', date: '2022-12-15', amount: 500.00, type: 'one-time', description: 'Year-End Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-062', patronId: 'eleanor-whitfield', date: '2023-06-20', amount: 1000.00, type: 'one-time', description: 'Annual Fund Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 1000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-063', patronId: 'eleanor-whitfield', date: '2024-06-15', amount: 1500.00, type: 'one-time', description: 'Annual Fund Gift', fundId: 'annual-operating', campaignId: 'annual-2025', appealId: 'spring-2025', deductible: 1500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-064', patronId: 'eleanor-whitfield', date: '2025-02-18', amount: 5000.00, type: 'one-time', description: 'Leadership Circle Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'online-giving', deductible: 5000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-065', patronId: 'eleanor-whitfield', date: '2025-05-18', amount: 10000.00, type: 'one-time', description: 'Spring Gala Major Gift', fundId: 'annual-operating', campaignId: 'spring-gala-2026', appealId: 'gala-sponsorship', deductible: 9000.00, benefitsValue: 1000.00, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-066', patronId: 'eleanor-whitfield', date: '2025-08-18', amount: 5000.00, type: 'one-time', description: 'Education Program Gift', fundId: 'education', campaignId: 'education-2026', appealId: 'summer-camp', deductible: 5000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-067', patronId: 'eleanor-whitfield', date: '2025-11-25', amount: 10000.00, type: 'one-time', description: 'Year-End Major Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'year-end-mailer', deductible: 10000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-068', patronId: 'eleanor-whitfield', date: '2026-01-22', amount: 2000.00, type: 'one-time', description: 'New Year Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'online-giving', deductible: 2000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-061', patronId: '7962432', date: '2022-12-15', amount: 500.00, type: 'one-time', description: 'Year-End Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-062', patronId: '7962432', date: '2023-06-20', amount: 1000.00, type: 'one-time', description: 'Annual Fund Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 1000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-063', patronId: '7962432', date: '2024-06-15', amount: 1500.00, type: 'one-time', description: 'Annual Fund Gift', fundId: 'annual-operating', campaignId: 'annual-2025', appealId: 'spring-2025', deductible: 1500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-064', patronId: '7962432', date: '2025-02-18', amount: 5000.00, type: 'one-time', description: 'Leadership Circle Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'online-giving', deductible: 5000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-065', patronId: '7962432', date: '2025-05-18', amount: 10000.00, type: 'one-time', description: 'Spring Gala Major Gift', fundId: 'annual-operating', campaignId: 'spring-gala-2026', appealId: 'gala-sponsorship', deductible: 9000.00, benefitsValue: 1000.00, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-066', patronId: '7962432', date: '2025-08-18', amount: 5000.00, type: 'one-time', description: 'Education Program Gift', fundId: 'education', campaignId: 'education-2026', appealId: 'summer-camp', deductible: 5000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-067', patronId: '7962432', date: '2025-11-25', amount: 10000.00, type: 'one-time', description: 'Year-End Major Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'year-end-mailer', deductible: 10000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-068', patronId: '7962432', date: '2026-01-22', amount: 2000.00, type: 'one-time', description: 'New Year Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'online-giving', deductible: 2000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
 
   // ── William Hartford (9 gifts: $45K, planned giving prospect) ──────────
-  { id: 'gift-069', patronId: 'william-hartford', date: '2021-03-15', amount: 2000.00, type: 'one-time', description: 'First Annual Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 2000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-070', patronId: 'william-hartford', date: '2022-06-15', amount: 3000.00, type: 'one-time', description: 'Annual Fund Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 3000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-071', patronId: 'william-hartford', date: '2023-03-10', amount: 5000.00, type: 'one-time', description: 'Spring Major Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 5000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-072', patronId: 'william-hartford', date: '2024-06-15', amount: 5000.00, type: 'one-time', description: 'Annual Leadership Gift', fundId: 'annual-operating', campaignId: 'annual-2025', appealId: 'spring-2025', deductible: 5000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-073', patronId: 'william-hartford', date: '2025-03-28', amount: 5000.00, type: 'one-time', description: 'Annual Fund Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'online-giving', deductible: 5000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-074', patronId: 'william-hartford', date: '2025-06-28', amount: 5000.00, type: 'one-time', description: 'Spring Gala Sponsorship', fundId: 'annual-operating', campaignId: 'spring-gala-2026', appealId: 'gala-sponsorship', deductible: 4500.00, benefitsValue: 500.00, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-075', patronId: 'william-hartford', date: '2025-09-18', amount: 10000.00, type: 'one-time', description: 'Building Campaign Gift', fundId: 'capital-building', campaignId: 'building-future', appealId: 'leadership-gifts', deductible: 10000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-076', patronId: 'william-hartford', date: '2025-12-28', amount: 5000.00, type: 'one-time', description: 'Year-End Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'year-end-mailer', deductible: 5000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-077', patronId: 'william-hartford', date: '2026-01-15', amount: 5000.00, type: 'one-time', description: 'New Year Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'online-giving', deductible: 5000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-069', patronId: '7962437', date: '2021-03-15', amount: 2000.00, type: 'one-time', description: 'First Annual Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 2000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-070', patronId: '7962437', date: '2022-06-15', amount: 3000.00, type: 'one-time', description: 'Annual Fund Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 3000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-071', patronId: '7962437', date: '2023-03-10', amount: 5000.00, type: 'one-time', description: 'Spring Major Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 5000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-072', patronId: '7962437', date: '2024-06-15', amount: 5000.00, type: 'one-time', description: 'Annual Leadership Gift', fundId: 'annual-operating', campaignId: 'annual-2025', appealId: 'spring-2025', deductible: 5000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-073', patronId: '7962437', date: '2025-03-28', amount: 5000.00, type: 'one-time', description: 'Annual Fund Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'online-giving', deductible: 5000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-074', patronId: '7962437', date: '2025-06-28', amount: 5000.00, type: 'one-time', description: 'Spring Gala Sponsorship', fundId: 'annual-operating', campaignId: 'spring-gala-2026', appealId: 'gala-sponsorship', deductible: 4500.00, benefitsValue: 500.00, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-075', patronId: '7962437', date: '2025-09-18', amount: 10000.00, type: 'one-time', description: 'Building Campaign Gift', fundId: 'capital-building', campaignId: 'building-future', appealId: 'leadership-gifts', deductible: 10000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-076', patronId: '7962437', date: '2025-12-28', amount: 5000.00, type: 'one-time', description: 'Year-End Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'year-end-mailer', deductible: 5000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-077', patronId: '7962437', date: '2026-01-15', amount: 5000.00, type: 'one-time', description: 'New Year Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'online-giving', deductible: 5000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
 
   // ── Theodore Banks (10 gifts: $60K, long-tenured annual donor) ─────────
-  { id: 'gift-078', patronId: 'theodore-banks', date: '2020-03-15', amount: 2500.00, type: 'one-time', description: 'First Annual Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 2500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-079', patronId: 'theodore-banks', date: '2020-12-18', amount: 5000.00, type: 'one-time', description: 'Year-End Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 5000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-080', patronId: 'theodore-banks', date: '2021-06-15', amount: 5000.00, type: 'one-time', description: 'Annual Fund Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 5000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-081', patronId: 'theodore-banks', date: '2021-12-20', amount: 5000.00, type: 'one-time', description: 'Year-End Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 5000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-082', patronId: 'theodore-banks', date: '2022-06-10', amount: 5000.00, type: 'one-time', description: 'Annual Fund Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 5000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-083', patronId: 'theodore-banks', date: '2023-03-15', amount: 7500.00, type: 'one-time', description: 'Spring Major Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 7500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-084', patronId: 'theodore-banks', date: '2023-12-18', amount: 7500.00, type: 'one-time', description: 'Year-End Major Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 7500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-085', patronId: 'theodore-banks', date: '2024-06-15', amount: 10000.00, type: 'one-time', description: 'Annual Leadership Gift', fundId: 'annual-operating', campaignId: 'annual-2025', appealId: 'spring-2025', deductible: 10000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-086', patronId: 'theodore-banks', date: '2025-04-18', amount: 2500.00, type: 'one-time', description: 'Annual Fund Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'online-giving', deductible: 2500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-087', patronId: 'theodore-banks', date: '2025-11-15', amount: 10000.00, type: 'one-time', description: 'Year-End Major Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'year-end-mailer', deductible: 10000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-078', patronId: '7962439', date: '2020-03-15', amount: 2500.00, type: 'one-time', description: 'First Annual Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 2500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-079', patronId: '7962439', date: '2020-12-18', amount: 5000.00, type: 'one-time', description: 'Year-End Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 5000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-080', patronId: '7962439', date: '2021-06-15', amount: 5000.00, type: 'one-time', description: 'Annual Fund Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 5000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-081', patronId: '7962439', date: '2021-12-20', amount: 5000.00, type: 'one-time', description: 'Year-End Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 5000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-082', patronId: '7962439', date: '2022-06-10', amount: 5000.00, type: 'one-time', description: 'Annual Fund Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 5000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-083', patronId: '7962439', date: '2023-03-15', amount: 7500.00, type: 'one-time', description: 'Spring Major Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 7500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-084', patronId: '7962439', date: '2023-12-18', amount: 7500.00, type: 'one-time', description: 'Year-End Major Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 7500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-085', patronId: '7962439', date: '2024-06-15', amount: 10000.00, type: 'one-time', description: 'Annual Leadership Gift', fundId: 'annual-operating', campaignId: 'annual-2025', appealId: 'spring-2025', deductible: 10000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-086', patronId: '7962439', date: '2025-04-18', amount: 2500.00, type: 'one-time', description: 'Annual Fund Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'online-giving', deductible: 2500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-087', patronId: '7962439', date: '2025-11-15', amount: 10000.00, type: 'one-time', description: 'Year-End Major Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'year-end-mailer', deductible: 10000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
 
   // ── Victoria Sterling (5 gifts: $75K, high-value donor) ────────────────
-  { id: 'gift-088', patronId: 'victoria-sterling', date: '2023-06-15', amount: 5000.00, type: 'one-time', description: 'First Annual Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 5000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-089', patronId: 'victoria-sterling', date: '2023-12-20', amount: 10000.00, type: 'one-time', description: 'Year-End Major Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 10000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-090', patronId: 'victoria-sterling', date: '2024-06-15', amount: 10000.00, type: 'one-time', description: 'Annual Fund Major Gift', fundId: 'annual-operating', campaignId: 'annual-2025', appealId: 'spring-2025', deductible: 10000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-091', patronId: 'victoria-sterling', date: '2025-07-18', amount: 25000.00, type: 'one-time', description: 'Building Campaign Gift', fundId: 'capital-building', campaignId: 'building-future', appealId: 'leadership-gifts', deductible: 25000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-092', patronId: 'victoria-sterling', date: '2025-11-10', amount: 25000.00, type: 'one-time', description: 'Year-End Transformational Gift', fundId: 'capital-building', campaignId: 'building-future', appealId: 'capital-kickoff', deductible: 25000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-088', patronId: '7962440', date: '2023-06-15', amount: 5000.00, type: 'one-time', description: 'First Annual Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 5000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-089', patronId: '7962440', date: '2023-12-20', amount: 10000.00, type: 'one-time', description: 'Year-End Major Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 10000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-090', patronId: '7962440', date: '2024-06-15', amount: 10000.00, type: 'one-time', description: 'Annual Fund Major Gift', fundId: 'annual-operating', campaignId: 'annual-2025', appealId: 'spring-2025', deductible: 10000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-091', patronId: '7962440', date: '2025-07-18', amount: 25000.00, type: 'one-time', description: 'Building Campaign Gift', fundId: 'capital-building', campaignId: 'building-future', appealId: 'leadership-gifts', deductible: 25000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-092', patronId: '7962440', date: '2025-11-10', amount: 25000.00, type: 'one-time', description: 'Year-End Transformational Gift', fundId: 'capital-building', campaignId: 'building-future', appealId: 'capital-kickoff', deductible: 25000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
 
   // ── Marcus Chen (3 gifts: $15K corporate sponsor) ──────────────────────
-  { id: 'gift-093', patronId: 'marcus-chen', date: '2024-03-15', amount: 5000.00, type: 'one-time', description: 'Corporate Sponsorship', fundId: 'annual-operating', campaignId: 'annual-2025', appealId: 'spring-2025', deductible: 5000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-094', patronId: 'marcus-chen', date: '2024-12-18', amount: 5000.00, type: 'one-time', description: 'Year-End Corporate Gift', fundId: 'annual-operating', campaignId: 'annual-2025', appealId: 'year-end-2025', deductible: 5000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-095', patronId: 'marcus-chen', date: '2025-09-22', amount: 5000.00, type: 'one-time', description: 'Exhibition Sponsorship', fundId: 'exhibitions', campaignId: 'impressionist-2026', appealId: null, deductible: 5000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-093', patronId: '7962433', date: '2024-03-15', amount: 5000.00, type: 'one-time', description: 'Corporate Sponsorship', fundId: 'annual-operating', campaignId: 'annual-2025', appealId: 'spring-2025', deductible: 5000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-094', patronId: '7962433', date: '2024-12-18', amount: 5000.00, type: 'one-time', description: 'Year-End Corporate Gift', fundId: 'annual-operating', campaignId: 'annual-2025', appealId: 'year-end-2025', deductible: 5000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-095', patronId: '7962433', date: '2025-09-22', amount: 5000.00, type: 'one-time', description: 'Exhibition Sponsorship', fundId: 'exhibitions', campaignId: 'impressionist-2026', appealId: null, deductible: 5000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
 
   // ── Patricia Hawthorne (2 gifts: $12K foundation grants) ───────────────
-  { id: 'gift-096', patronId: 'patricia-hawthorne', date: '2023-06-15', amount: 6000.00, type: 'one-time', description: 'Hawthorne Foundation Grant - Education', fundId: 'restricted', campaignId: null, appealId: null, deductible: 6000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-097', patronId: 'patricia-hawthorne', date: '2023-12-10', amount: 6000.00, type: 'one-time', description: 'Hawthorne Foundation Grant - Operations', fundId: 'restricted', campaignId: null, appealId: null, deductible: 6000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-096', patronId: '7962434', date: '2023-06-15', amount: 6000.00, type: 'one-time', description: 'Hawthorne Foundation Grant - Education', fundId: 'restricted', campaignId: null, appealId: null, deductible: 6000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-097', patronId: '7962434', date: '2023-12-10', amount: 6000.00, type: 'one-time', description: 'Hawthorne Foundation Grant - Operations', fundId: 'restricted', campaignId: null, appealId: null, deductible: 6000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
 
   // ── Diana Rothschild (4 gifts: $8K education supporter) ────────────────
-  { id: 'gift-098', patronId: 'diana-rothschild', date: '2024-06-15', amount: 1000.00, type: 'one-time', description: 'Education Program Gift', fundId: 'education', campaignId: null, appealId: null, deductible: 1000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-099', patronId: 'diana-rothschild', date: '2024-09-18', amount: 2000.00, type: 'one-time', description: 'Fall Annual Gift', fundId: 'annual-operating', campaignId: 'annual-2025', appealId: 'online-2025', deductible: 2000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-100', patronId: 'diana-rothschild', date: '2025-04-10', amount: 2000.00, type: 'one-time', description: 'Education Program Gift', fundId: 'education', campaignId: 'education-2026', appealId: 'school-partnership', deductible: 2000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-101', patronId: 'diana-rothschild', date: '2025-09-18', amount: 3000.00, type: 'one-time', description: 'Summer Camp Sponsorship', fundId: 'education', campaignId: 'education-2026', appealId: 'summer-camp', deductible: 3000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-098', patronId: '7962438', date: '2024-06-15', amount: 1000.00, type: 'one-time', description: 'Education Program Gift', fundId: 'education', campaignId: null, appealId: null, deductible: 1000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-099', patronId: '7962438', date: '2024-09-18', amount: 2000.00, type: 'one-time', description: 'Fall Annual Gift', fundId: 'annual-operating', campaignId: 'annual-2025', appealId: 'online-2025', deductible: 2000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-100', patronId: '7962438', date: '2025-04-10', amount: 2000.00, type: 'one-time', description: 'Education Program Gift', fundId: 'education', campaignId: 'education-2026', appealId: 'school-partnership', deductible: 2000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-101', patronId: '7962438', date: '2025-09-18', amount: 3000.00, type: 'one-time', description: 'Summer Camp Sponsorship', fundId: 'education', campaignId: 'education-2026', appealId: 'summer-camp', deductible: 3000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
 
   // ── Ava Anderson (5 gifts: $7K engaged volunteer-donor) ────────────────
-  { id: 'gift-102', patronId: 'ava-anderson', date: '2025-03-10', amount: 1000.00, type: 'one-time', description: 'Spring Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'online-giving', deductible: 1000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-103', patronId: 'ava-anderson', date: '2025-05-18', amount: 2000.00, type: 'one-time', description: 'Annual Fund Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'spring-gala', deductible: 2000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-104', patronId: 'ava-anderson', date: '2025-07-18', amount: 1500.00, type: 'one-time', description: 'Summer Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'online-giving', deductible: 1500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-105', patronId: 'ava-anderson', date: '2025-09-18', amount: 1000.00, type: 'one-time', description: 'Fall Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'online-giving', deductible: 1000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-106', patronId: 'ava-anderson', date: '2025-11-01', amount: 1500.00, type: 'one-time', description: 'Year-End Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'year-end-mailer', deductible: 1500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-102', patronId: '7962420', date: '2025-03-10', amount: 1000.00, type: 'one-time', description: 'Spring Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'online-giving', deductible: 1000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-103', patronId: '7962420', date: '2025-05-18', amount: 2000.00, type: 'one-time', description: 'Annual Fund Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'spring-gala', deductible: 2000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-104', patronId: '7962420', date: '2025-07-18', amount: 1500.00, type: 'one-time', description: 'Summer Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'online-giving', deductible: 1500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-105', patronId: '7962420', date: '2025-09-18', amount: 1000.00, type: 'one-time', description: 'Fall Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'online-giving', deductible: 1000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-106', patronId: '7962420', date: '2025-11-01', amount: 1500.00, type: 'one-time', description: 'Year-End Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'year-end-mailer', deductible: 1500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
 
   // ── John Martinez (4 gifts: $2K corporate quarterly donor) ─────────────
-  { id: 'gift-107', patronId: 'john-martinez', date: '2025-03-28', amount: 500.00, type: 'one-time', description: 'Q1 Corporate Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'online-giving', deductible: 500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-108', patronId: 'john-martinez', date: '2025-06-28', amount: 500.00, type: 'one-time', description: 'Q2 Corporate Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'spring-gala', deductible: 500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-109', patronId: 'john-martinez', date: '2025-09-28', amount: 500.00, type: 'one-time', description: 'Q3 Corporate Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'online-giving', deductible: 500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-110', patronId: 'john-martinez', date: '2025-11-10', amount: 500.00, type: 'one-time', description: 'Q4 Corporate Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'year-end-mailer', deductible: 500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-107', patronId: '7962422', date: '2025-03-28', amount: 500.00, type: 'one-time', description: 'Q1 Corporate Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'online-giving', deductible: 500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-108', patronId: '7962422', date: '2025-06-28', amount: 500.00, type: 'one-time', description: 'Q2 Corporate Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'spring-gala', deductible: 500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-109', patronId: '7962422', date: '2025-09-28', amount: 500.00, type: 'one-time', description: 'Q3 Corporate Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'online-giving', deductible: 500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-110', patronId: '7962422', date: '2025-11-10', amount: 500.00, type: 'one-time', description: 'Q4 Corporate Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'year-end-mailer', deductible: 500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
 
   // ── Margaret Chen (2 gifts: $2K prospect) ──────────────────────────────
-  { id: 'gift-111', patronId: 'margaret-chen', date: '2024-08-15', amount: 1000.00, type: 'one-time', description: 'First Gift - Online', fundId: 'annual-operating', campaignId: 'annual-2025', appealId: 'online-2025', deductible: 1000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-112', patronId: 'margaret-chen', date: '2025-09-10', amount: 1000.00, type: 'one-time', description: 'Annual Fund Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'online-giving', deductible: 1000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-111', patronId: '7962441', date: '2024-08-15', amount: 1000.00, type: 'one-time', description: 'First Gift - Online', fundId: 'annual-operating', campaignId: 'annual-2025', appealId: 'online-2025', deductible: 1000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-112', patronId: '7962441', date: '2025-09-10', amount: 1000.00, type: 'one-time', description: 'Annual Fund Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'online-giving', deductible: 1000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
 
   // ── Lucas Taylor (3 gifts: $1,500 regular donor) ───────────────────────
-  { id: 'gift-113', patronId: 'lucas-taylor', date: '2025-05-18', amount: 500.00, type: 'one-time', description: 'Spring Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'spring-gala', deductible: 500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-114', patronId: 'lucas-taylor', date: '2025-08-28', amount: 500.00, type: 'one-time', description: 'Summer Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'online-giving', deductible: 500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-115', patronId: 'lucas-taylor', date: '2025-10-18', amount: 500.00, type: 'one-time', description: 'Fall Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'online-giving', deductible: 500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-113', patronId: '7962419', date: '2025-05-18', amount: 500.00, type: 'one-time', description: 'Spring Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'spring-gala', deductible: 500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-114', patronId: '7962419', date: '2025-08-28', amount: 500.00, type: 'one-time', description: 'Summer Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'online-giving', deductible: 500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-115', patronId: '7962419', date: '2025-10-18', amount: 500.00, type: 'one-time', description: 'Fall Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'online-giving', deductible: 500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
 
   // ── Olivia Brown (3 gifts: $1,200 steady donor) ────────────────────────
-  { id: 'gift-116', patronId: 'olivia-brown', date: '2025-03-28', amount: 400.00, type: 'one-time', description: 'Spring Online Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'online-giving', deductible: 400.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-117', patronId: 'olivia-brown', date: '2025-06-18', amount: 400.00, type: 'one-time', description: 'Spring Gala Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'spring-gala', deductible: 400.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
-  { id: 'gift-118', patronId: 'olivia-brown', date: '2025-09-28', amount: 400.00, type: 'one-time', description: 'Fall Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'online-giving', deductible: 400.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-116', patronId: '7962424', date: '2025-03-28', amount: 400.00, type: 'one-time', description: 'Spring Online Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'online-giving', deductible: 400.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-117', patronId: '7962424', date: '2025-06-18', amount: 400.00, type: 'one-time', description: 'Spring Gala Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'spring-gala', deductible: 400.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-118', patronId: '7962424', date: '2025-09-28', amount: 400.00, type: 'one-time', description: 'Fall Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'online-giving', deductible: 400.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
 
   // ── Sophia Thomas (1 gift: $750) ───────────────────────────────────────
-  { id: 'gift-119', patronId: 'sophia-thomas', date: '2025-09-18', amount: 750.00, type: 'one-time', description: 'Online Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'online-giving', deductible: 750.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-119', patronId: '7962418', date: '2025-09-18', amount: 750.00, type: 'one-time', description: 'Online Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'online-giving', deductible: 750.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
 
   // ── Ethan Davis (1 gift: $250) ─────────────────────────────────────────
-  { id: 'gift-120', patronId: 'ethan-davis', date: '2025-05-25', amount: 250.00, type: 'one-time', description: 'Online Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'online-giving', deductible: 250.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-120', patronId: '7962425', date: '2025-05-25', amount: 250.00, type: 'one-time', description: 'Online Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'online-giving', deductible: 250.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
 
   // ── Sarah Collingwood (1 gift: $250, Anderson's spouse) ────────────────
-  { id: 'gift-121', patronId: 'sarah-collingwood', date: '2024-07-20', amount: 250.00, type: 'one-time', description: 'Personal Gift', fundId: 'annual-operating', campaignId: 'annual-2025', appealId: 'online-2025', deductible: 250.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-121', patronId: '7962430', date: '2024-07-20', amount: 250.00, type: 'one-time', description: 'Personal Gift', fundId: 'annual-operating', campaignId: 'annual-2025', appealId: 'online-2025', deductible: 250.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
 
   // ── David Chen (1 gift: $200, online donor) ────────────────────────────
-  { id: 'gift-122', patronId: 'david-chen', date: '2025-08-18', amount: 200.00, type: 'one-time', description: 'Online Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'online-giving', deductible: 200.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-122', patronId: '7962427', date: '2025-08-18', amount: 200.00, type: 'one-time', description: 'Online Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'online-giving', deductible: 200.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
 
   // ── Maria Santos (1 gift: $150, membership convert) ────────────────────
-  { id: 'gift-123', patronId: 'maria-santos', date: '2025-12-18', amount: 150.00, type: 'one-time', description: 'Year-End Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'year-end-mailer', deductible: 150.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-123', patronId: '7962428', date: '2025-12-18', amount: 150.00, type: 'one-time', description: 'Year-End Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'year-end-mailer', deductible: 150.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
 
   // ── Rachel Kim (1 gift: $100, recent donor) ────────────────────────────
-  { id: 'gift-124', patronId: 'rachel-kim', date: '2025-12-18', amount: 100.00, type: 'one-time', description: 'Holiday Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'year-end-mailer', deductible: 100.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-124', patronId: '7962426', date: '2025-12-18', amount: 100.00, type: 'one-time', description: 'Holiday Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'year-end-mailer', deductible: 100.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
 ]
 
 // Get all gifts for a patron
@@ -2606,7 +2601,7 @@ export const resolveGift = (gift) => {
 export const PLEDGES = [
   {
     id: 'pledge-001',
-    patronId: 'anderson-collingwood',
+    patronId: '7962415',
     amount: 5000.00,
     balance: 1250.00,
     totalPaid: 3750.00,
@@ -2625,7 +2620,7 @@ export const PLEDGES = [
   // Elizabeth Fairfax - overdue pledge (triggers alert)
   {
     id: 'pledge-002',
-    patronId: 'elizabeth-fairfax',
+    patronId: '7962442',
     amount: 2500.00,
     balance: 2000.00,
     totalPaid: 500.00,
@@ -2668,7 +2663,7 @@ export const getPledgeBalance = (pledgeId) => {
 export const RECURRING_PROFILES = [
   {
     id: 'rec-001',
-    patronId: 'anderson-collingwood',
+    patronId: '7962415',
     amount: 100.00,
     frequency: 'monthly',
     startDate: '2025-10-15',
@@ -2721,8 +2716,8 @@ export const isGiftSplit = (giftId) => {
 export const INTERACTIONS = [
   {
     id: 'int-001',
-    patronId: 'anderson-collingwood',
-    opportunityId: null,
+    patronId: '7962415',
+    opportunityId: 'opp-001',
     type: 'phone',
     direction: 'outbound',
     date: '2025-10-19T11:20:00',
@@ -2737,7 +2732,7 @@ export const INTERACTIONS = [
   },
   {
     id: 'int-002',
-    patronId: 'anderson-collingwood',
+    patronId: '7962415',
     opportunityId: null,
     type: 'email',
     direction: 'outbound',
@@ -2753,7 +2748,7 @@ export const INTERACTIONS = [
   },
   {
     id: 'int-003',
-    patronId: 'anderson-collingwood',
+    patronId: '7962415',
     opportunityId: null,
     type: 'event',
     direction: null,
@@ -2769,8 +2764,8 @@ export const INTERACTIONS = [
   },
   {
     id: 'int-004',
-    patronId: 'anderson-collingwood',
-    opportunityId: null,
+    patronId: '7962415',
+    opportunityId: 'opp-001',
     type: 'meeting',
     direction: null,
     date: '2025-07-10T14:00:00',
@@ -2786,7 +2781,7 @@ export const INTERACTIONS = [
   },
   {
     id: 'int-005',
-    patronId: 'anderson-collingwood',
+    patronId: '7962415',
     opportunityId: null,
     type: 'note',
     direction: null,
@@ -2800,7 +2795,7 @@ export const INTERACTIONS = [
   },
   {
     id: 'int-006',
-    patronId: 'anderson-collingwood',
+    patronId: '7962415',
     opportunityId: null,
     type: 'email',
     direction: 'inbound',
@@ -2816,7 +2811,7 @@ export const INTERACTIONS = [
   },
   {
     id: 'int-007',
-    patronId: 'anderson-collingwood',
+    patronId: '7962415',
     opportunityId: null,
     type: 'ticket',
     direction: null,
@@ -2833,7 +2828,7 @@ export const INTERACTIONS = [
   },
   {
     id: 'int-008',
-    patronId: 'anderson-collingwood',
+    patronId: '7962415',
     opportunityId: null,
     type: 'phone',
     direction: 'outbound',
@@ -2850,7 +2845,7 @@ export const INTERACTIONS = [
   // Paul Fairfax interactions
   {
     id: 'int-009',
-    patronId: 'paul-fairfax',
+    patronId: '7962416',
     opportunityId: null,
     type: 'ticket',
     direction: null,
@@ -2867,7 +2862,7 @@ export const INTERACTIONS = [
   },
   {
     id: 'int-010',
-    patronId: 'paul-fairfax',
+    patronId: '7962416',
     opportunityId: null,
     type: 'event',
     direction: null,
@@ -2883,7 +2878,7 @@ export const INTERACTIONS = [
   },
   {
     id: 'int-011',
-    patronId: 'paul-fairfax',
+    patronId: '7962416',
     opportunityId: null,
     type: 'ticket',
     direction: null,
@@ -2900,7 +2895,7 @@ export const INTERACTIONS = [
   },
   {
     id: 'int-012',
-    patronId: 'paul-fairfax',
+    patronId: '7962416',
     opportunityId: null,
     type: 'event',
     direction: null,
@@ -2916,7 +2911,7 @@ export const INTERACTIONS = [
   },
   {
     id: 'int-013',
-    patronId: 'paul-fairfax',
+    patronId: '7962416',
     opportunityId: null,
     type: 'ticket',
     direction: null,
@@ -2933,7 +2928,7 @@ export const INTERACTIONS = [
   },
   {
     id: 'int-014',
-    patronId: 'paul-fairfax',
+    patronId: '7962416',
     opportunityId: null,
     type: 'ticket',
     direction: null,
@@ -2955,245 +2950,245 @@ export const INTERACTIONS = [
   // ============================================
 
   // --- James Morrison (Major Donor) ---
-  { id: 'int-015', patronId: 'james-morrison', opportunityId: null, type: 'ticket', direction: null, date: '2025-02-14T19:00:00', description: 'Purchased Valentine Art Night tickets', details: { event: 'Valentine Art Night', quantity: 4, ticketType: 'VIP Table' }, amount: 750, staffId: null, createdDate: '2025-02-14' },
-  { id: 'int-016', patronId: 'james-morrison', opportunityId: null, type: 'ticket', direction: null, date: '2025-03-08T18:30:00', description: 'Purchased Spring Gala 2025 tickets', details: { event: 'Spring Gala 2025', quantity: 4, ticketType: 'VIP Table' }, amount: 850, staffId: null, createdDate: '2025-03-08' },
-  { id: 'int-017', patronId: 'james-morrison', opportunityId: null, type: 'ticket', direction: null, date: '2025-04-05T18:00:00', description: 'Purchased Impressionist Masters Opening Night tickets', details: { event: 'Impressionist Masters Opening Night', quantity: 4, ticketType: 'Patron Circle' }, amount: 600, staffId: null, createdDate: '2025-04-05' },
-  { id: 'int-018', patronId: 'james-morrison', opportunityId: null, type: 'ticket', direction: null, date: '2025-05-10T19:00:00', description: 'Purchased Wine and Art Evening tickets', details: { event: 'Wine and Art Evening', quantity: 6, ticketType: 'VIP Table' }, amount: 900, staffId: null, createdDate: '2025-05-10' },
-  { id: 'int-019', patronId: 'james-morrison', opportunityId: null, type: 'ticket', direction: null, date: '2025-06-07T18:00:00', description: 'Purchased Summer Exhibition Opening Gala tickets', details: { event: 'Summer Exhibition Opening Gala', quantity: 8, ticketType: 'Sponsor Package' }, amount: 1200, staffId: null, createdDate: '2025-06-07' },
-  { id: 'int-020', patronId: 'james-morrison', opportunityId: null, type: 'ticket', direction: null, date: '2025-07-04T19:30:00', description: 'Purchased Summer Concert Series tickets', details: { event: 'Summer Concert Series', quantity: 4, ticketType: 'Premium Reserved' }, amount: 800, staffId: null, createdDate: '2025-07-04' },
-  { id: 'int-021', patronId: 'james-morrison', opportunityId: null, type: 'ticket', direction: null, date: '2025-08-02T18:00:00', description: 'Purchased Summer Concert VIP Reception tickets', details: { event: 'Summer Concert VIP Reception', quantity: 6, ticketType: 'VIP Table' }, amount: 950, staffId: null, createdDate: '2025-08-02' },
-  { id: 'int-022', patronId: 'james-morrison', opportunityId: null, type: 'ticket', direction: null, date: '2025-09-06T18:30:00', description: 'Purchased Fall Exhibition Opening tickets', details: { event: 'Fall Exhibition: Emerging Artists', quantity: 6, ticketType: 'Sponsor Package' }, amount: 1100, staffId: null, createdDate: '2025-09-06' },
-  { id: 'int-023', patronId: 'james-morrison', opportunityId: null, type: 'ticket', direction: null, date: '2025-10-04T18:00:00', description: 'Purchased Impressionist Masters Evening Tour tickets', details: { event: 'Impressionist Masters Evening Tour', quantity: 4, ticketType: 'VIP Tour Package' }, amount: 900, staffId: null, createdDate: '2025-10-04' },
-  { id: 'int-024', patronId: 'james-morrison', opportunityId: null, type: 'ticket', direction: null, date: '2025-11-08T18:30:00', description: 'Purchased Annual Benefit Dinner tickets', details: { event: 'Annual Benefit Dinner', quantity: 4, ticketType: 'VIP Table' }, amount: 850, staffId: null, createdDate: '2025-11-08' },
-  { id: 'int-025', patronId: 'james-morrison', opportunityId: null, type: 'ticket', direction: null, date: '2025-12-06T18:00:00', description: 'Purchased Holiday Spectacular tickets', details: { event: 'Holiday Spectacular', quantity: 6, ticketType: 'Patron Circle' }, amount: 1100, staffId: null, createdDate: '2025-12-06' },
+  { id: 'int-015', patronId: '7962435', opportunityId: null, type: 'ticket', direction: null, date: '2025-02-14T19:00:00', description: 'Purchased Valentine Art Night tickets', details: { event: 'Valentine Art Night', quantity: 4, ticketType: 'VIP Table' }, amount: 750, staffId: null, createdDate: '2025-02-14' },
+  { id: 'int-016', patronId: '7962435', opportunityId: null, type: 'ticket', direction: null, date: '2025-03-08T18:30:00', description: 'Purchased Spring Gala 2025 tickets', details: { event: 'Spring Gala 2025', quantity: 4, ticketType: 'VIP Table' }, amount: 850, staffId: null, createdDate: '2025-03-08' },
+  { id: 'int-017', patronId: '7962435', opportunityId: null, type: 'ticket', direction: null, date: '2025-04-05T18:00:00', description: 'Purchased Impressionist Masters Opening Night tickets', details: { event: 'Impressionist Masters Opening Night', quantity: 4, ticketType: 'Patron Circle' }, amount: 600, staffId: null, createdDate: '2025-04-05' },
+  { id: 'int-018', patronId: '7962435', opportunityId: null, type: 'ticket', direction: null, date: '2025-05-10T19:00:00', description: 'Purchased Wine and Art Evening tickets', details: { event: 'Wine and Art Evening', quantity: 6, ticketType: 'VIP Table' }, amount: 900, staffId: null, createdDate: '2025-05-10' },
+  { id: 'int-019', patronId: '7962435', opportunityId: null, type: 'ticket', direction: null, date: '2025-06-07T18:00:00', description: 'Purchased Summer Exhibition Opening Gala tickets', details: { event: 'Summer Exhibition Opening Gala', quantity: 8, ticketType: 'Sponsor Package' }, amount: 1200, staffId: null, createdDate: '2025-06-07' },
+  { id: 'int-020', patronId: '7962435', opportunityId: null, type: 'ticket', direction: null, date: '2025-07-04T19:30:00', description: 'Purchased Summer Concert Series tickets', details: { event: 'Summer Concert Series', quantity: 4, ticketType: 'Premium Reserved' }, amount: 800, staffId: null, createdDate: '2025-07-04' },
+  { id: 'int-021', patronId: '7962435', opportunityId: null, type: 'ticket', direction: null, date: '2025-08-02T18:00:00', description: 'Purchased Summer Concert VIP Reception tickets', details: { event: 'Summer Concert VIP Reception', quantity: 6, ticketType: 'VIP Table' }, amount: 950, staffId: null, createdDate: '2025-08-02' },
+  { id: 'int-022', patronId: '7962435', opportunityId: null, type: 'ticket', direction: null, date: '2025-09-06T18:30:00', description: 'Purchased Fall Exhibition Opening tickets', details: { event: 'Fall Exhibition: Emerging Artists', quantity: 6, ticketType: 'Sponsor Package' }, amount: 1100, staffId: null, createdDate: '2025-09-06' },
+  { id: 'int-023', patronId: '7962435', opportunityId: null, type: 'ticket', direction: null, date: '2025-10-04T18:00:00', description: 'Purchased Impressionist Masters Evening Tour tickets', details: { event: 'Impressionist Masters Evening Tour', quantity: 4, ticketType: 'VIP Tour Package' }, amount: 900, staffId: null, createdDate: '2025-10-04' },
+  { id: 'int-024', patronId: '7962435', opportunityId: null, type: 'ticket', direction: null, date: '2025-11-08T18:30:00', description: 'Purchased Annual Benefit Dinner tickets', details: { event: 'Annual Benefit Dinner', quantity: 4, ticketType: 'VIP Table' }, amount: 850, staffId: null, createdDate: '2025-11-08' },
+  { id: 'int-025', patronId: '7962435', opportunityId: null, type: 'ticket', direction: null, date: '2025-12-06T18:00:00', description: 'Purchased Holiday Spectacular tickets', details: { event: 'Holiday Spectacular', quantity: 6, ticketType: 'Patron Circle' }, amount: 1100, staffId: null, createdDate: '2025-12-06' },
 
   // --- Eleanor Whitfield (Major Donor) ---
-  { id: 'int-026', patronId: 'eleanor-whitfield', opportunityId: null, type: 'ticket', direction: null, date: '2025-02-14T19:00:00', description: 'Purchased Valentine Art Night tickets', details: { event: 'Valentine Art Night', quantity: 4, ticketType: 'VIP Table' }, amount: 800, staffId: null, createdDate: '2025-02-14' },
-  { id: 'int-027', patronId: 'eleanor-whitfield', opportunityId: null, type: 'ticket', direction: null, date: '2025-03-22T14:00:00', description: 'Purchased Photography Exhibition tickets', details: { event: 'Photography Exhibition: Urban Landscapes', quantity: 4, ticketType: 'Patron Circle' }, amount: 750, staffId: null, createdDate: '2025-03-22' },
-  { id: 'int-028', patronId: 'eleanor-whitfield', opportunityId: null, type: 'ticket', direction: null, date: '2025-04-19T14:00:00', description: 'Purchased Curator Talk tickets', details: { event: 'Curator Talk: Modern Sculpture', quantity: 2, ticketType: 'Premium' }, amount: 120, staffId: null, createdDate: '2025-04-19' },
-  { id: 'int-029', patronId: 'eleanor-whitfield', opportunityId: null, type: 'ticket', direction: null, date: '2025-05-10T19:00:00', description: 'Purchased Wine and Art Evening tickets', details: { event: 'Wine and Art Evening', quantity: 4, ticketType: 'VIP Table' }, amount: 800, staffId: null, createdDate: '2025-05-10' },
-  { id: 'int-030', patronId: 'eleanor-whitfield', opportunityId: null, type: 'ticket', direction: null, date: '2025-06-21T14:00:00', description: 'Purchased Architecture Lecture tickets', details: { event: 'Architecture and Design Lecture', quantity: 2, ticketType: 'Reserved' }, amount: 85, staffId: null, createdDate: '2025-06-21' },
-  { id: 'int-031', patronId: 'eleanor-whitfield', opportunityId: null, type: 'ticket', direction: null, date: '2025-07-04T19:30:00', description: 'Purchased Summer Concert Series tickets', details: { event: 'Summer Concert Series', quantity: 4, ticketType: 'VIP Table' }, amount: 750, staffId: null, createdDate: '2025-07-04' },
-  { id: 'int-032', patronId: 'eleanor-whitfield', opportunityId: null, type: 'ticket', direction: null, date: '2025-08-02T18:00:00', description: 'Purchased Summer Concert VIP Reception tickets', details: { event: 'Summer Concert VIP Reception', quantity: 4, ticketType: 'Patron Circle' }, amount: 800, staffId: null, createdDate: '2025-08-02' },
-  { id: 'int-033', patronId: 'eleanor-whitfield', opportunityId: null, type: 'ticket', direction: null, date: '2025-09-20T14:00:00', description: 'Purchased Curator Talk tickets', details: { event: 'Curator Talk: Impressionist Masters', quantity: 4, ticketType: 'VIP Reception' }, amount: 750, staffId: null, createdDate: '2025-09-20' },
-  { id: 'int-034', patronId: 'eleanor-whitfield', opportunityId: null, type: 'ticket', direction: null, date: '2025-10-18T18:00:00', description: 'Purchased Wine and Cheese Gallery Hours tickets', details: { event: 'Wine and Cheese: Gallery After Hours', quantity: 2, ticketType: 'Premium' }, amount: 200, staffId: null, createdDate: '2025-10-18' },
-  { id: 'int-035', patronId: 'eleanor-whitfield', opportunityId: null, type: 'ticket', direction: null, date: '2025-11-08T18:30:00', description: 'Purchased Annual Benefit Dinner tickets', details: { event: 'Annual Benefit Dinner', quantity: 4, ticketType: 'VIP Table' }, amount: 800, staffId: null, createdDate: '2025-11-08' },
-  { id: 'int-036', patronId: 'eleanor-whitfield', opportunityId: null, type: 'ticket', direction: null, date: '2025-12-06T18:00:00', description: 'Purchased Holiday Spectacular tickets', details: { event: 'Holiday Spectacular', quantity: 4, ticketType: 'Patron Circle' }, amount: 850, staffId: null, createdDate: '2025-12-06' },
-  { id: 'int-037', patronId: 'eleanor-whitfield', opportunityId: null, type: 'ticket', direction: null, date: '2026-01-10T18:00:00', description: 'Purchased Winter Exhibition Opening tickets', details: { event: 'Winter Exhibition: Light and Shadow', quantity: 4, ticketType: 'VIP Preview' }, amount: 795, staffId: null, createdDate: '2026-01-10' },
+  { id: 'int-026', patronId: '7962432', opportunityId: null, type: 'ticket', direction: null, date: '2025-02-14T19:00:00', description: 'Purchased Valentine Art Night tickets', details: { event: 'Valentine Art Night', quantity: 4, ticketType: 'VIP Table' }, amount: 800, staffId: null, createdDate: '2025-02-14' },
+  { id: 'int-027', patronId: '7962432', opportunityId: null, type: 'ticket', direction: null, date: '2025-03-22T14:00:00', description: 'Purchased Photography Exhibition tickets', details: { event: 'Photography Exhibition: Urban Landscapes', quantity: 4, ticketType: 'Patron Circle' }, amount: 750, staffId: null, createdDate: '2025-03-22' },
+  { id: 'int-028', patronId: '7962432', opportunityId: null, type: 'ticket', direction: null, date: '2025-04-19T14:00:00', description: 'Purchased Curator Talk tickets', details: { event: 'Curator Talk: Modern Sculpture', quantity: 2, ticketType: 'Premium' }, amount: 120, staffId: null, createdDate: '2025-04-19' },
+  { id: 'int-029', patronId: '7962432', opportunityId: null, type: 'ticket', direction: null, date: '2025-05-10T19:00:00', description: 'Purchased Wine and Art Evening tickets', details: { event: 'Wine and Art Evening', quantity: 4, ticketType: 'VIP Table' }, amount: 800, staffId: null, createdDate: '2025-05-10' },
+  { id: 'int-030', patronId: '7962432', opportunityId: null, type: 'ticket', direction: null, date: '2025-06-21T14:00:00', description: 'Purchased Architecture Lecture tickets', details: { event: 'Architecture and Design Lecture', quantity: 2, ticketType: 'Reserved' }, amount: 85, staffId: null, createdDate: '2025-06-21' },
+  { id: 'int-031', patronId: '7962432', opportunityId: null, type: 'ticket', direction: null, date: '2025-07-04T19:30:00', description: 'Purchased Summer Concert Series tickets', details: { event: 'Summer Concert Series', quantity: 4, ticketType: 'VIP Table' }, amount: 750, staffId: null, createdDate: '2025-07-04' },
+  { id: 'int-032', patronId: '7962432', opportunityId: null, type: 'ticket', direction: null, date: '2025-08-02T18:00:00', description: 'Purchased Summer Concert VIP Reception tickets', details: { event: 'Summer Concert VIP Reception', quantity: 4, ticketType: 'Patron Circle' }, amount: 800, staffId: null, createdDate: '2025-08-02' },
+  { id: 'int-033', patronId: '7962432', opportunityId: null, type: 'ticket', direction: null, date: '2025-09-20T14:00:00', description: 'Purchased Curator Talk tickets', details: { event: 'Curator Talk: Impressionist Masters', quantity: 4, ticketType: 'VIP Reception' }, amount: 750, staffId: null, createdDate: '2025-09-20' },
+  { id: 'int-034', patronId: '7962432', opportunityId: null, type: 'ticket', direction: null, date: '2025-10-18T18:00:00', description: 'Purchased Wine and Cheese Gallery Hours tickets', details: { event: 'Wine and Cheese: Gallery After Hours', quantity: 2, ticketType: 'Premium' }, amount: 200, staffId: null, createdDate: '2025-10-18' },
+  { id: 'int-035', patronId: '7962432', opportunityId: null, type: 'ticket', direction: null, date: '2025-11-08T18:30:00', description: 'Purchased Annual Benefit Dinner tickets', details: { event: 'Annual Benefit Dinner', quantity: 4, ticketType: 'VIP Table' }, amount: 800, staffId: null, createdDate: '2025-11-08' },
+  { id: 'int-036', patronId: '7962432', opportunityId: null, type: 'ticket', direction: null, date: '2025-12-06T18:00:00', description: 'Purchased Holiday Spectacular tickets', details: { event: 'Holiday Spectacular', quantity: 4, ticketType: 'Patron Circle' }, amount: 850, staffId: null, createdDate: '2025-12-06' },
+  { id: 'int-037', patronId: '7962432', opportunityId: null, type: 'ticket', direction: null, date: '2026-01-10T18:00:00', description: 'Purchased Winter Exhibition Opening tickets', details: { event: 'Winter Exhibition: Light and Shadow', quantity: 4, ticketType: 'VIP Preview' }, amount: 795, staffId: null, createdDate: '2026-01-10' },
 
   // --- William Hartford (Major Donor) ---
-  { id: 'int-038', patronId: 'william-hartford', opportunityId: null, type: 'ticket', direction: null, date: '2025-02-22T18:00:00', description: 'Purchased Photography Exhibition tickets', details: { event: 'Photography Exhibition: Urban Landscapes', quantity: 4, ticketType: 'VIP Table' }, amount: 550, staffId: null, createdDate: '2025-02-22' },
-  { id: 'int-039', patronId: 'william-hartford', opportunityId: null, type: 'ticket', direction: null, date: '2025-03-08T18:30:00', description: 'Purchased Spring Gala 2025 tickets', details: { event: 'Spring Gala 2025', quantity: 4, ticketType: 'VIP Table' }, amount: 600, staffId: null, createdDate: '2025-03-08' },
-  { id: 'int-040', patronId: 'william-hartford', opportunityId: null, type: 'ticket', direction: null, date: '2025-04-05T18:00:00', description: 'Purchased Impressionist Masters Opening tickets', details: { event: 'Impressionist Masters Opening Night', quantity: 4, ticketType: 'Patron Circle' }, amount: 550, staffId: null, createdDate: '2025-04-05' },
-  { id: 'int-041', patronId: 'william-hartford', opportunityId: null, type: 'ticket', direction: null, date: '2025-05-10T19:00:00', description: 'Purchased Wine and Art Evening tickets', details: { event: 'Wine and Art Evening', quantity: 4, ticketType: 'VIP Table' }, amount: 600, staffId: null, createdDate: '2025-05-10' },
-  { id: 'int-042', patronId: 'william-hartford', opportunityId: null, type: 'ticket', direction: null, date: '2025-06-07T18:00:00', description: 'Purchased Summer Exhibition Opening tickets', details: { event: 'Summer Exhibition: Contemporary Voices', quantity: 4, ticketType: 'VIP Table' }, amount: 650, staffId: null, createdDate: '2025-06-07' },
-  { id: 'int-043', patronId: 'william-hartford', opportunityId: null, type: 'ticket', direction: null, date: '2025-07-04T19:30:00', description: 'Purchased Summer Concert Series tickets', details: { event: 'Summer Concert Series', quantity: 4, ticketType: 'Premium Reserved' }, amount: 550, staffId: null, createdDate: '2025-07-04' },
-  { id: 'int-044', patronId: 'william-hartford', opportunityId: null, type: 'ticket', direction: null, date: '2025-08-16T14:00:00', description: 'Purchased Photography Workshop tickets', details: { event: 'Photography Workshop and Exhibition Tour', quantity: 4, ticketType: 'VIP Table' }, amount: 550, staffId: null, createdDate: '2025-08-16' },
-  { id: 'int-045', patronId: 'william-hartford', opportunityId: null, type: 'ticket', direction: null, date: '2025-09-06T18:30:00', description: 'Purchased Fall Exhibition Opening tickets', details: { event: 'Fall Exhibition: Emerging Artists', quantity: 4, ticketType: 'VIP Table' }, amount: 600, staffId: null, createdDate: '2025-09-06' },
-  { id: 'int-046', patronId: 'william-hartford', opportunityId: null, type: 'ticket', direction: null, date: '2025-10-04T18:00:00', description: 'Purchased Impressionist Masters Evening Tour tickets', details: { event: 'Impressionist Masters Evening Tour', quantity: 4, ticketType: 'VIP Tour Package' }, amount: 600, staffId: null, createdDate: '2025-10-04' },
-  { id: 'int-047', patronId: 'william-hartford', opportunityId: null, type: 'ticket', direction: null, date: '2025-11-08T18:30:00', description: 'Purchased Annual Benefit Dinner tickets', details: { event: 'Annual Benefit Dinner', quantity: 4, ticketType: 'VIP Table' }, amount: 550, staffId: null, createdDate: '2025-11-08' },
-  { id: 'int-048', patronId: 'william-hartford', opportunityId: null, type: 'ticket', direction: null, date: '2025-12-06T18:00:00', description: 'Purchased Holiday Spectacular tickets', details: { event: 'Holiday Spectacular', quantity: 4, ticketType: 'VIP Table' }, amount: 600, staffId: null, createdDate: '2025-12-06' },
-  { id: 'int-049', patronId: 'william-hartford', opportunityId: null, type: 'ticket', direction: null, date: '2026-01-10T18:00:00', description: 'Purchased Winter Exhibition Opening tickets', details: { event: 'Winter Exhibition: Light and Shadow', quantity: 4, ticketType: 'VIP Preview' }, amount: 600, staffId: null, createdDate: '2026-01-10' },
+  { id: 'int-038', patronId: '7962437', opportunityId: null, type: 'ticket', direction: null, date: '2025-02-22T18:00:00', description: 'Purchased Photography Exhibition tickets', details: { event: 'Photography Exhibition: Urban Landscapes', quantity: 4, ticketType: 'VIP Table' }, amount: 550, staffId: null, createdDate: '2025-02-22' },
+  { id: 'int-039', patronId: '7962437', opportunityId: null, type: 'ticket', direction: null, date: '2025-03-08T18:30:00', description: 'Purchased Spring Gala 2025 tickets', details: { event: 'Spring Gala 2025', quantity: 4, ticketType: 'VIP Table' }, amount: 600, staffId: null, createdDate: '2025-03-08' },
+  { id: 'int-040', patronId: '7962437', opportunityId: null, type: 'ticket', direction: null, date: '2025-04-05T18:00:00', description: 'Purchased Impressionist Masters Opening tickets', details: { event: 'Impressionist Masters Opening Night', quantity: 4, ticketType: 'Patron Circle' }, amount: 550, staffId: null, createdDate: '2025-04-05' },
+  { id: 'int-041', patronId: '7962437', opportunityId: null, type: 'ticket', direction: null, date: '2025-05-10T19:00:00', description: 'Purchased Wine and Art Evening tickets', details: { event: 'Wine and Art Evening', quantity: 4, ticketType: 'VIP Table' }, amount: 600, staffId: null, createdDate: '2025-05-10' },
+  { id: 'int-042', patronId: '7962437', opportunityId: null, type: 'ticket', direction: null, date: '2025-06-07T18:00:00', description: 'Purchased Summer Exhibition Opening tickets', details: { event: 'Summer Exhibition: Contemporary Voices', quantity: 4, ticketType: 'VIP Table' }, amount: 650, staffId: null, createdDate: '2025-06-07' },
+  { id: 'int-043', patronId: '7962437', opportunityId: null, type: 'ticket', direction: null, date: '2025-07-04T19:30:00', description: 'Purchased Summer Concert Series tickets', details: { event: 'Summer Concert Series', quantity: 4, ticketType: 'Premium Reserved' }, amount: 550, staffId: null, createdDate: '2025-07-04' },
+  { id: 'int-044', patronId: '7962437', opportunityId: null, type: 'ticket', direction: null, date: '2025-08-16T14:00:00', description: 'Purchased Photography Workshop tickets', details: { event: 'Photography Workshop and Exhibition Tour', quantity: 4, ticketType: 'VIP Table' }, amount: 550, staffId: null, createdDate: '2025-08-16' },
+  { id: 'int-045', patronId: '7962437', opportunityId: null, type: 'ticket', direction: null, date: '2025-09-06T18:30:00', description: 'Purchased Fall Exhibition Opening tickets', details: { event: 'Fall Exhibition: Emerging Artists', quantity: 4, ticketType: 'VIP Table' }, amount: 600, staffId: null, createdDate: '2025-09-06' },
+  { id: 'int-046', patronId: '7962437', opportunityId: null, type: 'ticket', direction: null, date: '2025-10-04T18:00:00', description: 'Purchased Impressionist Masters Evening Tour tickets', details: { event: 'Impressionist Masters Evening Tour', quantity: 4, ticketType: 'VIP Tour Package' }, amount: 600, staffId: null, createdDate: '2025-10-04' },
+  { id: 'int-047', patronId: '7962437', opportunityId: null, type: 'ticket', direction: null, date: '2025-11-08T18:30:00', description: 'Purchased Annual Benefit Dinner tickets', details: { event: 'Annual Benefit Dinner', quantity: 4, ticketType: 'VIP Table' }, amount: 550, staffId: null, createdDate: '2025-11-08' },
+  { id: 'int-048', patronId: '7962437', opportunityId: null, type: 'ticket', direction: null, date: '2025-12-06T18:00:00', description: 'Purchased Holiday Spectacular tickets', details: { event: 'Holiday Spectacular', quantity: 4, ticketType: 'VIP Table' }, amount: 600, staffId: null, createdDate: '2025-12-06' },
+  { id: 'int-049', patronId: '7962437', opportunityId: null, type: 'ticket', direction: null, date: '2026-01-10T18:00:00', description: 'Purchased Winter Exhibition Opening tickets', details: { event: 'Winter Exhibition: Light and Shadow', quantity: 4, ticketType: 'VIP Preview' }, amount: 600, staffId: null, createdDate: '2026-01-10' },
 
   // --- Theodore Banks (Major Donor) ---
-  { id: 'int-050', patronId: 'theodore-banks', opportunityId: null, type: 'ticket', direction: null, date: '2025-02-14T19:00:00', description: 'Purchased Valentine Art Night tickets', details: { event: 'Valentine Art Night', quantity: 4, ticketType: 'VIP Table' }, amount: 500, staffId: null, createdDate: '2025-02-14' },
-  { id: 'int-051', patronId: 'theodore-banks', opportunityId: null, type: 'ticket', direction: null, date: '2025-03-08T18:30:00', description: 'Purchased Spring Gala tickets', details: { event: 'Spring Gala 2025', quantity: 4, ticketType: 'Patron Circle' }, amount: 550, staffId: null, createdDate: '2025-03-08' },
-  { id: 'int-052', patronId: 'theodore-banks', opportunityId: null, type: 'ticket', direction: null, date: '2025-04-05T18:00:00', description: 'Purchased Impressionist Masters Opening tickets', details: { event: 'Impressionist Masters Opening Night', quantity: 4, ticketType: 'Patron Circle' }, amount: 500, staffId: null, createdDate: '2025-04-05' },
-  { id: 'int-053', patronId: 'theodore-banks', opportunityId: null, type: 'ticket', direction: null, date: '2025-05-10T19:00:00', description: 'Purchased Wine and Art Evening tickets', details: { event: 'Wine and Art Evening', quantity: 4, ticketType: 'VIP Table' }, amount: 550, staffId: null, createdDate: '2025-05-10' },
-  { id: 'int-054', patronId: 'theodore-banks', opportunityId: null, type: 'ticket', direction: null, date: '2025-06-07T18:00:00', description: 'Purchased Summer Exhibition Opening tickets', details: { event: 'Summer Exhibition: Contemporary Voices', quantity: 4, ticketType: 'VIP Table' }, amount: 550, staffId: null, createdDate: '2025-06-07' },
-  { id: 'int-055', patronId: 'theodore-banks', opportunityId: null, type: 'ticket', direction: null, date: '2025-07-04T19:30:00', description: 'Purchased Summer Concert Series tickets', details: { event: 'Summer Concert Series', quantity: 4, ticketType: 'Premium Reserved' }, amount: 500, staffId: null, createdDate: '2025-07-04' },
-  { id: 'int-056', patronId: 'theodore-banks', opportunityId: null, type: 'ticket', direction: null, date: '2025-08-02T18:00:00', description: 'Purchased Summer Concert VIP Reception tickets', details: { event: 'Summer Concert VIP Reception', quantity: 4, ticketType: 'VIP Table' }, amount: 550, staffId: null, createdDate: '2025-08-02' },
-  { id: 'int-057', patronId: 'theodore-banks', opportunityId: null, type: 'ticket', direction: null, date: '2025-09-20T14:00:00', description: 'Purchased Curator Talk tickets', details: { event: 'Curator Talk: Impressionist Masters', quantity: 2, ticketType: 'Reserved' }, amount: 75, staffId: null, createdDate: '2025-09-20' },
-  { id: 'int-058', patronId: 'theodore-banks', opportunityId: null, type: 'ticket', direction: null, date: '2025-10-04T18:00:00', description: 'Purchased Impressionist Masters Evening Tour tickets', details: { event: 'Impressionist Masters Evening Tour', quantity: 4, ticketType: 'VIP Tour Package' }, amount: 575, staffId: null, createdDate: '2025-10-04' },
-  { id: 'int-059', patronId: 'theodore-banks', opportunityId: null, type: 'ticket', direction: null, date: '2025-11-08T18:30:00', description: 'Purchased Annual Benefit Dinner tickets', details: { event: 'Annual Benefit Dinner', quantity: 4, ticketType: 'VIP Table' }, amount: 650, staffId: null, createdDate: '2025-11-08' },
+  { id: 'int-050', patronId: '7962439', opportunityId: null, type: 'ticket', direction: null, date: '2025-02-14T19:00:00', description: 'Purchased Valentine Art Night tickets', details: { event: 'Valentine Art Night', quantity: 4, ticketType: 'VIP Table' }, amount: 500, staffId: null, createdDate: '2025-02-14' },
+  { id: 'int-051', patronId: '7962439', opportunityId: null, type: 'ticket', direction: null, date: '2025-03-08T18:30:00', description: 'Purchased Spring Gala tickets', details: { event: 'Spring Gala 2025', quantity: 4, ticketType: 'Patron Circle' }, amount: 550, staffId: null, createdDate: '2025-03-08' },
+  { id: 'int-052', patronId: '7962439', opportunityId: null, type: 'ticket', direction: null, date: '2025-04-05T18:00:00', description: 'Purchased Impressionist Masters Opening tickets', details: { event: 'Impressionist Masters Opening Night', quantity: 4, ticketType: 'Patron Circle' }, amount: 500, staffId: null, createdDate: '2025-04-05' },
+  { id: 'int-053', patronId: '7962439', opportunityId: null, type: 'ticket', direction: null, date: '2025-05-10T19:00:00', description: 'Purchased Wine and Art Evening tickets', details: { event: 'Wine and Art Evening', quantity: 4, ticketType: 'VIP Table' }, amount: 550, staffId: null, createdDate: '2025-05-10' },
+  { id: 'int-054', patronId: '7962439', opportunityId: null, type: 'ticket', direction: null, date: '2025-06-07T18:00:00', description: 'Purchased Summer Exhibition Opening tickets', details: { event: 'Summer Exhibition: Contemporary Voices', quantity: 4, ticketType: 'VIP Table' }, amount: 550, staffId: null, createdDate: '2025-06-07' },
+  { id: 'int-055', patronId: '7962439', opportunityId: null, type: 'ticket', direction: null, date: '2025-07-04T19:30:00', description: 'Purchased Summer Concert Series tickets', details: { event: 'Summer Concert Series', quantity: 4, ticketType: 'Premium Reserved' }, amount: 500, staffId: null, createdDate: '2025-07-04' },
+  { id: 'int-056', patronId: '7962439', opportunityId: null, type: 'ticket', direction: null, date: '2025-08-02T18:00:00', description: 'Purchased Summer Concert VIP Reception tickets', details: { event: 'Summer Concert VIP Reception', quantity: 4, ticketType: 'VIP Table' }, amount: 550, staffId: null, createdDate: '2025-08-02' },
+  { id: 'int-057', patronId: '7962439', opportunityId: null, type: 'ticket', direction: null, date: '2025-09-20T14:00:00', description: 'Purchased Curator Talk tickets', details: { event: 'Curator Talk: Impressionist Masters', quantity: 2, ticketType: 'Reserved' }, amount: 75, staffId: null, createdDate: '2025-09-20' },
+  { id: 'int-058', patronId: '7962439', opportunityId: null, type: 'ticket', direction: null, date: '2025-10-04T18:00:00', description: 'Purchased Impressionist Masters Evening Tour tickets', details: { event: 'Impressionist Masters Evening Tour', quantity: 4, ticketType: 'VIP Tour Package' }, amount: 575, staffId: null, createdDate: '2025-10-04' },
+  { id: 'int-059', patronId: '7962439', opportunityId: null, type: 'ticket', direction: null, date: '2025-11-08T18:30:00', description: 'Purchased Annual Benefit Dinner tickets', details: { event: 'Annual Benefit Dinner', quantity: 4, ticketType: 'VIP Table' }, amount: 650, staffId: null, createdDate: '2025-11-08' },
 
   // --- Samantha Carter (Major Donor) ---
-  { id: 'int-060', patronId: 'samantha-carter', opportunityId: null, type: 'ticket', direction: null, date: '2025-02-14T19:00:00', description: 'Purchased Valentine Art Night tickets', details: { event: 'Valentine Art Night', quantity: 4, ticketType: 'VIP Table' }, amount: 625, staffId: null, createdDate: '2025-02-14' },
-  { id: 'int-061', patronId: 'samantha-carter', opportunityId: null, type: 'ticket', direction: null, date: '2025-03-08T18:30:00', description: 'Purchased Spring Gala tickets', details: { event: 'Spring Gala 2025', quantity: 4, ticketType: 'Patron Circle' }, amount: 589, staffId: null, createdDate: '2025-03-08' },
-  { id: 'int-062', patronId: 'samantha-carter', opportunityId: null, type: 'ticket', direction: null, date: '2025-04-05T18:00:00', description: 'Purchased Impressionist Masters Opening tickets', details: { event: 'Impressionist Masters Opening Night', quantity: 4, ticketType: 'VIP Table' }, amount: 550, staffId: null, createdDate: '2025-04-05' },
-  { id: 'int-063', patronId: 'samantha-carter', opportunityId: null, type: 'ticket', direction: null, date: '2025-05-10T19:00:00', description: 'Purchased Wine and Art Evening tickets', details: { event: 'Wine and Art Evening', quantity: 6, ticketType: 'VIP Table' }, amount: 656, staffId: null, createdDate: '2025-05-10' },
-  { id: 'int-064', patronId: 'samantha-carter', opportunityId: null, type: 'ticket', direction: null, date: '2025-06-07T18:00:00', description: 'Purchased Summer Exhibition Opening tickets', details: { event: 'Summer Exhibition: Contemporary Voices', quantity: 4, ticketType: 'Patron Circle' }, amount: 478, staffId: null, createdDate: '2025-06-07' },
-  { id: 'int-065', patronId: 'samantha-carter', opportunityId: null, type: 'ticket', direction: null, date: '2025-07-04T19:30:00', description: 'Purchased Summer Concert Series tickets', details: { event: 'Summer Concert Series', quantity: 4, ticketType: 'VIP Table' }, amount: 475, staffId: null, createdDate: '2025-07-04' },
-  { id: 'int-066', patronId: 'samantha-carter', opportunityId: null, type: 'ticket', direction: null, date: '2025-08-02T18:00:00', description: 'Purchased Summer Concert VIP Reception tickets', details: { event: 'Summer Concert VIP Reception', quantity: 4, ticketType: 'VIP Table' }, amount: 462, staffId: null, createdDate: '2025-08-02' },
-  { id: 'int-067', patronId: 'samantha-carter', opportunityId: null, type: 'ticket', direction: null, date: '2025-09-06T18:30:00', description: 'Purchased Fall Exhibition Opening tickets', details: { event: 'Fall Exhibition: Emerging Artists', quantity: 4, ticketType: 'Patron Circle' }, amount: 465, staffId: null, createdDate: '2025-09-06' },
-  { id: 'int-068', patronId: 'samantha-carter', opportunityId: null, type: 'ticket', direction: null, date: '2025-10-04T18:00:00', description: 'Purchased Impressionist Masters Evening Tour tickets', details: { event: 'Impressionist Masters Evening Tour', quantity: 4, ticketType: 'VIP Tour Package' }, amount: 600, staffId: null, createdDate: '2025-10-04' },
+  { id: 'int-060', patronId: '7962421', opportunityId: null, type: 'ticket', direction: null, date: '2025-02-14T19:00:00', description: 'Purchased Valentine Art Night tickets', details: { event: 'Valentine Art Night', quantity: 4, ticketType: 'VIP Table' }, amount: 625, staffId: null, createdDate: '2025-02-14' },
+  { id: 'int-061', patronId: '7962421', opportunityId: null, type: 'ticket', direction: null, date: '2025-03-08T18:30:00', description: 'Purchased Spring Gala tickets', details: { event: 'Spring Gala 2025', quantity: 4, ticketType: 'Patron Circle' }, amount: 589, staffId: null, createdDate: '2025-03-08' },
+  { id: 'int-062', patronId: '7962421', opportunityId: null, type: 'ticket', direction: null, date: '2025-04-05T18:00:00', description: 'Purchased Impressionist Masters Opening tickets', details: { event: 'Impressionist Masters Opening Night', quantity: 4, ticketType: 'VIP Table' }, amount: 550, staffId: null, createdDate: '2025-04-05' },
+  { id: 'int-063', patronId: '7962421', opportunityId: null, type: 'ticket', direction: null, date: '2025-05-10T19:00:00', description: 'Purchased Wine and Art Evening tickets', details: { event: 'Wine and Art Evening', quantity: 6, ticketType: 'VIP Table' }, amount: 656, staffId: null, createdDate: '2025-05-10' },
+  { id: 'int-064', patronId: '7962421', opportunityId: null, type: 'ticket', direction: null, date: '2025-06-07T18:00:00', description: 'Purchased Summer Exhibition Opening tickets', details: { event: 'Summer Exhibition: Contemporary Voices', quantity: 4, ticketType: 'Patron Circle' }, amount: 478, staffId: null, createdDate: '2025-06-07' },
+  { id: 'int-065', patronId: '7962421', opportunityId: null, type: 'ticket', direction: null, date: '2025-07-04T19:30:00', description: 'Purchased Summer Concert Series tickets', details: { event: 'Summer Concert Series', quantity: 4, ticketType: 'VIP Table' }, amount: 475, staffId: null, createdDate: '2025-07-04' },
+  { id: 'int-066', patronId: '7962421', opportunityId: null, type: 'ticket', direction: null, date: '2025-08-02T18:00:00', description: 'Purchased Summer Concert VIP Reception tickets', details: { event: 'Summer Concert VIP Reception', quantity: 4, ticketType: 'VIP Table' }, amount: 462, staffId: null, createdDate: '2025-08-02' },
+  { id: 'int-067', patronId: '7962421', opportunityId: null, type: 'ticket', direction: null, date: '2025-09-06T18:30:00', description: 'Purchased Fall Exhibition Opening tickets', details: { event: 'Fall Exhibition: Emerging Artists', quantity: 4, ticketType: 'Patron Circle' }, amount: 465, staffId: null, createdDate: '2025-09-06' },
+  { id: 'int-068', patronId: '7962421', opportunityId: null, type: 'ticket', direction: null, date: '2025-10-04T18:00:00', description: 'Purchased Impressionist Masters Evening Tour tickets', details: { event: 'Impressionist Masters Evening Tour', quantity: 4, ticketType: 'VIP Tour Package' }, amount: 600, staffId: null, createdDate: '2025-10-04' },
 
   // --- Mia Wilson (Major Donor) ---
-  { id: 'int-069', patronId: 'mia-wilson', opportunityId: null, type: 'ticket', direction: null, date: '2025-02-14T19:00:00', description: 'Purchased Valentine Art Night tickets', details: { event: 'Valentine Art Night', quantity: 4, ticketType: 'VIP Table' }, amount: 545, staffId: null, createdDate: '2025-02-14' },
-  { id: 'int-070', patronId: 'mia-wilson', opportunityId: null, type: 'ticket', direction: null, date: '2025-03-22T14:00:00', description: 'Purchased Curator Talk tickets', details: { event: 'Curator Talk: Renaissance to Modern', quantity: 4, ticketType: 'VIP Reception' }, amount: 550, staffId: null, createdDate: '2025-03-22' },
-  { id: 'int-071', patronId: 'mia-wilson', opportunityId: null, type: 'ticket', direction: null, date: '2025-04-05T18:00:00', description: 'Purchased Impressionist Masters Opening tickets', details: { event: 'Impressionist Masters Opening Night', quantity: 4, ticketType: 'VIP Table' }, amount: 595, staffId: null, createdDate: '2025-04-05' },
-  { id: 'int-072', patronId: 'mia-wilson', opportunityId: null, type: 'ticket', direction: null, date: '2025-05-24T10:00:00', description: 'Purchased Family Day Art Workshop tickets', details: { event: 'Family Day: Interactive Art Workshop', quantity: 4, ticketType: 'VIP Table' }, amount: 528, staffId: null, createdDate: '2025-05-24' },
-  { id: 'int-073', patronId: 'mia-wilson', opportunityId: null, type: 'ticket', direction: null, date: '2025-06-07T18:00:00', description: 'Purchased Summer Exhibition Opening tickets', details: { event: 'Summer Exhibition: Contemporary Voices', quantity: 4, ticketType: 'VIP Table' }, amount: 550, staffId: null, createdDate: '2025-06-07' },
-  { id: 'int-074', patronId: 'mia-wilson', opportunityId: null, type: 'ticket', direction: null, date: '2025-07-04T19:30:00', description: 'Purchased Summer Concert Series tickets', details: { event: 'Summer Concert Series', quantity: 4, ticketType: 'Patron Circle' }, amount: 562, staffId: null, createdDate: '2025-07-04' },
-  { id: 'int-075', patronId: 'mia-wilson', opportunityId: null, type: 'ticket', direction: null, date: '2025-08-02T18:00:00', description: 'Purchased Summer Concert VIP Reception tickets', details: { event: 'Summer Concert VIP Reception', quantity: 4, ticketType: 'VIP Table' }, amount: 565, staffId: null, createdDate: '2025-08-02' },
-  { id: 'int-076', patronId: 'mia-wilson', opportunityId: null, type: 'ticket', direction: null, date: '2025-09-06T18:30:00', description: 'Purchased Fall Exhibition Opening tickets', details: { event: 'Fall Exhibition: Emerging Artists', quantity: 4, ticketType: 'VIP Table' }, amount: 550, staffId: null, createdDate: '2025-09-06' },
-  { id: 'int-077', patronId: 'mia-wilson', opportunityId: null, type: 'ticket', direction: null, date: '2025-10-18T18:00:00', description: 'Purchased Wine and Cheese Gallery Hours tickets', details: { event: 'Wine and Cheese: Gallery After Hours', quantity: 4, ticketType: 'VIP Table' }, amount: 555, staffId: null, createdDate: '2025-10-18' },
+  { id: 'int-069', patronId: '7962423', opportunityId: null, type: 'ticket', direction: null, date: '2025-02-14T19:00:00', description: 'Purchased Valentine Art Night tickets', details: { event: 'Valentine Art Night', quantity: 4, ticketType: 'VIP Table' }, amount: 545, staffId: null, createdDate: '2025-02-14' },
+  { id: 'int-070', patronId: '7962423', opportunityId: null, type: 'ticket', direction: null, date: '2025-03-22T14:00:00', description: 'Purchased Curator Talk tickets', details: { event: 'Curator Talk: Renaissance to Modern', quantity: 4, ticketType: 'VIP Reception' }, amount: 550, staffId: null, createdDate: '2025-03-22' },
+  { id: 'int-071', patronId: '7962423', opportunityId: null, type: 'ticket', direction: null, date: '2025-04-05T18:00:00', description: 'Purchased Impressionist Masters Opening tickets', details: { event: 'Impressionist Masters Opening Night', quantity: 4, ticketType: 'VIP Table' }, amount: 595, staffId: null, createdDate: '2025-04-05' },
+  { id: 'int-072', patronId: '7962423', opportunityId: null, type: 'ticket', direction: null, date: '2025-05-24T10:00:00', description: 'Purchased Family Day Art Workshop tickets', details: { event: 'Family Day: Interactive Art Workshop', quantity: 4, ticketType: 'VIP Table' }, amount: 528, staffId: null, createdDate: '2025-05-24' },
+  { id: 'int-073', patronId: '7962423', opportunityId: null, type: 'ticket', direction: null, date: '2025-06-07T18:00:00', description: 'Purchased Summer Exhibition Opening tickets', details: { event: 'Summer Exhibition: Contemporary Voices', quantity: 4, ticketType: 'VIP Table' }, amount: 550, staffId: null, createdDate: '2025-06-07' },
+  { id: 'int-074', patronId: '7962423', opportunityId: null, type: 'ticket', direction: null, date: '2025-07-04T19:30:00', description: 'Purchased Summer Concert Series tickets', details: { event: 'Summer Concert Series', quantity: 4, ticketType: 'Patron Circle' }, amount: 562, staffId: null, createdDate: '2025-07-04' },
+  { id: 'int-075', patronId: '7962423', opportunityId: null, type: 'ticket', direction: null, date: '2025-08-02T18:00:00', description: 'Purchased Summer Concert VIP Reception tickets', details: { event: 'Summer Concert VIP Reception', quantity: 4, ticketType: 'VIP Table' }, amount: 565, staffId: null, createdDate: '2025-08-02' },
+  { id: 'int-076', patronId: '7962423', opportunityId: null, type: 'ticket', direction: null, date: '2025-09-06T18:30:00', description: 'Purchased Fall Exhibition Opening tickets', details: { event: 'Fall Exhibition: Emerging Artists', quantity: 4, ticketType: 'VIP Table' }, amount: 550, staffId: null, createdDate: '2025-09-06' },
+  { id: 'int-077', patronId: '7962423', opportunityId: null, type: 'ticket', direction: null, date: '2025-10-18T18:00:00', description: 'Purchased Wine and Cheese Gallery Hours tickets', details: { event: 'Wine and Cheese: Gallery After Hours', quantity: 4, ticketType: 'VIP Table' }, amount: 555, staffId: null, createdDate: '2025-10-18' },
 
   // --- Victoria Sterling (Major Donor) ---
-  { id: 'int-078', patronId: 'victoria-sterling', opportunityId: null, type: 'ticket', direction: null, date: '2025-04-19T14:00:00', description: 'Purchased Members Preview Night tickets', details: { event: 'Members Preview: New Acquisitions', quantity: 2, ticketType: 'Patron Circle' }, amount: 300, staffId: null, createdDate: '2025-04-19' },
-  { id: 'int-079', patronId: 'victoria-sterling', opportunityId: null, type: 'ticket', direction: null, date: '2025-05-10T19:00:00', description: 'Purchased Wine and Art Evening tickets', details: { event: 'Wine and Art Evening', quantity: 2, ticketType: 'Patron Circle' }, amount: 300, staffId: null, createdDate: '2025-05-10' },
-  { id: 'int-080', patronId: 'victoria-sterling', opportunityId: null, type: 'ticket', direction: null, date: '2025-07-04T19:30:00', description: 'Purchased Summer Concert Series tickets', details: { event: 'Summer Concert Series', quantity: 4, ticketType: 'VIP Table' }, amount: 400, staffId: null, createdDate: '2025-07-04' },
-  { id: 'int-081', patronId: 'victoria-sterling', opportunityId: null, type: 'ticket', direction: null, date: '2025-08-16T14:00:00', description: 'Purchased Photography Workshop tickets', details: { event: 'Photography Workshop and Exhibition Tour', quantity: 2, ticketType: 'Premium' }, amount: 300, staffId: null, createdDate: '2025-08-16' },
-  { id: 'int-082', patronId: 'victoria-sterling', opportunityId: null, type: 'ticket', direction: null, date: '2025-09-06T18:30:00', description: 'Purchased Fall Exhibition Opening tickets', details: { event: 'Fall Exhibition: Emerging Artists', quantity: 4, ticketType: 'VIP Table' }, amount: 600, staffId: null, createdDate: '2025-09-06' },
-  { id: 'int-083', patronId: 'victoria-sterling', opportunityId: null, type: 'ticket', direction: null, date: '2025-10-04T18:00:00', description: 'Purchased Impressionist Masters Evening Tour tickets', details: { event: 'Impressionist Masters Evening Tour', quantity: 2, ticketType: 'VIP Tour Package' }, amount: 300, staffId: null, createdDate: '2025-10-04' },
-  { id: 'int-084', patronId: 'victoria-sterling', opportunityId: null, type: 'ticket', direction: null, date: '2025-11-08T18:30:00', description: 'Purchased Annual Benefit Dinner tickets', details: { event: 'Annual Benefit Dinner', quantity: 2, ticketType: 'VIP Table' }, amount: 400, staffId: null, createdDate: '2025-11-08' },
-  { id: 'int-085', patronId: 'victoria-sterling', opportunityId: null, type: 'ticket', direction: null, date: '2025-12-06T18:00:00', description: 'Purchased Holiday Spectacular tickets', details: { event: 'Holiday Spectacular', quantity: 2, ticketType: 'Patron Circle' }, amount: 400, staffId: null, createdDate: '2025-12-06' },
+  { id: 'int-078', patronId: '7962440', opportunityId: null, type: 'ticket', direction: null, date: '2025-04-19T14:00:00', description: 'Purchased Members Preview Night tickets', details: { event: 'Members Preview: New Acquisitions', quantity: 2, ticketType: 'Patron Circle' }, amount: 300, staffId: null, createdDate: '2025-04-19' },
+  { id: 'int-079', patronId: '7962440', opportunityId: null, type: 'ticket', direction: null, date: '2025-05-10T19:00:00', description: 'Purchased Wine and Art Evening tickets', details: { event: 'Wine and Art Evening', quantity: 2, ticketType: 'Patron Circle' }, amount: 300, staffId: null, createdDate: '2025-05-10' },
+  { id: 'int-080', patronId: '7962440', opportunityId: null, type: 'ticket', direction: null, date: '2025-07-04T19:30:00', description: 'Purchased Summer Concert Series tickets', details: { event: 'Summer Concert Series', quantity: 4, ticketType: 'VIP Table' }, amount: 400, staffId: null, createdDate: '2025-07-04' },
+  { id: 'int-081', patronId: '7962440', opportunityId: null, type: 'ticket', direction: null, date: '2025-08-16T14:00:00', description: 'Purchased Photography Workshop tickets', details: { event: 'Photography Workshop and Exhibition Tour', quantity: 2, ticketType: 'Premium' }, amount: 300, staffId: null, createdDate: '2025-08-16' },
+  { id: 'int-082', patronId: '7962440', opportunityId: null, type: 'ticket', direction: null, date: '2025-09-06T18:30:00', description: 'Purchased Fall Exhibition Opening tickets', details: { event: 'Fall Exhibition: Emerging Artists', quantity: 4, ticketType: 'VIP Table' }, amount: 600, staffId: null, createdDate: '2025-09-06' },
+  { id: 'int-083', patronId: '7962440', opportunityId: null, type: 'ticket', direction: null, date: '2025-10-04T18:00:00', description: 'Purchased Impressionist Masters Evening Tour tickets', details: { event: 'Impressionist Masters Evening Tour', quantity: 2, ticketType: 'VIP Tour Package' }, amount: 300, staffId: null, createdDate: '2025-10-04' },
+  { id: 'int-084', patronId: '7962440', opportunityId: null, type: 'ticket', direction: null, date: '2025-11-08T18:30:00', description: 'Purchased Annual Benefit Dinner tickets', details: { event: 'Annual Benefit Dinner', quantity: 2, ticketType: 'VIP Table' }, amount: 400, staffId: null, createdDate: '2025-11-08' },
+  { id: 'int-085', patronId: '7962440', opportunityId: null, type: 'ticket', direction: null, date: '2025-12-06T18:00:00', description: 'Purchased Holiday Spectacular tickets', details: { event: 'Holiday Spectacular', quantity: 2, ticketType: 'Patron Circle' }, amount: 400, staffId: null, createdDate: '2025-12-06' },
 
   // --- Marcus Chen (Mid-tier) ---
-  { id: 'int-086', patronId: 'marcus-chen', opportunityId: null, type: 'ticket', direction: null, date: '2025-02-14T19:00:00', description: 'Purchased Valentine Art Night tickets', details: { event: 'Valentine Art Night', quantity: 2, ticketType: 'Premium' }, amount: 250, staffId: null, createdDate: '2025-02-14' },
-  { id: 'int-087', patronId: 'marcus-chen', opportunityId: null, type: 'ticket', direction: null, date: '2025-03-08T18:30:00', description: 'Purchased Spring Gala tickets', details: { event: 'Spring Gala 2025', quantity: 2, ticketType: 'Reserved' }, amount: 250, staffId: null, createdDate: '2025-03-08' },
-  { id: 'int-088', patronId: 'marcus-chen', opportunityId: null, type: 'ticket', direction: null, date: '2025-04-05T18:00:00', description: 'Purchased Impressionist Masters Opening tickets', details: { event: 'Impressionist Masters Opening Night', quantity: 2, ticketType: 'Premium' }, amount: 250, staffId: null, createdDate: '2025-04-05' },
-  { id: 'int-089', patronId: 'marcus-chen', opportunityId: null, type: 'ticket', direction: null, date: '2025-05-10T19:00:00', description: 'Purchased Wine and Art Evening tickets', details: { event: 'Wine and Art Evening', quantity: 2, ticketType: 'Premium' }, amount: 250, staffId: null, createdDate: '2025-05-10' },
-  { id: 'int-090', patronId: 'marcus-chen', opportunityId: null, type: 'ticket', direction: null, date: '2025-06-07T18:00:00', description: 'Purchased Summer Exhibition Opening tickets', details: { event: 'Summer Exhibition: Contemporary Voices', quantity: 2, ticketType: 'Reserved' }, amount: 250, staffId: null, createdDate: '2025-06-07' },
-  { id: 'int-091', patronId: 'marcus-chen', opportunityId: null, type: 'ticket', direction: null, date: '2025-07-04T19:30:00', description: 'Purchased Summer Concert Series tickets', details: { event: 'Summer Concert Series', quantity: 2, ticketType: 'Premium' }, amount: 250, staffId: null, createdDate: '2025-07-04' },
-  { id: 'int-092', patronId: 'marcus-chen', opportunityId: null, type: 'ticket', direction: null, date: '2025-08-02T18:00:00', description: 'Purchased Summer Concert VIP Reception tickets', details: { event: 'Summer Concert VIP Reception', quantity: 4, ticketType: 'Reserved' }, amount: 500, staffId: null, createdDate: '2025-08-02' },
-  { id: 'int-093', patronId: 'marcus-chen', opportunityId: null, type: 'ticket', direction: null, date: '2025-09-06T18:30:00', description: 'Purchased Fall Exhibition Opening tickets', details: { event: 'Fall Exhibition: Emerging Artists', quantity: 2, ticketType: 'Premium' }, amount: 250, staffId: null, createdDate: '2025-09-06' },
-  { id: 'int-094', patronId: 'marcus-chen', opportunityId: null, type: 'ticket', direction: null, date: '2025-10-04T18:00:00', description: 'Purchased Impressionist Masters Evening Tour tickets', details: { event: 'Impressionist Masters Evening Tour', quantity: 2, ticketType: 'Premium' }, amount: 250, staffId: null, createdDate: '2025-10-04' },
-  { id: 'int-095', patronId: 'marcus-chen', opportunityId: null, type: 'ticket', direction: null, date: '2025-11-08T18:30:00', description: 'Purchased Annual Benefit Dinner tickets', details: { event: 'Annual Benefit Dinner', quantity: 2, ticketType: 'Reserved' }, amount: 250, staffId: null, createdDate: '2025-11-08' },
-  { id: 'int-096', patronId: 'marcus-chen', opportunityId: null, type: 'ticket', direction: null, date: '2025-12-06T18:00:00', description: 'Purchased Holiday Spectacular tickets', details: { event: 'Holiday Spectacular', quantity: 2, ticketType: 'Premium' }, amount: 250, staffId: null, createdDate: '2025-12-06' },
+  { id: 'int-086', patronId: '7962433', opportunityId: null, type: 'ticket', direction: null, date: '2025-02-14T19:00:00', description: 'Purchased Valentine Art Night tickets', details: { event: 'Valentine Art Night', quantity: 2, ticketType: 'Premium' }, amount: 250, staffId: null, createdDate: '2025-02-14' },
+  { id: 'int-087', patronId: '7962433', opportunityId: null, type: 'ticket', direction: null, date: '2025-03-08T18:30:00', description: 'Purchased Spring Gala tickets', details: { event: 'Spring Gala 2025', quantity: 2, ticketType: 'Reserved' }, amount: 250, staffId: null, createdDate: '2025-03-08' },
+  { id: 'int-088', patronId: '7962433', opportunityId: null, type: 'ticket', direction: null, date: '2025-04-05T18:00:00', description: 'Purchased Impressionist Masters Opening tickets', details: { event: 'Impressionist Masters Opening Night', quantity: 2, ticketType: 'Premium' }, amount: 250, staffId: null, createdDate: '2025-04-05' },
+  { id: 'int-089', patronId: '7962433', opportunityId: null, type: 'ticket', direction: null, date: '2025-05-10T19:00:00', description: 'Purchased Wine and Art Evening tickets', details: { event: 'Wine and Art Evening', quantity: 2, ticketType: 'Premium' }, amount: 250, staffId: null, createdDate: '2025-05-10' },
+  { id: 'int-090', patronId: '7962433', opportunityId: null, type: 'ticket', direction: null, date: '2025-06-07T18:00:00', description: 'Purchased Summer Exhibition Opening tickets', details: { event: 'Summer Exhibition: Contemporary Voices', quantity: 2, ticketType: 'Reserved' }, amount: 250, staffId: null, createdDate: '2025-06-07' },
+  { id: 'int-091', patronId: '7962433', opportunityId: null, type: 'ticket', direction: null, date: '2025-07-04T19:30:00', description: 'Purchased Summer Concert Series tickets', details: { event: 'Summer Concert Series', quantity: 2, ticketType: 'Premium' }, amount: 250, staffId: null, createdDate: '2025-07-04' },
+  { id: 'int-092', patronId: '7962433', opportunityId: null, type: 'ticket', direction: null, date: '2025-08-02T18:00:00', description: 'Purchased Summer Concert VIP Reception tickets', details: { event: 'Summer Concert VIP Reception', quantity: 4, ticketType: 'Reserved' }, amount: 500, staffId: null, createdDate: '2025-08-02' },
+  { id: 'int-093', patronId: '7962433', opportunityId: null, type: 'ticket', direction: null, date: '2025-09-06T18:30:00', description: 'Purchased Fall Exhibition Opening tickets', details: { event: 'Fall Exhibition: Emerging Artists', quantity: 2, ticketType: 'Premium' }, amount: 250, staffId: null, createdDate: '2025-09-06' },
+  { id: 'int-094', patronId: '7962433', opportunityId: null, type: 'ticket', direction: null, date: '2025-10-04T18:00:00', description: 'Purchased Impressionist Masters Evening Tour tickets', details: { event: 'Impressionist Masters Evening Tour', quantity: 2, ticketType: 'Premium' }, amount: 250, staffId: null, createdDate: '2025-10-04' },
+  { id: 'int-095', patronId: '7962433', opportunityId: null, type: 'ticket', direction: null, date: '2025-11-08T18:30:00', description: 'Purchased Annual Benefit Dinner tickets', details: { event: 'Annual Benefit Dinner', quantity: 2, ticketType: 'Reserved' }, amount: 250, staffId: null, createdDate: '2025-11-08' },
+  { id: 'int-096', patronId: '7962433', opportunityId: null, type: 'ticket', direction: null, date: '2025-12-06T18:00:00', description: 'Purchased Holiday Spectacular tickets', details: { event: 'Holiday Spectacular', quantity: 2, ticketType: 'Premium' }, amount: 250, staffId: null, createdDate: '2025-12-06' },
 
   // --- Anderson Collingwood (Mid-tier, already has int-007 for Mar) ---
-  { id: 'int-097', patronId: 'anderson-collingwood', opportunityId: null, type: 'ticket', direction: null, date: '2025-02-14T19:00:00', description: 'Purchased Valentine Art Night tickets', details: { event: 'Valentine Art Night', quantity: 2, ticketType: 'Premium' }, amount: 235, staffId: null, createdDate: '2025-02-14' },
-  { id: 'int-098', patronId: 'anderson-collingwood', opportunityId: null, type: 'ticket', direction: null, date: '2025-04-05T18:00:00', description: 'Purchased Impressionist Masters Opening tickets', details: { event: 'Impressionist Masters Opening Night', quantity: 2, ticketType: 'Member Plus' }, amount: 250, staffId: null, createdDate: '2025-04-05' },
-  { id: 'int-099', patronId: 'anderson-collingwood', opportunityId: null, type: 'ticket', direction: null, date: '2025-05-10T19:00:00', description: 'Purchased Wine and Art Evening tickets', details: { event: 'Wine and Art Evening', quantity: 2, ticketType: 'Premium' }, amount: 228, staffId: null, createdDate: '2025-05-10' },
-  { id: 'int-100', patronId: 'anderson-collingwood', opportunityId: null, type: 'ticket', direction: null, date: '2025-06-07T18:00:00', description: 'Purchased Summer Exhibition Opening tickets', details: { event: 'Summer Exhibition: Contemporary Voices', quantity: 2, ticketType: 'Member Plus' }, amount: 175, staffId: null, createdDate: '2025-06-07' },
-  { id: 'int-101', patronId: 'anderson-collingwood', opportunityId: null, type: 'ticket', direction: null, date: '2025-07-04T19:30:00', description: 'Purchased Summer Concert Series tickets', details: { event: 'Summer Concert Series', quantity: 2, ticketType: 'Premium' }, amount: 250, staffId: null, createdDate: '2025-07-04' },
-  { id: 'int-102', patronId: 'anderson-collingwood', opportunityId: null, type: 'ticket', direction: null, date: '2025-08-02T18:00:00', description: 'Purchased Summer Concert VIP Reception tickets', details: { event: 'Summer Concert VIP Reception', quantity: 2, ticketType: 'Reserved' }, amount: 300, staffId: null, createdDate: '2025-08-02' },
-  { id: 'int-103', patronId: 'anderson-collingwood', opportunityId: null, type: 'ticket', direction: null, date: '2025-09-06T18:30:00', description: 'Purchased Fall Exhibition Opening tickets', details: { event: 'Fall Exhibition: Emerging Artists', quantity: 2, ticketType: 'Premium' }, amount: 192, staffId: null, createdDate: '2025-09-06' },
-  { id: 'int-104', patronId: 'anderson-collingwood', opportunityId: null, type: 'ticket', direction: null, date: '2025-10-04T18:00:00', description: 'Purchased Impressionist Masters Evening Tour tickets', details: { event: 'Impressionist Masters Evening Tour', quantity: 2, ticketType: 'Premium' }, amount: 205, staffId: null, createdDate: '2025-10-04' },
-  { id: 'int-105', patronId: 'anderson-collingwood', opportunityId: null, type: 'ticket', direction: null, date: '2025-11-22T18:00:00', description: 'Purchased Holiday Preview Night tickets', details: { event: 'Holiday Preview Night', quantity: 2, ticketType: 'Member Plus' }, amount: 134, staffId: null, createdDate: '2025-11-22' },
-  { id: 'int-106', patronId: 'anderson-collingwood', opportunityId: null, type: 'ticket', direction: null, date: '2025-12-06T18:00:00', description: 'Purchased Holiday Spectacular tickets', details: { event: 'Holiday Spectacular', quantity: 2, ticketType: 'Premium' }, amount: 156, staffId: null, createdDate: '2025-12-06' },
-  { id: 'int-107', patronId: 'anderson-collingwood', opportunityId: null, type: 'ticket', direction: null, date: '2026-01-10T18:00:00', description: 'Purchased Winter Exhibition Opening tickets', details: { event: 'Winter Exhibition: Light and Shadow', quantity: 2, ticketType: 'Member Plus' }, amount: 180, staffId: null, createdDate: '2026-01-10' },
+  { id: 'int-097', patronId: '7962415', opportunityId: null, type: 'ticket', direction: null, date: '2025-02-14T19:00:00', description: 'Purchased Valentine Art Night tickets', details: { event: 'Valentine Art Night', quantity: 2, ticketType: 'Premium' }, amount: 235, staffId: null, createdDate: '2025-02-14' },
+  { id: 'int-098', patronId: '7962415', opportunityId: null, type: 'ticket', direction: null, date: '2025-04-05T18:00:00', description: 'Purchased Impressionist Masters Opening tickets', details: { event: 'Impressionist Masters Opening Night', quantity: 2, ticketType: 'Member Plus' }, amount: 250, staffId: null, createdDate: '2025-04-05' },
+  { id: 'int-099', patronId: '7962415', opportunityId: null, type: 'ticket', direction: null, date: '2025-05-10T19:00:00', description: 'Purchased Wine and Art Evening tickets', details: { event: 'Wine and Art Evening', quantity: 2, ticketType: 'Premium' }, amount: 228, staffId: null, createdDate: '2025-05-10' },
+  { id: 'int-100', patronId: '7962415', opportunityId: null, type: 'ticket', direction: null, date: '2025-06-07T18:00:00', description: 'Purchased Summer Exhibition Opening tickets', details: { event: 'Summer Exhibition: Contemporary Voices', quantity: 2, ticketType: 'Member Plus' }, amount: 175, staffId: null, createdDate: '2025-06-07' },
+  { id: 'int-101', patronId: '7962415', opportunityId: null, type: 'ticket', direction: null, date: '2025-07-04T19:30:00', description: 'Purchased Summer Concert Series tickets', details: { event: 'Summer Concert Series', quantity: 2, ticketType: 'Premium' }, amount: 250, staffId: null, createdDate: '2025-07-04' },
+  { id: 'int-102', patronId: '7962415', opportunityId: null, type: 'ticket', direction: null, date: '2025-08-02T18:00:00', description: 'Purchased Summer Concert VIP Reception tickets', details: { event: 'Summer Concert VIP Reception', quantity: 2, ticketType: 'Reserved' }, amount: 300, staffId: null, createdDate: '2025-08-02' },
+  { id: 'int-103', patronId: '7962415', opportunityId: null, type: 'ticket', direction: null, date: '2025-09-06T18:30:00', description: 'Purchased Fall Exhibition Opening tickets', details: { event: 'Fall Exhibition: Emerging Artists', quantity: 2, ticketType: 'Premium' }, amount: 192, staffId: null, createdDate: '2025-09-06' },
+  { id: 'int-104', patronId: '7962415', opportunityId: null, type: 'ticket', direction: null, date: '2025-10-04T18:00:00', description: 'Purchased Impressionist Masters Evening Tour tickets', details: { event: 'Impressionist Masters Evening Tour', quantity: 2, ticketType: 'Premium' }, amount: 205, staffId: null, createdDate: '2025-10-04' },
+  { id: 'int-105', patronId: '7962415', opportunityId: null, type: 'ticket', direction: null, date: '2025-11-22T18:00:00', description: 'Purchased Holiday Preview Night tickets', details: { event: 'Holiday Preview Night', quantity: 2, ticketType: 'Member Plus' }, amount: 134, staffId: null, createdDate: '2025-11-22' },
+  { id: 'int-106', patronId: '7962415', opportunityId: null, type: 'ticket', direction: null, date: '2025-12-06T18:00:00', description: 'Purchased Holiday Spectacular tickets', details: { event: 'Holiday Spectacular', quantity: 2, ticketType: 'Premium' }, amount: 156, staffId: null, createdDate: '2025-12-06' },
+  { id: 'int-107', patronId: '7962415', opportunityId: null, type: 'ticket', direction: null, date: '2026-01-10T18:00:00', description: 'Purchased Winter Exhibition Opening tickets', details: { event: 'Winter Exhibition: Light and Shadow', quantity: 2, ticketType: 'Member Plus' }, amount: 180, staffId: null, createdDate: '2026-01-10' },
 
   // --- Diana Rothschild (Mid-tier) ---
-  { id: 'int-108', patronId: 'diana-rothschild', opportunityId: null, type: 'ticket', direction: null, date: '2025-02-14T19:00:00', description: 'Purchased Valentine Art Night tickets', details: { event: 'Valentine Art Night', quantity: 2, ticketType: 'Reserved' }, amount: 125, staffId: null, createdDate: '2025-02-14' },
-  { id: 'int-109', patronId: 'diana-rothschild', opportunityId: null, type: 'ticket', direction: null, date: '2025-03-08T18:30:00', description: 'Purchased Spring Gala tickets', details: { event: 'Spring Gala 2025', quantity: 2, ticketType: 'Premium' }, amount: 150, staffId: null, createdDate: '2025-03-08' },
-  { id: 'int-110', patronId: 'diana-rothschild', opportunityId: null, type: 'ticket', direction: null, date: '2025-04-05T18:00:00', description: 'Purchased Impressionist Masters Opening tickets', details: { event: 'Impressionist Masters Opening Night', quantity: 2, ticketType: 'Premium' }, amount: 150, staffId: null, createdDate: '2025-04-05' },
-  { id: 'int-111', patronId: 'diana-rothschild', opportunityId: null, type: 'ticket', direction: null, date: '2025-05-10T19:00:00', description: 'Purchased Wine and Art Evening tickets', details: { event: 'Wine and Art Evening', quantity: 2, ticketType: 'Premium' }, amount: 150, staffId: null, createdDate: '2025-05-10' },
-  { id: 'int-112', patronId: 'diana-rothschild', opportunityId: null, type: 'ticket', direction: null, date: '2025-06-21T14:00:00', description: 'Purchased Architecture Lecture tickets', details: { event: 'Architecture and Design Lecture', quantity: 2, ticketType: 'Reserved' }, amount: 125, staffId: null, createdDate: '2025-06-21' },
-  { id: 'int-113', patronId: 'diana-rothschild', opportunityId: null, type: 'ticket', direction: null, date: '2025-07-04T19:30:00', description: 'Purchased Summer Concert Series tickets', details: { event: 'Summer Concert Series', quantity: 2, ticketType: 'Premium' }, amount: 150, staffId: null, createdDate: '2025-07-04' },
-  { id: 'int-114', patronId: 'diana-rothschild', opportunityId: null, type: 'ticket', direction: null, date: '2025-08-16T14:00:00', description: 'Purchased Photography Workshop tickets', details: { event: 'Photography Workshop and Exhibition Tour', quantity: 2, ticketType: 'Reserved' }, amount: 125, staffId: null, createdDate: '2025-08-16' },
-  { id: 'int-115', patronId: 'diana-rothschild', opportunityId: null, type: 'ticket', direction: null, date: '2025-09-20T14:00:00', description: 'Purchased Curator Talk tickets', details: { event: 'Curator Talk: Impressionist Masters', quantity: 2, ticketType: 'Premium' }, amount: 150, staffId: null, createdDate: '2025-09-20' },
-  { id: 'int-116', patronId: 'diana-rothschild', opportunityId: null, type: 'ticket', direction: null, date: '2025-10-18T18:00:00', description: 'Purchased Wine and Cheese Gallery Hours tickets', details: { event: 'Wine and Cheese: Gallery After Hours', quantity: 2, ticketType: 'Reserved' }, amount: 125, staffId: null, createdDate: '2025-10-18' },
-  { id: 'int-117', patronId: 'diana-rothschild', opportunityId: null, type: 'ticket', direction: null, date: '2025-11-22T18:00:00', description: 'Purchased Holiday Preview Night tickets', details: { event: 'Holiday Preview Night', quantity: 2, ticketType: 'Reserved' }, amount: 125, staffId: null, createdDate: '2025-11-22' },
-  { id: 'int-118', patronId: 'diana-rothschild', opportunityId: null, type: 'ticket', direction: null, date: '2026-01-10T18:00:00', description: 'Purchased Winter Exhibition Opening tickets', details: { event: 'Winter Exhibition: Light and Shadow', quantity: 2, ticketType: 'Premium' }, amount: 125, staffId: null, createdDate: '2026-01-10' },
+  { id: 'int-108', patronId: '7962438', opportunityId: null, type: 'ticket', direction: null, date: '2025-02-14T19:00:00', description: 'Purchased Valentine Art Night tickets', details: { event: 'Valentine Art Night', quantity: 2, ticketType: 'Reserved' }, amount: 125, staffId: null, createdDate: '2025-02-14' },
+  { id: 'int-109', patronId: '7962438', opportunityId: null, type: 'ticket', direction: null, date: '2025-03-08T18:30:00', description: 'Purchased Spring Gala tickets', details: { event: 'Spring Gala 2025', quantity: 2, ticketType: 'Premium' }, amount: 150, staffId: null, createdDate: '2025-03-08' },
+  { id: 'int-110', patronId: '7962438', opportunityId: null, type: 'ticket', direction: null, date: '2025-04-05T18:00:00', description: 'Purchased Impressionist Masters Opening tickets', details: { event: 'Impressionist Masters Opening Night', quantity: 2, ticketType: 'Premium' }, amount: 150, staffId: null, createdDate: '2025-04-05' },
+  { id: 'int-111', patronId: '7962438', opportunityId: null, type: 'ticket', direction: null, date: '2025-05-10T19:00:00', description: 'Purchased Wine and Art Evening tickets', details: { event: 'Wine and Art Evening', quantity: 2, ticketType: 'Premium' }, amount: 150, staffId: null, createdDate: '2025-05-10' },
+  { id: 'int-112', patronId: '7962438', opportunityId: null, type: 'ticket', direction: null, date: '2025-06-21T14:00:00', description: 'Purchased Architecture Lecture tickets', details: { event: 'Architecture and Design Lecture', quantity: 2, ticketType: 'Reserved' }, amount: 125, staffId: null, createdDate: '2025-06-21' },
+  { id: 'int-113', patronId: '7962438', opportunityId: null, type: 'ticket', direction: null, date: '2025-07-04T19:30:00', description: 'Purchased Summer Concert Series tickets', details: { event: 'Summer Concert Series', quantity: 2, ticketType: 'Premium' }, amount: 150, staffId: null, createdDate: '2025-07-04' },
+  { id: 'int-114', patronId: '7962438', opportunityId: null, type: 'ticket', direction: null, date: '2025-08-16T14:00:00', description: 'Purchased Photography Workshop tickets', details: { event: 'Photography Workshop and Exhibition Tour', quantity: 2, ticketType: 'Reserved' }, amount: 125, staffId: null, createdDate: '2025-08-16' },
+  { id: 'int-115', patronId: '7962438', opportunityId: null, type: 'ticket', direction: null, date: '2025-09-20T14:00:00', description: 'Purchased Curator Talk tickets', details: { event: 'Curator Talk: Impressionist Masters', quantity: 2, ticketType: 'Premium' }, amount: 150, staffId: null, createdDate: '2025-09-20' },
+  { id: 'int-116', patronId: '7962438', opportunityId: null, type: 'ticket', direction: null, date: '2025-10-18T18:00:00', description: 'Purchased Wine and Cheese Gallery Hours tickets', details: { event: 'Wine and Cheese: Gallery After Hours', quantity: 2, ticketType: 'Reserved' }, amount: 125, staffId: null, createdDate: '2025-10-18' },
+  { id: 'int-117', patronId: '7962438', opportunityId: null, type: 'ticket', direction: null, date: '2025-11-22T18:00:00', description: 'Purchased Holiday Preview Night tickets', details: { event: 'Holiday Preview Night', quantity: 2, ticketType: 'Reserved' }, amount: 125, staffId: null, createdDate: '2025-11-22' },
+  { id: 'int-118', patronId: '7962438', opportunityId: null, type: 'ticket', direction: null, date: '2026-01-10T18:00:00', description: 'Purchased Winter Exhibition Opening tickets', details: { event: 'Winter Exhibition: Light and Shadow', quantity: 2, ticketType: 'Premium' }, amount: 125, staffId: null, createdDate: '2026-01-10' },
 
   // --- Ava Anderson (Mid-tier) ---
-  { id: 'int-119', patronId: 'ava-anderson', opportunityId: null, type: 'ticket', direction: null, date: '2025-02-14T19:00:00', description: 'Purchased Valentine Art Night tickets', details: { event: 'Valentine Art Night', quantity: 2, ticketType: 'Premium' }, amount: 165, staffId: null, createdDate: '2025-02-14' },
-  { id: 'int-120', patronId: 'ava-anderson', opportunityId: null, type: 'ticket', direction: null, date: '2025-03-08T18:30:00', description: 'Purchased Spring Gala tickets', details: { event: 'Spring Gala 2025', quantity: 2, ticketType: 'Reserved' }, amount: 145, staffId: null, createdDate: '2025-03-08' },
-  { id: 'int-121', patronId: 'ava-anderson', opportunityId: null, type: 'ticket', direction: null, date: '2025-04-19T14:00:00', description: 'Purchased Members Preview Night tickets', details: { event: 'Members Preview: New Acquisitions', quantity: 2, ticketType: 'Member Plus' }, amount: 138, staffId: null, createdDate: '2025-04-19' },
-  { id: 'int-122', patronId: 'ava-anderson', opportunityId: null, type: 'ticket', direction: null, date: '2025-05-24T10:00:00', description: 'Purchased Family Day Art Workshop tickets', details: { event: 'Family Day: Interactive Art Workshop', quantity: 2, ticketType: 'Premium' }, amount: 120, staffId: null, createdDate: '2025-05-24' },
-  { id: 'int-123', patronId: 'ava-anderson', opportunityId: null, type: 'ticket', direction: null, date: '2025-06-07T18:00:00', description: 'Purchased Summer Exhibition Opening tickets', details: { event: 'Summer Exhibition: Contemporary Voices', quantity: 2, ticketType: 'Premium' }, amount: 178, staffId: null, createdDate: '2025-06-07' },
-  { id: 'int-124', patronId: 'ava-anderson', opportunityId: null, type: 'ticket', direction: null, date: '2025-07-04T19:30:00', description: 'Purchased Summer Concert Series tickets', details: { event: 'Summer Concert Series', quantity: 2, ticketType: 'Reserved' }, amount: 220, staffId: null, createdDate: '2025-07-04' },
-  { id: 'int-125', patronId: 'ava-anderson', opportunityId: null, type: 'ticket', direction: null, date: '2025-08-16T14:00:00', description: 'Purchased Photography Workshop tickets', details: { event: 'Photography Workshop and Exhibition Tour', quantity: 2, ticketType: 'Premium' }, amount: 155, staffId: null, createdDate: '2025-08-16' },
-  { id: 'int-126', patronId: 'ava-anderson', opportunityId: null, type: 'ticket', direction: null, date: '2025-09-06T18:30:00', description: 'Purchased Fall Exhibition Opening tickets', details: { event: 'Fall Exhibition: Emerging Artists', quantity: 2, ticketType: 'Premium' }, amount: 182, staffId: null, createdDate: '2025-09-06' },
-  { id: 'int-127', patronId: 'ava-anderson', opportunityId: null, type: 'ticket', direction: null, date: '2025-10-04T18:00:00', description: 'Purchased Impressionist Masters Evening Tour tickets', details: { event: 'Impressionist Masters Evening Tour', quantity: 2, ticketType: 'Reserved' }, amount: 142, staffId: null, createdDate: '2025-10-04' },
-  { id: 'int-128', patronId: 'ava-anderson', opportunityId: null, type: 'ticket', direction: null, date: '2025-11-22T18:00:00', description: 'Purchased Holiday Preview Night tickets', details: { event: 'Holiday Preview Night', quantity: 2, ticketType: 'Member Plus' }, amount: 120, staffId: null, createdDate: '2025-11-22' },
+  { id: 'int-119', patronId: '7962420', opportunityId: null, type: 'ticket', direction: null, date: '2025-02-14T19:00:00', description: 'Purchased Valentine Art Night tickets', details: { event: 'Valentine Art Night', quantity: 2, ticketType: 'Premium' }, amount: 165, staffId: null, createdDate: '2025-02-14' },
+  { id: 'int-120', patronId: '7962420', opportunityId: null, type: 'ticket', direction: null, date: '2025-03-08T18:30:00', description: 'Purchased Spring Gala tickets', details: { event: 'Spring Gala 2025', quantity: 2, ticketType: 'Reserved' }, amount: 145, staffId: null, createdDate: '2025-03-08' },
+  { id: 'int-121', patronId: '7962420', opportunityId: null, type: 'ticket', direction: null, date: '2025-04-19T14:00:00', description: 'Purchased Members Preview Night tickets', details: { event: 'Members Preview: New Acquisitions', quantity: 2, ticketType: 'Member Plus' }, amount: 138, staffId: null, createdDate: '2025-04-19' },
+  { id: 'int-122', patronId: '7962420', opportunityId: null, type: 'ticket', direction: null, date: '2025-05-24T10:00:00', description: 'Purchased Family Day Art Workshop tickets', details: { event: 'Family Day: Interactive Art Workshop', quantity: 2, ticketType: 'Premium' }, amount: 120, staffId: null, createdDate: '2025-05-24' },
+  { id: 'int-123', patronId: '7962420', opportunityId: null, type: 'ticket', direction: null, date: '2025-06-07T18:00:00', description: 'Purchased Summer Exhibition Opening tickets', details: { event: 'Summer Exhibition: Contemporary Voices', quantity: 2, ticketType: 'Premium' }, amount: 178, staffId: null, createdDate: '2025-06-07' },
+  { id: 'int-124', patronId: '7962420', opportunityId: null, type: 'ticket', direction: null, date: '2025-07-04T19:30:00', description: 'Purchased Summer Concert Series tickets', details: { event: 'Summer Concert Series', quantity: 2, ticketType: 'Reserved' }, amount: 220, staffId: null, createdDate: '2025-07-04' },
+  { id: 'int-125', patronId: '7962420', opportunityId: null, type: 'ticket', direction: null, date: '2025-08-16T14:00:00', description: 'Purchased Photography Workshop tickets', details: { event: 'Photography Workshop and Exhibition Tour', quantity: 2, ticketType: 'Premium' }, amount: 155, staffId: null, createdDate: '2025-08-16' },
+  { id: 'int-126', patronId: '7962420', opportunityId: null, type: 'ticket', direction: null, date: '2025-09-06T18:30:00', description: 'Purchased Fall Exhibition Opening tickets', details: { event: 'Fall Exhibition: Emerging Artists', quantity: 2, ticketType: 'Premium' }, amount: 182, staffId: null, createdDate: '2025-09-06' },
+  { id: 'int-127', patronId: '7962420', opportunityId: null, type: 'ticket', direction: null, date: '2025-10-04T18:00:00', description: 'Purchased Impressionist Masters Evening Tour tickets', details: { event: 'Impressionist Masters Evening Tour', quantity: 2, ticketType: 'Reserved' }, amount: 142, staffId: null, createdDate: '2025-10-04' },
+  { id: 'int-128', patronId: '7962420', opportunityId: null, type: 'ticket', direction: null, date: '2025-11-22T18:00:00', description: 'Purchased Holiday Preview Night tickets', details: { event: 'Holiday Preview Night', quantity: 2, ticketType: 'Member Plus' }, amount: 120, staffId: null, createdDate: '2025-11-22' },
 
   // --- John Martinez (Mid-tier) ---
-  { id: 'int-129', patronId: 'john-martinez', opportunityId: null, type: 'ticket', direction: null, date: '2025-02-22T18:00:00', description: 'Purchased Photography Exhibition tickets', details: { event: 'Photography Exhibition: Urban Landscapes', quantity: 2, ticketType: 'Reserved' }, amount: 150, staffId: null, createdDate: '2025-02-22' },
-  { id: 'int-130', patronId: 'john-martinez', opportunityId: null, type: 'ticket', direction: null, date: '2025-03-22T14:00:00', description: 'Purchased Curator Talk tickets', details: { event: 'Curator Talk: Renaissance to Modern', quantity: 2, ticketType: 'Premium' }, amount: 150, staffId: null, createdDate: '2025-03-22' },
-  { id: 'int-131', patronId: 'john-martinez', opportunityId: null, type: 'ticket', direction: null, date: '2025-05-10T19:00:00', description: 'Purchased Wine and Art Evening tickets', details: { event: 'Wine and Art Evening', quantity: 2, ticketType: 'Premium' }, amount: 150, staffId: null, createdDate: '2025-05-10' },
-  { id: 'int-132', patronId: 'john-martinez', opportunityId: null, type: 'ticket', direction: null, date: '2025-06-07T18:00:00', description: 'Purchased Summer Exhibition Opening tickets', details: { event: 'Summer Exhibition: Contemporary Voices', quantity: 2, ticketType: 'Reserved' }, amount: 150, staffId: null, createdDate: '2025-06-07' },
-  { id: 'int-133', patronId: 'john-martinez', opportunityId: null, type: 'ticket', direction: null, date: '2025-08-02T18:00:00', description: 'Purchased Summer Concert VIP Reception tickets', details: { event: 'Summer Concert VIP Reception', quantity: 2, ticketType: 'Premium' }, amount: 150, staffId: null, createdDate: '2025-08-02' },
-  { id: 'int-134', patronId: 'john-martinez', opportunityId: null, type: 'ticket', direction: null, date: '2025-09-20T14:00:00', description: 'Purchased Curator Talk tickets', details: { event: 'Curator Talk: Impressionist Masters', quantity: 2, ticketType: 'Reserved' }, amount: 150, staffId: null, createdDate: '2025-09-20' },
-  { id: 'int-135', patronId: 'john-martinez', opportunityId: null, type: 'ticket', direction: null, date: '2025-11-08T18:30:00', description: 'Purchased Annual Benefit Dinner tickets', details: { event: 'Annual Benefit Dinner', quantity: 2, ticketType: 'Premium' }, amount: 165, staffId: null, createdDate: '2025-11-08' },
+  { id: 'int-129', patronId: '7962422', opportunityId: null, type: 'ticket', direction: null, date: '2025-02-22T18:00:00', description: 'Purchased Photography Exhibition tickets', details: { event: 'Photography Exhibition: Urban Landscapes', quantity: 2, ticketType: 'Reserved' }, amount: 150, staffId: null, createdDate: '2025-02-22' },
+  { id: 'int-130', patronId: '7962422', opportunityId: null, type: 'ticket', direction: null, date: '2025-03-22T14:00:00', description: 'Purchased Curator Talk tickets', details: { event: 'Curator Talk: Renaissance to Modern', quantity: 2, ticketType: 'Premium' }, amount: 150, staffId: null, createdDate: '2025-03-22' },
+  { id: 'int-131', patronId: '7962422', opportunityId: null, type: 'ticket', direction: null, date: '2025-05-10T19:00:00', description: 'Purchased Wine and Art Evening tickets', details: { event: 'Wine and Art Evening', quantity: 2, ticketType: 'Premium' }, amount: 150, staffId: null, createdDate: '2025-05-10' },
+  { id: 'int-132', patronId: '7962422', opportunityId: null, type: 'ticket', direction: null, date: '2025-06-07T18:00:00', description: 'Purchased Summer Exhibition Opening tickets', details: { event: 'Summer Exhibition: Contemporary Voices', quantity: 2, ticketType: 'Reserved' }, amount: 150, staffId: null, createdDate: '2025-06-07' },
+  { id: 'int-133', patronId: '7962422', opportunityId: null, type: 'ticket', direction: null, date: '2025-08-02T18:00:00', description: 'Purchased Summer Concert VIP Reception tickets', details: { event: 'Summer Concert VIP Reception', quantity: 2, ticketType: 'Premium' }, amount: 150, staffId: null, createdDate: '2025-08-02' },
+  { id: 'int-134', patronId: '7962422', opportunityId: null, type: 'ticket', direction: null, date: '2025-09-20T14:00:00', description: 'Purchased Curator Talk tickets', details: { event: 'Curator Talk: Impressionist Masters', quantity: 2, ticketType: 'Reserved' }, amount: 150, staffId: null, createdDate: '2025-09-20' },
+  { id: 'int-135', patronId: '7962422', opportunityId: null, type: 'ticket', direction: null, date: '2025-11-08T18:30:00', description: 'Purchased Annual Benefit Dinner tickets', details: { event: 'Annual Benefit Dinner', quantity: 2, ticketType: 'Premium' }, amount: 165, staffId: null, createdDate: '2025-11-08' },
 
   // --- Lucas Taylor (Mid-tier) ---
-  { id: 'int-136', patronId: 'lucas-taylor', opportunityId: null, type: 'ticket', direction: null, date: '2025-02-14T19:00:00', description: 'Purchased Valentine Art Night tickets', details: { event: 'Valentine Art Night', quantity: 2, ticketType: 'Reserved' }, amount: 175, staffId: null, createdDate: '2025-02-14' },
-  { id: 'int-137', patronId: 'lucas-taylor', opportunityId: null, type: 'ticket', direction: null, date: '2025-04-05T18:00:00', description: 'Purchased Impressionist Masters Opening tickets', details: { event: 'Impressionist Masters Opening Night', quantity: 2, ticketType: 'Premium' }, amount: 200, staffId: null, createdDate: '2025-04-05' },
-  { id: 'int-138', patronId: 'lucas-taylor', opportunityId: null, type: 'ticket', direction: null, date: '2025-05-24T10:00:00', description: 'Purchased Family Day Art Workshop tickets', details: { event: 'Family Day: Interactive Art Workshop', quantity: 2, ticketType: 'Premium' }, amount: 175, staffId: null, createdDate: '2025-05-24' },
-  { id: 'int-139', patronId: 'lucas-taylor', opportunityId: null, type: 'ticket', direction: null, date: '2025-06-07T18:00:00', description: 'Purchased Summer Exhibition Opening tickets', details: { event: 'Summer Exhibition: Contemporary Voices', quantity: 2, ticketType: 'Reserved' }, amount: 200, staffId: null, createdDate: '2025-06-07' },
-  { id: 'int-140', patronId: 'lucas-taylor', opportunityId: null, type: 'ticket', direction: null, date: '2025-08-02T18:00:00', description: 'Purchased Summer Concert VIP Reception tickets', details: { event: 'Summer Concert VIP Reception', quantity: 2, ticketType: 'Premium' }, amount: 200, staffId: null, createdDate: '2025-08-02' },
-  { id: 'int-141', patronId: 'lucas-taylor', opportunityId: null, type: 'ticket', direction: null, date: '2025-09-06T18:30:00', description: 'Purchased Fall Exhibition Opening tickets', details: { event: 'Fall Exhibition: Emerging Artists', quantity: 2, ticketType: 'Reserved' }, amount: 215, staffId: null, createdDate: '2025-09-06' },
+  { id: 'int-136', patronId: '7962419', opportunityId: null, type: 'ticket', direction: null, date: '2025-02-14T19:00:00', description: 'Purchased Valentine Art Night tickets', details: { event: 'Valentine Art Night', quantity: 2, ticketType: 'Reserved' }, amount: 175, staffId: null, createdDate: '2025-02-14' },
+  { id: 'int-137', patronId: '7962419', opportunityId: null, type: 'ticket', direction: null, date: '2025-04-05T18:00:00', description: 'Purchased Impressionist Masters Opening tickets', details: { event: 'Impressionist Masters Opening Night', quantity: 2, ticketType: 'Premium' }, amount: 200, staffId: null, createdDate: '2025-04-05' },
+  { id: 'int-138', patronId: '7962419', opportunityId: null, type: 'ticket', direction: null, date: '2025-05-24T10:00:00', description: 'Purchased Family Day Art Workshop tickets', details: { event: 'Family Day: Interactive Art Workshop', quantity: 2, ticketType: 'Premium' }, amount: 175, staffId: null, createdDate: '2025-05-24' },
+  { id: 'int-139', patronId: '7962419', opportunityId: null, type: 'ticket', direction: null, date: '2025-06-07T18:00:00', description: 'Purchased Summer Exhibition Opening tickets', details: { event: 'Summer Exhibition: Contemporary Voices', quantity: 2, ticketType: 'Reserved' }, amount: 200, staffId: null, createdDate: '2025-06-07' },
+  { id: 'int-140', patronId: '7962419', opportunityId: null, type: 'ticket', direction: null, date: '2025-08-02T18:00:00', description: 'Purchased Summer Concert VIP Reception tickets', details: { event: 'Summer Concert VIP Reception', quantity: 2, ticketType: 'Premium' }, amount: 200, staffId: null, createdDate: '2025-08-02' },
+  { id: 'int-141', patronId: '7962419', opportunityId: null, type: 'ticket', direction: null, date: '2025-09-06T18:30:00', description: 'Purchased Fall Exhibition Opening tickets', details: { event: 'Fall Exhibition: Emerging Artists', quantity: 2, ticketType: 'Reserved' }, amount: 215, staffId: null, createdDate: '2025-09-06' },
 
   // --- Margaret Chen (Mid-tier) ---
-  { id: 'int-142', patronId: 'margaret-chen', opportunityId: null, type: 'ticket', direction: null, date: '2025-03-22T14:00:00', description: 'Purchased Curator Talk tickets', details: { event: 'Curator Talk: Renaissance to Modern', quantity: 2, ticketType: 'Reserved' }, amount: 100, staffId: null, createdDate: '2025-03-22' },
-  { id: 'int-143', patronId: 'margaret-chen', opportunityId: null, type: 'ticket', direction: null, date: '2025-04-19T14:00:00', description: 'Purchased Members Preview Night tickets', details: { event: 'Members Preview: New Acquisitions', quantity: 2, ticketType: 'Member Plus' }, amount: 100, staffId: null, createdDate: '2025-04-19' },
-  { id: 'int-144', patronId: 'margaret-chen', opportunityId: null, type: 'ticket', direction: null, date: '2025-05-24T10:00:00', description: 'Purchased Family Day Art Workshop tickets', details: { event: 'Family Day: Interactive Art Workshop', quantity: 2, ticketType: 'Reserved' }, amount: 100, staffId: null, createdDate: '2025-05-24' },
-  { id: 'int-145', patronId: 'margaret-chen', opportunityId: null, type: 'ticket', direction: null, date: '2025-06-21T14:00:00', description: 'Purchased Architecture Lecture tickets', details: { event: 'Architecture and Design Lecture', quantity: 2, ticketType: 'Reserved' }, amount: 100, staffId: null, createdDate: '2025-06-21' },
-  { id: 'int-146', patronId: 'margaret-chen', opportunityId: null, type: 'ticket', direction: null, date: '2025-07-19T14:00:00', description: 'Purchased Film Series tickets', details: { event: 'Film Series: Art in Cinema', quantity: 2, ticketType: 'Reserved' }, amount: 100, staffId: null, createdDate: '2025-07-19' },
-  { id: 'int-147', patronId: 'margaret-chen', opportunityId: null, type: 'ticket', direction: null, date: '2025-08-16T14:00:00', description: 'Purchased Photography Workshop tickets', details: { event: 'Photography Workshop and Exhibition Tour', quantity: 2, ticketType: 'Reserved' }, amount: 100, staffId: null, createdDate: '2025-08-16' },
-  { id: 'int-148', patronId: 'margaret-chen', opportunityId: null, type: 'ticket', direction: null, date: '2025-09-20T14:00:00', description: 'Purchased Curator Talk tickets', details: { event: 'Curator Talk: Impressionist Masters', quantity: 2, ticketType: 'Reserved' }, amount: 100, staffId: null, createdDate: '2025-09-20' },
-  { id: 'int-149', patronId: 'margaret-chen', opportunityId: null, type: 'ticket', direction: null, date: '2025-10-04T18:00:00', description: 'Purchased Impressionist Masters Evening Tour tickets', details: { event: 'Impressionist Masters Evening Tour', quantity: 2, ticketType: 'Reserved' }, amount: 100, staffId: null, createdDate: '2025-10-04' },
+  { id: 'int-142', patronId: '7962441', opportunityId: null, type: 'ticket', direction: null, date: '2025-03-22T14:00:00', description: 'Purchased Curator Talk tickets', details: { event: 'Curator Talk: Renaissance to Modern', quantity: 2, ticketType: 'Reserved' }, amount: 100, staffId: null, createdDate: '2025-03-22' },
+  { id: 'int-143', patronId: '7962441', opportunityId: null, type: 'ticket', direction: null, date: '2025-04-19T14:00:00', description: 'Purchased Members Preview Night tickets', details: { event: 'Members Preview: New Acquisitions', quantity: 2, ticketType: 'Member Plus' }, amount: 100, staffId: null, createdDate: '2025-04-19' },
+  { id: 'int-144', patronId: '7962441', opportunityId: null, type: 'ticket', direction: null, date: '2025-05-24T10:00:00', description: 'Purchased Family Day Art Workshop tickets', details: { event: 'Family Day: Interactive Art Workshop', quantity: 2, ticketType: 'Reserved' }, amount: 100, staffId: null, createdDate: '2025-05-24' },
+  { id: 'int-145', patronId: '7962441', opportunityId: null, type: 'ticket', direction: null, date: '2025-06-21T14:00:00', description: 'Purchased Architecture Lecture tickets', details: { event: 'Architecture and Design Lecture', quantity: 2, ticketType: 'Reserved' }, amount: 100, staffId: null, createdDate: '2025-06-21' },
+  { id: 'int-146', patronId: '7962441', opportunityId: null, type: 'ticket', direction: null, date: '2025-07-19T14:00:00', description: 'Purchased Film Series tickets', details: { event: 'Film Series: Art in Cinema', quantity: 2, ticketType: 'Reserved' }, amount: 100, staffId: null, createdDate: '2025-07-19' },
+  { id: 'int-147', patronId: '7962441', opportunityId: null, type: 'ticket', direction: null, date: '2025-08-16T14:00:00', description: 'Purchased Photography Workshop tickets', details: { event: 'Photography Workshop and Exhibition Tour', quantity: 2, ticketType: 'Reserved' }, amount: 100, staffId: null, createdDate: '2025-08-16' },
+  { id: 'int-148', patronId: '7962441', opportunityId: null, type: 'ticket', direction: null, date: '2025-09-20T14:00:00', description: 'Purchased Curator Talk tickets', details: { event: 'Curator Talk: Impressionist Masters', quantity: 2, ticketType: 'Reserved' }, amount: 100, staffId: null, createdDate: '2025-09-20' },
+  { id: 'int-149', patronId: '7962441', opportunityId: null, type: 'ticket', direction: null, date: '2025-10-04T18:00:00', description: 'Purchased Impressionist Masters Evening Tour tickets', details: { event: 'Impressionist Masters Evening Tour', quantity: 2, ticketType: 'Reserved' }, amount: 100, staffId: null, createdDate: '2025-10-04' },
 
   // --- Ethan Davis (Small) ---
-  { id: 'int-150', patronId: 'ethan-davis', opportunityId: null, type: 'ticket', direction: null, date: '2025-02-14T19:00:00', description: 'Purchased Valentine Art Night tickets', details: { event: 'Valentine Art Night', quantity: 1, ticketType: 'General Admission' }, amount: 75, staffId: null, createdDate: '2025-02-14' },
-  { id: 'int-151', patronId: 'ethan-davis', opportunityId: null, type: 'ticket', direction: null, date: '2025-03-22T14:00:00', description: 'Purchased Curator Talk tickets', details: { event: 'Curator Talk: Renaissance to Modern', quantity: 1, ticketType: 'Standard' }, amount: 45, staffId: null, createdDate: '2025-03-22' },
-  { id: 'int-152', patronId: 'ethan-davis', opportunityId: null, type: 'ticket', direction: null, date: '2025-04-05T18:00:00', description: 'Purchased Impressionist Masters Opening tickets', details: { event: 'Impressionist Masters Opening Night', quantity: 1, ticketType: 'General Admission' }, amount: 80, staffId: null, createdDate: '2025-04-05' },
-  { id: 'int-153', patronId: 'ethan-davis', opportunityId: null, type: 'ticket', direction: null, date: '2025-05-24T10:00:00', description: 'Purchased Family Day Workshop tickets', details: { event: 'Family Day: Interactive Art Workshop', quantity: 1, ticketType: 'Standard' }, amount: 75, staffId: null, createdDate: '2025-05-24' },
-  { id: 'int-154', patronId: 'ethan-davis', opportunityId: null, type: 'ticket', direction: null, date: '2025-07-04T19:30:00', description: 'Purchased Summer Concert Series tickets', details: { event: 'Summer Concert Series', quantity: 1, ticketType: 'General Admission' }, amount: 80, staffId: null, createdDate: '2025-07-04' },
-  { id: 'int-155', patronId: 'ethan-davis', opportunityId: null, type: 'ticket', direction: null, date: '2025-08-02T18:00:00', description: 'Purchased Summer Concert tickets', details: { event: 'Summer Concert VIP Reception', quantity: 2, ticketType: 'Standard' }, amount: 132, staffId: null, createdDate: '2025-08-02' },
-  { id: 'int-156', patronId: 'ethan-davis', opportunityId: null, type: 'ticket', direction: null, date: '2025-09-06T18:30:00', description: 'Purchased Fall Exhibition tickets', details: { event: 'Fall Exhibition: Emerging Artists', quantity: 1, ticketType: 'General Admission' }, amount: 80, staffId: null, createdDate: '2025-09-06' },
-  { id: 'int-157', patronId: 'ethan-davis', opportunityId: null, type: 'ticket', direction: null, date: '2025-10-04T18:00:00', description: 'Purchased Impressionist Masters tickets', details: { event: 'Impressionist Masters Evening Tour', quantity: 1, ticketType: 'Standard' }, amount: 95, staffId: null, createdDate: '2025-10-04' },
+  { id: 'int-150', patronId: '7962425', opportunityId: null, type: 'ticket', direction: null, date: '2025-02-14T19:00:00', description: 'Purchased Valentine Art Night tickets', details: { event: 'Valentine Art Night', quantity: 1, ticketType: 'General Admission' }, amount: 75, staffId: null, createdDate: '2025-02-14' },
+  { id: 'int-151', patronId: '7962425', opportunityId: null, type: 'ticket', direction: null, date: '2025-03-22T14:00:00', description: 'Purchased Curator Talk tickets', details: { event: 'Curator Talk: Renaissance to Modern', quantity: 1, ticketType: 'Standard' }, amount: 45, staffId: null, createdDate: '2025-03-22' },
+  { id: 'int-152', patronId: '7962425', opportunityId: null, type: 'ticket', direction: null, date: '2025-04-05T18:00:00', description: 'Purchased Impressionist Masters Opening tickets', details: { event: 'Impressionist Masters Opening Night', quantity: 1, ticketType: 'General Admission' }, amount: 80, staffId: null, createdDate: '2025-04-05' },
+  { id: 'int-153', patronId: '7962425', opportunityId: null, type: 'ticket', direction: null, date: '2025-05-24T10:00:00', description: 'Purchased Family Day Workshop tickets', details: { event: 'Family Day: Interactive Art Workshop', quantity: 1, ticketType: 'Standard' }, amount: 75, staffId: null, createdDate: '2025-05-24' },
+  { id: 'int-154', patronId: '7962425', opportunityId: null, type: 'ticket', direction: null, date: '2025-07-04T19:30:00', description: 'Purchased Summer Concert Series tickets', details: { event: 'Summer Concert Series', quantity: 1, ticketType: 'General Admission' }, amount: 80, staffId: null, createdDate: '2025-07-04' },
+  { id: 'int-155', patronId: '7962425', opportunityId: null, type: 'ticket', direction: null, date: '2025-08-02T18:00:00', description: 'Purchased Summer Concert tickets', details: { event: 'Summer Concert VIP Reception', quantity: 2, ticketType: 'Standard' }, amount: 132, staffId: null, createdDate: '2025-08-02' },
+  { id: 'int-156', patronId: '7962425', opportunityId: null, type: 'ticket', direction: null, date: '2025-09-06T18:30:00', description: 'Purchased Fall Exhibition tickets', details: { event: 'Fall Exhibition: Emerging Artists', quantity: 1, ticketType: 'General Admission' }, amount: 80, staffId: null, createdDate: '2025-09-06' },
+  { id: 'int-157', patronId: '7962425', opportunityId: null, type: 'ticket', direction: null, date: '2025-10-04T18:00:00', description: 'Purchased Impressionist Masters tickets', details: { event: 'Impressionist Masters Evening Tour', quantity: 1, ticketType: 'Standard' }, amount: 95, staffId: null, createdDate: '2025-10-04' },
 
   // --- Olivia Brown (Small) ---
-  { id: 'int-158', patronId: 'olivia-brown', opportunityId: null, type: 'ticket', direction: null, date: '2025-02-22T18:00:00', description: 'Purchased Photography Exhibition tickets', details: { event: 'Photography Exhibition: Urban Landscapes', quantity: 1, ticketType: 'General Admission' }, amount: 65, staffId: null, createdDate: '2025-02-22' },
-  { id: 'int-159', patronId: 'olivia-brown', opportunityId: null, type: 'ticket', direction: null, date: '2025-03-22T14:00:00', description: 'Purchased Curator Talk tickets', details: { event: 'Curator Talk: Renaissance to Modern', quantity: 1, ticketType: 'Standard' }, amount: 65, staffId: null, createdDate: '2025-03-22' },
-  { id: 'int-160', patronId: 'olivia-brown', opportunityId: null, type: 'ticket', direction: null, date: '2025-04-19T14:00:00', description: 'Purchased Members Preview tickets', details: { event: 'Members Preview: New Acquisitions', quantity: 1, ticketType: 'Member Access' }, amount: 65, staffId: null, createdDate: '2025-04-19' },
-  { id: 'int-161', patronId: 'olivia-brown', opportunityId: null, type: 'ticket', direction: null, date: '2025-06-21T14:00:00', description: 'Purchased Architecture Lecture tickets', details: { event: 'Architecture and Design Lecture', quantity: 1, ticketType: 'Standard' }, amount: 65, staffId: null, createdDate: '2025-06-21' },
-  { id: 'int-162', patronId: 'olivia-brown', opportunityId: null, type: 'ticket', direction: null, date: '2025-07-19T14:00:00', description: 'Purchased Film Series tickets', details: { event: 'Film Series: Art in Cinema', quantity: 1, ticketType: 'General Admission' }, amount: 65, staffId: null, createdDate: '2025-07-19' },
-  { id: 'int-163', patronId: 'olivia-brown', opportunityId: null, type: 'ticket', direction: null, date: '2025-09-20T14:00:00', description: 'Purchased Curator Talk tickets', details: { event: 'Curator Talk: Impressionist Masters', quantity: 1, ticketType: 'Standard' }, amount: 65, staffId: null, createdDate: '2025-09-20' },
-  { id: 'int-164', patronId: 'olivia-brown', opportunityId: null, type: 'ticket', direction: null, date: '2025-10-18T18:00:00', description: 'Purchased Wine and Cheese Gallery Hours tickets', details: { event: 'Wine and Cheese: Gallery After Hours', quantity: 1, ticketType: 'General Admission' }, amount: 68, staffId: null, createdDate: '2025-10-18' },
-  { id: 'int-165', patronId: 'olivia-brown', opportunityId: null, type: 'ticket', direction: null, date: '2025-11-22T18:00:00', description: 'Purchased Holiday Preview Night tickets', details: { event: 'Holiday Preview Night', quantity: 1, ticketType: 'Member Access' }, amount: 65, staffId: null, createdDate: '2025-11-22' },
+  { id: 'int-158', patronId: '7962424', opportunityId: null, type: 'ticket', direction: null, date: '2025-02-22T18:00:00', description: 'Purchased Photography Exhibition tickets', details: { event: 'Photography Exhibition: Urban Landscapes', quantity: 1, ticketType: 'General Admission' }, amount: 65, staffId: null, createdDate: '2025-02-22' },
+  { id: 'int-159', patronId: '7962424', opportunityId: null, type: 'ticket', direction: null, date: '2025-03-22T14:00:00', description: 'Purchased Curator Talk tickets', details: { event: 'Curator Talk: Renaissance to Modern', quantity: 1, ticketType: 'Standard' }, amount: 65, staffId: null, createdDate: '2025-03-22' },
+  { id: 'int-160', patronId: '7962424', opportunityId: null, type: 'ticket', direction: null, date: '2025-04-19T14:00:00', description: 'Purchased Members Preview tickets', details: { event: 'Members Preview: New Acquisitions', quantity: 1, ticketType: 'Member Access' }, amount: 65, staffId: null, createdDate: '2025-04-19' },
+  { id: 'int-161', patronId: '7962424', opportunityId: null, type: 'ticket', direction: null, date: '2025-06-21T14:00:00', description: 'Purchased Architecture Lecture tickets', details: { event: 'Architecture and Design Lecture', quantity: 1, ticketType: 'Standard' }, amount: 65, staffId: null, createdDate: '2025-06-21' },
+  { id: 'int-162', patronId: '7962424', opportunityId: null, type: 'ticket', direction: null, date: '2025-07-19T14:00:00', description: 'Purchased Film Series tickets', details: { event: 'Film Series: Art in Cinema', quantity: 1, ticketType: 'General Admission' }, amount: 65, staffId: null, createdDate: '2025-07-19' },
+  { id: 'int-163', patronId: '7962424', opportunityId: null, type: 'ticket', direction: null, date: '2025-09-20T14:00:00', description: 'Purchased Curator Talk tickets', details: { event: 'Curator Talk: Impressionist Masters', quantity: 1, ticketType: 'Standard' }, amount: 65, staffId: null, createdDate: '2025-09-20' },
+  { id: 'int-164', patronId: '7962424', opportunityId: null, type: 'ticket', direction: null, date: '2025-10-18T18:00:00', description: 'Purchased Wine and Cheese Gallery Hours tickets', details: { event: 'Wine and Cheese: Gallery After Hours', quantity: 1, ticketType: 'General Admission' }, amount: 68, staffId: null, createdDate: '2025-10-18' },
+  { id: 'int-165', patronId: '7962424', opportunityId: null, type: 'ticket', direction: null, date: '2025-11-22T18:00:00', description: 'Purchased Holiday Preview Night tickets', details: { event: 'Holiday Preview Night', quantity: 1, ticketType: 'Member Access' }, amount: 65, staffId: null, createdDate: '2025-11-22' },
 
   // --- Sophia Thomas (Small) ---
-  { id: 'int-166', patronId: 'sophia-thomas', opportunityId: null, type: 'ticket', direction: null, date: '2025-05-24T10:00:00', description: 'Purchased Family Day Workshop tickets', details: { event: 'Family Day: Interactive Art Workshop', quantity: 1, ticketType: 'General Admission' }, amount: 80, staffId: null, createdDate: '2025-05-24' },
-  { id: 'int-167', patronId: 'sophia-thomas', opportunityId: null, type: 'ticket', direction: null, date: '2025-06-07T18:00:00', description: 'Purchased Summer Exhibition tickets', details: { event: 'Summer Exhibition: Contemporary Voices', quantity: 1, ticketType: 'General Admission' }, amount: 80, staffId: null, createdDate: '2025-06-07' },
-  { id: 'int-168', patronId: 'sophia-thomas', opportunityId: null, type: 'ticket', direction: null, date: '2025-07-04T19:30:00', description: 'Purchased Summer Concert Series tickets', details: { event: 'Summer Concert Series', quantity: 1, ticketType: 'General Admission' }, amount: 80, staffId: null, createdDate: '2025-07-04' },
-  { id: 'int-169', patronId: 'sophia-thomas', opportunityId: null, type: 'ticket', direction: null, date: '2025-08-16T14:00:00', description: 'Purchased Photography Workshop tickets', details: { event: 'Photography Workshop and Exhibition Tour', quantity: 1, ticketType: 'Standard' }, amount: 80, staffId: null, createdDate: '2025-08-16' },
-  { id: 'int-170', patronId: 'sophia-thomas', opportunityId: null, type: 'ticket', direction: null, date: '2025-09-06T18:30:00', description: 'Purchased Fall Exhibition tickets', details: { event: 'Fall Exhibition: Emerging Artists', quantity: 1, ticketType: 'General Admission' }, amount: 90, staffId: null, createdDate: '2025-09-06' },
-  { id: 'int-171', patronId: 'sophia-thomas', opportunityId: null, type: 'ticket', direction: null, date: '2025-10-04T18:00:00', description: 'Purchased Impressionist Masters tickets', details: { event: 'Impressionist Masters Evening Tour', quantity: 1, ticketType: 'Standard' }, amount: 90, staffId: null, createdDate: '2025-10-04' },
+  { id: 'int-166', patronId: '7962418', opportunityId: null, type: 'ticket', direction: null, date: '2025-05-24T10:00:00', description: 'Purchased Family Day Workshop tickets', details: { event: 'Family Day: Interactive Art Workshop', quantity: 1, ticketType: 'General Admission' }, amount: 80, staffId: null, createdDate: '2025-05-24' },
+  { id: 'int-167', patronId: '7962418', opportunityId: null, type: 'ticket', direction: null, date: '2025-06-07T18:00:00', description: 'Purchased Summer Exhibition tickets', details: { event: 'Summer Exhibition: Contemporary Voices', quantity: 1, ticketType: 'General Admission' }, amount: 80, staffId: null, createdDate: '2025-06-07' },
+  { id: 'int-168', patronId: '7962418', opportunityId: null, type: 'ticket', direction: null, date: '2025-07-04T19:30:00', description: 'Purchased Summer Concert Series tickets', details: { event: 'Summer Concert Series', quantity: 1, ticketType: 'General Admission' }, amount: 80, staffId: null, createdDate: '2025-07-04' },
+  { id: 'int-169', patronId: '7962418', opportunityId: null, type: 'ticket', direction: null, date: '2025-08-16T14:00:00', description: 'Purchased Photography Workshop tickets', details: { event: 'Photography Workshop and Exhibition Tour', quantity: 1, ticketType: 'Standard' }, amount: 80, staffId: null, createdDate: '2025-08-16' },
+  { id: 'int-170', patronId: '7962418', opportunityId: null, type: 'ticket', direction: null, date: '2025-09-06T18:30:00', description: 'Purchased Fall Exhibition tickets', details: { event: 'Fall Exhibition: Emerging Artists', quantity: 1, ticketType: 'General Admission' }, amount: 90, staffId: null, createdDate: '2025-09-06' },
+  { id: 'int-171', patronId: '7962418', opportunityId: null, type: 'ticket', direction: null, date: '2025-10-04T18:00:00', description: 'Purchased Impressionist Masters tickets', details: { event: 'Impressionist Masters Evening Tour', quantity: 1, ticketType: 'Standard' }, amount: 90, staffId: null, createdDate: '2025-10-04' },
 
   // --- Paul Fairfax (Small, already has int-009/Sep, int-011/Jun, int-013/Feb, int-014/Nov2024) ---
-  { id: 'int-172', patronId: 'paul-fairfax', opportunityId: null, type: 'ticket', direction: null, date: '2025-03-22T14:00:00', description: 'Purchased Curator Talk tickets', details: { event: 'Curator Talk: Renaissance to Modern', quantity: 2, ticketType: 'Member Access' }, amount: 90, staffId: null, createdDate: '2025-03-22' },
-  { id: 'int-173', patronId: 'paul-fairfax', opportunityId: null, type: 'ticket', direction: null, date: '2025-05-24T10:00:00', description: 'Purchased Family Day Workshop tickets', details: { event: 'Family Day: Interactive Art Workshop', quantity: 2, ticketType: 'Standard' }, amount: 90, staffId: null, createdDate: '2025-05-24' },
-  { id: 'int-174', patronId: 'paul-fairfax', opportunityId: null, type: 'ticket', direction: null, date: '2025-07-04T19:30:00', description: 'Purchased Summer Concert Series tickets', details: { event: 'Summer Concert Series', quantity: 2, ticketType: 'General Admission' }, amount: 112, staffId: null, createdDate: '2025-07-04' },
-  { id: 'int-175', patronId: 'paul-fairfax', opportunityId: null, type: 'ticket', direction: null, date: '2025-10-04T18:00:00', description: 'Purchased Impressionist Masters tickets', details: { event: 'Impressionist Masters Evening Tour', quantity: 2, ticketType: 'Member Access' }, amount: 90, staffId: null, createdDate: '2025-10-04' },
-  { id: 'int-176', patronId: 'paul-fairfax', opportunityId: null, type: 'ticket', direction: null, date: '2025-11-22T18:00:00', description: 'Purchased Holiday Preview Night tickets', details: { event: 'Holiday Preview Night', quantity: 2, ticketType: 'Member Access' }, amount: 88, staffId: null, createdDate: '2025-11-22' },
+  { id: 'int-172', patronId: '7962416', opportunityId: null, type: 'ticket', direction: null, date: '2025-03-22T14:00:00', description: 'Purchased Curator Talk tickets', details: { event: 'Curator Talk: Renaissance to Modern', quantity: 2, ticketType: 'Member Access' }, amount: 90, staffId: null, createdDate: '2025-03-22' },
+  { id: 'int-173', patronId: '7962416', opportunityId: null, type: 'ticket', direction: null, date: '2025-05-24T10:00:00', description: 'Purchased Family Day Workshop tickets', details: { event: 'Family Day: Interactive Art Workshop', quantity: 2, ticketType: 'Standard' }, amount: 90, staffId: null, createdDate: '2025-05-24' },
+  { id: 'int-174', patronId: '7962416', opportunityId: null, type: 'ticket', direction: null, date: '2025-07-04T19:30:00', description: 'Purchased Summer Concert Series tickets', details: { event: 'Summer Concert Series', quantity: 2, ticketType: 'General Admission' }, amount: 112, staffId: null, createdDate: '2025-07-04' },
+  { id: 'int-175', patronId: '7962416', opportunityId: null, type: 'ticket', direction: null, date: '2025-10-04T18:00:00', description: 'Purchased Impressionist Masters tickets', details: { event: 'Impressionist Masters Evening Tour', quantity: 2, ticketType: 'Member Access' }, amount: 90, staffId: null, createdDate: '2025-10-04' },
+  { id: 'int-176', patronId: '7962416', opportunityId: null, type: 'ticket', direction: null, date: '2025-11-22T18:00:00', description: 'Purchased Holiday Preview Night tickets', details: { event: 'Holiday Preview Night', quantity: 2, ticketType: 'Member Access' }, amount: 88, staffId: null, createdDate: '2025-11-22' },
 
   // --- Elizabeth Fairfax (Small) ---
-  { id: 'int-177', patronId: 'elizabeth-fairfax', opportunityId: null, type: 'ticket', direction: null, date: '2025-02-14T19:00:00', description: 'Purchased Valentine Art Night tickets', details: { event: 'Valentine Art Night', quantity: 1, ticketType: 'Member Access' }, amount: 45, staffId: null, createdDate: '2025-02-14' },
-  { id: 'int-178', patronId: 'elizabeth-fairfax', opportunityId: null, type: 'ticket', direction: null, date: '2025-03-22T14:00:00', description: 'Purchased Curator Talk tickets', details: { event: 'Curator Talk: Renaissance to Modern', quantity: 1, ticketType: 'Standard' }, amount: 45, staffId: null, createdDate: '2025-03-22' },
-  { id: 'int-179', patronId: 'elizabeth-fairfax', opportunityId: null, type: 'ticket', direction: null, date: '2025-04-19T14:00:00', description: 'Purchased Members Preview tickets', details: { event: 'Members Preview: New Acquisitions', quantity: 1, ticketType: 'Member Access' }, amount: 45, staffId: null, createdDate: '2025-04-19' },
-  { id: 'int-180', patronId: 'elizabeth-fairfax', opportunityId: null, type: 'ticket', direction: null, date: '2025-05-24T10:00:00', description: 'Purchased Family Day Workshop tickets', details: { event: 'Family Day: Interactive Art Workshop', quantity: 1, ticketType: 'Standard' }, amount: 45, staffId: null, createdDate: '2025-05-24' },
-  { id: 'int-181', patronId: 'elizabeth-fairfax', opportunityId: null, type: 'ticket', direction: null, date: '2025-06-21T14:00:00', description: 'Purchased Architecture Lecture tickets', details: { event: 'Architecture and Design Lecture', quantity: 1, ticketType: 'Standard' }, amount: 45, staffId: null, createdDate: '2025-06-21' },
-  { id: 'int-182', patronId: 'elizabeth-fairfax', opportunityId: null, type: 'ticket', direction: null, date: '2025-07-19T14:00:00', description: 'Purchased Film Series tickets', details: { event: 'Film Series: Art in Cinema', quantity: 1, ticketType: 'General Admission' }, amount: 45, staffId: null, createdDate: '2025-07-19' },
-  { id: 'int-183', patronId: 'elizabeth-fairfax', opportunityId: null, type: 'ticket', direction: null, date: '2025-08-16T14:00:00', description: 'Purchased Photography Workshop tickets', details: { event: 'Photography Workshop and Exhibition Tour', quantity: 1, ticketType: 'Standard' }, amount: 45, staffId: null, createdDate: '2025-08-16' },
-  { id: 'int-184', patronId: 'elizabeth-fairfax', opportunityId: null, type: 'ticket', direction: null, date: '2025-09-20T14:00:00', description: 'Purchased Curator Talk tickets', details: { event: 'Curator Talk: Impressionist Masters', quantity: 1, ticketType: 'Member Access' }, amount: 45, staffId: null, createdDate: '2025-09-20' },
-  { id: 'int-185', patronId: 'elizabeth-fairfax', opportunityId: null, type: 'ticket', direction: null, date: '2025-11-22T18:00:00', description: 'Purchased Holiday Preview Night tickets', details: { event: 'Holiday Preview Night', quantity: 1, ticketType: 'Member Access' }, amount: 50, staffId: null, createdDate: '2025-11-22' },
-  { id: 'int-186', patronId: 'elizabeth-fairfax', opportunityId: null, type: 'ticket', direction: null, date: '2025-12-06T18:00:00', description: 'Purchased Holiday Spectacular tickets', details: { event: 'Holiday Spectacular', quantity: 1, ticketType: 'Standard' }, amount: 45, staffId: null, createdDate: '2025-12-06' },
+  { id: 'int-177', patronId: '7962442', opportunityId: null, type: 'ticket', direction: null, date: '2025-02-14T19:00:00', description: 'Purchased Valentine Art Night tickets', details: { event: 'Valentine Art Night', quantity: 1, ticketType: 'Member Access' }, amount: 45, staffId: null, createdDate: '2025-02-14' },
+  { id: 'int-178', patronId: '7962442', opportunityId: null, type: 'ticket', direction: null, date: '2025-03-22T14:00:00', description: 'Purchased Curator Talk tickets', details: { event: 'Curator Talk: Renaissance to Modern', quantity: 1, ticketType: 'Standard' }, amount: 45, staffId: null, createdDate: '2025-03-22' },
+  { id: 'int-179', patronId: '7962442', opportunityId: null, type: 'ticket', direction: null, date: '2025-04-19T14:00:00', description: 'Purchased Members Preview tickets', details: { event: 'Members Preview: New Acquisitions', quantity: 1, ticketType: 'Member Access' }, amount: 45, staffId: null, createdDate: '2025-04-19' },
+  { id: 'int-180', patronId: '7962442', opportunityId: null, type: 'ticket', direction: null, date: '2025-05-24T10:00:00', description: 'Purchased Family Day Workshop tickets', details: { event: 'Family Day: Interactive Art Workshop', quantity: 1, ticketType: 'Standard' }, amount: 45, staffId: null, createdDate: '2025-05-24' },
+  { id: 'int-181', patronId: '7962442', opportunityId: null, type: 'ticket', direction: null, date: '2025-06-21T14:00:00', description: 'Purchased Architecture Lecture tickets', details: { event: 'Architecture and Design Lecture', quantity: 1, ticketType: 'Standard' }, amount: 45, staffId: null, createdDate: '2025-06-21' },
+  { id: 'int-182', patronId: '7962442', opportunityId: null, type: 'ticket', direction: null, date: '2025-07-19T14:00:00', description: 'Purchased Film Series tickets', details: { event: 'Film Series: Art in Cinema', quantity: 1, ticketType: 'General Admission' }, amount: 45, staffId: null, createdDate: '2025-07-19' },
+  { id: 'int-183', patronId: '7962442', opportunityId: null, type: 'ticket', direction: null, date: '2025-08-16T14:00:00', description: 'Purchased Photography Workshop tickets', details: { event: 'Photography Workshop and Exhibition Tour', quantity: 1, ticketType: 'Standard' }, amount: 45, staffId: null, createdDate: '2025-08-16' },
+  { id: 'int-184', patronId: '7962442', opportunityId: null, type: 'ticket', direction: null, date: '2025-09-20T14:00:00', description: 'Purchased Curator Talk tickets', details: { event: 'Curator Talk: Impressionist Masters', quantity: 1, ticketType: 'Member Access' }, amount: 45, staffId: null, createdDate: '2025-09-20' },
+  { id: 'int-185', patronId: '7962442', opportunityId: null, type: 'ticket', direction: null, date: '2025-11-22T18:00:00', description: 'Purchased Holiday Preview Night tickets', details: { event: 'Holiday Preview Night', quantity: 1, ticketType: 'Member Access' }, amount: 50, staffId: null, createdDate: '2025-11-22' },
+  { id: 'int-186', patronId: '7962442', opportunityId: null, type: 'ticket', direction: null, date: '2025-12-06T18:00:00', description: 'Purchased Holiday Spectacular tickets', details: { event: 'Holiday Spectacular', quantity: 1, ticketType: 'Standard' }, amount: 45, staffId: null, createdDate: '2025-12-06' },
 
   // --- Maria Santos (Small) ---
-  { id: 'int-187', patronId: 'maria-santos', opportunityId: null, type: 'ticket', direction: null, date: '2025-06-07T18:00:00', description: 'Purchased Summer Exhibition tickets', details: { event: 'Summer Exhibition: Contemporary Voices', quantity: 1, ticketType: 'General Admission' }, amount: 85, staffId: null, createdDate: '2025-06-07' },
-  { id: 'int-188', patronId: 'maria-santos', opportunityId: null, type: 'ticket', direction: null, date: '2025-07-04T19:30:00', description: 'Purchased Summer Concert Series tickets', details: { event: 'Summer Concert Series', quantity: 1, ticketType: 'General Admission' }, amount: 55, staffId: null, createdDate: '2025-07-04' },
-  { id: 'int-189', patronId: 'maria-santos', opportunityId: null, type: 'ticket', direction: null, date: '2025-09-06T18:30:00', description: 'Purchased Fall Exhibition tickets', details: { event: 'Fall Exhibition: Emerging Artists', quantity: 1, ticketType: 'General Admission' }, amount: 55, staffId: null, createdDate: '2025-09-06' },
-  { id: 'int-190', patronId: 'maria-santos', opportunityId: null, type: 'ticket', direction: null, date: '2025-10-04T18:00:00', description: 'Purchased Impressionist Masters tickets', details: { event: 'Impressionist Masters Evening Tour', quantity: 1, ticketType: 'Standard' }, amount: 55, staffId: null, createdDate: '2025-10-04' },
-  { id: 'int-191', patronId: 'maria-santos', opportunityId: null, type: 'ticket', direction: null, date: '2025-11-22T18:00:00', description: 'Purchased Holiday Preview Night tickets', details: { event: 'Holiday Preview Night', quantity: 1, ticketType: 'General Admission' }, amount: 55, staffId: null, createdDate: '2025-11-22' },
-  { id: 'int-192', patronId: 'maria-santos', opportunityId: null, type: 'ticket', direction: null, date: '2025-12-06T18:00:00', description: 'Purchased Holiday Spectacular tickets', details: { event: 'Holiday Spectacular', quantity: 1, ticketType: 'Standard' }, amount: 55, staffId: null, createdDate: '2025-12-06' },
-  { id: 'int-193', patronId: 'maria-santos', opportunityId: null, type: 'ticket', direction: null, date: '2026-01-10T18:00:00', description: 'Purchased Winter Exhibition tickets', details: { event: 'Winter Exhibition: Light and Shadow', quantity: 1, ticketType: 'General Admission' }, amount: 55, staffId: null, createdDate: '2026-01-10' },
+  { id: 'int-187', patronId: '7962428', opportunityId: null, type: 'ticket', direction: null, date: '2025-06-07T18:00:00', description: 'Purchased Summer Exhibition tickets', details: { event: 'Summer Exhibition: Contemporary Voices', quantity: 1, ticketType: 'General Admission' }, amount: 85, staffId: null, createdDate: '2025-06-07' },
+  { id: 'int-188', patronId: '7962428', opportunityId: null, type: 'ticket', direction: null, date: '2025-07-04T19:30:00', description: 'Purchased Summer Concert Series tickets', details: { event: 'Summer Concert Series', quantity: 1, ticketType: 'General Admission' }, amount: 55, staffId: null, createdDate: '2025-07-04' },
+  { id: 'int-189', patronId: '7962428', opportunityId: null, type: 'ticket', direction: null, date: '2025-09-06T18:30:00', description: 'Purchased Fall Exhibition tickets', details: { event: 'Fall Exhibition: Emerging Artists', quantity: 1, ticketType: 'General Admission' }, amount: 55, staffId: null, createdDate: '2025-09-06' },
+  { id: 'int-190', patronId: '7962428', opportunityId: null, type: 'ticket', direction: null, date: '2025-10-04T18:00:00', description: 'Purchased Impressionist Masters tickets', details: { event: 'Impressionist Masters Evening Tour', quantity: 1, ticketType: 'Standard' }, amount: 55, staffId: null, createdDate: '2025-10-04' },
+  { id: 'int-191', patronId: '7962428', opportunityId: null, type: 'ticket', direction: null, date: '2025-11-22T18:00:00', description: 'Purchased Holiday Preview Night tickets', details: { event: 'Holiday Preview Night', quantity: 1, ticketType: 'General Admission' }, amount: 55, staffId: null, createdDate: '2025-11-22' },
+  { id: 'int-192', patronId: '7962428', opportunityId: null, type: 'ticket', direction: null, date: '2025-12-06T18:00:00', description: 'Purchased Holiday Spectacular tickets', details: { event: 'Holiday Spectacular', quantity: 1, ticketType: 'Standard' }, amount: 55, staffId: null, createdDate: '2025-12-06' },
+  { id: 'int-193', patronId: '7962428', opportunityId: null, type: 'ticket', direction: null, date: '2026-01-10T18:00:00', description: 'Purchased Winter Exhibition tickets', details: { event: 'Winter Exhibition: Light and Shadow', quantity: 1, ticketType: 'General Admission' }, amount: 55, staffId: null, createdDate: '2026-01-10' },
 
   // --- Rachel Kim (Small) ---
-  { id: 'int-194', patronId: 'rachel-kim', opportunityId: null, type: 'ticket', direction: null, date: '2025-10-04T18:00:00', description: 'Purchased Impressionist Masters Evening Tour tickets', details: { event: 'Impressionist Masters Evening Tour', quantity: 2, ticketType: 'General Admission' }, amount: 115, staffId: null, createdDate: '2025-10-04' },
-  { id: 'int-195', patronId: 'rachel-kim', opportunityId: null, type: 'ticket', direction: null, date: '2025-11-08T18:30:00', description: 'Purchased Annual Benefit Dinner tickets', details: { event: 'Annual Benefit Dinner', quantity: 2, ticketType: 'Standard' }, amount: 115, staffId: null, createdDate: '2025-11-08' },
-  { id: 'int-196', patronId: 'rachel-kim', opportunityId: null, type: 'ticket', direction: null, date: '2025-12-06T18:00:00', description: 'Purchased Holiday Spectacular tickets', details: { event: 'Holiday Spectacular', quantity: 2, ticketType: 'General Admission' }, amount: 120, staffId: null, createdDate: '2025-12-06' },
+  { id: 'int-194', patronId: '7962426', opportunityId: null, type: 'ticket', direction: null, date: '2025-10-04T18:00:00', description: 'Purchased Impressionist Masters Evening Tour tickets', details: { event: 'Impressionist Masters Evening Tour', quantity: 2, ticketType: 'General Admission' }, amount: 115, staffId: null, createdDate: '2025-10-04' },
+  { id: 'int-195', patronId: '7962426', opportunityId: null, type: 'ticket', direction: null, date: '2025-11-08T18:30:00', description: 'Purchased Annual Benefit Dinner tickets', details: { event: 'Annual Benefit Dinner', quantity: 2, ticketType: 'Standard' }, amount: 115, staffId: null, createdDate: '2025-11-08' },
+  { id: 'int-196', patronId: '7962426', opportunityId: null, type: 'ticket', direction: null, date: '2025-12-06T18:00:00', description: 'Purchased Holiday Spectacular tickets', details: { event: 'Holiday Spectacular', quantity: 2, ticketType: 'General Admission' }, amount: 120, staffId: null, createdDate: '2025-12-06' },
 
   // --- Sarah Blackwood (Small) ---
-  { id: 'int-197', patronId: 'sarah-blackwood', opportunityId: null, type: 'ticket', direction: null, date: '2025-11-22T18:00:00', description: 'Purchased Holiday Preview Night tickets', details: { event: 'Holiday Preview Night', quantity: 2, ticketType: 'General Admission' }, amount: 115, staffId: null, createdDate: '2025-11-22' },
-  { id: 'int-198', patronId: 'sarah-blackwood', opportunityId: null, type: 'ticket', direction: null, date: '2025-12-06T18:00:00', description: 'Purchased Holiday Spectacular tickets', details: { event: 'Holiday Spectacular', quantity: 2, ticketType: 'Standard' }, amount: 120, staffId: null, createdDate: '2025-12-06' },
-  { id: 'int-199', patronId: 'sarah-blackwood', opportunityId: null, type: 'ticket', direction: null, date: '2026-01-10T18:00:00', description: 'Purchased Winter Exhibition Opening tickets', details: { event: 'Winter Exhibition: Light and Shadow', quantity: 2, ticketType: 'General Admission' }, amount: 115, staffId: null, createdDate: '2026-01-10' },
+  { id: 'int-197', patronId: '7962436', opportunityId: null, type: 'ticket', direction: null, date: '2025-11-22T18:00:00', description: 'Purchased Holiday Preview Night tickets', details: { event: 'Holiday Preview Night', quantity: 2, ticketType: 'General Admission' }, amount: 115, staffId: null, createdDate: '2025-11-22' },
+  { id: 'int-198', patronId: '7962436', opportunityId: null, type: 'ticket', direction: null, date: '2025-12-06T18:00:00', description: 'Purchased Holiday Spectacular tickets', details: { event: 'Holiday Spectacular', quantity: 2, ticketType: 'Standard' }, amount: 120, staffId: null, createdDate: '2025-12-06' },
+  { id: 'int-199', patronId: '7962436', opportunityId: null, type: 'ticket', direction: null, date: '2026-01-10T18:00:00', description: 'Purchased Winter Exhibition Opening tickets', details: { event: 'Winter Exhibition: Light and Shadow', quantity: 2, ticketType: 'General Admission' }, amount: 115, staffId: null, createdDate: '2026-01-10' },
 
   // --- Jake Thompson (Small) ---
-  { id: 'int-200', patronId: 'jake-thompson', opportunityId: null, type: 'ticket', direction: null, date: '2025-07-04T19:30:00', description: 'Purchased Summer Concert Series tickets', details: { event: 'Summer Concert Series', quantity: 1, ticketType: 'General Admission' }, amount: 50, staffId: null, createdDate: '2025-07-04' },
-  { id: 'int-201', patronId: 'jake-thompson', opportunityId: null, type: 'ticket', direction: null, date: '2025-09-06T18:30:00', description: 'Purchased Fall Exhibition tickets', details: { event: 'Fall Exhibition: Emerging Artists', quantity: 1, ticketType: 'General Admission' }, amount: 50, staffId: null, createdDate: '2025-09-06' },
-  { id: 'int-202', patronId: 'jake-thompson', opportunityId: null, type: 'ticket', direction: null, date: '2025-10-04T18:00:00', description: 'Purchased Impressionist Masters tickets', details: { event: 'Impressionist Masters Evening Tour', quantity: 1, ticketType: 'Standard' }, amount: 50, staffId: null, createdDate: '2025-10-04' },
+  { id: 'int-200', patronId: '7962417', opportunityId: null, type: 'ticket', direction: null, date: '2025-07-04T19:30:00', description: 'Purchased Summer Concert Series tickets', details: { event: 'Summer Concert Series', quantity: 1, ticketType: 'General Admission' }, amount: 50, staffId: null, createdDate: '2025-07-04' },
+  { id: 'int-201', patronId: '7962417', opportunityId: null, type: 'ticket', direction: null, date: '2025-09-06T18:30:00', description: 'Purchased Fall Exhibition tickets', details: { event: 'Fall Exhibition: Emerging Artists', quantity: 1, ticketType: 'General Admission' }, amount: 50, staffId: null, createdDate: '2025-09-06' },
+  { id: 'int-202', patronId: '7962417', opportunityId: null, type: 'ticket', direction: null, date: '2025-10-04T18:00:00', description: 'Purchased Impressionist Masters tickets', details: { event: 'Impressionist Masters Evening Tour', quantity: 1, ticketType: 'Standard' }, amount: 50, staffId: null, createdDate: '2025-10-04' },
 
   // --- David Chen (Small) ---
-  { id: 'int-203', patronId: 'david-chen', opportunityId: null, type: 'ticket', direction: null, date: '2025-08-16T14:00:00', description: 'Purchased Photography Workshop tickets', details: { event: 'Photography Workshop and Exhibition Tour', quantity: 1, ticketType: 'General Admission' }, amount: 40, staffId: null, createdDate: '2025-08-16' },
-  { id: 'int-204', patronId: 'david-chen', opportunityId: null, type: 'ticket', direction: null, date: '2025-09-06T18:30:00', description: 'Purchased Fall Exhibition tickets', details: { event: 'Fall Exhibition: Emerging Artists', quantity: 1, ticketType: 'General Admission' }, amount: 35, staffId: null, createdDate: '2025-09-06' },
+  { id: 'int-203', patronId: '7962427', opportunityId: null, type: 'ticket', direction: null, date: '2025-08-16T14:00:00', description: 'Purchased Photography Workshop tickets', details: { event: 'Photography Workshop and Exhibition Tour', quantity: 1, ticketType: 'General Admission' }, amount: 40, staffId: null, createdDate: '2025-08-16' },
+  { id: 'int-204', patronId: '7962427', opportunityId: null, type: 'ticket', direction: null, date: '2025-09-06T18:30:00', description: 'Purchased Fall Exhibition tickets', details: { event: 'Fall Exhibition: Emerging Artists', quantity: 1, ticketType: 'General Admission' }, amount: 35, staffId: null, createdDate: '2025-09-06' },
 
   // --- James Wilson (Small) ---
-  { id: 'int-205', patronId: 'james-wilson', opportunityId: null, type: 'ticket', direction: null, date: '2026-01-10T18:00:00', description: 'Purchased Winter Exhibition Opening tickets', details: { event: 'Winter Exhibition: Light and Shadow', quantity: 1, ticketType: 'General Admission' }, amount: 50, staffId: null, createdDate: '2026-01-10' },
+  { id: 'int-205', patronId: '7962429', opportunityId: null, type: 'ticket', direction: null, date: '2026-01-10T18:00:00', description: 'Purchased Winter Exhibition Opening tickets', details: { event: 'Winter Exhibition: Light and Shadow', quantity: 1, ticketType: 'General Admission' }, amount: 50, staffId: null, createdDate: '2026-01-10' },
 ]
 
 // ============================================
@@ -3282,31 +3277,31 @@ export const addInteraction = (data) => {
 
 export const ACKNOWLEDGMENTS = [
   // gift-016: New Year Major Gift ($2,500) - fully acknowledged
-  { id: 'ack-001', giftId: 'gift-016', patronId: 'anderson-collingwood', type: 'thank-you-letter', method: 'email', status: 'sent', date: '2026-01-29', staffId: 'lj', templateUsed: 'major-gift-thanks', notes: null },
-  { id: 'ack-002', giftId: 'gift-016', patronId: 'anderson-collingwood', type: 'tax-receipt', method: 'email', status: 'sent', date: '2026-01-29', staffId: null, templateUsed: 'standard-receipt', notes: null },
+  { id: 'ack-001', giftId: 'gift-016', patronId: '7962415', type: 'thank-you-letter', method: 'email', status: 'sent', date: '2026-01-29', staffId: 'lj', templateUsed: 'major-gift-thanks', notes: null },
+  { id: 'ack-002', giftId: 'gift-016', patronId: '7962415', type: 'tax-receipt', method: 'email', status: 'sent', date: '2026-01-29', staffId: null, templateUsed: 'standard-receipt', notes: null },
 
   // gift-006: Year-End Major Gift 2024 ($2,500) - acknowledged
-  { id: 'ack-003', giftId: 'gift-006', patronId: 'anderson-collingwood', type: 'thank-you-letter', method: 'email', status: 'sent', date: '2024-12-19', staffId: 'lj', templateUsed: 'major-gift-thanks', notes: null },
-  { id: 'ack-004', giftId: 'gift-006', patronId: 'anderson-collingwood', type: 'tax-receipt', method: 'email', status: 'sent', date: '2024-12-19', staffId: null, templateUsed: 'standard-receipt', notes: null },
+  { id: 'ack-003', giftId: 'gift-006', patronId: '7962415', type: 'thank-you-letter', method: 'email', status: 'sent', date: '2024-12-19', staffId: 'lj', templateUsed: 'major-gift-thanks', notes: null },
+  { id: 'ack-004', giftId: 'gift-006', patronId: '7962415', type: 'tax-receipt', method: 'email', status: 'sent', date: '2024-12-19', staffId: null, templateUsed: 'standard-receipt', notes: null },
 
   // gift-008: Spring Gala Sponsorship ($2,500) - acknowledged
-  { id: 'ack-005', giftId: 'gift-008', patronId: 'anderson-collingwood', type: 'thank-you-letter', method: 'email', status: 'sent', date: '2025-06-16', staffId: 'lj', templateUsed: 'event-gift-thanks', notes: null },
+  { id: 'ack-005', giftId: 'gift-008', patronId: '7962415', type: 'thank-you-letter', method: 'email', status: 'sent', date: '2025-06-16', staffId: 'lj', templateUsed: 'event-gift-thanks', notes: null },
 
   // gift-007: Building Campaign Q1 Payment ($1,250) - acknowledged
-  { id: 'ack-006', giftId: 'gift-007', patronId: 'anderson-collingwood', type: 'thank-you-letter', method: 'email', status: 'sent', date: '2025-06-16', staffId: 'lj', templateUsed: 'pledge-payment-thanks', notes: null },
+  { id: 'ack-006', giftId: 'gift-007', patronId: '7962415', type: 'thank-you-letter', method: 'email', status: 'sent', date: '2025-06-16', staffId: 'lj', templateUsed: 'pledge-payment-thanks', notes: null },
 
   // gift-013: Building Campaign Q3 Payment ($1,250) - PENDING acknowledgment
-  { id: 'ack-007', giftId: 'gift-013', patronId: 'anderson-collingwood', type: 'thank-you-letter', method: 'email', status: 'pending', date: null, staffId: 'lj', templateUsed: 'pledge-payment-thanks', notes: 'Queued for next batch' },
+  { id: 'ack-007', giftId: 'gift-013', patronId: '7962415', type: 'thank-you-letter', method: 'email', status: 'pending', date: null, staffId: 'lj', templateUsed: 'pledge-payment-thanks', notes: 'Queued for next batch' },
 
   // gift-002: First Annual Gift ($500) - auto-acknowledged
-  { id: 'ack-008', giftId: 'gift-002', patronId: 'anderson-collingwood', type: 'thank-you-email', method: 'email', status: 'sent', date: '2024-03-16', staffId: null, templateUsed: 'online-auto-thanks', notes: 'Auto-generated' },
+  { id: 'ack-008', giftId: 'gift-002', patronId: '7962415', type: 'thank-you-email', method: 'email', status: 'sent', date: '2024-03-16', staffId: null, templateUsed: 'online-auto-thanks', notes: 'Auto-generated' },
 
   // gift-014: Year-End Major Gift 2025 ($2,500) - acknowledged
-  { id: 'ack-009', giftId: 'gift-014', patronId: 'anderson-collingwood', type: 'thank-you-letter', method: 'email', status: 'sent', date: '2025-12-21', staffId: 'lj', templateUsed: 'major-gift-thanks', notes: null },
+  { id: 'ack-009', giftId: 'gift-014', patronId: '7962415', type: 'thank-you-letter', method: 'email', status: 'sent', date: '2025-12-21', staffId: 'lj', templateUsed: 'major-gift-thanks', notes: null },
 
   // Elizabeth Fairfax - gift-017 acknowledged, gift-018 PENDING
-  { id: 'ack-010', giftId: 'gift-017', patronId: 'elizabeth-fairfax', type: 'thank-you-letter', method: 'email', status: 'sent', date: '2025-04-16', staffId: 'lj', templateUsed: 'pledge-payment-thanks', notes: null },
-  { id: 'ack-011', giftId: 'gift-018', patronId: 'elizabeth-fairfax', type: 'thank-you-email', method: 'email', status: 'pending', date: null, staffId: 'lj', templateUsed: 'online-auto-thanks', notes: 'Queued for batch processing' },
+  { id: 'ack-010', giftId: 'gift-017', patronId: '7962442', type: 'thank-you-letter', method: 'email', status: 'sent', date: '2025-04-16', staffId: 'lj', templateUsed: 'pledge-payment-thanks', notes: null },
+  { id: 'ack-011', giftId: 'gift-018', patronId: '7962442', type: 'thank-you-email', method: 'email', status: 'pending', date: null, staffId: 'lj', templateUsed: 'online-auto-thanks', notes: 'Queued for batch processing' },
 ]
 
 // Get all acknowledgments for a gift
@@ -3339,7 +3334,7 @@ export const HOUSEHOLDS = [
     name: 'Collingwood Family',
     formalSalutation: 'Mr. Anderson & Mrs. Sarah Collingwood',
     informalSalutation: 'Anderson & Sarah',
-    primaryContactId: 'anderson-collingwood',
+    primaryContactId: '7962415',
     verified: true,
     createdDate: '2024-06-15'
   },
@@ -3348,7 +3343,7 @@ export const HOUSEHOLDS = [
     name: 'Fairfax Family',
     formalSalutation: 'Mr. Paul & Mrs. Elizabeth Fairfax',
     informalSalutation: 'Paul & Elizabeth',
-    primaryContactId: 'paul-fairfax',
+    primaryContactId: '7962416',
     verified: true,
     createdDate: '2024-09-01'
   },
@@ -3357,7 +3352,7 @@ export const HOUSEHOLDS = [
     name: 'Martinez-Carter Family',
     formalSalutation: 'Mr. John Martinez & Mrs. Samantha Carter',
     informalSalutation: 'John & Samantha',
-    primaryContactId: 'john-martinez',
+    primaryContactId: '7962422',
     verified: false,
     createdDate: '2025-01-10'
   },
@@ -3366,7 +3361,7 @@ export const HOUSEHOLDS = [
     name: 'Taylor-Thomas Family',
     formalSalutation: 'Mr. Lucas Taylor & Ms. Sophia Thomas',
     informalSalutation: 'Lucas & Sophia',
-    primaryContactId: 'lucas-taylor',
+    primaryContactId: '7962419',
     verified: true,
     createdDate: '2025-03-20'
   }
@@ -3374,18 +3369,18 @@ export const HOUSEHOLDS = [
 
 export const HOUSEHOLD_MEMBERS = [
   // Collingwood Family
-  { id: 'hhm-1', householdId: 'hh-collingwood', patronId: 'anderson-collingwood', role: 'Head', isPrimary: true, joinedDate: '2024-06-15' },
-  { id: 'hhm-2', householdId: 'hh-collingwood', patronId: 'sarah-collingwood', role: 'Spouse', isPrimary: false, joinedDate: '2024-06-15' },
-  { id: 'hhm-3', householdId: 'hh-collingwood', patronId: 'emma-collingwood', role: 'Child', isPrimary: false, joinedDate: '2024-06-15' },
+  { id: 'hhm-1', householdId: 'hh-collingwood', patronId: '7962415', role: 'Head', isPrimary: true, joinedDate: '2024-06-15' },
+  { id: 'hhm-2', householdId: 'hh-collingwood', patronId: '7962430', role: 'Spouse', isPrimary: false, joinedDate: '2024-06-15' },
+  { id: 'hhm-3', householdId: 'hh-collingwood', patronId: '7962431', role: 'Child', isPrimary: false, joinedDate: '2024-06-15' },
   // Fairfax Family
-  { id: 'hhm-4', householdId: 'hh-fairfax', patronId: 'paul-fairfax', role: 'Head', isPrimary: true, joinedDate: '2024-09-01' },
-  { id: 'hhm-5', householdId: 'hh-fairfax', patronId: 'elizabeth-fairfax', role: 'Spouse', isPrimary: false, joinedDate: '2024-09-01' },
+  { id: 'hhm-4', householdId: 'hh-fairfax', patronId: '7962416', role: 'Head', isPrimary: true, joinedDate: '2024-09-01' },
+  { id: 'hhm-5', householdId: 'hh-fairfax', patronId: '7962442', role: 'Spouse', isPrimary: false, joinedDate: '2024-09-01' },
   // Martinez-Carter Family
-  { id: 'hhm-6', householdId: 'hh-martinez-carter', patronId: 'john-martinez', role: 'Head', isPrimary: true, joinedDate: '2025-01-10' },
-  { id: 'hhm-7', householdId: 'hh-martinez-carter', patronId: 'samantha-carter', role: 'Spouse', isPrimary: false, joinedDate: '2025-01-10' },
+  { id: 'hhm-6', householdId: 'hh-martinez-carter', patronId: '7962422', role: 'Head', isPrimary: true, joinedDate: '2025-01-10' },
+  { id: 'hhm-7', householdId: 'hh-martinez-carter', patronId: '7962421', role: 'Spouse', isPrimary: false, joinedDate: '2025-01-10' },
   // Taylor-Thomas Family
-  { id: 'hhm-8', householdId: 'hh-taylor-thomas', patronId: 'lucas-taylor', role: 'Head', isPrimary: true, joinedDate: '2025-03-20' },
-  { id: 'hhm-9', householdId: 'hh-taylor-thomas', patronId: 'sophia-thomas', role: 'Spouse', isPrimary: false, joinedDate: '2025-03-20' }
+  { id: 'hhm-8', householdId: 'hh-taylor-thomas', patronId: '7962419', role: 'Head', isPrimary: true, joinedDate: '2025-03-20' },
+  { id: 'hhm-9', householdId: 'hh-taylor-thomas', patronId: '7962418', role: 'Spouse', isPrimary: false, joinedDate: '2025-03-20' }
 ]
 
 // Household helper functions
@@ -3442,8 +3437,8 @@ export const patronRelationships = [
   // Anderson's relationships
   {
     id: 'rel-1',
-    fromPatronId: 'anderson-collingwood',
-    toPatronId: 'sarah-collingwood',
+    fromPatronId: '7962415',
+    toPatronId: '7962430',
     type: 'household',
     role: 'Spouse',
     reciprocalRole: 'Spouse',
@@ -3454,8 +3449,8 @@ export const patronRelationships = [
   },
   {
     id: 'rel-2',
-    fromPatronId: 'anderson-collingwood',
-    toPatronId: 'emma-collingwood',
+    fromPatronId: '7962415',
+    toPatronId: '7962431',
     type: 'household',
     role: 'Daughter',
     reciprocalRole: 'Father',
@@ -3467,8 +3462,8 @@ export const patronRelationships = [
   // Sarah's reverse relationships (auto-created)
   {
     id: 'rel-3',
-    fromPatronId: 'sarah-collingwood',
-    toPatronId: 'anderson-collingwood',
+    fromPatronId: '7962430',
+    toPatronId: '7962415',
     type: 'household',
     role: 'Spouse',
     reciprocalRole: 'Spouse',
@@ -3479,8 +3474,8 @@ export const patronRelationships = [
   },
   {
     id: 'rel-4',
-    fromPatronId: 'sarah-collingwood',
-    toPatronId: 'emma-collingwood',
+    fromPatronId: '7962430',
+    toPatronId: '7962431',
     type: 'household',
     role: 'Daughter',
     reciprocalRole: 'Mother',
@@ -3492,8 +3487,8 @@ export const patronRelationships = [
   // Emma's reverse relationships
   {
     id: 'rel-5',
-    fromPatronId: 'emma-collingwood',
-    toPatronId: 'anderson-collingwood',
+    fromPatronId: '7962431',
+    toPatronId: '7962415',
     type: 'household',
     role: 'Father',
     reciprocalRole: 'Daughter',
@@ -3504,8 +3499,8 @@ export const patronRelationships = [
   },
   {
     id: 'rel-6',
-    fromPatronId: 'emma-collingwood',
-    toPatronId: 'sarah-collingwood',
+    fromPatronId: '7962431',
+    toPatronId: '7962430',
     type: 'household',
     role: 'Mother',
     reciprocalRole: 'Daughter',
@@ -3517,7 +3512,7 @@ export const patronRelationships = [
   // Anderson's organization relationships
   {
     id: 'rel-14',
-    fromPatronId: 'anderson-collingwood',
+    fromPatronId: '7962415',
     toPatronId: null,
     type: 'organization',
     role: 'Employee',
@@ -3531,8 +3526,8 @@ export const patronRelationships = [
   // Fairfax household relationships
   {
     id: 'rel-8',
-    fromPatronId: 'paul-fairfax',
-    toPatronId: 'elizabeth-fairfax',
+    fromPatronId: '7962416',
+    toPatronId: '7962442',
     type: 'household',
     role: 'Spouse',
     reciprocalRole: 'Spouse',
@@ -3543,8 +3538,8 @@ export const patronRelationships = [
   },
   {
     id: 'rel-9',
-    fromPatronId: 'elizabeth-fairfax',
-    toPatronId: 'paul-fairfax',
+    fromPatronId: '7962442',
+    toPatronId: '7962416',
     type: 'household',
     role: 'Spouse',
     reciprocalRole: 'Spouse',
@@ -3556,8 +3551,8 @@ export const patronRelationships = [
   // Martinez-Carter household relationships
   {
     id: 'rel-10',
-    fromPatronId: 'john-martinez',
-    toPatronId: 'samantha-carter',
+    fromPatronId: '7962422',
+    toPatronId: '7962421',
     type: 'household',
     role: 'Spouse',
     reciprocalRole: 'Spouse',
@@ -3568,8 +3563,8 @@ export const patronRelationships = [
   },
   {
     id: 'rel-11',
-    fromPatronId: 'samantha-carter',
-    toPatronId: 'john-martinez',
+    fromPatronId: '7962421',
+    toPatronId: '7962422',
     type: 'household',
     role: 'Spouse',
     reciprocalRole: 'Spouse',
@@ -3581,8 +3576,8 @@ export const patronRelationships = [
   // Taylor-Thomas household relationships
   {
     id: 'rel-12',
-    fromPatronId: 'lucas-taylor',
-    toPatronId: 'sophia-thomas',
+    fromPatronId: '7962419',
+    toPatronId: '7962418',
     type: 'household',
     role: 'Spouse',
     reciprocalRole: 'Spouse',
@@ -3593,8 +3588,8 @@ export const patronRelationships = [
   },
   {
     id: 'rel-13',
-    fromPatronId: 'sophia-thomas',
-    toPatronId: 'lucas-taylor',
+    fromPatronId: '7962418',
+    toPatronId: '7962419',
     type: 'household',
     role: 'Spouse',
     reciprocalRole: 'Spouse',
@@ -3962,6 +3957,9 @@ export const addPatronRelationship = (fromPatronId, toPatronId, type, role, reci
 export const endPatronRelationship = (fromPatronId, toPatronId) => {
   const today = new Date().toISOString().split('T')[0]
   
+  // Check if any of the matching relationships are household type
+  let isHouseholdRel = false
+  
   // End both directions
   patronRelationships.forEach(rel => {
     if (
@@ -3969,8 +3967,52 @@ export const endPatronRelationship = (fromPatronId, toPatronId) => {
       (rel.fromPatronId === toPatronId && rel.toPatronId === fromPatronId)
     ) {
       rel.endDate = today
+      if (rel.type === 'household') isHouseholdRel = true
     }
   })
+  
+  // If it was a household relationship, also remove from HOUSEHOLD_MEMBERS
+  if (isHouseholdRel) {
+    // Determine which patron is NOT the primary/head — remove them from the household
+    const fromMember = HOUSEHOLD_MEMBERS.find(m => m.patronId === fromPatronId)
+    const toMember = HOUSEHOLD_MEMBERS.find(m => m.patronId === toPatronId)
+    
+    // Remove the non-primary member (the one being disconnected)
+    // If toPatron is not primary, remove them; otherwise remove fromPatron
+    const memberToRemove = toMember && !toMember.isPrimary ? toMember : (fromMember && !fromMember.isPrimary ? fromMember : null)
+    
+    if (memberToRemove) {
+      const idx = HOUSEHOLD_MEMBERS.indexOf(memberToRemove)
+      if (idx !== -1) {
+        HOUSEHOLD_MEMBERS.splice(idx, 1)
+      }
+      // Clear their householdId
+      const patron = patrons.find(p => p.id === memberToRemove.patronId)
+      if (patron) {
+        patron.householdId = null
+      }
+    }
+  }
+}
+
+// Change the Head of Household
+export const changeHeadOfHousehold = (householdId, newHeadPatronId) => {
+  // 1. Update HOUSEHOLD_MEMBERS: old head -> role 'Spouse', isPrimary false
+  //    new head -> role 'Head', isPrimary true
+  HOUSEHOLD_MEMBERS.forEach(m => {
+    if (m.householdId === householdId) {
+      if (m.patronId === newHeadPatronId) {
+        m.role = 'Head'
+        m.isPrimary = true
+      } else if (m.role === 'Head') {
+        m.role = 'Spouse'
+        m.isPrimary = false
+      }
+    }
+  })
+  // 2. Update HOUSEHOLDS.primaryContactId
+  const household = HOUSEHOLDS.find(h => h.id === householdId)
+  if (household) household.primaryContactId = newHeadPatronId
 }
 
 // Get reciprocal role (exported for UI auto-suggest)

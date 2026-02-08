@@ -17,7 +17,8 @@ import GiftDetailPanel from '../components/GiftDetailPanel/GiftDetailPanel'
 import RelationshipsTab from '../components/RelationshipsTab/RelationshipsTab'
 import AddRelationshipModal from '../components/AddRelationshipModal/AddRelationshipModal'
 import EndRelationshipModal from '../components/EndRelationshipModal/EndRelationshipModal'
-import { getPatronById, isManagedProspect, archivePatron, restorePatron, updatePatronTags, getMembershipsByPatronId, getPrimaryPatronForMembership, getGiftsByPatronId, getInteractionsByPatronId, hasHouseholdRelationship, reorderBeneficiaries } from '../data/patrons'
+import EditHouseholdModal from '../components/EditHouseholdModal/EditHouseholdModal'
+import { getPatronById, isManagedProspect, archivePatron, restorePatron, updatePatronTags, getMembershipsByPatronId, getPrimaryPatronForMembership, getGiftsByPatronId, getInteractionsByPatronId, hasHouseholdRelationship, reorderBeneficiaries, getHouseholdForPatron, getHouseholdMembers } from '../data/patrons'
 import './PatronProfile.css'
 
 const tabs = [
@@ -32,7 +33,7 @@ const tabs = [
 
 // Default/fallback patron data (Anderson Collingwood) for backwards compatibility
 const defaultPatronData = {
-  id: 'anderson-collingwood',
+  id: '7962415',
   firstName: 'Anderson',
   lastName: 'Collingwood',
   photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
@@ -224,6 +225,7 @@ function PatronProfile() {
   const [showEndRelationshipModal, setShowEndRelationshipModal] = useState(false)
   const [relationshipToEnd, setRelationshipToEnd] = useState(null)
   const [relationshipRefreshKey, setRelationshipRefreshKey] = useState(0)
+  const [showEditHouseholdModal, setShowEditHouseholdModal] = useState(false)
   const [selectedTimelineGift, setSelectedTimelineGift] = useState(null)
 
   // Get patron data from store, fallback to default if not found
@@ -324,6 +326,17 @@ function PatronProfile() {
     }
   }
 
+  // Household data for the edit modal
+  const householdData = useMemo(() => getHouseholdForPatron(patronData.id), [patronData.id, relationshipRefreshKey])
+  const householdMembersData = useMemo(() => {
+    if (!householdData) return []
+    return getHouseholdMembers(householdData.id)
+  }, [householdData, relationshipRefreshKey])
+
+  const handleEditHousehold = () => {
+    setShowEditHouseholdModal(true)
+  }
+
   // Relationship management handlers
   const handleAddRelationship = (preselectedType = null) => {
     setAddRelationshipType(preselectedType)
@@ -405,6 +418,7 @@ function PatronProfile() {
             onNavigateToPatron={handleNavigateToPatron}
             onAddRelationship={handleAddRelationship}
             onEndRelationship={handleEndRelationship}
+            onEditHousehold={handleEditHousehold}
           />
         )
       case 'documents':
@@ -572,6 +586,14 @@ function PatronProfile() {
         }}
         relationship={relationshipToEnd}
         patronName={patronFullName}
+        onSuccess={handleRelationshipSuccess}
+      />
+
+      <EditHouseholdModal
+        isOpen={showEditHouseholdModal}
+        onClose={() => setShowEditHouseholdModal(false)}
+        household={householdData}
+        members={householdMembersData}
         onSuccess={handleRelationshipSuccess}
       />
 

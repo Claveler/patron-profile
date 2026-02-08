@@ -1,11 +1,11 @@
-import { useMemo, useState, useRef, useEffect, useCallback } from 'react'
-import { getHouseholdForPatron, getHouseholdMembers, getPatronRelationships, getPatronById, updateHouseholdName } from '../../data/patrons'
+import { useMemo } from 'react'
+import { getHouseholdForPatron, getHouseholdMembers, getPatronRelationships, getPatronById } from '../../data/patrons'
 import { getInitials } from '../../utils/getInitials'
 import './RelationshipsTab.css'
 
 // Outlined badge colors (border + text color — bg is always white)
 const roleBadgeColors = {
-  'Head': { color: '#0079ca', label: 'Head of Household' },
+  'Head': { color: '#0079ca', label: 'Spouse' },
   'Spouse': { color: '#0079ca', label: 'Spouse' },
   'Child': { color: '#0079ca', label: 'Child' },
   'Daughter': { color: '#0079ca', label: 'Child' },
@@ -35,7 +35,7 @@ const orgTitleBadgeColors = {
   'default': { color: '#6f41d7' },
 }
 
-function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onEndRelationship }) {
+function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onEndRelationship, onEditHousehold }) {
   // Get household data
   const household = useMemo(() => getHouseholdForPatron(patronId), [patronId])
   const householdMembers = useMemo(() => {
@@ -48,46 +48,6 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
       return 0
     })
   }, [household, patronId])
-
-  // Inline editing of household name
-  const [isEditingName, setIsEditingName] = useState(false)
-  const [editName, setEditName] = useState('')
-  const nameInputRef = useRef(null)
-
-  useEffect(() => {
-    if (isEditingName && nameInputRef.current) {
-      nameInputRef.current.focus()
-      nameInputRef.current.select()
-    }
-  }, [isEditingName])
-
-  const startEditingName = useCallback(() => {
-    if (household) {
-      setEditName(household.name)
-      setIsEditingName(true)
-    }
-  }, [household])
-
-  const saveName = useCallback(() => {
-    const trimmed = editName.trim()
-    if (trimmed && household && trimmed !== household.name) {
-      updateHouseholdName(household.id, trimmed)
-    }
-    setIsEditingName(false)
-  }, [editName, household])
-
-  const cancelEditName = useCallback(() => {
-    setIsEditingName(false)
-  }, [])
-
-  const handleNameKeyDown = useCallback((e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault()
-      saveName()
-    } else if (e.key === 'Escape') {
-      cancelEditName()
-    }
-  }, [saveName, cancelEditName])
 
   // Get all relationships for viewing patron (needed for household-rel lookups)
   const allRelationships = useMemo(() => getPatronRelationships(patronId), [patronId])
@@ -253,37 +213,15 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
 
   return (
     <div className="relationships-tab">
-      {/* Header with Add relationship button */}
-      <div className="relationships-tab__header">
-        <button className="relationships-tab__add-btn" onClick={() => onAddRelationship && onAddRelationship()}>
-          Add relationship <i className="fa-solid fa-plus"></i>
-        </button>
-      </div>
-
       {/* Relationship graph area — gray background */}
       <div className="relationships-tab__graph">
         {hasHousehold ? (
           <div className="relationships-tab__graph-inner">
             {/* LEFT: Light blue wrapper with title + card + add-family link */}
             <div className="relationships-tab__household-wrapper">
-              {isEditingName ? (
-                <div className="relationships-tab__household-name-edit">
-                  <input
-                    ref={nameInputRef}
-                    type="text"
-                    className="relationships-tab__household-name-input"
-                    value={editName}
-                    onChange={(e) => setEditName(e.target.value)}
-                    onKeyDown={handleNameKeyDown}
-                    onBlur={saveName}
-                  />
-                </div>
-              ) : (
-                <h4 className="relationships-tab__household-name" onClick={startEditingName} title="Click to rename">
-                  {household.name}
-                  <i className="fa-solid fa-pen relationships-tab__edit-icon"></i>
-                </h4>
-              )}
+              <h4 className="relationships-tab__household-name">
+                {household.name}
+              </h4>
 
               {/* Single white card containing all member rows */}
               <div className="relationships-tab__household-card">
@@ -310,16 +248,21 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
                       <div className="relationships-tab__member-info">
                         <span className={`relationships-tab__member-name ${isCurrentPatron ? 'relationships-tab__member-name--head' : ''}`}>
                           {member.patron?.name}
+                        </span>
+                        <div className="relationships-tab__badges">
                           {isHead && (
-                            <i className="fa-solid fa-crown relationships-tab__head-icon" title="Head of Household"></i>
+                            <span className="relationships-tab__role-badge relationships-tab__role-badge--head">
+                              <i className="fa-solid fa-circle-check"></i>
+                              Head of household
+                            </span>
                           )}
-                        </span>
-                        <span
-                          className="relationships-tab__role-badge"
-                          style={{ color: badge.color, borderColor: badge.color }}
-                        >
-                          {badge.label}
-                        </span>
+                          <span
+                            className="relationships-tab__role-badge"
+                            style={{ color: badge.color, borderColor: badge.color }}
+                          >
+                            {badge.label}
+                          </span>
+                        </div>
                       </div>
                       {!isCurrentPatron && onEndRelationship && (
                         <button
@@ -335,9 +278,16 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
                 })}
               </div>
 
-              <button className="relationships-tab__add-family" onClick={() => onAddRelationship && onAddRelationship('household')}>
-                Add household relationship
-              </button>
+              <div className="relationships-tab__actions">
+                <button className="relationships-tab__action-btn" onClick={() => onAddRelationship && onAddRelationship()}>
+                  <i className="fa-solid fa-plus"></i>
+                  Add relationship
+                </button>
+                <button className="relationships-tab__action-btn" onClick={() => onEditHousehold && onEditHousehold()}>
+                  <i className="fa-solid fa-pen-to-square"></i>
+                  Edit household
+                </button>
+              </div>
             </div>
 
             {/* RIGHT: External connections column — one slot per member */}

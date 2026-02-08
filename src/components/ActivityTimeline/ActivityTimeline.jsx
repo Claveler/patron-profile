@@ -1,6 +1,8 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { formatDateTime } from '../../data/patrons'
-import { getFundNameById, getCampaignNameById, getAppealNameById } from '../../data/campaigns'
+import { getFundNameById, getCampaignNameById, getAppealNameById, getStaffNameById, getStaffInitialsById } from '../../data/campaigns'
+import { getOpportunityById } from '../../data/opportunities'
 import './ActivityTimeline.css'
 
 // Activity type configurations
@@ -47,7 +49,7 @@ const activityTypes = {
   },
   ticket: {
     icon: 'fa-ticket',
-    title: 'Buy ticket',
+    title: 'Ticket Purchase',
     filter: 'events'
   },
   note: {
@@ -86,10 +88,12 @@ const formatCurrency = (amount) => {
 // Format date - use shared utility
 const formatDate = formatDateTime
 
-function ActivityTimeline({ gifts = [], activities = [], onAddActivity, onRecordGift, onGiftSelect }) {
-  const [expandedItem, setExpandedItem] = useState(null)
+function ActivityTimeline({ gifts = [], activities = [], onAddActivity, onRecordGift, onGiftSelect, variant }) {
+  const navigate = useNavigate()
+  const [expandedItems, setExpandedItems] = useState(new Set())
   const [filter, setFilter] = useState('all')
-  const [visibleCount, setVisibleCount] = useState(6)
+  const isFull = variant === 'full'
+  const [visibleCount, setVisibleCount] = useState(isFull ? 20 : 6)
 
   // Map gift.type to activity type key
   const getGiftActivityType = (gift) => {
@@ -134,7 +138,15 @@ function ActivityTimeline({ gifts = [], activities = [], onAddActivity, onRecord
   const hasMore = filteredActivities.length > visibleCount
 
   const toggleExpand = (id) => {
-    setExpandedItem(expandedItem === id ? null : id)
+    setExpandedItems(prev => {
+      const next = new Set(prev)
+      if (next.has(id)) {
+        next.delete(id)
+      } else {
+        next.add(id)
+      }
+      return next
+    })
   }
 
   const handleAddActivity = () => {
@@ -150,10 +162,10 @@ function ActivityTimeline({ gifts = [], activities = [], onAddActivity, onRecord
   }
 
   return (
-    <div className="activity-timeline">
+    <div className={`activity-timeline ${isFull ? 'activity-timeline--full' : ''}`}>
       {/* Header */}
       <div className="activity-timeline__header">
-        <h3 className="activity-timeline__title">Recent Activity</h3>
+        <h3 className="activity-timeline__title">{isFull ? 'Activity Timeline' : 'Recent Activity'}</h3>
         <div className="activity-timeline__filters">
           <button 
             className={`activity-timeline__filter ${filter === 'all' ? 'activity-timeline__filter--active' : ''}`}
@@ -202,8 +214,11 @@ function ActivityTimeline({ gifts = [], activities = [], onAddActivity, onRecord
         ) : (
           displayedActivities.map((activity, index) => {
             const typeConfig = activityTypes[activity.type] || { icon: 'fa-circle', title: activity.type }
-            const isExpanded = expandedItem === activity.id
+            const isExpanded = expandedItems.has(activity.id)
             const isLast = index === displayedActivities.length - 1
+            const staffName = activity.staffId ? getStaffNameById(activity.staffId) : null
+            const staffInitials = activity.staffId ? getStaffInitialsById(activity.staffId) : null
+            const linkedOpportunity = activity.opportunityId ? getOpportunityById(activity.opportunityId) : null
 
             return (
               <div 
@@ -226,7 +241,24 @@ function ActivityTimeline({ gifts = [], activities = [], onAddActivity, onRecord
                     onClick={() => toggleExpand(activity.id)}
                   >
                     <div className="activity-timeline__text">
-                      <span className="activity-timeline__item-title">{typeConfig.title}</span>
+                      <div className="activity-timeline__title-row">
+                        <span className="activity-timeline__item-title">{typeConfig.title}</span>
+                        {activity.direction && (
+                          <span className={`activity-timeline__direction activity-timeline__direction--${activity.direction}`} title={activity.direction === 'outbound' ? 'Outbound' : 'Inbound'}>
+                            <i className={`fa-solid ${activity.direction === 'outbound' ? 'fa-share' : 'fa-reply'}`}></i>
+                          </span>
+                        )}
+                        {linkedOpportunity && (
+                          <span
+                            className="activity-timeline__opp-chip"
+                            title={`Linked to: ${linkedOpportunity.name}`}
+                            onClick={(e) => { e.stopPropagation(); navigate(`/opportunities/${activity.opportunityId}`); }}
+                          >
+                            <i className="fa-solid fa-bullseye"></i>
+                            {linkedOpportunity.name}
+                          </span>
+                        )}
+                      </div>
                       {activity.eventUrl ? (
                         <a
                           href={activity.eventUrl}
@@ -249,6 +281,11 @@ function ActivityTimeline({ gifts = [], activities = [], onAddActivity, onRecord
                     <div className="activity-timeline__meta">
                       {activity.amount && (
                         <span className="activity-timeline__amount">{formatCurrency(activity.amount)}</span>
+                      )}
+                      {staffName && (
+                        <span className="activity-timeline__staff" data-tooltip={staffName}>
+                          {staffInitials}
+                        </span>
                       )}
                       <span className="activity-timeline__date">{formatDate(activity.date)}</span>
                       <i className={`fa-solid fa-chevron-${isExpanded ? 'up' : 'down'} activity-timeline__chevron`}></i>

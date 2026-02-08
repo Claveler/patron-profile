@@ -4,38 +4,6 @@
   padding: 0;
 }
 
-/* Header */
-.relationships-tab__header {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: var(--space-6);
-}
-
-.relationships-tab__add-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-2) var(--space-4);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text-primary);
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-full);
-  cursor: pointer;
-  transition: all var(--transition-fast);
-}
-
-.relationships-tab__add-btn:hover {
-  border-color: var(--color-primary);
-  color: var(--color-primary);
-  background: var(--color-primary-50);
-}
-
-.relationships-tab__add-btn i {
-  font-size: var(--font-size-xs);
-}
-
 /* ============================================
    GRAPH CONTAINER — gray background
    ============================================ */
@@ -69,8 +37,8 @@
 
 .relationships-tab__household-wrapper {
   background: #e6f4ff;
-  border-radius: 20px;
-  padding: 24px 32px;
+  border-radius: 24px;
+  padding: 40px;
   flex-shrink: 0;
 }
 
@@ -84,50 +52,13 @@
   color: var(--color-text-primary);
   margin: 0 0 var(--space-4) 0;
   text-align: center;
-  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  border-radius: 6px;
   padding: 4px 8px;
-  transition: background-color var(--transition-fast);
 }
 
-.relationships-tab__household-name:hover {
-  background-color: rgba(0, 0, 0, 0.04);
-}
-
-.relationships-tab__edit-icon {
-  font-size: 11px;
-  color: var(--color-text-secondary);
-  opacity: 0;
-  transition: opacity var(--transition-fast);
-}
-
-.relationships-tab__household-name:hover .relationships-tab__edit-icon {
-  opacity: 1;
-}
-
-/* Inline edit input for household name */
-.relationships-tab__household-name-edit {
-  margin: 0 0 var(--space-4) 0;
-  text-align: center;
-}
-
-.relationships-tab__household-name-input {
-  font-size: var(--font-size-base);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text-primary);
-  background: var(--color-surface);
-  border: 2px solid var(--color-primary);
-  border-radius: 6px;
-  padding: 4px 8px;
-  text-align: center;
-  width: 100%;
-  box-sizing: border-box;
-  outline: none;
-}
 
 /* ============================================
    HOUSEHOLD CARD — single white card
@@ -138,7 +69,7 @@
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: 8px;
-  width: 300px;
+  width: 343px;
   overflow: hidden;
 }
 
@@ -179,10 +110,10 @@
 .relationships-tab__ext-column {
   display: flex;
   flex-direction: column;
-  /* Offset = wrapper-padding-top(24) + title-line-height(24) + title-margin-bottom(16) + card-border(1) = 65px */
-  padding-top: 65px;
+  /* Offset = wrapper-padding-top(40) + title-line-height(24) + title-margin-bottom(16) + card-border(1) = 81px */
+  padding-top: 81px;
   /* Pull left into the wrapper's right padding so connector starts at card edge */
-  margin-left: -32px;
+  margin-left: -40px;
   position: relative;
 }
 
@@ -258,23 +189,25 @@
   font-weight: var(--font-weight-semibold);
 }
 
-/* Crown icon — Head of Household indicator */
-.relationships-tab__head-icon {
-  font-size: 13px;
-  color: var(--color-warning);
-  flex-shrink: 0;
-}
-
 /* ============================================
    ROLE BADGES — outlined variant
    White bg, colored border, 4px radius,
    10px font, 20px height.
    ============================================ */
 
+/* Badges row — flex wrap for multiple badges side by side */
+.relationships-tab__badges {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
 .relationships-tab__role-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 4px;
   height: 20px;
   min-width: 48px;
   padding: 2px 4px;
@@ -286,31 +219,53 @@
   border: 1px solid currentColor;
 }
 
-/* Add household relationship link — inside the blue wrapper */
-.relationships-tab__add-family {
+/* Head of household badge — blue with badge-check icon */
+.relationships-tab__role-badge--head {
+  color: #0079ca;
+  border-color: #0089e3;
+}
+
+.relationships-tab__role-badge--head i {
+  font-size: 12px;
+  color: #0089e3;
+}
+
+/* ============================================
+   ACTION BUTTONS — tertiary pills below the card
+   Inside the blue wrapper, centered.
+   ============================================ */
+
+.relationships-tab__actions {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-2);
-  margin-top: var(--space-3);
-  padding: 0;
-  width: 100%;
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-primary);
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.relationships-tab__action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 32px;
+  padding: 0 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-primary, #0079ca);
   background: none;
   border: none;
+  border-radius: 64px;
   cursor: pointer;
-  transition: color var(--transition-fast);
+  transition: all var(--transition-fast);
+  white-space: nowrap;
 }
 
-.relationships-tab__add-family:hover {
-  color: var(--color-primary-700);
-  text-decoration: underline;
+.relationships-tab__action-btn:hover {
+  background: rgba(0, 121, 202, 0.08);
 }
 
-.relationships-tab__add-family i {
-  font-size: var(--font-size-xs);
+.relationships-tab__action-btn i {
+  font-size: 12px;
 }
 
 /* ============================================

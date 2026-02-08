@@ -178,14 +178,14 @@ function PatronInfoBox({ patron, isManaged, onCreateOpportunity, onAddActivity, 
                 {household.name}
               </button>
               {household.verified && (
-                <i className="fa-solid fa-badge-check patron-info-box__verified"></i>
+                <i className="fa-solid fa-circle-check patron-info-box__verified"></i>
               )}
               {householdPopoverOpen && (
                 <div className="patron-info-box__household-popover">
                   <div className="patron-info-box__household-popover-header">
                     <span className="patron-info-box__household-popover-title">{household.name}</span>
                     {household.verified && (
-                      <i className="fa-solid fa-badge-check patron-info-box__household-popover-badge"></i>
+                      <i className="fa-solid fa-circle-check patron-info-box__household-popover-badge"></i>
                     )}
                     <button 
                       className="patron-info-box__household-popover-close"

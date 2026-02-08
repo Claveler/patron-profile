@@ -1,9 +1,10 @@
 import { useState, useRef, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { getOpportunityById, PIPELINE_STAGES, updateOpportunityStage, closeOpportunityAsLost } from '../../data/opportunities'
-import { formatDate, getPatronById, getPatronDisplayName } from '../../data/patrons'
+import { formatDate, getPatronById, getPatronDisplayName, getInteractionsByOpportunityId } from '../../data/patrons'
 import { getStaffNameById, getFundNameById, getCampaignNameById } from '../../data/campaigns'
 import ActivityModal from '../../components/ActivityModal/ActivityModal'
+import ActivityTimeline from '../../components/ActivityTimeline/ActivityTimeline'
 import CloseWonModal from '../../components/CloseWonModal/CloseWonModal'
 import './OpportunityDetail.css'
 
@@ -492,17 +493,11 @@ function OpportunityDetail() {
           </div>
 
           {/* Recent Activity */}
-          <div className="opportunity-detail__section">
-            <h3 className="opportunity-detail__section-title">
-              <i className="fa-solid fa-clipboard-list"></i>
-              Recent Activity
-            </h3>
-            <div className="opportunity-detail__activity-placeholder">
-              <i className="fa-solid fa-clipboard-list"></i>
-              <p>No activity logged for this opportunity yet.</p>
-              <span className="opportunity-detail__activity-hint">Use "Log contact" to record interactions.</span>
-            </div>
-          </div>
+          <ActivityTimeline
+            gifts={[]}
+            activities={getInteractionsByOpportunityId(opportunityId)}
+            onAddActivity={handleLogContact}
+          />
         </div>
       </div>
 

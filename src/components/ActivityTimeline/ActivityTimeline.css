@@ -494,6 +494,110 @@
   }
 }
 
+/* Title row - holds title + direction badge + opportunity chip */
+.activity-timeline__title-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+/* Direction indicator (inbound / outbound) */
+.activity-timeline__direction {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  font-size: 9px;
+  flex-shrink: 0;
+}
+
+.activity-timeline__direction--outbound {
+  background-color: var(--color-primary-50, #e6f4ff);
+  color: var(--color-primary);
+}
+
+.activity-timeline__direction--inbound {
+  background-color: var(--color-success-50, #e6f9ed);
+  color: var(--color-success);
+}
+
+/* Opportunity chip */
+.activity-timeline__opp-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 8px;
+  background-color: var(--color-warning-50, #fff8e6);
+  color: var(--color-warning-700, #b37400);
+  border: 1px solid var(--color-warning-200, #ffe099);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.4;
+  white-space: nowrap;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.activity-timeline__opp-chip:hover {
+  background-color: var(--color-warning-100, #ffecb3);
+  border-color: var(--color-warning-300, #ffd54f);
+}
+
+.activity-timeline__opp-chip i {
+  font-size: 8px;
+  flex-shrink: 0;
+}
+
+/* Staff initials badge */
+.activity-timeline__staff {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 20px;
+  padding: 0 var(--space-1);
+  border-radius: var(--radius-full);
+  background-color: var(--color-gray-100);
+  color: var(--color-text-secondary);
+  font-size: 10px;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.02em;
+  flex-shrink: 0;
+  cursor: default;
+  position: relative;
+}
+
+/* CSS tooltip for staff badge */
+.activity-timeline__staff[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 8px;
+  background-color: var(--color-gray-900, #1a1a2e);
+  color: #fff;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  white-space: nowrap;
+  border-radius: var(--radius-sm);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  z-index: 10;
+}
+
+.activity-timeline__staff[data-tooltip]:hover::after {
+  opacity: 1;
+}
+
 /* Full-page variant */
 .activity-timeline--full {
   background-color: var(--color-surface);

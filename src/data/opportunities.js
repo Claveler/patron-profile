@@ -7,7 +7,7 @@ export const opportunities = [
   // Anderson Collingwood - 2 opportunities
   {
     id: 'opp-001',
-    patronId: 'anderson-collingwood',
+    patronId: '7962415',
     
     name: 'New Wing Major Gift',
     description: 'Multi-year pledge for capital campaign',
@@ -33,7 +33,7 @@ export const opportunities = [
   },
   {
     id: 'opp-002',
-    patronId: 'anderson-collingwood',
+    patronId: '7962415',
     
     name: 'Spring Gala Table Sponsor',
     description: 'Table sponsorship for Spring Gala 2026',
@@ -61,7 +61,7 @@ export const opportunities = [
   // Eleanor Whitfield
   {
     id: 'opp-003',
-    patronId: 'eleanor-whitfield',
+    patronId: '7962432',
     
     name: 'Annual Fund Leadership Gift',
     description: 'Leadership level annual fund commitment',
@@ -89,7 +89,7 @@ export const opportunities = [
   // Marcus Chen
   {
     id: 'opp-004',
-    patronId: 'marcus-chen',
+    patronId: '7962433',
     
     name: 'Exhibition Sponsorship',
     description: 'Corporate sponsorship for Impressionist exhibition',
@@ -117,7 +117,7 @@ export const opportunities = [
   // Patricia Hawthorne
   {
     id: 'opp-005',
-    patronId: 'patricia-hawthorne',
+    patronId: '7962434',
     
     name: 'Foundation Grant',
     description: 'Grant from Hawthorne Family Foundation',
@@ -145,7 +145,7 @@ export const opportunities = [
   // James Morrison - Stewardship (recently closed won)
   {
     id: 'opp-006',
-    patronId: 'james-morrison',
+    patronId: '7962435',
     
     name: 'Major Gift - Building Campaign',
     description: 'Major gift pledge for new wing',
@@ -173,7 +173,7 @@ export const opportunities = [
   // Sarah Blackwood
   {
     id: 'opp-007',
-    patronId: 'sarah-blackwood',
+    patronId: '7962436',
     
     name: 'First Major Gift',
     description: 'Identified through wealth screening',
@@ -201,7 +201,7 @@ export const opportunities = [
   // William Hartford
   {
     id: 'opp-008',
-    patronId: 'william-hartford',
+    patronId: '7962437',
     
     name: 'Planned Giving - Bequest',
     description: 'Bequest intention for estate planning',
@@ -229,7 +229,7 @@ export const opportunities = [
   // Diana Rothschild
   {
     id: 'opp-009',
-    patronId: 'diana-rothschild',
+    patronId: '7962438',
     
     name: 'Education Program Support',
     description: 'Support for youth education initiatives',
@@ -257,7 +257,7 @@ export const opportunities = [
   // Theodore Banks - Stewardship
   {
     id: 'opp-010',
-    patronId: 'theodore-banks',
+    patronId: '7962439',
     
     name: 'Annual Renewal',
     description: 'Annual major gift renewal',
@@ -285,7 +285,7 @@ export const opportunities = [
   // Victoria Sterling
   {
     id: 'opp-011',
-    patronId: 'victoria-sterling',
+    patronId: '7962440',
     
     name: 'Transformational Gift',
     description: 'Potential naming opportunity',
@@ -313,7 +313,7 @@ export const opportunities = [
   // Margaret Chen
   {
     id: 'opp-012',
-    patronId: 'margaret-chen',
+    patronId: '7962441',
     
     name: 'Annual Fund Gift',
     description: 'Annual giving commitment',
