@@ -314,7 +314,7 @@
   background-color: var(--color-neutral-100);
   color: var(--color-text-secondary);
   border: 1px solid var(--color-border);
-  max-width: 80px;
+  max-width: 110px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -355,6 +355,13 @@
 .patrons-list__owner--none {
   color: var(--color-text-muted);
   font-weight: var(--font-weight-regular);
+}
+
+/* Owner Popover Backdrop */
+.patrons-list__owner-popover-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 199;
 }
 
 /* Owner Popover */

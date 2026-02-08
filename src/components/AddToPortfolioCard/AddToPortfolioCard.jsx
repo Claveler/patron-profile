@@ -34,7 +34,7 @@ function AddToPortfolioCard({ patron, onAddToPortfolio }) {
           <i className="fa-solid fa-user-plus"></i>
         </div>
         <p className="add-to-portfolio-card__message">
-          This patron is not currently assigned to a relationship manager.
+          This patron is not currently assigned to a gift officer.
         </p>
         
         {/* Quick stats to help decision */}

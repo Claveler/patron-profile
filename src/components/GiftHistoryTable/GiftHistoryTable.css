@@ -39,10 +39,31 @@
   font-weight: var(--font-weight-semibold);
 }
 
+.gift-history__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-shrink: 0;
+}
+
 .gift-history__total {
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-secondary);
+}
+
+.gift-history__record-gift-btn {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-primary);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.gift-history__record-gift-btn:hover {
+  text-decoration: underline;
 }
 
 /* Table wrapper */
@@ -87,8 +108,17 @@
   vertical-align: middle;
 }
 
-.gift-history__table tbody tr:hover {
+.gift-history__row {
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.gift-history__row:hover {
   background-color: var(--color-background);
+}
+
+.gift-history__row--selected {
+  background-color: var(--color-primary-100) !important;
 }
 
 .gift-history__date {
@@ -129,7 +159,7 @@
   white-space: nowrap;
 }
 
-.gift-history__type-badge--donation {
+.gift-history__type-badge--one-time {
   background-color: var(--color-success-100);
   color: var(--color-success-700);
 }

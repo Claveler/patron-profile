@@ -172,7 +172,7 @@ function AssignPortfolioModal({
         {/* Header */}
         <div className="assign-modal__header">
           <div className="assign-modal__header-content">
-            <h2 className="assign-modal__title">Add to Portfolio</h2>
+            <h2 className="assign-modal__title">Add to portfolio</h2>
             <p className="assign-modal__subtitle">
               <i className="fa-solid fa-user"></i>
               {patronName}

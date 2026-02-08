@@ -27,7 +27,7 @@ function Header({ onToggleSidebar }) {
         <button className="header__user-menu">
           <span className="header__user-info">
             <span className="header__user-name">Andres Clavel</span>
-            <span className="header__user-org">Fever Demo Events</span>
+            <span className="header__user-org">Fonck Museum</span>
           </span>
           <i className="fa-regular fa-circle-user header__user-icon"></i>
         </button>

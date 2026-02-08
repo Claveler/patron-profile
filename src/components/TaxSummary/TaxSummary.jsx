@@ -41,7 +41,7 @@ function TaxSummary({
 
   // Group receipts by type
   const membershipReceipts = receipts.filter(r => r.type === 'membership')
-  const donationReceipts = receipts.filter(r => r.type === 'donation')
+  const donationReceipts = receipts.filter(r => r.type === 'one-time')
 
   return (
     <div className="tax-summary">
@@ -113,7 +113,7 @@ function TaxSummary({
                       <td>{formatDate(receipt.date)}</td>
                       <td>
                         <span className={`tax-summary__type-badge tax-summary__type-badge--${receipt.type}`}>
-                          {receipt.type === 'membership' ? 'Membership' : 'Donation'}
+                          {receipt.type === 'membership' ? 'Membership' : 'Gift'}
                         </span>
                         {receipt.description}
                       </td>
@@ -162,7 +162,7 @@ function TaxSummary({
           <p>
             {organization.name} is a 501(c)(3) nonprofit organization. 
             Contributions are tax deductible to the extent allowed by law. 
-            No goods or services were provided in exchange for donations listed above.
+            No goods or services were provided in exchange for gifts listed above.
           </p>
         </div>
       </div>

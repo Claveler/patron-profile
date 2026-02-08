@@ -17,9 +17,11 @@ function MembershipsTab({
   patronId,
   patronName, 
   patronEmail,
+  refreshKey,
   onNavigateToPatron,
   onAddBeneficiary,
-  onRemoveBeneficiary
+  onRemoveBeneficiary,
+  onReorderBeneficiaries
 }) {
   // Get memberships using new data model if patronId is provided
   const membershipData = useMemo(() => {
@@ -58,7 +60,7 @@ function MembershipsTab({
     }
     
     return null
-  }, [patronId, membership])
+  }, [patronId, membership, refreshKey])
 
   // Empty state for patrons without membership
   if (!membershipData) {
@@ -174,6 +176,7 @@ function MembershipsTab({
             onNavigateToPatron={onNavigateToPatron}
             onAddBeneficiary={onAddBeneficiary}
             onRemoveBeneficiary={onRemoveBeneficiary}
+            onReorderBeneficiaries={onReorderBeneficiaries}
           />
           
           {/* Membership History */}

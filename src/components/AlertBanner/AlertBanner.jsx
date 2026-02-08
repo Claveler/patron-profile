@@ -65,7 +65,7 @@ function AlertBanner({ patron }) {
       type: 'info',
       icon: 'fa-envelope-open-text',
       title: `${pendingAcks.length} gift${pendingAcks.length > 1 ? 's' : ''} awaiting acknowledgment`,
-      message: 'Send thank-you letters to maintain donor relations',
+      message: 'Send thank-you letters to maintain patron relations',
       action: 'Review & Send',
       actionLabel: 'Review',
       isPipeline: false

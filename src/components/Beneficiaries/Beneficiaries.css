@@ -45,7 +45,52 @@
   padding: var(--space-2);
   background: var(--color-background);
   border-radius: var(--radius-md);
-  transition: background-color var(--transition-fast);
+  transition: background-color var(--transition-fast), transform 200ms ease, box-shadow 200ms ease;
+}
+
+/* Drag handle */
+.beneficiaries__drag-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border: none;
+  background: none;
+  color: var(--color-text-muted);
+  cursor: grab;
+  opacity: 0;
+  transition: opacity var(--transition-fast), color var(--transition-fast);
+  flex-shrink: 0;
+  padding: 0;
+  touch-action: none;
+}
+
+.beneficiaries__item:hover .beneficiaries__drag-handle {
+  opacity: 0.6;
+}
+
+.beneficiaries__drag-handle:hover {
+  opacity: 1 !important;
+  color: var(--color-text-secondary);
+}
+
+.beneficiaries__drag-handle:active {
+  cursor: grabbing;
+}
+
+/* Spacer for primary member (keeps alignment consistent) */
+.beneficiaries__drag-handle-spacer {
+  width: 20px;
+  flex-shrink: 0;
+}
+
+/* Dragging state */
+.beneficiaries__item--dragging {
+  box-shadow: var(--shadow-lg);
+  background: var(--color-surface);
+  opacity: 0.95;
+  z-index: 10;
 }
 
 .beneficiaries__item--clickable {

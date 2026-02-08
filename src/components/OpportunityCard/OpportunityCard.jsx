@@ -140,15 +140,15 @@ function OpportunityCard({
           </div>
         )}
         <div className="opportunity-card__footer">
-          <span className="opportunity-card__assignee" title={getStaffNameById(opportunity.assignedToId)}>
+          <span className="opportunity-card__assignee" data-tooltip={getStaffNameById(opportunity.assignedToId)}>
             {getStaffInitialsById(opportunity.assignedToId)}
           </span>
           {opportunity.campaignId && (() => {
             const campaignName = getCampaignNameById(opportunity.campaignId)
             return (
               <span className="opportunity-card__campaign" title={campaignName}>
-                {campaignName.length > 15 
-                  ? campaignName.substring(0, 15) + '...' 
+                {campaignName.length > 20 
+                  ? campaignName.substring(0, 20) + '...' 
                   : campaignName}
               </span>
             )

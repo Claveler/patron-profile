@@ -1,9 +1,9 @@
 import { useState, useRef, useEffect } from 'react'
-import { patronTags, addCustomTag, getPrimaryMembershipForPatron, formatDate, getHouseholdForPatron, getHouseholdMembers } from '../../data/patrons'
+import { patronTags, addCustomTag, getPrimaryMembershipForPatron, formatDate, getHouseholdForPatron, getHouseholdMembers, getHouseholdAddress } from '../../data/patrons'
 import { getInitials } from '../../utils/getInitials'
 import './PatronInfoBox.css'
 
-function PatronInfoBox({ patron, isManaged, onCreateOpportunity, onAddActivity, onArchive, onRestore, onUpdateTags, onNavigateToPatron }) {
+function PatronInfoBox({ patron, isManaged, onCreateOpportunity, onAddActivity, onRecordGift, onAssignToPortfolio, onArchive, onRestore, onUpdateTags, onNavigateToPatron }) {
   const membership = getPrimaryMembershipForPatron(patron.id)
   const household = getHouseholdForPatron(patron.id)
   const householdMembers = household ? getHouseholdMembers(household.id) : []
@@ -16,6 +16,7 @@ function PatronInfoBox({ patron, isManaged, onCreateOpportunity, onAddActivity, 
   const [householdPopoverOpen, setHouseholdPopoverOpen] = useState(false)
   const tagsPopoverRef = useRef(null)
   const householdPopoverRef = useRef(null)
+  const actionsRef = useRef(null)
   
   // Tags display logic - show 1 tag + count
   const allTags = patron.tags || []
@@ -59,6 +60,19 @@ function PatronInfoBox({ patron, isManaged, onCreateOpportunity, onAddActivity, 
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [householdPopoverOpen])
 
+  // Close actions dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (actionsRef.current && !actionsRef.current.contains(e.target)) {
+        setActionsOpen(false)
+      }
+    }
+    if (actionsOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [actionsOpen])
+
   // Tag management handlers
   const handleRemoveTag = (tagId) => {
     if (onUpdateTags) {
@@ -94,6 +108,20 @@ function PatronInfoBox({ patron, isManaged, onCreateOpportunity, onAddActivity, 
     setActionsOpen(false)
     if (onAddActivity) {
       onAddActivity()
+    }
+  }
+
+  const handleRecordGift = () => {
+    setActionsOpen(false)
+    if (onRecordGift) {
+      onRecordGift()
+    }
+  }
+
+  const handleAssignToPortfolio = () => {
+    setActionsOpen(false)
+    if (onAssignToPortfolio) {
+      onAssignToPortfolio()
     }
   }
 
@@ -166,10 +194,10 @@ function PatronInfoBox({ patron, isManaged, onCreateOpportunity, onAddActivity, 
                       <i className="fa-solid fa-xmark"></i>
                     </button>
                   </div>
-                  {household.address && (
+                  {getHouseholdAddress(household) && (
                     <div className="patron-info-box__household-popover-address">
                       <i className="fa-solid fa-location-dot"></i>
-                      <span>{household.address}</span>
+                      <span>{getHouseholdAddress(household)}</span>
                     </div>
                   )}
                   <div className="patron-info-box__household-popover-members">
@@ -227,8 +255,13 @@ function PatronInfoBox({ patron, isManaged, onCreateOpportunity, onAddActivity, 
               <button 
                 className="patron-info-box__tag patron-info-box__tag--count"
                 onClick={() => setTagsPopoverOpen(!tagsPopoverOpen)}
+                title={remainingCount > 0 ? `${remainingCount} more tag${remainingCount > 1 ? 's' : ''}` : 'Manage tags'}
               >
-                {remainingCount > 0 ? `+${remainingCount}` : <i className="fa-solid fa-plus"></i>}
+                {remainingCount > 0 ? (
+                  <><i className="fa-solid fa-tag" style={{fontSize: '9px', marginRight: '2px'}}></i>+{remainingCount}</>
+                ) : (
+                  <i className="fa-solid fa-plus"></i>
+                )}
               </button>
               
               {tagsPopoverOpen && (
@@ -335,7 +368,7 @@ function PatronInfoBox({ patron, isManaged, onCreateOpportunity, onAddActivity, 
           <div className="patron-info-box__info-item">
             <i className="fa-solid fa-address-card patron-info-box__info-icon"></i>
             <span>
-              {membership.programme ? `${membership.programme} - ` : ''}
+              {membership.program ? `${membership.program} - ` : ''}
               {membership.tier || 'Member'}
             </span>
             <span 
@@ -366,7 +399,7 @@ function PatronInfoBox({ patron, isManaged, onCreateOpportunity, onAddActivity, 
 
       {/* Actions */}
       <div className="patron-info-box__actions">
-        <div className="patron-info-box__dropdown">
+        <div className="patron-info-box__dropdown" ref={actionsRef}>
           <button 
             className="patron-info-box__actions-btn"
             onClick={() => setActionsOpen(!actionsOpen)}
@@ -376,28 +409,14 @@ function PatronInfoBox({ patron, isManaged, onCreateOpportunity, onAddActivity, 
           </button>
           {actionsOpen && (
             <div className="patron-info-box__dropdown-menu">
-              <button className="patron-info-box__dropdown-item">
-                <i className="fa-solid fa-pen"></i>
-                Edit Information
-              </button>
-              <button className="patron-info-box__dropdown-item">
-                <i className="fa-solid fa-tags"></i>
-                Change Category
+              {/* Group 1: Quick Record Actions */}
+              <button className="patron-info-box__dropdown-item" onClick={handleRecordGift}>
+                <i className="fa-solid fa-hand-holding-dollar"></i>
+                Record gift
               </button>
               <button className="patron-info-box__dropdown-item" onClick={handleAddActivity}>
-                Add activity
-              </button>
-              <button className="patron-info-box__dropdown-item">
-                <i className="fa-solid fa-link"></i>
-                Add relationship
-              </button>
-              <button className="patron-info-box__dropdown-item">
-                <i className="fa-solid fa-user"></i>
-                Change Assignment
-              </button>
-              <button className="patron-info-box__dropdown-item">
-                <i className="fa-solid fa-fire-flame-curved"></i>
-                Modify Engagement Level
+                <i className="fa-solid fa-calendar-plus"></i>
+                Log activity
               </button>
               {isManaged && (
                 <button className="patron-info-box__dropdown-item" onClick={handleCreateOpportunity}>
@@ -406,15 +425,30 @@ function PatronInfoBox({ patron, isManaged, onCreateOpportunity, onAddActivity, 
                 </button>
               )}
               <div className="patron-info-box__dropdown-divider"></div>
+              {/* Group 2: Manage Profile */}
+              <button className="patron-info-box__dropdown-item">
+                <i className="fa-solid fa-pen"></i>
+                Edit information
+              </button>
+              <button className="patron-info-box__dropdown-item" onClick={handleAssignToPortfolio}>
+                <i className="fa-solid fa-user-shield"></i>
+                Assign to portfolio
+              </button>
+              <button className="patron-info-box__dropdown-item">
+                <i className="fa-solid fa-link"></i>
+                Add relationship
+              </button>
+              <div className="patron-info-box__dropdown-divider"></div>
+              {/* Group 3: Administrative */}
               {isArchived ? (
                 <button className="patron-info-box__dropdown-item patron-info-box__dropdown-item--success" onClick={handleRestore}>
                   <i className="fa-solid fa-rotate-left"></i>
-                  Restore Patron
+                  Restore patron
                 </button>
               ) : (
                 <button className="patron-info-box__dropdown-item patron-info-box__dropdown-item--danger" onClick={handleArchive}>
                   <i className="fa-solid fa-box-archive"></i>
-                  Archive Patron
+                  Archive patron
                 </button>
               )}
             </div>

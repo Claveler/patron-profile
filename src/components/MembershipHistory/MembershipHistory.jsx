@@ -62,7 +62,7 @@ function MembershipHistory({ history }) {
                   </span>
                   <span className="membership-history__tier">{item.tier}</span>
                 </div>
-                <span className="membership-history__programme">{item.programme}</span>
+                <span className="membership-history__programme">{item.program}</span>
                 <div className="membership-history__date">
                   <span>{formatDate(item.date)}</span>
                   <span className="membership-history__ago">{getYearsAgo(item.date)}</span>

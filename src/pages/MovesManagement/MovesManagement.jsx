@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import OpportunityCard from '../../components/OpportunityCard/OpportunityCard'
 import OpportunityModal from '../../components/OpportunityModal/OpportunityModal'
 import { 
@@ -29,7 +30,8 @@ const formatCurrency = (amount) => {
   }).format(amount)
 }
 
-function MovesManagement({ onNavigateToPatron, onSelectOpportunity, embedded = false, initialAssigneeFilter, onClearInitialFilter }) {
+function MovesManagement({ embedded = false, initialAssigneeFilter, onClearInitialFilter }) {
+  const navigate = useNavigate()
   const [opportunities, setOpportunities] = useState(
     initialOpportunities.filter(opp => opp.status === 'open')
   )
@@ -110,15 +112,11 @@ function MovesManagement({ onNavigateToPatron, onSelectOpportunity, embedded = f
   }
 
   const handleOpportunityClick = (opportunity) => {
-    if (onSelectOpportunity) {
-      onSelectOpportunity(opportunity.id)
-    }
+    navigate(`/opportunities/${opportunity.id}`)
   }
 
   const handlePatronClick = (patronId) => {
-    if (onNavigateToPatron) {
-      onNavigateToPatron(patronId)
-    }
+    navigate(`/patrons/${patronId}`)
   }
   
   // Create opportunity handlers
@@ -158,10 +156,6 @@ function MovesManagement({ onNavigateToPatron, onSelectOpportunity, embedded = f
             </span>
           </div>
           <div className="moves-management__filters">
-            <label className="moves-management__filter-label">
-              <i className="fa-solid fa-user"></i>
-              Assigned To:
-            </label>
             <select
               className="moves-management__filter-select"
               value={filterOfficer}
@@ -175,10 +169,6 @@ function MovesManagement({ onNavigateToPatron, onSelectOpportunity, embedded = f
               ))}
             </select>
             
-            <label className="moves-management__filter-label">
-              <i className="fa-solid fa-bullhorn"></i>
-              Campaign:
-            </label>
             <select
               className="moves-management__filter-select"
               value={filterCampaign}

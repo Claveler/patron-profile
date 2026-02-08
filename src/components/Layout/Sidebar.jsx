@@ -1,6 +1,7 @@
+import { NavLink } from 'react-router-dom'
 import './Sidebar.css'
 
-const getMenuItems = (activePage) => [
+const menuItems = [
   { icon: 'fa-calendar', label: 'Events', hasSubmenu: true },
   { icon: 'fa-tower-broadcast', label: 'Channels', hasSubmenu: true },
   { icon: 'fa-id-card', label: 'Memberships', hasSubmenu: true },
@@ -10,15 +11,14 @@ const getMenuItems = (activePage) => [
     hasSubmenu: true,
     expanded: true,
     submenu: [
-      { label: 'Dashboard', page: 'dashboard', active: activePage === 'dashboard' },
-      // 'patrons' is the list view, 'patron' is the detail view - both should highlight Patrons
-      { label: 'Patrons', page: 'patrons', active: activePage === 'patrons' || activePage === 'patron' },
-      // Opportunities now includes both Pipeline and List views
-      { label: 'Opportunities', page: 'opportunities', active: activePage === 'opportunities' || activePage === 'opportunity' },
-      { label: 'Campaigns', page: 'campaigns', active: activePage === 'campaigns' },
-      { label: 'Donation Prompts', href: '#' },
-      { label: 'Donation Pages', href: '#' },
-      { label: 'Settings', page: 'settings', active: activePage === 'settings' },
+      { label: 'Dashboard', to: '/' },
+      { label: 'Patrons', to: '/patrons' },
+      { label: 'Gifts', to: '/gifts' },
+      { label: 'Opportunities', to: '/opportunities' },
+      { label: 'Campaigns', to: '/campaigns' },
+      { label: 'Donation Prompts' },
+      { label: 'Donation Pages' },
+      { label: 'Settings', to: '/settings' },
     ]
   },
   { icon: 'fa-chart-line', label: 'Report', href: '#' },
@@ -33,8 +33,7 @@ const getMenuItems = (activePage) => [
   { icon: 'fa-building', label: 'Organizations', hasSubmenu: true },
 ]
 
-function Sidebar({ collapsed, activePage = 'patron', onNavigate }) {
-  const menuItems = getMenuItems(activePage)
+function Sidebar({ collapsed }) {
   return (
     <aside className={`sidebar ${collapsed ? 'sidebar--collapsed' : ''}`}>
       <nav className="sidebar__nav">
@@ -60,18 +59,24 @@ function Sidebar({ collapsed, activePage = 'patron', onNavigate }) {
                 <ul className="sidebar__submenu">
                   {item.submenu.map((subitem, subindex) => (
                     <li key={subindex} className="sidebar__subitem">
-                      <a 
-                        href={subitem.href || '#'}
-                        className={`sidebar__sublink ${subitem.active ? 'sidebar__sublink--active' : ''}`}
-                        onClick={(e) => {
-                          if (subitem.page && onNavigate) {
-                            e.preventDefault()
-                            onNavigate(subitem.page)
+                      {subitem.to ? (
+                        <NavLink
+                          to={subitem.to}
+                          end={subitem.to === '/'}
+                          className={({ isActive }) =>
+                            `sidebar__sublink ${isActive ? 'sidebar__sublink--active' : ''}`
                           }
-                        }}
-                      >
-                        {subitem.label}
-                      </a>
+                        >
+                          {subitem.label}
+                        </NavLink>
+                      ) : (
+                        <a 
+                          href="#"
+                          className="sidebar__sublink"
+                        >
+                          {subitem.label}
+                        </a>
+                      )}
                     </li>
                   ))}
                 </ul>

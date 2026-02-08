@@ -1,23 +1,48 @@
 import { useState, useMemo } from 'react'
 import './GivingSummary.css'
 
-// Sample monthly data for chart (with year for proper labels)
-const monthlyData = [
-  { month: 'Jan', year: '25', donations: 150, revenue: 80 },
-  { month: 'Feb', year: '25', donations: 200, revenue: 120 },
-  { month: 'Mar', year: '25', donations: 180, revenue: 100 },
-  { month: 'Apr', year: '25', donations: 350, revenue: 200 },
-  { month: 'May', year: '25', donations: 250, revenue: 150 },
-  { month: 'Jun', year: '25', donations: 400, revenue: 180 },
-  { month: 'Jul', year: '25', donations: 220, revenue: 140 },
-  { month: 'Aug', year: '25', donations: 280, revenue: 160 },
-  { month: 'Sep', year: '25', donations: 320, revenue: 190 },
-  { month: 'Oct', year: '25', donations: 200, revenue: 120 },
-  { month: 'Nov', year: '25', donations: 380, revenue: 170 },
-  { month: 'Dec', year: '25', donations: 450, revenue: 220 },
-]
+const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
-function GivingSummary({ giving }) {
+/**
+ * Build a YYYY-MM key from a Date object.
+ */
+function toMonthKey(date) {
+  const yyyy = date.getFullYear()
+  const mm = String(date.getMonth() + 1).padStart(2, '0')
+  return `${yyyy}-${mm}`
+}
+
+/**
+ * Parse a YYYY-MM key into { month: 'Jan', year: '25', sortKey: '2025-01' }
+ */
+function parseMonthKey(key) {
+  const [yyyy, mm] = key.split('-')
+  return {
+    month: MONTH_NAMES[parseInt(mm, 10) - 1],
+    year: yyyy.slice(2),        // '2025' → '25'
+    sortKey: key,               // keeps original for sorting
+    fullYear: parseInt(yyyy, 10),
+    monthIndex: parseInt(mm, 10) - 1,
+  }
+}
+
+/**
+ * Generate an array of YYYY-MM keys from startKey to endKey (inclusive).
+ */
+function generateMonthRange(startKey, endKey) {
+  const [sy, sm] = startKey.split('-').map(Number)
+  const [ey, em] = endKey.split('-').map(Number)
+  const months = []
+  let y = sy, m = sm
+  while (y < ey || (y === ey && m <= em)) {
+    months.push(`${y}-${String(m).padStart(2, '0')}`)
+    m++
+    if (m > 12) { m = 1; y++ }
+  }
+  return months
+}
+
+function GivingSummary({ giving, gifts = [], activityHistory = [] }) {
   const [selectedPeriod, setSelectedPeriod] = useState('12-months')
   const [hoveredLine, setHoveredLine] = useState(null) // 'total' | 'revenue' | null
   const [hoveredPointIndex, setHoveredPointIndex] = useState(null)
@@ -37,13 +62,86 @@ function GivingSummary({ giving }) {
       </div>
     )
   }
-  
+
+  // Aggregate gifts by month  
+  const giftsByMonth = useMemo(() => {
+    const map = {}
+    gifts.forEach(g => {
+      if (!g.date) return
+      const key = g.date.slice(0, 7) // 'YYYY-MM'
+      map[key] = (map[key] || 0) + g.amount
+    })
+    return map
+  }, [gifts])
+
+  // Aggregate revenue (purchases) from activityHistory by month
+  const revenueByMonth = useMemo(() => {
+    const map = {}
+    if (!activityHistory || activityHistory.length === 0) return map
+    activityHistory.forEach(entry => {
+      if (!entry.month || !entry.weeks) return
+      let monthTotal = 0
+      entry.weeks.forEach(week => {
+        if (!week.activities) return
+        week.activities.forEach(act => {
+          if (act.type === 'purchase' && act.value) {
+            monthTotal += act.value
+          }
+        })
+      })
+      if (monthTotal > 0) {
+        map[entry.month] = (map[entry.month] || 0) + monthTotal
+      }
+    })
+    return map
+  }, [activityHistory])
+
+  // Build the filtered monthly data based on selectedPeriod
+  const monthlyData = useMemo(() => {
+    const now = new Date()
+    const currentKey = toMonthKey(now)
+    
+    // Determine date range based on period
+    let startKey, endKey
+    if (selectedPeriod === 'all') {
+      // Collect all month keys from gifts and revenue
+      const allKeys = new Set([...Object.keys(giftsByMonth), ...Object.keys(revenueByMonth)])
+      if (allKeys.size === 0) return []
+      const sorted = [...allKeys].sort()
+      startKey = sorted[0]
+      endKey = currentKey > sorted[sorted.length - 1] ? currentKey : sorted[sorted.length - 1]
+    } else if (selectedPeriod === 'ytd') {
+      startKey = `${now.getFullYear()}-01`
+      endKey = currentKey
+    } else {
+      // '12-months' or '6-months'
+      const monthsBack = selectedPeriod === '6-months' ? 5 : 11  // inclusive of current month
+      const start = new Date(now.getFullYear(), now.getMonth() - monthsBack, 1)
+      startKey = toMonthKey(start)
+      endKey = currentKey
+    }
+
+    // Generate full continuous range of months
+    const range = generateMonthRange(startKey, endKey)
+
+    return range.map(key => {
+      const parsed = parseMonthKey(key)
+      return {
+        month: parsed.month,
+        year: parsed.year,
+        sortKey: key,
+        totalGifts: giftsByMonth[key] || 0,
+        revenue: revenueByMonth[key] || 0,
+      }
+    })
+  }, [giftsByMonth, revenueByMonth, selectedPeriod])
+
   // Calculate cumulative data
   const cumulativeData = useMemo(() => {
     let runningDonations = 0
     let runningRevenue = 0
     return monthlyData.map(d => {
-      runningDonations += d.donations
+      runningDonations += d.totalGifts
       runningRevenue += d.revenue
       return {
         ...d,
@@ -51,7 +149,7 @@ function GivingSummary({ giving }) {
         cumRevenue: runningRevenue
       }
     })
-  }, [])
+  }, [monthlyData])
   
   // Get chart data based on view mode
   const chartData = useMemo(() => {
@@ -64,14 +162,16 @@ function GivingSummary({ giving }) {
     }
     return monthlyData.map(d => ({
       ...d,
-      displayDonations: d.donations,
+      displayDonations: d.totalGifts,
       displayRevenue: d.revenue
     }))
-  }, [chartView, cumulativeData])
+  }, [chartView, cumulativeData, monthlyData])
   
   // Calculate max value for chart scaling (with padding)
   const maxValue = useMemo(() => {
+    if (chartData.length === 0) return 1000
     const max = Math.max(...chartData.map(d => d.displayDonations + d.displayRevenue))
+    if (max === 0) return 1000 // avoid log(0)
     // Round up to nice number for Y-axis
     const magnitude = Math.pow(10, Math.floor(Math.log10(max)))
     return Math.ceil(max / magnitude) * magnitude
@@ -127,7 +227,7 @@ function GivingSummary({ giving }) {
             <span className="giving-summary__value-dot giving-summary__value-dot--donations"></span>
             <span className="giving-summary__value-card-label">Gifts</span>
           </div>
-          <span className="giving-summary__value-card-amount">{formatCurrency(giving.donations || 0)}</span>
+          <span className="giving-summary__value-card-amount">{formatCurrency(giving.totalGifts || 0)}</span>
           {giving.averageGift && (
             <span className="giving-summary__value-card-detail">
               Avg Gift: {formatCurrency(giving.averageGift)}
@@ -474,7 +574,7 @@ function GivingSummary({ giving }) {
                 <h5 className="giving-summary__breakdown-title">By Fund</h5>
                 <div className="giving-summary__breakdown-list">
                   {Object.entries(giving.byFund).map(([id, fund]) => {
-                    const percentage = giving.donations ? (fund.total / giving.donations) * 100 : 0
+                    const percentage = giving.totalGifts ? (fund.total / giving.totalGifts) * 100 : 0
                     return (
                       <div key={id} className="giving-summary__breakdown-item">
                         <div className="giving-summary__breakdown-header">
@@ -501,7 +601,7 @@ function GivingSummary({ giving }) {
                 <h5 className="giving-summary__breakdown-title">By Campaign</h5>
                 <div className="giving-summary__breakdown-list">
                   {Object.entries(giving.byCampaign).map(([id, campaign]) => {
-                    const percentage = giving.donations ? (campaign.total / giving.donations) * 100 : 0
+                    const percentage = giving.totalGifts ? (campaign.total / giving.totalGifts) * 100 : 0
                     return (
                       <div key={id} className="giving-summary__breakdown-item">
                         <div className="giving-summary__breakdown-header">

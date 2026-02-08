@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { formatDate } from '../../data/patrons'
 import './DocumentHistory.css'
 
-function DocumentHistory({ summaries, receipts, inKindDonations }) {
+function DocumentHistory({ summaries, receipts, inKindGifts }) {
   const [activeSection, setActiveSection] = useState('history')
   const [typeFilter, setTypeFilter] = useState('all')
 
@@ -38,7 +38,7 @@ function DocumentHistory({ summaries, receipts, inKindDonations }) {
           <i className="fa-solid fa-receipt"></i>
           Receipts
         </button>
-        {inKindDonations.length > 0 && (
+        {inKindGifts.length > 0 && (
           <button 
             className={`document-history__tab ${activeSection === 'inkind' ? 'document-history__tab--active' : ''}`}
             onClick={() => setActiveSection('inkind')}
@@ -119,7 +119,7 @@ function DocumentHistory({ summaries, receipts, inKindDonations }) {
             >
               <option value="all">All Types</option>
               <option value="membership">Membership</option>
-              <option value="donation">Donation</option>
+              <option value="one-time">One-Time Gift</option>
             </select>
           </div>
           
@@ -129,13 +129,13 @@ function DocumentHistory({ summaries, receipts, inKindDonations }) {
                 <div key={receipt.id} className="document-history__receipt">
                   <div className="document-history__receipt-main">
                     <div className="document-history__receipt-icon">
-                      <i className={`fa-solid ${receipt.type === 'donation' ? 'fa-hand-holding-heart' : 'fa-id-card'}`}></i>
+                      <i className={`fa-solid ${receipt.type === 'one-time' ? 'fa-hand-holding-heart' : 'fa-id-card'}`}></i>
                     </div>
                     <div className="document-history__receipt-details">
                       <p className="document-history__receipt-desc">{receipt.description}</p>
                       <p className="document-history__receipt-meta">
                         <span className={`document-history__receipt-type document-history__receipt-type--${receipt.type}`}>
-                          {receipt.type === 'membership' ? 'Membership' : 'Donation'}
+                          {receipt.type === 'membership' ? 'Membership' : 'One-Time Gift'}
                         </span>
                         <span className="document-history__receipt-date">{formatDate(receipt.date)}</span>
                       </p>
@@ -167,21 +167,21 @@ function DocumentHistory({ summaries, receipts, inKindDonations }) {
         </div>
       )}
 
-      {/* In-Kind Donations Section */}
+      {/* In-Kind Gifts Section */}
       {activeSection === 'inkind' && (
         <div className="document-history__content">
           <div className="document-history__section-header">
-            <h4 className="document-history__section-title">In-Kind Donations</h4>
+            <h4 className="document-history__section-title">In-Kind Gifts</h4>
           </div>
           
           <div className="document-history__inkind-note">
             <i className="fa-solid fa-circle-info"></i>
-            <p>In-kind donations require the donor to determine fair market value for tax purposes. Acknowledgement letters confirm receipt only.</p>
+            <p>In-kind gifts require the patron to determine fair market value for tax purposes. Acknowledgment letters confirm receipt only.</p>
           </div>
 
-          {inKindDonations.length > 0 ? (
+          {inKindGifts.length > 0 ? (
             <div className="document-history__inkind-list">
-              {inKindDonations.map((donation, index) => (
+              {inKindGifts.map((donation, index) => (
                 <div key={index} className="document-history__inkind-item">
                   <div className="document-history__inkind-icon">
                     <i className="fa-solid fa-gift"></i>
@@ -202,7 +202,7 @@ function DocumentHistory({ summaries, receipts, inKindDonations }) {
           ) : (
             <div className="document-history__empty">
               <i className="fa-solid fa-gift"></i>
-              <p>No in-kind donations</p>
+              <p>No in-kind gifts</p>
               <span>Non-monetary gifts will appear here</span>
             </div>
           )}

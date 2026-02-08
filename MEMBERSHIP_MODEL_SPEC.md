@@ -47,9 +47,11 @@ Out of scope (future phases):
 │  email: string (optional)                                       │
 │  phone: string (optional)                                       │
 │  dateOfBirth: date (optional)                                   │
-│  recordStatus: "active" | "stub" | "deceased" | "merged"        │
+│  status: "active" | "archived"                                  │
+│  ** Proposed extensions (not yet in DATA_MODEL): **              │
+│  **   "stub" | "deceased" | "merged"                  **        │
 │  mergedIntoId: string (if merged, points to surviving record)   │
-│  source: "fever" | "manual" | "import"                          │
+│  source: "ticket" | "online" | "membership" | "manual" | "import" │
 │  createdDate: datetime                                          │
 │  ...existing patron fields...                                   │
 └─────────────────────────────────────────────────────────────────┘
@@ -59,13 +61,13 @@ Out of scope (future phases):
 │  Represents a membership account (can have multiple patrons)    │
 ├─────────────────────────────────────────────────────────────────┤
 │  id: string (uuid)                                              │
-│  programme: string ("General Membership", "Patron Circle", etc.)│
+│  program: string ("General Membership", "Patron Circle", etc.) │
 │  tier: string ("Basic", "Silver", "Gold", "Platinum")           │
 │  status: "active" | "expired" | "cancelled" | "pending"         │
 │  startDate: date                                                │
 │  renewalDate: date                                              │
 │  expirationDate: date                                           │
-│  autoRenew: boolean                                             │
+│  autoRenewal: boolean                                           │
 │  paymentMethod: object { type, last4, expiry }                  │
 │  benefits: object (tier-specific benefits config)               │
 │  createdDate: datetime                                          │
@@ -88,7 +90,7 @@ Out of scope (future phases):
 └─────────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────────┐
-│                       RELATIONSHIP                              │
+│                   PATRON_RELATIONSHIP                           │
 │  CRM connections between patrons (broader than membership)      │
 ├─────────────────────────────────────────────────────────────────┤
 │  id: string (uuid)                                              │
@@ -129,8 +131,8 @@ Out of scope (future phases):
           │                │                │
           ▼                ▼                ▼
     ┌───────────┐   ┌─────────────┐   ┌──────────────┐
-    │RELATIONSHIP│   │MEMBERSHIP_  │   │MEMBERSHIP_   │
-    │           │   │BENEFICIARY  │   │USAGE         │
+    │PATRON_    │   │MEMBERSHIP_  │   │MEMBERSHIP_   │
+    │RELATIONSHIP│  │BENEFICIARY  │   │USAGE         │
     └───────────┘   └──────┬──────┘   └──────┬───────┘
                            │                  │
                            ▼                  │
@@ -423,7 +425,7 @@ When a patron is on multiple memberships, show cards:
                                    ▼
                           ┌─────────────────┐
                           │ Optionally      │
-                          │ create          │
+                          │ create PATRON_  │
                           │ RELATIONSHIP    │
                           └────────┬────────┘
                                    │
@@ -458,9 +460,10 @@ When a patron is on multiple memberships, show cards:
          │
          ▼
 ┌─────────────────┐     ┌─────────────────┐
-│ User chose to   │────▶│ Set RELATIONSHIP│
-│ remove          │ YES │ endDate=now     │
-│ relationship?   │     └─────────────────┘
+│ User chose to   │────▶│ Set PATRON_     │
+│ remove          │ YES │ RELATIONSHIP    │
+│ relationship?   │     │ endDate=now     │
+                        └─────────────────┘
 └────────┬────────┘
          │ NO
          ▼
@@ -657,5 +660,6 @@ Provide staff with a "Data Quality" report showing stubs that need enrichment.
 ## Document History
 
 - Created: February 6, 2026
+- Updated: February 8, 2026 (Terminology alignment with DATA_MODEL.md: autoRenew -> autoRenewal, programme -> program, RELATIONSHIP -> PATRON_RELATIONSHIP, source values expanded, status field aligned with proposed extensions noted)
 - Author: AI Assistant (based on product discussion with Andres Clavel)
 - Status: Draft for Review

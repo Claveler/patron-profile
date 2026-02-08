@@ -1,6 +1,8 @@
 // Campaign and Fund data with DCAP hierarchy
 // DCAP = Designation (Fund) → Campaign → Appeal → Package
 
+import { shiftDemoData } from '../utils/demoDate'
+
 // =============================================================================
 // FUNDS - The accounting destinations
 // =============================================================================
@@ -189,13 +191,13 @@ export const GIFT_TYPES = [
 
 export const STAFF = [
   { id: 'lj', initials: 'LJ', name: 'Liam Johnson', role: 'Major Gift Officer' },
-  { id: 'jm', initials: 'JM', name: 'Jennifer Martinez', role: 'Director of Development' },
-  { id: 'rb', initials: 'RB', name: 'Robert Brown', role: 'Gift Officer' },
-  { id: 'al', initials: 'AL', name: 'Amanda Lee', role: 'Gift Officer' },
-  { id: 'es', initials: 'ES', name: 'Emma Smith', role: 'Gift Officer' },
-  { id: 'eg', initials: 'EG', name: 'Ethan Garcia', role: 'Gift Officer' },
-  { id: 'sa', initials: 'SA', name: 'Sophia Anderson', role: 'Gift Officer' },
-  { id: 'lt', initials: 'LT', name: 'Lucas Thomas', role: 'Gift Officer' },
+  { id: 'jm', initials: 'JS', name: 'Jason Lee Scott', role: 'Director of Development' },
+  { id: 'rb', initials: 'TO', name: 'Tommy Oliver', role: 'Gift Officer' },
+  { id: 'al', initials: 'KH', name: 'Kimberly Hart', role: 'Gift Officer' },
+  { id: 'es', initials: 'AH', name: 'Ashley Hammond', role: 'Gift Officer' },
+  { id: 'eg', initials: 'CG', name: 'Carter Grayson', role: 'Gift Officer' },
+  { id: 'sa', initials: 'WC', name: 'Wesley Collins', role: 'Gift Officer' },
+  { id: 'lt', initials: 'JL', name: 'Jack Landors', role: 'Gift Officer' },
 ]
 
 // =============================================================================
@@ -316,3 +318,11 @@ export const formatCurrency = (amount, compact = false) => {
     maximumFractionDigits: 0
   }).format(amount)
 }
+
+// =============================================================================
+// DATE SHIFTING — keeps demo dates relative to today (applied once at load time)
+// =============================================================================
+;(() => {
+  const shifted = shiftDemoData(CAMPAIGNS)
+  CAMPAIGNS.splice(0, CAMPAIGNS.length, ...shifted)
+})()

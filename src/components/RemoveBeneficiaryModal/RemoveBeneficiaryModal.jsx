@@ -7,6 +7,7 @@ function RemoveBeneficiaryModal({
   onClose, 
   membershipId,
   beneficiary,
+  hasRelationship = false,
   onSuccess 
 }) {
   const [removeRelationship, setRemoveRelationship] = useState(false)
@@ -42,7 +43,7 @@ function RemoveBeneficiaryModal({
     <div className="remove-beneficiary-modal__overlay" onClick={onClose}>
       <div className="remove-beneficiary-modal" onClick={e => e.stopPropagation()}>
         <div className="remove-beneficiary-modal__header">
-          <h2 className="remove-beneficiary-modal__title">Remove Beneficiary</h2>
+          <h2 className="remove-beneficiary-modal__title">Remove beneficiary</h2>
           <button className="remove-beneficiary-modal__close" onClick={onClose}>
             <i className="fa-solid fa-xmark"></i>
           </button>
@@ -59,17 +60,19 @@ function RemoveBeneficiaryModal({
             Their patron record will be preserved for historical tracking.
           </p>
 
-          <label className="remove-beneficiary-modal__checkbox">
-            <input
-              type="checkbox"
-              checked={removeRelationship}
-              onChange={e => setRemoveRelationship(e.target.checked)}
-            />
-            <span className="remove-beneficiary-modal__checkbox-text">
-              <strong>Also remove household relationship</strong>
-              <small>Uncheck if still family, just not on this membership</small>
-            </span>
-          </label>
+          {hasRelationship && (
+            <label className="remove-beneficiary-modal__checkbox">
+              <input
+                type="checkbox"
+                checked={removeRelationship}
+                onChange={e => setRemoveRelationship(e.target.checked)}
+              />
+              <span className="remove-beneficiary-modal__checkbox-text">
+                <strong>Also remove household relationship</strong>
+                <small>Uncheck if still family, just not on this membership</small>
+              </span>
+            </label>
+          )}
 
           {error && (
             <div className="remove-beneficiary-modal__error">

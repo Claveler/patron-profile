@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { patrons, patronTags, engagementLevels, giftOfficers, patronSources, isManagedProspect, formatRelativeDate, getActivePatrons, getPatronOrigin, getPrimaryMembershipForPatron } from '../../data/patrons'
 import { getStaffNameById } from '../../data/campaigns'
 import { getInitials } from '../../utils/getInitials'
@@ -25,7 +26,8 @@ const formatCurrency = (amount) => {
   }).format(amount)
 }
 
-function PatronsList({ onSelectPatron, onNavigateToOpportunitiesForOfficer }) {
+function PatronsList() {
+  const navigate = useNavigate()
   const [searchTerm, setSearchTerm] = useState('')
   const [sortField, setSortField] = useState('createdDate')
   const [sortDirection, setSortDirection] = useState('desc') // newest first
@@ -36,16 +38,19 @@ function PatronsList({ onSelectPatron, onNavigateToOpportunitiesForOfficer }) {
   const [ownerPopover, setOwnerPopover] = useState(null) // { officerId, officerName, rect }
   const ownerPopoverRef = useRef(null)
 
-  // Close owner popover on click outside
+  // Close owner popover on scroll or Escape key
   useEffect(() => {
     if (!ownerPopover) return
-    const handleClickOutside = (e) => {
-      if (ownerPopoverRef.current && !ownerPopoverRef.current.contains(e.target)) {
-        setOwnerPopover(null)
-      }
+    const handleScroll = () => setOwnerPopover(null)
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') setOwnerPopover(null)
     }
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
+    window.addEventListener('scroll', handleScroll, true)
+    document.addEventListener('keydown', handleKeyDown)
+    return () => {
+      window.removeEventListener('scroll', handleScroll, true)
+      document.removeEventListener('keydown', handleKeyDown)
+    }
   }, [ownerPopover])
 
   // Filter state
@@ -103,7 +108,7 @@ function PatronsList({ onSelectPatron, onNavigateToOpportunitiesForOfficer }) {
       result = result.filter(patron => 
         patron.firstName.toLowerCase().includes(term) ||
         patron.lastName.toLowerCase().includes(term) ||
-        patron.email.toLowerCase().includes(term) ||
+        patron.email?.toLowerCase().includes(term) ||
         (patron.assignedToId && getStaffNameById(patron.assignedToId).toLowerCase().includes(term))
       )
     }
@@ -152,17 +157,22 @@ function PatronsList({ onSelectPatron, onNavigateToOpportunitiesForOfficer }) {
       result = result.filter(p => (p.giving?.lifetimeValue || 0) <= Number(filterLtvMax))
     }
 
-    // Filter by last donation date
+    // Filter by last gift date
     if (filterLastDonation !== 'all') {
       const now = new Date()
       result = result.filter(p => {
-        const lastDonation = p.giving?.lastDonation
+        const lastGift = p.giving?.lastGift
         if (filterLastDonation === 'never') {
-          return !lastDonation
+          return !lastGift
         }
-        if (!lastDonation) return false
-        const donationDate = new Date(lastDonation)
-        const diffDays = Math.floor((now - donationDate) / (1000 * 60 * 60 * 24))
+        if (!lastGift) return false
+        const giftDate = new Date(lastGift)
+        const diffDays = Math.floor((now - giftDate) / (1000 * 60 * 60 * 24))
+        // Giving status filters (relative-time, evergreen with date shifting)
+        if (filterLastDonation === 'current') return diffDays <= 365
+        if (filterLastDonation === 'lybunt') return diffDays > 365 && diffDays <= 730
+        if (filterLastDonation === 'sybunt') return diffDays > 730
+        // Time-range filters
         if (filterLastDonation === '30') return diffDays <= 30
         if (filterLastDonation === '90') return diffDays <= 90
         if (filterLastDonation === '365') return diffDays <= 365
@@ -241,7 +251,7 @@ function PatronsList({ onSelectPatron, onNavigateToOpportunitiesForOfficer }) {
   }
 
   const handleRowClick = (patron) => {
-    onSelectPatron(patron.id)
+    navigate(`/patrons/${patron.id}`)
   }
 
   const handleMenuClick = (e, patronId) => {
@@ -252,7 +262,7 @@ function PatronsList({ onSelectPatron, onNavigateToOpportunitiesForOfficer }) {
   const handleViewProfile = (e, patron) => {
     e.stopPropagation()
     setOpenMenuId(null)
-    onSelectPatron(patron.id)
+    navigate(`/patrons/${patron.id}`)
   }
 
   // Close menu when clicking outside
@@ -282,16 +292,14 @@ function PatronsList({ onSelectPatron, onNavigateToOpportunitiesForOfficer }) {
   // Navigate to opportunities filtered by the clicked officer
   const handleViewOpportunitiesForOfficer = (officerId) => {
     setOwnerPopover(null)
-    if (onNavigateToOpportunitiesForOfficer) {
-      onNavigateToOpportunitiesForOfficer(officerId)
-    }
+    navigate(`/opportunities?officer=${officerId}`)
   }
 
   // Export filtered patrons to CSV
   const handleExportCSV = () => {
     const headers = [
       'First Name', 'Last Name', 'Email', 'Phone', 'Address',
-      'Membership Tier', 'Lifetime Value', 'Donation Count', 'Last Donation',
+      'Membership Tier', 'Lifetime Value', 'Gift Count', 'Last Gift',
       'Tags', 'Gift Officer', 'Engagement', 'Source', 'Patron Since'
     ]
     const rows = filteredPatrons.map(p => [
@@ -303,7 +311,7 @@ function PatronsList({ onSelectPatron, onNavigateToOpportunitiesForOfficer }) {
       p.membership?.tier || 'None',
       p.giving?.lifetimeValue || 0,
       p.giving?.giftCount || 0,
-      p.giving?.lastDonation || '',
+      p.giving?.lastGift || '',
       (p.tags || []).map(t => {
         const tag = patronTags.find(pt => pt.id === t)
         return tag ? tag.label : t
@@ -334,10 +342,8 @@ function PatronsList({ onSelectPatron, onNavigateToOpportunitiesForOfficer }) {
 
   // Handle new patron creation success
   const handlePatronCreated = (newPatron) => {
-    // Optionally navigate to the new patron's profile
-    if (onSelectPatron) {
-      onSelectPatron(newPatron.id)
-    }
+    // Navigate to the new patron's profile
+    navigate(`/patrons/${newPatron.id}`)
   }
 
   return (
@@ -520,9 +526,9 @@ function PatronsList({ onSelectPatron, onNavigateToOpportunitiesForOfficer }) {
                 </div>
               </div>
 
-              {/* Last Donation - dropdown */}
+              {/* Last Gift - dropdown */}
               <div className="patrons-list__filter-group">
-                <label className="patrons-list__filter-label">Last Donation</label>
+                <label className="patrons-list__filter-label">Last Gift</label>
                 <select
                   className="patrons-list__filter-select"
                   value={filterLastDonation}
@@ -533,7 +539,11 @@ function PatronsList({ onSelectPatron, onNavigateToOpportunitiesForOfficer }) {
                   <option value="90">Last 90 days</option>
                   <option value="365">Last year</option>
                   <option value="over365">Over 1 year ago</option>
-                  <option value="never">Never donated</option>
+                  <option value="never">No gifts</option>
+                  <option disabled>──────────</option>
+                  <option value="current">Active (last 12 months)</option>
+                  <option value="lybunt">LYBUNT (12–24 months ago)</option>
+                  <option value="sybunt">SYBUNT (over 24 months ago)</option>
                 </select>
               </div>
             </div>
@@ -622,8 +632,8 @@ function PatronsList({ onSelectPatron, onNavigateToOpportunitiesForOfficer }) {
             )}
             {filterLastDonation !== 'all' && (
               <span className="patrons-list__chip">
-                Last Donation: {
-                  { '30': 'Last 30 days', '90': 'Last 90 days', '365': 'Last year', 'over365': 'Over 1 year ago', 'never': 'Never' }[filterLastDonation]
+                Last Gift: {
+                  { '30': 'Last 30 days', '90': 'Last 90 days', '365': 'Last year', 'over365': 'Over 1 year ago', 'never': 'No gifts', 'current': 'Active', 'lybunt': 'LYBUNT', 'sybunt': 'SYBUNT' }[filterLastDonation]
                 }
                 <button className="patrons-list__chip-remove" onClick={() => setFilterLastDonation('all')}>
                   <i className="fa-solid fa-xmark"></i>
@@ -835,7 +845,7 @@ function PatronsList({ onSelectPatron, onNavigateToOpportunitiesForOfficer }) {
                   filterOwner !== 'all' && 'Gift Officer',
                   filterSource !== 'all' && 'Source',
                   (filterLtvMin !== '' || filterLtvMax !== '') && 'LTV',
-                  filterLastDonation !== 'all' && 'Last Donation',
+                  filterLastDonation !== 'all' && 'Last Gift',
                 ].filter(Boolean).join(', ')}
               </span>
             )}
@@ -845,32 +855,38 @@ function PatronsList({ onSelectPatron, onNavigateToOpportunitiesForOfficer }) {
 
       {/* Owner Popover */}
       {ownerPopover && (
-        <div 
-          className="patrons-list__owner-popover"
-          ref={ownerPopoverRef}
-          style={{
-            top: ownerPopover.rect.bottom + window.scrollY + 4,
-            left: ownerPopover.rect.left + window.scrollX,
-          }}
-        >
-          <div className="patrons-list__owner-popover-header">
-            {ownerPopover.officerName}
+        <>
+          <div
+            className="patrons-list__owner-popover-backdrop"
+            onClick={() => setOwnerPopover(null)}
+          />
+          <div 
+            className="patrons-list__owner-popover"
+            ref={ownerPopoverRef}
+            style={{
+              top: ownerPopover.rect.bottom + 4,
+              left: ownerPopover.rect.left,
+            }}
+          >
+            <div className="patrons-list__owner-popover-header">
+              {ownerPopover.officerName}
+            </div>
+            <button
+              className="patrons-list__owner-popover-item"
+              onClick={() => handleFilterByOfficer(ownerPopover.officerId)}
+            >
+              <i className="fa-solid fa-filter"></i>
+              Filter patrons by this gift officer
+            </button>
+            <button
+              className="patrons-list__owner-popover-item"
+              onClick={() => handleViewOpportunitiesForOfficer(ownerPopover.officerId)}
+            >
+              <i className="fa-solid fa-bullseye"></i>
+              View opportunities
+            </button>
           </div>
-          <button
-            className="patrons-list__owner-popover-item"
-            onClick={() => handleFilterByOfficer(ownerPopover.officerId)}
-          >
-            <i className="fa-solid fa-filter"></i>
-            Filter patrons by this gift officer
-          </button>
-          <button
-            className="patrons-list__owner-popover-item"
-            onClick={() => handleViewOpportunitiesForOfficer(ownerPopover.officerId)}
-          >
-            <i className="fa-solid fa-bullseye"></i>
-            View opportunities
-          </button>
-        </div>
+        </>
       )}
 
       {/* Patron Modal */}

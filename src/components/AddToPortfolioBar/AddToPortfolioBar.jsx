@@ -5,7 +5,7 @@ function AddToPortfolioBar({ patron, onAddToPortfolio }) {
     if (onAddToPortfolio) {
       onAddToPortfolio(patron)
     } else {
-      alert(`This would open a modal to assign ${patron.firstName} ${patron.lastName} to a relationship manager and optionally create their first opportunity.`)
+      alert(`This would open a modal to assign ${patron.firstName} ${patron.lastName} to a gift officer and optionally create their first opportunity.`)
     }
   }
 
@@ -19,7 +19,7 @@ function AddToPortfolioBar({ patron, onAddToPortfolio }) {
               This constituent has no active opportunities
             </span>
             <span className="add-to-portfolio-bar__subtext">
-              Assign to a relationship manager to begin cultivation
+              Assign to a gift officer to begin cultivation
             </span>
           </div>
         </div>

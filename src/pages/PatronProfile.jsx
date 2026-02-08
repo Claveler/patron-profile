@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
 import PatronInfoBox from '../components/PatronInfoBox/PatronInfoBox'
 import TabNavigation from '../components/TabNavigation/TabNavigation'
 import SummaryTab from '../components/Tabs/SummaryTab'
@@ -12,7 +13,11 @@ import AssignPortfolioModal from '../components/AssignPortfolioModal/AssignPortf
 import AddBeneficiaryModal from '../components/AddBeneficiaryModal/AddBeneficiaryModal'
 import RemoveBeneficiaryModal from '../components/RemoveBeneficiaryModal/RemoveBeneficiaryModal'
 import ActivityTimeline from '../components/ActivityTimeline/ActivityTimeline'
-import { getPatronById, isManagedProspect, archivePatron, restorePatron, updatePatronTags, getMembershipsByPatronId, getPrimaryPatronForMembership, getGiftsByPatronId, getInteractionsByPatronId } from '../data/patrons'
+import GiftDetailPanel from '../components/GiftDetailPanel/GiftDetailPanel'
+import RelationshipsTab from '../components/RelationshipsTab/RelationshipsTab'
+import AddRelationshipModal from '../components/AddRelationshipModal/AddRelationshipModal'
+import EndRelationshipModal from '../components/EndRelationshipModal/EndRelationshipModal'
+import { getPatronById, isManagedProspect, archivePatron, restorePatron, updatePatronTags, getMembershipsByPatronId, getPrimaryPatronForMembership, getGiftsByPatronId, getInteractionsByPatronId, hasHouseholdRelationship, reorderBeneficiaries } from '../data/patrons'
 import './PatronProfile.css'
 
 const tabs = [
@@ -36,9 +41,9 @@ const defaultPatronData = {
     verified: true
   },
   category: 'Member',
-  email: 'collingander@gmail.com',
-  phone: '(555) 123-4567',
-  address: '789 Pine Rd, Austin, TX 73301',
+  email: 'anderson.collingwood@gmail.com',
+  phone: '(415) 555-4567',
+  address: '45 Paradise Dr, Tiburon, CA 94920',
   // Membership data now comes from normalized memberships[] via getPrimaryMembershipForPatron()
   assignedToId: 'lj',
   engagement: {
@@ -61,7 +66,7 @@ const defaultPatronData = {
       { month: '2025-03', weeks: [
         { activities: [] },
         { activities: [{ type: 'attendance', count: 1 }] },
-        { activities: [{ type: 'donation', count: 1, value: 750 }] },
+        { activities: [{ type: 'gift', count: 1, value: 750 }] },
         { activities: [{ type: 'attendance', count: 2 }, { type: 'purchase', count: 1, value: 45 }] }
       ]},
       // Apr 2025
@@ -81,7 +86,7 @@ const defaultPatronData = {
       // Jun 2025
       { month: '2025-06', weeks: [
         { activities: [{ type: 'attendance', count: 1 }] },
-        { activities: [{ type: 'donation', count: 1, value: 500 }, { type: 'attendance', count: 3 }] },
+        { activities: [{ type: 'gift', count: 1, value: 500 }, { type: 'attendance', count: 3 }] },
         { activities: [{ type: 'attendance', count: 2 }] },
         { activities: [{ type: 'purchase', count: 1, value: 25 }] }
       ]},
@@ -111,7 +116,7 @@ const defaultPatronData = {
         { activities: [{ type: 'attendance', count: 2 }] },
         { activities: [{ type: 'attendance', count: 1 }, { type: 'purchase', count: 1, value: 55 }] },
         { activities: [{ type: 'attendance', count: 3 }] },
-        { activities: [{ type: 'donation', count: 1, value: 200 }] }
+        { activities: [{ type: 'gift', count: 1, value: 200 }] }
       ]},
       // Nov 2025
       { month: '2025-11', weeks: [
@@ -124,7 +129,7 @@ const defaultPatronData = {
       { month: '2025-12', weeks: [
         { activities: [{ type: 'membership', count: 1, value: 145.99 }] },
         { activities: [{ type: 'attendance', count: 2 }] },
-        { activities: [{ type: 'donation', count: 1, value: 1000 }, { type: 'attendance', count: 3 }] },
+        { activities: [{ type: 'gift', count: 1, value: 1000 }, { type: 'attendance', count: 3 }] },
         { activities: [{ type: 'attendance', count: 4 }, { type: 'purchase', count: 3, value: 156 }] }
       ]},
       // Jan 2026 (most recent)
@@ -132,7 +137,7 @@ const defaultPatronData = {
         { activities: [{ type: 'attendance', count: 2 }] },
         { activities: [] },
         { activities: [{ type: 'attendance', count: 1 }, { type: 'purchase', count: 1, value: 32 }] },
-        { activities: [{ type: 'attendance', count: 3 }, { type: 'donation', count: 1, value: 250 }] }
+        { activities: [{ type: 'attendance', count: 3 }, { type: 'gift', count: 1, value: 250 }] }
       ]}
     ]
   },
@@ -140,114 +145,71 @@ const defaultPatronData = {
   // See src/data/opportunities.js for opportunity records
   giving: {
     // Aggregate totals
-    lifetimeValue: 3222.50,      // Total financial relationship (donations + revenue)
-    donations: 1975.00,          // Charitable gifts (tax-deductible)
-    revenue: 1247.50,            // Earned income (tickets, F&B, merch)
-    giftCount: 6,                // Number of donation gifts
-    averageGift: 329.17,         // Average donation amount (donations-only)
+    lifetimeValue: 19231.97,     // Total financial relationship (gifts + revenue)
+    totalGifts: 16681.97,        // Charitable gifts (tax-deductible)
+    revenue: 2550.00,            // Earned income (tickets, F&B, merch)
+    giftCount: 16,               // Number of gift transactions
+    averageGift: 1042.62,        // Average gift amount (gifts-only)
     
     // Aggregates by fund
     byFund: {
-      'annual-operating': { name: 'Annual Operating', total: 1895.99, count: 3 },
-      'education': { name: 'Education Programs', total: 500.00, count: 1 },
-      'capital-building': { name: 'Capital Building', total: 750.00, count: 1 }
+      'annual-operating': { name: 'Annual Operating', total: 12181.97, count: 12 },
+      'restricted': { name: 'Restricted Funds', total: 750.00, count: 1 },
+      'capital-building': { name: 'Capital Building', total: 3750.00, count: 3 }
     },
     
     // Aggregates by campaign
     byCampaign: {
-      'annual-2026': { name: '2026 Annual Fund', total: 2145.99, count: 3, goal: 500000 },
-      'building-future': { name: 'Building the Future', total: 750.00, count: 1, goal: 50000000 },
-      'annual-2025': { name: '2025 Annual Fund', total: 250.00, count: 1, goal: 450000 }
+      'annual-2026': { name: '2026 Annual Fund', total: 7945.99, count: 7, goal: 500000 },
+      'building-future': { name: 'Building the Future', total: 3750.00, count: 3, goal: 50000000 },
+      'annual-2025': { name: '2025 Annual Fund', total: 4145.99, count: 4, goal: 450000 },
+      'emergency-2024': { name: 'Emergency Relief Fund', total: 750.00, count: 1, goal: 100000 }
     },
     
     // Aggregates by year
     byYear: {
-      2025: { total: 2895.99, count: 4 },
-      2024: { total: 250.00, count: 1 }
+      2026: { total: 2600.00, count: 2 },
+      2025: { total: 9095.99, count: 8 },
+      2024: { total: 4895.99, count: 5 },
+      2023: { total: 89.99, count: 1 }
     },
     
     // Transaction highlights
-    firstTransaction: { amount: 250.00, date: '2024-11-18' },
-    lastTransaction: { amount: 1000.00, date: '2025-12-15' },
-    largestTransaction: { amount: 1000.00, date: '2025-12-15' }
+    firstTransaction: { amount: 89.99, date: '2023-12-02' },
+    lastTransaction: { amount: 2500.00, date: '2026-01-28' },
+    largestTransaction: { amount: 2500.00, date: '2024-12-18' }
   },
   wealthInsights: {
     propensityScore: 'DSI-3',
-    description: 'Real Estate holdings of 1.2 million, business executive at a firm with revenues of $1-5 million.'
+    description: 'Real estate holdings in Marin County valued at $2.8 million, business executive at a firm with revenues of $5-10 million.'
   },
   taxDocuments: {
     organization: {
-      name: 'Paradox Museum',
+      name: 'Fonck Museum',
       ein: '12-3456789',
-      address: '123 Museum Way, Austin, TX 78701'
+      address: '100 Bridgeway, Sausalito, CA 94965'
     },
     yearEndSummaries: [
       { year: 2025, generated: '2026-01-15', sent: true, sentDate: '2026-01-15', method: 'email' },
-      { year: 2024, generated: '2025-01-12', sent: true, sentDate: '2025-01-12', method: 'email' }
+      { year: 2024, generated: '2025-01-12', sent: true, sentDate: '2025-01-12', method: 'email' },
+      { year: 2023, generated: '2024-01-10', sent: true, sentDate: '2024-01-10', method: 'email' }
     ],
     receipts: [
-      { 
-        id: 1,
-        date: '2025-12-15', 
-        type: 'donation', 
-        description: 'Year-End Major Gift', 
-        amount: 1000.00, 
-        deductible: 1000.00,
-        benefitsValue: 0,
-        campaign: '2026 Annual Fund',
-        appeal: 'Year-End Direct Mail'
-      },
-      { 
-        id: 2,
-        date: '2025-06-15', 
-        type: 'donation', 
-        description: 'Spring Gala Donation', 
-        amount: 500.00, 
-        deductible: 400.00,
-        benefitsValue: 100.00,
-        campaign: '2026 Annual Fund',
-        appeal: 'Spring Gala 2025'
-      },
-      { 
-        id: 3,
-        date: '2025-12-02', 
-        type: 'membership', 
-        description: 'Gold Membership Renewal', 
-        amount: 145.99, 
-        deductible: 95.99,
-        benefitsValue: 50.00,
-        campaign: '2026 Annual Fund',
-        appeal: 'Membership Renewal'
-      },
-      { 
-        id: 4,
-        date: '2025-03-22', 
-        type: 'donation', 
-        description: 'Building Campaign Gift', 
-        amount: 750.00, 
-        deductible: 750.00,
-        benefitsValue: 0,
-        campaign: 'Building the Future',
-        appeal: 'Capital Campaign Appeal'
-      },
-      { 
-        id: 5,
-        date: '2024-11-18', 
-        type: 'donation', 
-        description: 'Online Donation', 
-        amount: 250.00, 
-        deductible: 250.00,
-        benefitsValue: 0,
-        campaign: '2025 Annual Fund',
-        appeal: 'Website Donate Button'
-      }
+      { id: 1, date: '2024-12-18', type: 'one-time', description: 'Year-End Major Gift', amount: 2500.00, deductible: 2500.00, benefitsValue: 0, campaign: '2025 Annual Fund', appeal: 'Year-End Direct Mail' },
+      { id: 2, date: '2025-06-15', type: 'one-time', description: 'Spring Gala Sponsorship', amount: 2500.00, deductible: 2100.00, benefitsValue: 400.00, campaign: '2026 Annual Fund', appeal: 'Spring Gala 2026' },
+      { id: 3, date: '2025-12-02', type: 'membership', description: 'Gold Membership Renewal', amount: 145.99, deductible: 95.99, benefitsValue: 50.00, campaign: '2026 Annual Fund', appeal: 'Membership Renewal' },
+      { id: 4, date: '2025-06-15', type: 'pledge-payment', description: 'Building Campaign - Q1 Payment', amount: 1250.00, deductible: 1250.00, benefitsValue: 0, campaign: 'Building the Future', appeal: 'Leadership Gifts Circle' },
+      { id: 5, date: '2025-12-20', type: 'one-time', description: 'Year-End Major Gift', amount: 2500.00, deductible: 2500.00, benefitsValue: 0, campaign: '2026 Annual Fund', appeal: 'Year-End Direct Mail' }
     ],
-    inKindDonations: []
+    inKindGifts: []
   }
 }
 
-function PatronProfile({ patronId, onBack, onSelectOpportunity, onSelectPatron }) {
+function PatronProfile() {
+  const { patronId } = useParams()
+  const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState('summary')
+  const [refreshKey, setRefreshKey] = useState(0)
   
   // Modal states (managed at profile level for access from InfoBox and tabs)
   const [showOpportunityModal, setShowOpportunityModal] = useState(false)
@@ -257,6 +219,12 @@ function PatronProfile({ patronId, onBack, onSelectOpportunity, onSelectPatron }
   const [showAddBeneficiaryModal, setShowAddBeneficiaryModal] = useState(false)
   const [showRemoveBeneficiaryModal, setShowRemoveBeneficiaryModal] = useState(false)
   const [beneficiaryToRemove, setBeneficiaryToRemove] = useState(null)
+  const [showAddRelationshipModal, setShowAddRelationshipModal] = useState(false)
+  const [addRelationshipType, setAddRelationshipType] = useState(null)
+  const [showEndRelationshipModal, setShowEndRelationshipModal] = useState(false)
+  const [relationshipToEnd, setRelationshipToEnd] = useState(null)
+  const [relationshipRefreshKey, setRelationshipRefreshKey] = useState(0)
+  const [selectedTimelineGift, setSelectedTimelineGift] = useState(null)
 
   // Get patron data from store, fallback to default if not found
   const patronData = useMemo(() => {
@@ -281,11 +249,12 @@ function PatronProfile({ patronId, onBack, onSelectOpportunity, onSelectPatron }
       const primaryPatron = getPrimaryPatronForMembership(membership.id)
       return {
         membershipId: membership.id,
+        primaryPatronId: primaryPatron ? primaryPatron.id : patronData.id,
         primaryPatronName: primaryPatron ? primaryPatron.name : patronFullName
       }
     }
     return null
-  }, [patronData.id, patronFullName])
+  }, [patronData.id, patronFullName, refreshKey])
 
   // Modal handlers
   const handleCreateOpportunity = () => setShowOpportunityModal(true)
@@ -317,9 +286,7 @@ function PatronProfile({ patronId, onBack, onSelectOpportunity, onSelectPatron }
     archivePatron(patronData.id)
     console.log('Archived patron:', patronData.id)
     // Navigate back to patrons list after archiving
-    if (onBack) {
-      onBack()
-    }
+    navigate('/patrons')
   }
 
   const handleRestore = () => {
@@ -346,8 +313,39 @@ function PatronProfile({ patronId, onBack, onSelectOpportunity, onSelectPatron }
 
   const handleBeneficiarySuccess = () => {
     console.log('Beneficiary updated')
-    // Force re-render to show updated beneficiaries
-    window.location.reload() // Simple approach for demo
+    // Increment refreshKey to trigger re-render without page reload (preserves active tab)
+    setRefreshKey(k => k + 1)
+  }
+
+  const handleReorderBeneficiaries = (orderedPatronIds) => {
+    if (membershipData) {
+      reorderBeneficiaries(membershipData.membershipId, orderedPatronIds)
+      setRefreshKey(k => k + 1)
+    }
+  }
+
+  // Relationship management handlers
+  const handleAddRelationship = (preselectedType = null) => {
+    setAddRelationshipType(preselectedType)
+    setShowAddRelationshipModal(true)
+  }
+
+  const handleEndRelationship = (relationship) => {
+    setRelationshipToEnd(relationship)
+    setShowEndRelationshipModal(true)
+  }
+
+  const handleRelationshipSuccess = () => {
+    console.log('Relationship updated')
+    setRelationshipRefreshKey(k => k + 1) // Force RelationshipsTab remount with fresh data
+  }
+
+  const handleNavigateToOpportunity = (opportunityId) => {
+    navigate(`/opportunities/${opportunityId}`)
+  }
+
+  const handleNavigateToPatron = (id) => {
+    navigate(`/patrons/${id}`)
   }
 
   const renderTabContent = () => {
@@ -356,16 +354,16 @@ function PatronProfile({ patronId, onBack, onSelectOpportunity, onSelectPatron }
         return (
           <SummaryTab 
             patron={patronData} 
-            onSelectOpportunity={onSelectOpportunity}
+            onSelectOpportunity={handleNavigateToOpportunity}
             onCreateOpportunity={handleCreateOpportunity}
             onRecordGift={handleRecordGift}
             onLogActivity={handleLogActivity}
-            onNavigateToPatron={onSelectPatron}
+            onNavigateToPatron={handleNavigateToPatron}
           />
         )
       case 'giving':
         return (
-          <GivingTab patronId={patronData.id} />
+          <GivingTab patronId={patronData.id} onRecordGift={handleRecordGift} />
         )
       case 'memberships':
         return (
@@ -373,9 +371,11 @@ function PatronProfile({ patronId, onBack, onSelectOpportunity, onSelectPatron }
             patronId={patronData.id}
             patronName={patronFullName} 
             patronEmail={patronData.email}
-            onNavigateToPatron={onSelectPatron}
+            refreshKey={refreshKey}
+            onNavigateToPatron={handleNavigateToPatron}
             onAddBeneficiary={handleAddBeneficiary}
             onRemoveBeneficiary={handleRemoveBeneficiary}
+            onReorderBeneficiaries={handleReorderBeneficiaries}
           />
         )
       case 'profile':
@@ -393,16 +393,19 @@ function PatronProfile({ patronId, onBack, onSelectOpportunity, onSelectPatron }
             activities={getInteractionsByPatronId(patronData.id)}
             onAddActivity={handleLogActivity}
             onRecordGift={handleRecordGift}
+            onGiftSelect={setSelectedTimelineGift}
             variant="full"
           />
         )
       case 'relationships':
         return (
-          <div className="empty-state">
-            <i className="fa-solid fa-people-arrows empty-state__icon"></i>
-            <h3 className="empty-state__title">No Relationships Mapped</h3>
-            <p className="empty-state__text">Household members, organizational affiliations, and other patron relationships will appear here.</p>
-          </div>
+          <RelationshipsTab
+            key={relationshipRefreshKey}
+            patronId={patronData.id}
+            onNavigateToPatron={handleNavigateToPatron}
+            onAddRelationship={handleAddRelationship}
+            onEndRelationship={handleEndRelationship}
+          />
         )
       case 'documents':
         return <DocumentsTab patron={patronData} />
@@ -413,7 +416,7 @@ function PatronProfile({ patronId, onBack, onSelectOpportunity, onSelectPatron }
             onCreateOpportunity={handleCreateOpportunity}
             onRecordGift={handleRecordGift}
             onLogActivity={handleLogActivity}
-            onNavigateToPatron={onSelectPatron}
+            onNavigateToPatron={handleNavigateToPatron}
           />
         )
     }
@@ -426,17 +429,13 @@ function PatronProfile({ patronId, onBack, onSelectOpportunity, onSelectPatron }
         <div className="patron-profile__breadcrumb">
           <span className="patron-profile__breadcrumb-section">Fundraising</span>
           <i className="fa-solid fa-chevron-right patron-profile__breadcrumb-separator"></i>
-          {onBack && (
-            <>
-              <button 
-                className="patron-profile__breadcrumb-link"
-                onClick={onBack}
-              >
-                Patrons
-              </button>
-              <i className="fa-solid fa-chevron-right patron-profile__breadcrumb-separator"></i>
-            </>
-          )}
+          <button 
+            className="patron-profile__breadcrumb-link"
+            onClick={() => navigate(-1)}
+          >
+            Patrons
+          </button>
+          <i className="fa-solid fa-chevron-right patron-profile__breadcrumb-separator"></i>
         </div>
         <div className="patron-profile__title-row">
           <h1 className="patron-profile__title">
@@ -466,10 +465,12 @@ function PatronProfile({ patronId, onBack, onSelectOpportunity, onSelectPatron }
           isManaged={isManaged}
           onCreateOpportunity={handleCreateOpportunity}
           onAddActivity={handleLogActivity}
+          onRecordGift={handleRecordGift}
+          onAssignToPortfolio={handleAssignToPortfolio}
           onArchive={handleArchive}
           onRestore={handleRestore}
           onUpdateTags={handleUpdateTags}
-          onNavigateToPatron={onSelectPatron}
+          onNavigateToPatron={handleNavigateToPatron}
         />
 
         {/* Tab Section */}
@@ -528,6 +529,7 @@ function PatronProfile({ patronId, onBack, onSelectOpportunity, onSelectPatron }
             isOpen={showAddBeneficiaryModal}
             onClose={() => setShowAddBeneficiaryModal(false)}
             membershipId={membershipData.membershipId}
+            primaryPatronId={membershipData.primaryPatronId}
             primaryPatronName={membershipData.primaryPatronName}
             onSuccess={handleBeneficiarySuccess}
           />
@@ -540,9 +542,44 @@ function PatronProfile({ patronId, onBack, onSelectOpportunity, onSelectPatron }
             }}
             membershipId={membershipData.membershipId}
             beneficiary={beneficiaryToRemove}
+            hasRelationship={
+              beneficiaryToRemove?.patronId
+                ? hasHouseholdRelationship(membershipData.primaryPatronId, beneficiaryToRemove.patronId)
+                : false
+            }
             onSuccess={handleBeneficiarySuccess}
           />
         </>
+      )}
+
+      <AddRelationshipModal
+        isOpen={showAddRelationshipModal}
+        onClose={() => {
+          setShowAddRelationshipModal(false)
+          setAddRelationshipType(null)
+        }}
+        patronId={patronData.id}
+        patronName={patronFullName}
+        preselectedType={addRelationshipType}
+        onSuccess={handleRelationshipSuccess}
+      />
+
+      <EndRelationshipModal
+        isOpen={showEndRelationshipModal}
+        onClose={() => {
+          setShowEndRelationshipModal(false)
+          setRelationshipToEnd(null)
+        }}
+        relationship={relationshipToEnd}
+        patronName={patronFullName}
+        onSuccess={handleRelationshipSuccess}
+      />
+
+      {selectedTimelineGift && (
+        <GiftDetailPanel
+          gift={selectedTimelineGift}
+          onClose={() => setSelectedTimelineGift(null)}
+        />
       )}
     </div>
   )

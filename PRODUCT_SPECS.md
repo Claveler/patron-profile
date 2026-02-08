@@ -485,10 +485,10 @@ Partner opens Documents tab → Selects year → Generates/Previews summary → 
 **Sample Tax Document Data:**
 | Field | Value |
 |-------|-------|
-| Organization | Paradox Museum |
+| Organization | Fonck Museum |
 | EIN | 12-3456789 |
-| 2025 Contributions | $895.99 total |
-| 2025 Deductible | $845.99 |
+| 2025 Contributions | $9,095.99 total (8 gifts) |
+| 2025 Deductible | $8,645.99 |
 
 #### 3. Giving Summary (Financial Summary)
 - **Lifetime Contributions**: Total giving with breakdown (donations vs. revenue)
@@ -519,12 +519,12 @@ Partner opens Documents tab → Selects year → Generates/Previews summary → 
   - Helps visualize seasonal patterns and engagement consistency
 - **Manual Override**: Staff can adjust engagement level
 
-#### 5. Wealth Insights (Phase 3)
+#### 5. Wealth Insights (Post-MVP)
 - **Integration**: DonorSearch third-party service
 - **Propensity to Give Score**: Financial capacity indicator
 - **Wealth Screening Data**: Estimated net worth, real estate, etc.
 
-#### 6. Fever Insights / Smart Tips (Phase 3)
+#### 6. Fever Insights / Smart Tips (Post-MVP)
 - **AI Summary**: Natural language summary of patron activity
 - **Actionable Recommendations**:
   - "Offer membership" (frequent visitors)
@@ -787,22 +787,34 @@ Rather than permanently deleting patrons, the system uses a **soft delete** appr
 
 ---
 
-## Gift Terminology
+## Gift vs Donation Terminology
 
-### Industry Standard
-Following museum industry conventions (Blackbaud, Tessitura, Bloomerang), the platform uses **"Gift"** for charitable donations in staff-facing interfaces:
+### The Principle
 
-| Context | Term Used |
-|---------|-----------|
-| Database/Internal | Gift, Gift Record |
-| Staff UI | "Record Gift", "Gift History", "Giving Summary" |
-| Public-Facing | "Donate", "Make a Donation" |
-| Tax Documents | "Contribution", "Gift" |
+The platform maintains a deliberate split between **partner-facing** and **customer-facing** terminology:
 
-### Rationale
-- **Professional**: "Gift" is industry-standard for donor CRM software
+- **Partner-facing (staff CRM)**: Use **"Gift"** and **"Giving"**. This is the language fundraising professionals use internally. It appears in data model fields, staff UI labels, API names, and database columns.
+- **Customer-facing (patron-facing)**: Use **"Donation"** and **"Donate"**. This is the language patrons understand. It appears in public-facing pages, prompts, and any interface that patrons interact with directly.
+
+### Where Each Term Applies
+
+| Context | Term Used | Examples |
+|---------|-----------|----------|
+| Database / Internal | Gift, Giving | `totalGifts`, `lastGift`, `GIFT` entity, `PATRON_GIVING` |
+| Staff UI (CRM screens) | Gift, Giving | "Record Gift", "Gift History", "Giving Summary", "Giving Tab" |
+| Sidebar navigation (customer-facing features) | Donation | "Donation Prompts", "Donation Pages" |
+| Public-facing interfaces | Donation, Donate | "Make a Donation" buttons, donation forms, donation confirmation emails |
+| Tax Documents | Contribution, Gift | Year-end tax summaries, receipts |
+
+### Why Sidebar Says "Donation Prompts" and "Donation Pages"
+
+These sidebar items refer to features that produce **customer-facing content** -- the prompts and pages that patrons see when they donate. Because patrons interact with them directly, they use "Donation" (the customer-facing term), not "Giving" (the partner-facing term).
+
+### Industry Rationale
+- **Professional**: "Gift" is industry-standard for donor CRM software (Blackbaud, Tessitura, Bloomerang)
 - **Relational**: Implies personal, philanthropic relationship vs. transactional "donation"
 - **Legal**: Aligns with IRS terminology for tax-deductible contributions
+- **Patron clarity**: "Donation" is more widely understood by the general public than "Gift" in a philanthropic context
 
 ---
 
@@ -1173,12 +1185,12 @@ Museum boards demand data.
 ### Sample Data
 Using patron "Anderson Collingwood" with:
 - Household: Collingwood Family (verified)
-- Category: Member
+- Tags: Major Donor, Donor, Board Member
 - Membership: General Membership - Gold
-- Member since: 09/08/2025
-- Lifetime contributions: $3,222.50
-- Average contribution: $214.83
-- Total visits: 54
+- Member since: 12/02/2023
+- Lifetime value: $19,231.97
+- Average gift: $1,042.62
+- Total visits: 47
 - Engagement: On Fire
 - Assigned To: Liam Johnson
 
@@ -1195,34 +1207,41 @@ The financial data separates donations (charitable gifts) from revenue (earned i
 **Aggregates:**
 | Field | Value | Notes |
 |-------|-------|-------|
-| Lifetime Value | $3,222.50 | Total (donations + revenue) |
-| Donations | $1,975.00 | Charitable gifts |
-| Revenue | $1,247.50 | Tickets, F&B, merch |
-| Gift Count | 6 | Number of donation gifts |
-| Average Gift | $329.17 | Donations-only average |
+| Lifetime Value | $19,231.97 | Total (donations + revenue) |
+| Donations | $16,681.97 | Charitable gifts |
+| Revenue | $2,550.00 | Tickets, F&B, merch |
+| Gift Count | 16 | Number of donation gifts |
+| Average Gift | $1,042.62 | Donations-only average |
 
 **By Fund:**
 | Fund | Total | Count |
 |------|-------|-------|
-| Annual Operating | $1,895.99 | 3 |
-| Education Programs | $500.00 | 1 |
-| Capital Building | $750.00 | 1 |
+| Annual Operating | $12,181.97 | 12 |
+| Restricted Funds | $750.00 | 1 |
+| Capital Building | $3,750.00 | 3 |
 
 **By Campaign:**
 | Campaign | Total | Count | Goal |
 |----------|-------|-------|------|
-| 2026 Annual Fund | $2,145.99 | 3 | $500,000 |
-| Building the Future | $750.00 | 1 | $50,000,000 |
-| 2025 Annual Fund | $250.00 | 1 | $450,000 |
+| 2026 Annual Fund | $7,945.99 | 7 | $500,000 |
+| Building the Future | $3,750.00 | 3 | $50,000,000 |
+| 2025 Annual Fund | $4,145.99 | 4 | $450,000 |
+| Emergency Relief Fund | $750.00 | 1 | $100,000 |
 
-**Sample Gifts (5 records):**
+**Sample Gifts (16 records, representative selection shown):**
 | Date | Amount | Type | Description | Fund | Campaign | Appeal | Soft Credit |
 |------|--------|------|-------------|------|----------|--------|-------------|
-| 12/15/2025 | $1,000 | Donation | Year-End Major Gift | Annual Operating | 2026 Annual Fund | Year-End Direct Mail | Margaret Williams (Solicitor) |
-| 06/15/2025 | $500 | Donation | Spring Gala Donation | Education | 2026 Annual Fund | Spring Gala 2025 | — |
+| 12/02/2023 | $89.99 | Membership | Silver Membership - Initial | Annual Operating | — | Membership Join | — |
+| 03/15/2024 | $500.00 | One-Time | First Annual Gift | Annual Operating | 2025 Annual Fund | Online Giving | — |
+| 06/20/2024 | $750.00 | One-Time | Emergency Relief Gift | Restricted | Emergency Relief Fund | Emergency Email | — |
+| 12/18/2024 | $2,500.00 | One-Time | Year-End Major Gift | Annual Operating | 2025 Annual Fund | Year-End Direct Mail | Margaret Williams (Solicitor) |
+| 06/15/2025 | $2,500.00 | One-Time | Spring Gala Sponsorship | Annual Operating | 2026 Annual Fund | Gala Sponsorship | — |
+| 06/15/2025 | $1,250.00 | Pledge-Payment | Building Campaign - Q1 | Capital Building | Building the Future | Leadership Gifts Circle | Robert Chen (Influencer) |
 | 12/02/2025 | $145.99 | Membership | Gold Membership Renewal | Annual Operating | 2026 Annual Fund | Membership Renewal | — |
-| 03/22/2025 | $750 | Donation | Building Campaign Gift | Capital Building | Building the Future | Capital Campaign Appeal | Robert Chen (Influencer) |
-| 11/18/2024 | $250 | Donation | Online Donation | Annual Operating | 2025 Annual Fund | Website Donate Button | — |
+| 12/20/2025 | $2,500.00 | One-Time | Year-End Major Gift | Annual Operating | 2026 Annual Fund | Year-End Direct Mail | — |
+| 01/28/2026 | $2,500.00 | One-Time | New Year Major Gift | Annual Operating | 2026 Annual Fund | Year-End Direct Mail | Margaret Williams (Solicitor) |
+
+Additional gift types in the full history: 3 pledge payments ($1,250 each to Building the Future), 3 monthly recurring gifts ($100 each), 3 membership payments, and 7 one-time donations.
 
 #### Membership Data Structure
 Detailed membership sample data used in mockup:
@@ -1245,7 +1264,7 @@ Detailed membership sample data used in mockup:
 **Benefits (6 total):**
 | Category | Benefit | Allowance | Used | Reset Date |
 |----------|---------|-----------|------|------------|
-| Access | Unlimited visits | Unlimited | 34 | — |
+| Access | Unlimited visits | Unlimited | 47 | — |
 | Access | Priority entry | — | — | — |
 | Discount | Bring a friend for free | 5/year | 3 | 12/02/2026 |
 | Discount | 20% off special events | — | — | — |
@@ -1568,6 +1587,7 @@ Patrons like Anderson Collingwood can appear in both the general Patron Profile 
 - Updated: February 6, 2026 (Activity Heatmap - 12-month engagement visualization with TTM toggle)
 - Updated: February 6, 2026 (Import Data Wizard - 3-step mockup for Blackbaud, Tessitura, and CSV imports)
 - Updated: February 7, 2026 (MVP Scope Restructure - replaced Phase 1/2/3 rollout with 4 delivery epics: Patron Data Platform, Giving & Membership Management, Fundraising Pipeline, Campaign Intelligence & Dashboard; consolidated all out-of-scope features with rationale and "when to build" guidance)
+- Updated: February 8, 2026 (Consistency pass - updated sample data to match current prototype: Anderson lifetime value $19,231.97, 16 gifts, revised fund/campaign breakdowns, corrected tax document totals, aligned phase references with MVP Roadmap)
 - Product Manager: Andres Clavel
 - Designer: Pablo Rubio Retolaza
 - Tech Lead: Victor Almaraz Sanchez

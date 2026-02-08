@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
 import { getOpportunityById, PIPELINE_STAGES, updateOpportunityStage, closeOpportunityAsLost } from '../../data/opportunities'
 import { formatDate, getPatronById, getPatronDisplayName } from '../../data/patrons'
 import { getStaffNameById, getFundNameById, getCampaignNameById } from '../../data/campaigns'
@@ -25,7 +26,9 @@ const getDaysSince = (dateStr) => {
   return Math.floor((today - date) / (1000 * 60 * 60 * 24))
 }
 
-function OpportunityDetail({ opportunityId, onBack, onNavigateToPatron }) {
+function OpportunityDetail() {
+  const { oppId: opportunityId } = useParams()
+  const navigate = useNavigate()
   const [opportunity, setOpportunity] = useState(() => getOpportunityById(opportunityId))
 
   // Editable state
@@ -63,7 +66,7 @@ function OpportunityDetail({ opportunityId, onBack, onNavigateToPatron }) {
           <div className="opportunity-detail__breadcrumb">
             <span className="opportunity-detail__breadcrumb-section">Fundraising</span>
             <i className="fa-solid fa-chevron-right opportunity-detail__breadcrumb-separator"></i>
-            <button className="opportunity-detail__breadcrumb-link" onClick={onBack}>
+            <button className="opportunity-detail__breadcrumb-link" onClick={() => navigate(-1)}>
               Opportunities
             </button>
           </div>
@@ -136,9 +139,7 @@ function OpportunityDetail({ opportunityId, onBack, onNavigateToPatron }) {
   }
 
   const handlePatronClick = () => {
-    if (onNavigateToPatron) {
-      onNavigateToPatron(opportunity.patronId)
-    }
+    navigate(`/patrons/${opportunity.patronId}`)
   }
 
   // Badge for stage / status
@@ -171,7 +172,7 @@ function OpportunityDetail({ opportunityId, onBack, onNavigateToPatron }) {
         <div className="opportunity-detail__breadcrumb">
           <span className="opportunity-detail__breadcrumb-section">Fundraising</span>
           <i className="fa-solid fa-chevron-right opportunity-detail__breadcrumb-separator"></i>
-          <button className="opportunity-detail__breadcrumb-link" onClick={onBack}>
+          <button className="opportunity-detail__breadcrumb-link" onClick={() => navigate(-1)}>
             Opportunities
           </button>
           <i className="fa-solid fa-chevron-right opportunity-detail__breadcrumb-separator"></i>

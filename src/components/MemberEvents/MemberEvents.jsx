@@ -20,17 +20,27 @@ function MemberEvents({ events }) {
     ? allEvents 
     : allEvents.filter(e => e.type === activeFilter)
   
-  // formatDate imported from shared utility
-  
-  // Get days until event
-  const getDaysUntil = (dateString) => {
+  // Get days until event (returns number for urgency calculation)
+  const getDaysUntilRaw = (dateString) => {
     const date = new Date(dateString)
     const now = new Date()
-    const diffDays = Math.ceil((date - now) / (24 * 60 * 60 * 1000))
-    if (diffDays < 0) return 'Past'
-    if (diffDays === 0) return 'Today'
-    if (diffDays === 1) return 'Tomorrow'
-    return `In ${diffDays} days`
+    return Math.ceil((date - now) / (24 * 60 * 60 * 1000))
+  }
+  
+  // Get display label for countdown
+  const getDaysUntilLabel = (days) => {
+    if (days < 0) return 'Past'
+    if (days === 0) return 'Today'
+    if (days === 1) return 'Tomorrow'
+    return `In ${days} days`
+  }
+  
+  // Get urgency class based on days remaining
+  const getUrgencyClass = (days) => {
+    if (days < 0) return 'member-events__countdown--past'
+    if (days <= 14) return 'member-events__countdown--soon'
+    if (days <= 30) return 'member-events__countdown--near'
+    return ''
   }
   
   // Get access status for early access events
@@ -82,20 +92,21 @@ function MemberEvents({ events }) {
         </button>
       </div>
       
-      {/* Events List */}
+      {/* Events Grid */}
       <div className="member-events__list">
         {filteredEvents.length === 0 ? (
           <p className="member-events__empty">No events in this category</p>
         ) : (
           filteredEvents.map((event) => {
             const accessStatus = getAccessStatus(event)
+            const daysUntil = getDaysUntilRaw(event.date)
             
             return (
               <div key={event.id} className="member-events__item">
-                {/* Event Image */}
+                {/* Image Banner */}
                 <div className="member-events__image">
                   {event.image ? (
-                    <img src={event.image} alt={event.name} />
+                    <img src={event.image.replace(/w=100&h=60/, 'w=400&h=240')} alt={event.name} />
                   ) : (
                     <div className="member-events__image-placeholder">
                       <i className="fa-solid fa-calendar"></i>
@@ -111,7 +122,7 @@ function MemberEvents({ events }) {
                       </>
                     ) : (
                       <>
-                        <i className="fa-solid fa-clock"></i>
+                        <i className="fa-solid fa-bolt"></i>
                         Early Access
                       </>
                     )}
@@ -120,15 +131,28 @@ function MemberEvents({ events }) {
                 
                 {/* Event Details */}
                 <div className="member-events__details">
-                  <h5 className="member-events__name">{event.name}</h5>
+                  <h5 className="member-events__name">
+                    {event.eventUrl ? (
+                      <a
+                        href={event.eventUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="member-events__name-link"
+                      >
+                        {event.name} <i className="fa-solid fa-arrow-up-right-from-square member-events__external-icon"></i>
+                      </a>
+                    ) : (
+                      event.name
+                    )}
+                  </h5>
                   
                   <div className="member-events__meta">
                     <span className="member-events__date">
                       <i className="fa-regular fa-calendar"></i>
                       {formatDate(event.date)}
                     </span>
-                    <span className="member-events__countdown">
-                      {getDaysUntil(event.date)}
+                    <span className={`member-events__countdown ${getUrgencyClass(daysUntil)}`}>
+                      {getDaysUntilLabel(daysUntil)}
                     </span>
                   </div>
                   
@@ -142,19 +166,19 @@ function MemberEvents({ events }) {
                     </div>
                   )}
                   
-                  {/* Access Timeline for Early Access events */}
+                  {/* Access Timeline Stepper for Early Access events */}
                   {event.type === 'early-access' && event.publicAccess && (
                     <div className="member-events__timeline">
-                      <div className="member-events__timeline-item member-events__timeline-item--member">
-                        <span className="member-events__timeline-label">Member access</span>
-                        <span className="member-events__timeline-date">{formatDate(event.memberAccess)}</span>
+                      <div className="member-events__step member-events__step--member">
+                        <div className="member-events__step-dot" />
+                        <span className="member-events__step-label">Member</span>
+                        <span className="member-events__step-date">{formatDate(event.memberAccess)}</span>
                       </div>
-                      <div className="member-events__timeline-arrow">
-                        <i className="fa-solid fa-arrow-right"></i>
-                      </div>
-                      <div className="member-events__timeline-item member-events__timeline-item--public">
-                        <span className="member-events__timeline-label">Public access</span>
-                        <span className="member-events__timeline-date">{formatDate(event.publicAccess)}</span>
+                      <div className="member-events__step-line" />
+                      <div className="member-events__step member-events__step--public">
+                        <div className="member-events__step-dot" />
+                        <span className="member-events__step-label">Public</span>
+                        <span className="member-events__step-date">{formatDate(event.publicAccess)}</span>
                       </div>
                     </div>
                   )}

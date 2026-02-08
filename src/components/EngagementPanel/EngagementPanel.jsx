@@ -10,7 +10,7 @@ const engagementLevels = [
 ]
 
 const activityTypes = {
-  donation: { label: 'Donation', icon: 'fa-heart', color: 'var(--color-success)' },
+  gift: { label: 'Gift', icon: 'fa-heart', color: 'var(--color-success)' },
   attendance: { label: 'Visit', icon: 'fa-ticket', color: 'var(--color-primary)' },
   purchase: { label: 'Purchase', icon: 'fa-bag-shopping', color: 'var(--color-warning)' },
   membership: { label: 'Membership', icon: 'fa-id-card', color: 'var(--color-info)' },
@@ -30,10 +30,10 @@ const getActivityIntensity = (activities) => {
   if (!activities || activities.length === 0) return 0
   
   const totalCount = activities.reduce((sum, a) => sum + (a.count || 0), 0)
-  const hasDonation = activities.some(a => a.type === 'donation')
+  const hasDonation = activities.some(a => a.type === 'gift')
   const hasMembership = activities.some(a => a.type === 'membership')
   
-  // High-value activities (donations, memberships) get higher intensity
+  // High-value activities (gifts, memberships) get higher intensity
   if (hasDonation || hasMembership) {
     return totalCount >= 2 ? 4 : 3
   }
@@ -231,7 +231,7 @@ function EngagementPanel({ engagement }) {
           {/* Explanation text */}
           <p className="engagement-panel__activity-explanation">
             <i className="fa-solid fa-circle-info"></i>
-            Patron-initiated activity (donations, visits, purchases) from the last 12 months.
+            Patron-initiated activity (gifts, visits, purchases) from the last 12 months.
           </p>
         </div>
       )}

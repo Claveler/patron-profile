@@ -1,6 +1,8 @@
 // Opportunities data - each opportunity represents a specific "ask" for a patron
 // Pipeline stages track opportunities, not patrons
 
+import { shiftDemoData } from '../utils/demoDate'
+
 export const opportunities = [
   // Anderson Collingwood - 2 opportunities
   {
@@ -559,3 +561,11 @@ export const logContact = (id, contactDate, nextAction = null, interactionData =
 
   return updatedOpp
 }
+
+// =============================================================================
+// DATE SHIFTING — keeps demo dates relative to today (applied once at load time)
+// =============================================================================
+;(() => {
+  const shifted = shiftDemoData(opportunities)
+  opportunities.splice(0, opportunities.length, ...shifted)
+})()

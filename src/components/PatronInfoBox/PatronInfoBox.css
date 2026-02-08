@@ -519,6 +519,7 @@
 /* Actions */
 .patron-info-box__actions {
   margin-left: auto;
+  align-self: center;
   position: relative;
 }
 

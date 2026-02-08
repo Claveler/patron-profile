@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { 
   getOpenOpportunities, 
   getPipelineTotals, 
@@ -41,7 +42,8 @@ const getDaysSince = (dateStr) => {
   return Math.floor((today - date) / (1000 * 60 * 60 * 24))
 }
 
-function Dashboard({ onNavigateToPatron, onNavigateToOpportunity, onNavigateToPage }) {
+function Dashboard() {
+  const navigate = useNavigate()
   // Filter state
   const [selectedOfficer, setSelectedOfficer] = useState(null) // null = "All"
   
@@ -213,7 +215,7 @@ function Dashboard({ onNavigateToPatron, onNavigateToOpportunity, onNavigateToPa
               </h2>
               <button 
                 className="dashboard__card-action"
-                onClick={() => onNavigateToPage && onNavigateToPage('pipeline')}
+                onClick={() => navigate('/opportunities')}
               >
                 View Pipeline
                 <i className="fa-solid fa-arrow-right"></i>
@@ -249,7 +251,7 @@ function Dashboard({ onNavigateToPatron, onNavigateToOpportunity, onNavigateToPa
               </h2>
               <button 
                 className="dashboard__card-action"
-                onClick={() => onNavigateToPage && onNavigateToPage('opportunities')}
+                onClick={() => navigate('/opportunities')}
               >
                 View All
                 <i className="fa-solid fa-arrow-right"></i>
@@ -266,7 +268,7 @@ function Dashboard({ onNavigateToPatron, onNavigateToOpportunity, onNavigateToPa
                   <div 
                     key={opp.id} 
                     className="dashboard__list-item"
-                    onClick={() => onNavigateToOpportunity && onNavigateToOpportunity(opp.id)}
+                    onClick={() => navigate(`/opportunities/${opp.id}`)}
                   >
                     <div className="dashboard__list-item-main">
                       <span className="dashboard__list-item-title">{opp.name}</span>
@@ -307,7 +309,7 @@ function Dashboard({ onNavigateToPatron, onNavigateToOpportunity, onNavigateToPa
                   <div 
                     key={opp.id} 
                     className="dashboard__task"
-                    onClick={() => onNavigateToOpportunity && onNavigateToOpportunity(opp.id)}
+                    onClick={() => navigate(`/opportunities/${opp.id}`)}
                   >
                     <div className="dashboard__task-header">
                       <span className="dashboard__task-patron">{(() => { const p = getPatronById(opp.patronId); return p ? getPatronDisplayName(p) : 'Unknown' })()}</span>
@@ -339,28 +341,28 @@ function Dashboard({ onNavigateToPatron, onNavigateToOpportunity, onNavigateToPa
             <div className="dashboard__quick-actions">
               <button 
                 className="dashboard__quick-action"
-                onClick={() => onNavigateToPage && onNavigateToPage('patrons')}
+                onClick={() => navigate('/patrons')}
               >
                 <i className="fa-solid fa-user-plus"></i>
                 Add Patron
               </button>
               <button 
                 className="dashboard__quick-action"
-                onClick={() => onNavigateToPage && onNavigateToPage('opportunities')}
+                onClick={() => navigate('/opportunities')}
               >
                 <i className="fa-solid fa-bullseye"></i>
                 New Opportunity
               </button>
               <button 
                 className="dashboard__quick-action"
-                onClick={() => onNavigateToPage && onNavigateToPage('campaigns')}
+                onClick={() => navigate('/campaigns')}
               >
                 <i className="fa-solid fa-bullhorn"></i>
                 View Campaigns
               </button>
               <button 
                 className="dashboard__quick-action"
-                onClick={() => onNavigateToPage && onNavigateToPage('pipeline')}
+                onClick={() => navigate('/opportunities')}
               >
                 <i className="fa-solid fa-chart-simple"></i>
                 Pipeline Board

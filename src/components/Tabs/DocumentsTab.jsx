@@ -11,7 +11,7 @@ function DocumentsTab({ patron }) {
     organization: { name: '', ein: '', address: '' },
     yearEndSummaries: [],
     receipts: [],
-    inKindDonations: []
+    inKindGifts: []
   }
 
   // Calculate totals for selected year
@@ -40,7 +40,7 @@ function DocumentsTab({ patron }) {
           <DocumentHistory 
             summaries={taxData.yearEndSummaries}
             receipts={taxData.receipts}
-            inKindDonations={taxData.inKindDonations}
+            inKindGifts={taxData.inKindGifts}
           />
         </div>
       </div>

@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { Routes, Route, useLocation } from 'react-router-dom'
 import Header from './components/Layout/Header'
 import Sidebar from './components/Layout/Sidebar'
 import Footer from './components/Layout/Footer'
@@ -8,111 +9,43 @@ import PatronProfile from './pages/PatronProfile'
 import CampaignManagement from './pages/CampaignManagement/CampaignManagement'
 import Opportunities from './pages/Opportunities/Opportunities'
 import OpportunityDetail from './pages/OpportunityDetail/OpportunityDetail'
+import GiftsList from './pages/GiftsList/GiftsList'
 import Settings from './pages/Settings/Settings'
+
+// Scroll to top on route change
+function ScrollToTop() {
+  const { pathname } = useLocation()
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname])
+  return null
+}
 
 function App() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
-  const [activePage, setActivePage] = useState('dashboard') // Start at dashboard
-  const [selectedPatronId, setSelectedPatronId] = useState(null)
-  const [selectedOpportunityId, setSelectedOpportunityId] = useState(null)
-  const [initialOfficerFilter, setInitialOfficerFilter] = useState(null)
-
-  const handleSelectPatron = (patronId) => {
-    setSelectedPatronId(patronId)
-    setActivePage('patron')
-  }
-
-  const handleBackToList = () => {
-    setSelectedPatronId(null)
-    setActivePage('patrons')
-  }
-
-  const handleSelectOpportunity = (opportunityId) => {
-    setSelectedOpportunityId(opportunityId)
-    setActivePage('opportunity')
-  }
-
-  const handleBackToOpportunities = () => {
-    setSelectedOpportunityId(null)
-    setActivePage('opportunities')
-  }
-
-  const handleNavigateToOpportunitiesForOfficer = (officerId) => {
-    setInitialOfficerFilter(officerId)
-    setActivePage('opportunities')
-  }
-
-  const renderPage = () => {
-    switch (activePage) {
-      case 'dashboard':
-        return (
-          <Dashboard 
-            onNavigateToPatron={handleSelectPatron}
-            onNavigateToOpportunity={handleSelectOpportunity}
-            onNavigateToPage={setActivePage}
-          />
-        )
-      case 'campaigns':
-        return <CampaignManagement />
-      case 'patrons':
-        return (
-          <PatronsList 
-            onSelectPatron={handleSelectPatron} 
-            onNavigateToOpportunitiesForOfficer={handleNavigateToOpportunitiesForOfficer}
-          />
-        )
-      case 'patron':
-        return (
-          <PatronProfile 
-            patronId={selectedPatronId} 
-            onBack={handleBackToList}
-            onSelectOpportunity={handleSelectOpportunity}
-            onSelectPatron={handleSelectPatron}
-          />
-        )
-      case 'opportunities':
-        return (
-          <Opportunities 
-            onSelectOpportunity={handleSelectOpportunity}
-            onSelectPatron={handleSelectPatron}
-            initialOfficerFilter={initialOfficerFilter}
-            onClearInitialFilter={() => setInitialOfficerFilter(null)}
-          />
-        )
-      case 'opportunity':
-        return (
-          <OpportunityDetail 
-            opportunityId={selectedOpportunityId}
-            onBack={handleBackToOpportunities}
-            onNavigateToPatron={handleSelectPatron}
-          />
-        )
-      case 'settings':
-        return <Settings />
-      default:
-        return (
-          <Dashboard 
-            onNavigateToPatron={handleSelectPatron}
-            onNavigateToOpportunity={handleSelectOpportunity}
-            onNavigateToPage={setActivePage}
-          />
-        )
-    }
-  }
 
   return (
     <div className="app">
+      <ScrollToTop />
       <Header 
         onToggleSidebar={() => setSidebarCollapsed(!sidebarCollapsed)} 
       />
       <div className="app__body">
         <Sidebar 
           collapsed={sidebarCollapsed}
-          activePage={activePage}
-          onNavigate={setActivePage}
         />
         <main className={`app__content ${sidebarCollapsed ? 'app__content--expanded' : ''}`}>
-          {renderPage()}
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/patrons" element={<PatronsList />} />
+            <Route path="/patrons/:patronId" element={<PatronProfile />} />
+            <Route path="/gifts" element={<GiftsList />} />
+            <Route path="/opportunities" element={<Opportunities />} />
+            <Route path="/opportunities/:oppId" element={<OpportunityDetail />} />
+            <Route path="/campaigns" element={<CampaignManagement />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="*" element={<Dashboard />} />
+          </Routes>
         </main>
       </div>
       <Footer />

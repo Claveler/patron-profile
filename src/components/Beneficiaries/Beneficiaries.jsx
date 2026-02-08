@@ -1,3 +1,8 @@
+import { useState } from 'react'
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core'
+import { SortableContext, verticalListSortingStrategy, useSortable, arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
+import { restrictToVerticalAxis, restrictToParentElement } from '@dnd-kit/modifiers'
+import { CSS } from '@dnd-kit/utilities'
 import { getInitials } from '../../utils/getInitials'
 import './Beneficiaries.css'
 
@@ -23,6 +28,96 @@ const legacyRoleMap = {
   'Sibling': 'Additional Adult'
 }
 
+// Sortable beneficiary item component
+function SortableBeneficiaryItem({ person, isPrimary, isDraggable, onNavigate, onRemove, getRoleIcon }) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    setActivatorNodeRef,
+    transform,
+    transition,
+    isDragging
+  } = useSortable({ 
+    id: person.id,
+    disabled: !isDraggable
+  })
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    zIndex: isDragging ? 10 : undefined,
+    position: isDragging ? 'relative' : undefined
+  }
+
+  return (
+    <li
+      ref={setNodeRef}
+      style={style}
+      className={`beneficiaries__item ${person.patronId ? 'beneficiaries__item--clickable' : ''} ${isDragging ? 'beneficiaries__item--dragging' : ''}`}
+      onClick={() => onNavigate(person)}
+      {...attributes}
+    >
+      {/* Drag handle (only for non-primary, draggable items) */}
+      {isDraggable ? (
+        <button
+          ref={setActivatorNodeRef}
+          className="beneficiaries__drag-handle"
+          {...listeners}
+          onClick={e => e.stopPropagation()}
+          tabIndex={0}
+          aria-label="Drag to reorder"
+        >
+          <i className="fa-solid fa-grip-vertical"></i>
+        </button>
+      ) : (
+        <div className="beneficiaries__drag-handle-spacer" />
+      )}
+
+      <div className="beneficiaries__avatar">
+        {person.photo ? (
+          <img src={person.photo} alt={person.name} />
+        ) : (
+          <span className="beneficiaries__initials">{getInitials(person.name)}</span>
+        )}
+      </div>
+      <div className="beneficiaries__info">
+        <span className="beneficiaries__name">
+          {person.name}
+          {person.isCurrentPatron && (
+            <span className="beneficiaries__viewing-badge">Viewing</span>
+          )}
+        </span>
+        <span className="beneficiaries__role">
+          <i className={`fa-solid ${getRoleIcon(person.roleLabel)}`}></i>
+          {person.roleLabel}
+        </span>
+      </div>
+      
+      {/* Actions */}
+      <div className="beneficiaries__actions">
+        {/* Navigate chevron for linked patrons */}
+        {person.patronId && !person.isCurrentPatron && (
+          <span className="beneficiaries__chevron">
+            <i className="fa-solid fa-chevron-right"></i>
+          </span>
+        )}
+        
+        {/* Remove button (only for primary viewing non-primary beneficiaries) */}
+        {isPrimary && !person.isPrimaryRole && onRemove && (
+          <button 
+            className="beneficiaries__remove-btn"
+            onClick={(e) => { e.stopPropagation(); onRemove(person) }}
+            title="Remove beneficiary"
+          >
+            <i className="fa-solid fa-xmark"></i>
+          </button>
+        )}
+      </div>
+    </li>
+  )
+}
+
 function Beneficiaries({ 
   beneficiaries,
   currentPatronId,
@@ -30,7 +125,8 @@ function Beneficiaries({
   slotInfo,
   onNavigateToPatron,
   onAddBeneficiary,
-  onRemoveBeneficiary
+  onRemoveBeneficiary,
+  onReorderBeneficiaries
 }) {
   if (!beneficiaries || beneficiaries.length === 0) return null
   
@@ -47,7 +143,7 @@ function Beneficiaries({
         email: b.patron.email,
         photo: b.patron.photo,
         role: b.role,
-        roleLabel: b.roleLabel,
+        roleLabel: legacyRoleMap[b.roleLabel] || b.roleLabel,
         isCurrentPatron: b.patronId === currentPatronId,
         isPrimaryRole: b.role === 'primary'
       }
@@ -67,16 +163,44 @@ function Beneficiaries({
     }
   })
 
+  // Separate primary (pinned) from sortable beneficiaries
+  const primaryBeneficiary = normalizedBeneficiaries.find(b => b.isPrimaryRole)
+  const sortableBeneficiaries = normalizedBeneficiaries.filter(b => !b.isPrimaryRole)
+
   const handleBeneficiaryClick = (beneficiary) => {
     if (beneficiary.patronId && onNavigateToPatron) {
       onNavigateToPatron(beneficiary.patronId)
     }
   }
 
-  const handleRemove = (e, beneficiary) => {
-    e.stopPropagation()
-    if (onRemoveBeneficiary) {
-      onRemoveBeneficiary(beneficiary)
+  // DnD sensors with activation constraints to distinguish drag from click
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: { distance: 5 }
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates
+    })
+  )
+
+  const handleDragEnd = (event) => {
+    const { active, over } = event
+    if (!over || active.id === over.id) return
+
+    const oldIndex = sortableBeneficiaries.findIndex(b => b.id === active.id)
+    const newIndex = sortableBeneficiaries.findIndex(b => b.id === over.id)
+    if (oldIndex === -1 || newIndex === -1) return
+
+    const reordered = arrayMove(sortableBeneficiaries, oldIndex, newIndex)
+    
+    // Build full ordered patron IDs: primary first, then reordered
+    const orderedPatronIds = [
+      ...(primaryBeneficiary ? [primaryBeneficiary.patronId] : []),
+      ...reordered.map(b => b.patronId)
+    ]
+
+    if (onReorderBeneficiaries) {
+      onReorderBeneficiaries(orderedPatronIds)
     }
   }
 
@@ -85,6 +209,8 @@ function Beneficiaries({
     ? `${slotInfo.used}/${slotInfo.limit === 'unlimited' ? '∞' : slotInfo.limit} slots`
     : `${beneficiaries.length} people`
   
+  const sortableIds = sortableBeneficiaries.map(b => b.id)
+
   return (
     <div className="beneficiaries wrapper-card">
       <div className="beneficiaries__header">
@@ -93,54 +219,40 @@ function Beneficiaries({
       </div>
       
       <ul className="beneficiaries__list">
-        {normalizedBeneficiaries.map((person) => (
-          <li 
-            key={person.id} 
-            className={`beneficiaries__item ${person.patronId ? 'beneficiaries__item--clickable' : ''}`}
-            onClick={() => handleBeneficiaryClick(person)}
-          >
-            <div className="beneficiaries__avatar">
-              {person.photo ? (
-                <img src={person.photo} alt={person.name} />
-              ) : (
-                <span className="beneficiaries__initials">{getInitials(person.name)}</span>
-              )}
-            </div>
-            <div className="beneficiaries__info">
-              <span className="beneficiaries__name">
-                {person.name}
-                {person.isCurrentPatron && (
-                  <span className="beneficiaries__viewing-badge">Viewing</span>
-                )}
-              </span>
-              <span className="beneficiaries__role">
-                <i className={`fa-solid ${getRoleIcon(person.roleLabel)}`}></i>
-                {person.roleLabel}
-              </span>
-            </div>
-            
-            {/* Actions */}
-            <div className="beneficiaries__actions">
-              {/* Navigate chevron for linked patrons */}
-              {person.patronId && !person.isCurrentPatron && (
-                <span className="beneficiaries__chevron">
-                  <i className="fa-solid fa-chevron-right"></i>
-                </span>
-              )}
-              
-              {/* Remove button (only for primary viewing non-primary beneficiaries) */}
-              {isPrimary && !person.isPrimaryRole && onRemoveBeneficiary && (
-                <button 
-                  className="beneficiaries__remove-btn"
-                  onClick={(e) => handleRemove(e, person)}
-                  title="Remove beneficiary"
-                >
-                  <i className="fa-solid fa-xmark"></i>
-                </button>
-              )}
-            </div>
-          </li>
-        ))}
+        {/* Primary member: always first, not draggable */}
+        {primaryBeneficiary && (
+          <SortableBeneficiaryItem
+            key={primaryBeneficiary.id}
+            person={primaryBeneficiary}
+            isPrimary={isPrimary}
+            isDraggable={false}
+            onNavigate={handleBeneficiaryClick}
+            onRemove={onRemoveBeneficiary}
+            getRoleIcon={getRoleIcon}
+          />
+        )}
+
+        {/* Sortable non-primary beneficiaries */}
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+          modifiers={[restrictToVerticalAxis, restrictToParentElement]}
+        >
+          <SortableContext items={sortableIds} strategy={verticalListSortingStrategy}>
+            {sortableBeneficiaries.map((person) => (
+              <SortableBeneficiaryItem
+                key={person.id}
+                person={person}
+                isPrimary={isPrimary}
+                isDraggable={isPrimary && sortableBeneficiaries.length > 1}
+                onNavigate={handleBeneficiaryClick}
+                onRemove={onRemoveBeneficiary}
+                getRoleIcon={getRoleIcon}
+              />
+            ))}
+          </SortableContext>
+        </DndContext>
       </ul>
       
       {/* Add Beneficiary button (only for primary) */}

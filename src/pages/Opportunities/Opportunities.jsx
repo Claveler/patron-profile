@@ -1,10 +1,21 @@
 import { useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import MovesManagement from '../MovesManagement/MovesManagement'
 import OpportunitiesList from '../OpportunitiesList/OpportunitiesList'
 import './Opportunities.css'
 
-function Opportunities({ onSelectOpportunity, onSelectPatron, initialOfficerFilter, onClearInitialFilter }) {
+function Opportunities() {
   const [activeView, setActiveView] = useState('pipeline')
+  const [searchParams, setSearchParams] = useSearchParams()
+  const initialOfficerFilter = searchParams.get('officer') || null
+
+  const handleClearInitialFilter = () => {
+    // Remove the officer param from the URL without a full navigation
+    setSearchParams((prev) => {
+      prev.delete('officer')
+      return prev
+    }, { replace: true })
+  }
 
   return (
     <div className="opportunities">
@@ -43,19 +54,15 @@ function Opportunities({ onSelectOpportunity, onSelectPatron, initialOfficerFilt
           <div className="opportunities__tab-content">
             {activeView === 'pipeline' ? (
               <MovesManagement 
-                onNavigateToPatron={onSelectPatron}
-                onSelectOpportunity={onSelectOpportunity}
                 embedded={true}
                 initialAssigneeFilter={initialOfficerFilter}
-                onClearInitialFilter={onClearInitialFilter}
+                onClearInitialFilter={handleClearInitialFilter}
               />
             ) : (
               <OpportunitiesList 
-                onSelectOpportunity={onSelectOpportunity}
-                onSelectPatron={onSelectPatron}
                 embedded={true}
                 initialAssigneeFilter={initialOfficerFilter}
-                onClearInitialFilter={onClearInitialFilter}
+                onClearInitialFilter={handleClearInitialFilter}
               />
             )}
           </div>

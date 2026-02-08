@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import OpportunityCard from '../../components/OpportunityCard/OpportunityCard'
 import OpportunityModal from '../../components/OpportunityModal/OpportunityModal'
 import { 
@@ -24,7 +25,8 @@ const formatCurrency = (amount) => {
   }).format(amount)
 }
 
-function OpportunitiesList({ onSelectOpportunity, onSelectPatron, embedded = false, initialAssigneeFilter, onClearInitialFilter }) {
+function OpportunitiesList({ embedded = false, initialAssigneeFilter, onClearInitialFilter }) {
+  const navigate = useNavigate()
   // Filters
   const [stageFilter, setStageFilter] = useState('all')
   const [campaignFilter, setCampaignFilter] = useState('all')
@@ -111,15 +113,11 @@ function OpportunitiesList({ onSelectOpportunity, onSelectPatron, embedded = fal
   }, [refreshKey])
 
   const handleOpportunityClick = (opportunity) => {
-    if (onSelectOpportunity) {
-      onSelectOpportunity(opportunity.id)
-    }
+    navigate(`/opportunities/${opportunity.id}`)
   }
 
   const handlePatronClick = (patronId) => {
-    if (onSelectPatron) {
-      onSelectPatron(patronId)
-    }
+    navigate(`/patrons/${patronId}`)
   }
 
   const handleCreateClick = () => {

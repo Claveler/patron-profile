@@ -103,6 +103,65 @@
   color: var(--color-text-muted);
 }
 
+/* Household Suggestions */
+.add-beneficiary-modal__suggestions {
+  margin-bottom: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.add-beneficiary-modal__suggestions-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-neutral-50);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.add-beneficiary-modal__suggestions-label i {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+.add-beneficiary-modal__suggestions-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.add-beneficiary-modal__suggestion-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.add-beneficiary-modal__suggestion-item:last-child {
+  border-bottom: none;
+}
+
+.add-beneficiary-modal__suggestion-item:hover {
+  background: var(--color-primary-50);
+}
+
+.add-beneficiary-modal__suggestion-item:hover .add-beneficiary-modal__result-add {
+  opacity: 1;
+}
+
+.add-beneficiary-modal__suggestion-role {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+}
+
 /* Results */
 .add-beneficiary-modal__results {
   margin-top: var(--space-4);
@@ -437,6 +496,24 @@
   border-color: var(--color-primary);
 }
 
+/* Existing Relationship Info */
+.add-beneficiary-modal__existing-relationship {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  background: var(--color-neutral-50);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-4);
+}
+
+.add-beneficiary-modal__existing-relationship i {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
 /* Checkbox */
 .add-beneficiary-modal__checkbox {
   display: flex;
@@ -529,4 +606,64 @@
 .add-beneficiary-modal__submit:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+/* Bidirectional relationship pair (side-by-side dropdowns) */
+.add-beneficiary-modal__relationship-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+.add-beneficiary-modal__relationship-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.add-beneficiary-modal__relationship-label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  line-height: 1.3;
+}
+
+.add-beneficiary-modal__relationship-select {
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  background: white;
+  cursor: pointer;
+  transition: border-color var(--transition-fast);
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: var(--space-6);
+}
+
+.add-beneficiary-modal__relationship-select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary-100);
+}
+
+.add-beneficiary-modal__relationship-select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: var(--color-neutral-50);
+}
+
+.add-beneficiary-modal__auto-label {
+  display: inline-block;
+  margin-left: var(--space-1);
+  padding: 1px var(--space-1);
+  font-size: 10px;
+  font-weight: var(--font-weight-normal);
+  color: var(--color-text-muted);
+  background: var(--color-neutral-100);
+  border-radius: var(--radius-sm);
+  vertical-align: middle;
 }

@@ -95,7 +95,7 @@ Best regards`
         {/* Header */}
         <div className="upgrade-modal__header">
           <div className="upgrade-modal__header-content">
-            <h2 className="upgrade-modal__title">Upgrade Membership</h2>
+            <h2 className="upgrade-modal__title">Upgrade membership</h2>
             <p className="upgrade-modal__subtitle">
               <span className="upgrade-modal__tier upgrade-modal__tier--current">{currentTier}</span>
               <i className="fa-solid fa-arrow-right upgrade-modal__arrow"></i>
@@ -114,7 +114,7 @@ Best regards`
             <div className="upgrade-modal__section">
               <h3 className="upgrade-modal__section-title">
                 <i className="fa-solid fa-arrow-up"></i>
-                Enhanced Features
+                Enhanced features
               </h3>
               <div className="upgrade-modal__improvements">
                 {improvements.map((item, index) => (
@@ -136,7 +136,7 @@ Best regards`
             <div className="upgrade-modal__section">
               <h3 className="upgrade-modal__section-title">
                 <i className="fa-solid fa-plus"></i>
-                New Benefits
+                New benefits
               </h3>
               <ul className="upgrade-modal__new-perks">
                 {newPerks.map((perk, index) => (

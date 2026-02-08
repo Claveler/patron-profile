@@ -14,13 +14,13 @@ const formatCurrency = (amount) => {
 }
 
 const typeConfig = {
-  donation: { label: 'Donation', className: 'gift-history__type-badge--donation' },
+  'one-time': { label: 'One-Time', className: 'gift-history__type-badge--one-time' },
   membership: { label: 'Membership', className: 'gift-history__type-badge--membership' },
   'pledge-payment': { label: 'Pledge', className: 'gift-history__type-badge--pledge' },
   recurring: { label: 'Recurring', className: 'gift-history__type-badge--recurring' },
 }
 
-function GiftHistoryTable({ patronId }) {
+function GiftHistoryTable({ patronId, onRecordGift, onGiftSelect, selectedGiftId }) {
   const [visibleCount, setVisibleCount] = useState(10)
   
   const gifts = getGiftsByPatronId(patronId)
@@ -55,9 +55,16 @@ function GiftHistoryTable({ patronId }) {
           Gift History
           <span className="gift-history__count">{gifts.length}</span>
         </h4>
-        <span className="gift-history__total">
-          Total: {formatCurrency(totalAmount)}
-        </span>
+        <div className="gift-history__actions">
+          <span className="gift-history__total">
+            Total: {formatCurrency(totalAmount)}
+          </span>
+          {onRecordGift && (
+            <button className="gift-history__record-gift-btn" onClick={onRecordGift}>
+              Record gift
+            </button>
+          )}
+        </div>
       </div>
 
       {gifts.length === 0 ? (
@@ -81,13 +88,17 @@ function GiftHistoryTable({ patronId }) {
               </thead>
               <tbody>
                 {displayedGifts.map(gift => {
-                  const type = typeConfig[gift.type] || typeConfig.donation
+                  const type = typeConfig[gift.type] || typeConfig['one-time']
                   const fundName = getFundNameById(gift.fundId)
                   const ackStatus = getAckStatus(gift.id)
                   const ack = ackIcons[ackStatus]
 
                   return (
-                    <tr key={gift.id}>
+                    <tr
+                      key={gift.id}
+                      className={`gift-history__row${selectedGiftId === gift.id ? ' gift-history__row--selected' : ''}`}
+                      onClick={() => onGiftSelect && onGiftSelect(gift)}
+                    >
                       <td className="gift-history__date">{formatDate(gift.date)}</td>
                       <td className="gift-history__description">{gift.description}</td>
                       <td>

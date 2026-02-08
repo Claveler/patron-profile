@@ -173,7 +173,7 @@ function GiftModal({
         patronId,
         amount: parseFloat(formData.amount),
         date: formData.date,
-        type: 'donation',
+        type: 'one-time',
         description: formData.notes || `${formData.giftType} gift`,
         fundId: formData.fundId || null,
         campaignId: formData.campaignId || null,
@@ -225,7 +225,7 @@ function GiftModal({
         {/* Header */}
         <div className="gift-modal__header">
           <div className="gift-modal__header-content">
-            <h2 className="gift-modal__title">Record Gift</h2>
+            <h2 className="gift-modal__title">Record gift</h2>
             {patronName && (
               <p className="gift-modal__subtitle">
                 <i className="fa-solid fa-user"></i>

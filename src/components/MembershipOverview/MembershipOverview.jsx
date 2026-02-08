@@ -5,6 +5,17 @@ import { formatDate } from '../../data/patrons'
 import { getInitials } from '../../utils/getInitials'
 import './MembershipOverview.css'
 
+// Card-specific date format: DD/MMM/YYYY (e.g. "02/Dec/2026")
+const formatCardDate = (dateStr) => {
+  if (!dateStr) return '-'
+  const date = new Date(dateStr)
+  if (isNaN(date.getTime())) return '-'
+  const day = String(date.getDate()).padStart(2, '0')
+  const month = date.toLocaleDateString('en-US', { month: 'short' })
+  const year = date.getFullYear()
+  return `${day}/${month}/${year}`
+}
+
 // Category display names, order, and icon colors (from PRD: Membership Perks Management)
 const categoryConfig = {
   access: { label: 'Access', order: 1, colorClass: 'access' },
@@ -25,7 +36,7 @@ function MembershipOverview({ membership, patronName, patronEmail, patronPhoto, 
   const [showUpgradeModal, setShowUpgradeModal] = useState(false)
   
   // Guard for incomplete membership data
-  if (!membership?.programme || !membership?.benefits) {
+  if (!membership?.program || !membership?.benefits) {
     return (
       <div className="membership-overview wrapper-card">
         <div className="membership-overview__header">
@@ -134,8 +145,8 @@ function MembershipOverview({ membership, patronName, patronEmail, patronPhoto, 
               <div className="membership-overview__card-content">
                 <div className="membership-overview__card-info">
                   <span className="membership-overview__tier-tag">{membership.tier}</span>
-                  <p className="membership-overview__card-id">ID: {membership.patronId}</p>
-                  <p className="membership-overview__card-valid">Valid until: {formatDate(membership.validUntil)}</p>
+                  <p className="membership-overview__card-id">Member ID: {membership.membershipId}</p>
+                  <p className="membership-overview__card-valid">Valid until: {formatCardDate(membership.validUntil)}</p>
                 </div>
                 
                 <div className="membership-overview__qr-container">

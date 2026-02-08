@@ -86,8 +86,10 @@ function PatronModal({
       newErrors.lastName = 'Last name is required'
     }
     
-    // Basic email validation if provided
-    if (formData.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+    // Email is required (all patrons have a Fever account)
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email is required'
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = 'Please enter a valid email address'
     }
     
@@ -138,7 +140,7 @@ function PatronModal({
         {/* Header */}
         <div className="patron-modal__header">
           <div className="patron-modal__header-content">
-            <h2 className="patron-modal__title">Add New Patron</h2>
+            <h2 className="patron-modal__title">Add new patron</h2>
             <p className="patron-modal__subtitle">
               Create a new patron record in the database
             </p>
@@ -189,7 +191,7 @@ function PatronModal({
           {/* Email */}
           <div className="patron-modal__field">
             <label className="patron-modal__label" htmlFor="patron-email">
-              Email
+              Email <span className="patron-modal__required">*</span>
             </label>
             <input
               id="patron-email"

@@ -5,7 +5,7 @@ import './ActivityTimeline.css'
 
 // Activity type configurations
 const activityTypes = {
-  donation: {
+  'one-time': {
     icon: 'fa-hand-holding-dollar',
     title: 'Gift',
     filter: 'gifts'
@@ -86,7 +86,7 @@ const formatCurrency = (amount) => {
 // Format date - use shared utility
 const formatDate = formatDateTime
 
-function ActivityTimeline({ gifts = [], activities = [], onAddActivity, onRecordGift }) {
+function ActivityTimeline({ gifts = [], activities = [], onAddActivity, onRecordGift, onGiftSelect }) {
   const [expandedItem, setExpandedItem] = useState(null)
   const [filter, setFilter] = useState('all')
   const [visibleCount, setVisibleCount] = useState(6)
@@ -96,7 +96,7 @@ function ActivityTimeline({ gifts = [], activities = [], onAddActivity, onRecord
     if (gift.type === 'pledge-payment') return 'pledge-payment'
     if (gift.type === 'recurring') return 'recurring'
     if (gift.type === 'membership') return 'membership'
-    return 'donation'
+    return 'one-time'
   }
 
   // Convert gifts to activity format and merge with other activities
@@ -106,6 +106,7 @@ function ActivityTimeline({ gifts = [], activities = [], onAddActivity, onRecord
     description: gift.description,
     date: gift.date,
     amount: gift.amount,
+    _originalGift: gift,
     details: {
       fund: gift.fundId ? { id: gift.fundId, name: getFundNameById(gift.fundId) } : null,
       campaign: gift.campaignId ? { id: gift.campaignId, name: getCampaignNameById(gift.campaignId) } : null,
@@ -226,7 +227,24 @@ function ActivityTimeline({ gifts = [], activities = [], onAddActivity, onRecord
                   >
                     <div className="activity-timeline__text">
                       <span className="activity-timeline__item-title">{typeConfig.title}</span>
-                      <span className="activity-timeline__subtitle">{activity.description}</span>
+                      {activity.eventUrl ? (
+                        <a
+                          href={activity.eventUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="activity-timeline__subtitle activity-timeline__event-link"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          {activity.description} <i className="fa-solid fa-arrow-up-right-from-square activity-timeline__external-icon"></i>
+                        </a>
+                      ) : (
+                        <span className="activity-timeline__subtitle">{activity.description}</span>
+                      )}
+                      {activity.orderId && (
+                        <a href="/#" className="activity-timeline__order-id" onClick={(e) => e.stopPropagation()}>
+                          {activity.orderId}
+                        </a>
+                      )}
                     </div>
                     <div className="activity-timeline__meta">
                       {activity.amount && (
@@ -240,7 +258,7 @@ function ActivityTimeline({ gifts = [], activities = [], onAddActivity, onRecord
                   {/* Expanded details */}
                   {isExpanded && (
                     <div className="activity-timeline__details">
-                      <ActivityDetails activity={activity} />
+                      <ActivityDetails activity={activity} onGiftSelect={onGiftSelect} />
                     </div>
                   )}
                 </div>
@@ -261,18 +279,18 @@ function ActivityTimeline({ gifts = [], activities = [], onAddActivity, onRecord
 }
 
 // Component to render type-specific expanded details
-function ActivityDetails({ activity }) {
-  const { type, details, amount } = activity
+function ActivityDetails({ activity, onGiftSelect }) {
+  const { type, details, amount, eventUrl, orderId } = activity
 
   if (!details) return null
 
   switch (type) {
-    case 'donation':
+    case 'one-time':
     case 'membership':
     case 'pledge-payment':
     case 'recurring':
       return (
-        <div className="activity-details activity-details--donation">
+        <div className="activity-details activity-details--gift">
           {details.fund && (
             <div className="activity-details__row">
               <span className="activity-details__label">Fund:</span>
@@ -308,6 +326,15 @@ function ActivityDetails({ activity }) {
                 <span>Benefits Value: {formatCurrency(details.benefitsValue)}</span>
               )}
             </div>
+          )}
+          {onGiftSelect && activity._originalGift && (
+            <button
+              className="activity-details__view-full"
+              onClick={(e) => { e.stopPropagation(); onGiftSelect(activity._originalGift); }}
+            >
+              <i className="fa-solid fa-arrow-up-right-from-square"></i>
+              View full details
+            </button>
           )}
         </div>
       )
@@ -373,6 +400,24 @@ function ActivityDetails({ activity }) {
     case 'event':
       return (
         <div className="activity-details activity-details--event">
+          {activity.orderId && (
+            <div className="activity-details__row">
+              <span className="activity-details__label">Order ID:</span>
+              <span className="activity-details__value">
+                <a href="/#" className="activity-details__link">{activity.orderId}</a>
+              </span>
+            </div>
+          )}
+          {activity.eventUrl && (
+            <div className="activity-details__row">
+              <span className="activity-details__label">Event:</span>
+              <span className="activity-details__value">
+                <a href={activity.eventUrl} target="_blank" rel="noopener noreferrer" className="activity-details__link">
+                  View on Fever <i className="fa-solid fa-arrow-up-right-from-square activity-details__external-icon"></i>
+                </a>
+              </span>
+            </div>
+          )}
           {details.venue && (
             <div className="activity-details__row">
               <span className="activity-details__label">Venue:</span>
@@ -397,10 +442,26 @@ function ActivityDetails({ activity }) {
     case 'ticket':
       return (
         <div className="activity-details activity-details--ticket">
+          {activity.orderId && (
+            <div className="activity-details__row">
+              <span className="activity-details__label">Order ID:</span>
+              <span className="activity-details__value">
+                <a href="/#" className="activity-details__link">{activity.orderId}</a>
+              </span>
+            </div>
+          )}
           {details.event && (
             <div className="activity-details__row">
               <span className="activity-details__label">Event:</span>
-              <span className="activity-details__value">{details.event}</span>
+              <span className="activity-details__value">
+                {activity.eventUrl ? (
+                  <a href={activity.eventUrl} target="_blank" rel="noopener noreferrer" className="activity-details__link">
+                    {details.event} <i className="fa-solid fa-arrow-up-right-from-square activity-details__external-icon"></i>
+                  </a>
+                ) : (
+                  details.event
+                )}
+              </span>
             </div>
           )}
           {details.quantity && (
