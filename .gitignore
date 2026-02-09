@@ -13,5 +13,15 @@ dist/
 # Product Management documents (internal, not shipped)
 product-management/
 
+# Strategy / product docs (keep out of public repo)
+DATA_MODEL.md
+DEMO_FLOW_ANALYSIS.md
+DEMO_WALKTHROUGH.md
+DEMO_WALKTHROUGH_REPORT.md
+MEMBERSHIP_MODEL_SPEC.md
+PRODUCT_ROADMAP.md
+PRODUCT_SPECS.md
+PRODUCT_SPECS_SUMMARY.md
+
 # OS files
 .DS_Store
