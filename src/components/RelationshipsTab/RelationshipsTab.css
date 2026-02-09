@@ -36,8 +36,12 @@
 .relationships-tab__household-wrapper {
   background: #e6f4ff;
   border-radius: 24px;
-  padding: 24px;
+  padding: 40px;
   flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
 }
 
 /* ============================================
@@ -48,13 +52,12 @@
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary);
-  margin: 0 0 var(--space-4) 0;
+  margin: 0;
   text-align: center;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 4px 8px;
 }
 
 
@@ -108,10 +111,10 @@
 .relationships-tab__ext-column {
   display: flex;
   flex-direction: column;
-  /* Offset = wrapper-padding-top(24) + title-height(32) + title-margin-bottom(16) + card-border(1) = 73px */
-  padding-top: 73px;
-  /* Pull into wrapper's right padding (24px) so connector starts at card edge */
-  margin-left: -24px;
+  /* Offset = wrapper-padding-top(40) + title-line-height(24) + wrapper-gap(24) + card-border(1) = 89px */
+  padding-top: 89px;
+  /* Pull into wrapper's right padding (40px) so connector starts at card edge */
+  margin-left: -40px;
   position: relative;
 }
 
@@ -239,7 +242,7 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  margin-top: 16px;
+  margin-top: 0;
 }
 
 .relationships-tab__action-btn {
@@ -312,7 +315,7 @@
   display: flex;
   align-items: center;
   gap: 0;
-  width: 140px;
+  width: 180px;
   flex-shrink: 0;
 }
 

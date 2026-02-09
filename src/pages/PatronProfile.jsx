@@ -1,5 +1,6 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useContext } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import { GuideContext } from '../App'
 import PatronInfoBox from '../components/PatronInfoBox/PatronInfoBox'
 import TabNavigation from '../components/TabNavigation/TabNavigation'
 import SummaryTab from '../components/Tabs/SummaryTab'
@@ -212,11 +213,18 @@ function PatronProfile() {
   const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState('summary')
   const [refreshKey, setRefreshKey] = useState(0)
+  const { setGuideTab } = useContext(GuideContext)
 
   // Scroll to top whenever the active tab changes
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
   }, [activeTab]);
+
+  // Report active tab to Product Guide context
+  useEffect(() => {
+    setGuideTab(activeTab)
+    return () => setGuideTab(null)
+  }, [activeTab, setGuideTab]);
   
   // Modal states (managed at profile level for access from InfoBox and tabs)
   const [showOpportunityModal, setShowOpportunityModal] = useState(false)

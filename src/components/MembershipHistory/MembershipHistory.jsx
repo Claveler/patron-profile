@@ -10,6 +10,13 @@ const eventConfig = {
   'Cancelled': { icon: 'fa-xmark', color: 'error' },
   'Lapsed': { icon: 'fa-clock', color: 'warning' },
   'Reactivated': { icon: 'fa-play', color: 'success' },
+  'Paused': { icon: 'fa-pause', color: 'warning' },
+  'Extended': { icon: 'fa-calendar-plus', color: 'success' },
+  'Primary Transferred': { icon: 'fa-people-arrows', color: 'primary' },
+  'Complimentary': { icon: 'fa-gift', color: 'success' },
+  'Renewal Requested': { icon: 'fa-rotate', color: 'primary' },
+  'Note Added': { icon: 'fa-sticky-note', color: 'neutral' },
+  'Confirmation Resent': { icon: 'fa-paper-plane', color: 'neutral' },
   'Settings Updated': { icon: 'fa-gear', color: 'neutral' },
   'Renewal Change Requested': { icon: 'fa-envelope', color: 'primary' },
   'default': { icon: 'fa-circle', color: 'neutral' }

@@ -1,0 +1,148 @@
+/* Membership Actions Card */
+
+.membership-actions__header {
+  margin-bottom: var(--space-3);
+}
+
+.membership-actions__title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.membership-actions__title i {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+/* Status banners */
+.membership-actions__pending-banner,
+.membership-actions__paused-banner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  margin-bottom: var(--space-3);
+}
+
+.membership-actions__pending-banner {
+  background: var(--color-error-50, #fef2f2);
+  color: var(--color-error-700, #b91c1c);
+  border: 1px solid var(--color-error-200, #fecaca);
+}
+
+.membership-actions__paused-banner {
+  background: #fef3e2;
+  color: #92400e;
+  border: 1px solid #f5c97e;
+}
+
+.membership-actions__pending-banner i,
+.membership-actions__paused-banner i {
+  font-size: var(--font-size-sm);
+  flex-shrink: 0;
+}
+
+/* Action groups */
+.membership-actions__groups {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.membership-actions__group-label {
+  display: block;
+  font-size: 10px;
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-1);
+  padding-left: var(--space-1);
+}
+
+.membership-actions__list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+/* Action items */
+.membership-actions__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-surface);
+  border: none;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+  text-align: left;
+}
+
+.membership-actions__item:hover {
+  background: var(--color-neutral-50);
+}
+
+.membership-actions__item i:first-child {
+  width: 16px;
+  text-align: center;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+.membership-actions__item span {
+  flex: 1;
+}
+
+.membership-actions__chevron {
+  font-size: 10px;
+  color: var(--color-text-muted);
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.membership-actions__item:hover .membership-actions__chevron {
+  opacity: 1;
+}
+
+/* Danger variant */
+.membership-actions__item--danger {
+  color: var(--color-error-600, #dc2626);
+}
+
+.membership-actions__item--danger i:first-child {
+  color: var(--color-error-400, #f87171);
+}
+
+.membership-actions__item--danger:hover {
+  background: var(--color-error-50, #fef2f2);
+}
+
+/* Disabled state */
+.membership-actions__item--disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.membership-actions__item--disabled:hover {
+  background: var(--color-surface);
+}
+
+.membership-actions__item--disabled .membership-actions__chevron {
+  display: none;
+}

@@ -1,8 +1,8 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { QRCodeSVG } from 'qrcode.react'
 import UpgradeModal from '../UpgradeModal/UpgradeModal'
 import AutoRenewalModal from '../AutoRenewalModal/AutoRenewalModal'
-import { formatDate } from '../../data/patrons'
+import { formatDate, resendConfirmationEmail, addMembershipNote } from '../../data/patrons'
 import { getInitials } from '../../utils/getInitials'
 import './MembershipOverview.css'
 
@@ -36,6 +36,51 @@ function MembershipOverview({ membership, patronName, patronEmail, patronPhoto, 
   // IMPORTANT: All hooks must be called before any early returns (Rules of Hooks)
   const [showUpgradeModal, setShowUpgradeModal] = useState(false)
   const [showAutoRenewalModal, setShowAutoRenewalModal] = useState(false)
+  const [showMenu, setShowMenu] = useState(false)
+  const [showNoteInput, setShowNoteInput] = useState(false)
+  const [noteText, setNoteText] = useState('')
+  const [emailSentFeedback, setEmailSentFeedback] = useState(false)
+  const menuRef = useRef(null)
+
+  // Close menu on outside click
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setShowMenu(false)
+      }
+    }
+    if (showMenu) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [showMenu])
+
+  const handleResendEmail = () => {
+    resendConfirmationEmail(membership?.id)
+    setShowMenu(false)
+    setEmailSentFeedback(true)
+    setTimeout(() => setEmailSentFeedback(false), 2500)
+    onUpdate && onUpdate()
+  }
+
+  const handleAddNote = () => {
+    setShowMenu(false)
+    setShowNoteInput(true)
+  }
+
+  const handleSaveNote = () => {
+    if (noteText.trim()) {
+      addMembershipNote(membership?.id, noteText)
+      setNoteText('')
+      setShowNoteInput(false)
+      onUpdate && onUpdate()
+    }
+  }
+
+  const handleCancelNote = () => {
+    setNoteText('')
+    setShowNoteInput(false)
+  }
   
   // Guard for incomplete membership data
   if (!membership?.program || !membership?.benefits) {
@@ -110,11 +155,60 @@ function MembershipOverview({ membership, patronName, patronEmail, patronPhoto, 
     <div className="membership-overview wrapper-card">
       <div className="membership-overview__header">
         <h4 className="membership-overview__title">Overview</h4>
-        <button className="membership-overview__menu">
-          <i className="fa-solid fa-ellipsis-vertical"></i>
-        </button>
+        <div className="membership-overview__menu-wrapper" ref={menuRef}>
+          <button className="membership-overview__menu" onClick={() => setShowMenu(!showMenu)}>
+            <i className="fa-solid fa-ellipsis-vertical"></i>
+          </button>
+          {showMenu && (
+            <div className="membership-overview__menu-dropdown">
+              <button className="membership-overview__menu-item" onClick={handleResendEmail}>
+                <i className="fa-solid fa-paper-plane"></i>
+                Resend confirmation email
+              </button>
+              <button className="membership-overview__menu-item" onClick={handleAddNote}>
+                <i className="fa-solid fa-sticky-note"></i>
+                Add membership note
+              </button>
+            </div>
+          )}
+        </div>
       </div>
       
+      {/* Email sent feedback toast */}
+      {emailSentFeedback && (
+        <div className="membership-overview__toast">
+          <i className="fa-solid fa-check-circle"></i>
+          Confirmation email sent
+        </div>
+      )}
+
+      {/* Inline note input */}
+      {showNoteInput && (
+        <div className="membership-overview__note-input">
+          <textarea
+            className="membership-overview__note-textarea"
+            placeholder="Add a note about this membership..."
+            value={noteText}
+            onChange={e => setNoteText(e.target.value)}
+            rows={2}
+            autoFocus
+          />
+          <div className="membership-overview__note-actions">
+            <button className="membership-overview__note-btn membership-overview__note-btn--cancel" onClick={handleCancelNote}>
+              Cancel
+            </button>
+            <button
+              className="membership-overview__note-btn membership-overview__note-btn--save"
+              onClick={handleSaveNote}
+              disabled={!noteText.trim()}
+            >
+              <i className="fa-solid fa-check"></i>
+              Save note
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="membership-overview__content">
         {/* Two-column layout: Card on left, Benefits on right */}
         <div className="membership-overview__two-col">

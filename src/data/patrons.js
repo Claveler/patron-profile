@@ -1970,6 +1970,96 @@ export const tierConfig = {
   }
 }
 
+// Available membership programs (centralized config for empty-state tier cards)
+// In production, this comes from the partner's membership program settings in Fever Zone.
+export const membershipPrograms = [
+  {
+    id: 'basic',
+    tier: 'Basic',
+    price: 49.99,
+    period: 'year',
+    tagline: 'Essential museum access',
+    highlights: ['Unlimited general admission', '5% store discount'],
+    icon: 'fa-solid fa-ticket'
+  },
+  {
+    id: 'silver',
+    tier: 'Silver',
+    price: 89.99,
+    period: 'year',
+    tagline: 'Enhanced benefits for regular visitors',
+    highlights: ['Unlimited visits', '2 guest passes/year', '5% F&B discount'],
+    icon: 'fa-solid fa-star'
+  },
+  {
+    id: 'gold',
+    tier: 'Gold',
+    price: 145.99,
+    period: 'year',
+    tagline: 'Premium access with family benefits',
+    highlights: ['Unlimited visits', '5 guest passes/year', '10% F&B discount', 'Priority entry'],
+    icon: 'fa-solid fa-crown'
+  },
+  {
+    id: 'platinum',
+    tier: 'Platinum',
+    price: 249.99,
+    period: 'year',
+    tagline: 'The ultimate membership experience',
+    highlights: ['Unlimited everything', 'Free parking', 'Member lounge', 'Private tours'],
+    icon: 'fa-solid fa-gem'
+  }
+]
+
+// Generate a membership purchase link for a patron (mirrors upgrade link pattern)
+export const getMembershipPurchaseLink = (patronId, tier) => {
+  return `https://pay.fever.co/membership/${patronId}/${tier.toLowerCase().replace(/\s+/g, '-')}`
+}
+
+// Generate a behavioral nudge message based on patron engagement data
+// Returns { message, strength } or null if no meaningful data
+export const getMembershipNudge = (patron) => {
+  if (!patron) return null
+
+  const visits = patron.engagement?.visits || 0
+  const revenue = patron.giving?.revenue || 0
+  const level = patron.engagement?.level
+  const firstName = patron.firstName || 'This patron'
+
+  // Format currency
+  const fmt = (n) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(n)
+
+  // High engagement: lots of visits AND spending
+  if (visits >= 20 && revenue >= 1000) {
+    return {
+      message: `${firstName} has visited ${visits} times and spent ${fmt(revenue)} on tickets and purchases. Frequent visitors like this are great candidates for membership.`,
+      strength: 'high'
+    }
+  }
+
+  // Good engagement: decent visits OR spending
+  if (visits >= 10 || revenue >= 500) {
+    const parts = []
+    if (visits >= 10) parts.push(`visited ${visits} times`)
+    if (revenue >= 500) parts.push(`spent ${fmt(revenue)} on tickets`)
+    return {
+      message: `${firstName} has ${parts.join(' and ')} — membership could save them on repeat admissions.`,
+      strength: 'medium'
+    }
+  }
+
+  // Some engagement: at least a few visits or warm+ level
+  if (visits >= 3 || (level && level !== 'cold')) {
+    return {
+      message: `${firstName} has shown interest with ${visits} visit${visits !== 1 ? 's' : ''}. A membership could help build a longer-term relationship.`,
+      strength: 'low'
+    }
+  }
+
+  // No meaningful engagement data — don't show nudge
+  return null
+}
+
 // Memberships as first-class entities
 export const memberships = [
   {
@@ -4207,6 +4297,371 @@ export const requestPaymentMethodUpdate = (membershipId, patronEmail) => {
   })
   
   return { success: true, link: `https://account.fever.co/payment/${membershipId}/update` }
+}
+
+// ============================================
+// MEMBERSHIP LIFECYCLE ACTIONS
+// ============================================
+
+// Cancel membership (staff-initiated or patron-requested)
+export const cancelMembership = (membershipId, options = {}) => {
+  const membership = memberships.find(m => m.id === membershipId)
+  if (!membership) return { success: false, error: 'Membership not found' }
+  if (membership.status === 'cancelled') return { success: false, error: 'Membership is already cancelled' }
+
+  const {
+    timing = 'immediate', // 'immediate' | 'end_of_period'
+    refundType = 'none',  // 'none' | 'prorated' | 'full'
+    reason = '',
+    reasonCategory = 'patron_request', // patron_request | non_payment | policy_violation | other
+    notes = ''
+  } = options
+
+  const today = new Date().toISOString().split('T')[0]
+
+  if (timing === 'immediate') {
+    membership.status = 'cancelled'
+    membership.cancelledDate = today
+  } else {
+    // Schedule cancellation at end of period
+    membership.pendingCancellation = {
+      scheduledDate: membership.validUntil || membership.expirationDate,
+      reason: reasonCategory,
+      requestedAt: today
+    }
+  }
+
+  // Calculate refund amount
+  let refundAmount = 0
+  const tierProgram = membershipPrograms.find(p => p.tier === membership.tier)
+  const price = tierProgram?.price || 0
+  if (refundType === 'full') {
+    refundAmount = price
+  } else if (refundType === 'prorated' && membership.periodStart && membership.validUntil) {
+    const start = new Date(membership.periodStart)
+    const end = new Date(membership.validUntil)
+    const now = new Date()
+    const totalDays = (end - start) / (1000 * 60 * 60 * 24)
+    const remainingDays = Math.max(0, (end - now) / (1000 * 60 * 60 * 24))
+    refundAmount = Math.round((remainingDays / totalDays) * price * 100) / 100
+  }
+
+  // Deactivate beneficiaries
+  const affectedBeneficiaries = membershipBeneficiaries.filter(
+    mb => mb.membershipId === membershipId && mb.status === 'active' && mb.role !== 'primary'
+  )
+  if (timing === 'immediate') {
+    affectedBeneficiaries.forEach(mb => {
+      mb.status = 'removed'
+      mb.removedDate = today
+    })
+  }
+
+  // Build details string
+  const detailParts = []
+  detailParts.push(timing === 'immediate' ? 'Effective immediately' : `Scheduled for ${membership.validUntil}`)
+  if (refundType !== 'none') detailParts.push(`${refundType} refund: $${refundAmount.toFixed(2)}`)
+  if (reason) detailParts.push(reason)
+  if (affectedBeneficiaries.length > 0) detailParts.push(`${affectedBeneficiaries.length} beneficiar${affectedBeneficiaries.length === 1 ? 'y' : 'ies'} affected`)
+
+  membership.membershipHistory.unshift({
+    date: today,
+    event: 'Cancelled',
+    tier: membership.tier,
+    program: membership.program,
+    details: detailParts.join(' — ')
+  })
+
+  return { success: true, refundAmount, affectedBeneficiaries: affectedBeneficiaries.length }
+}
+
+// Generate renewal payment link (patron-action)
+export const renewMembership = (membershipId, patronEmail) => {
+  const membership = memberships.find(m => m.id === membershipId)
+  if (!membership) return { success: false, error: 'Membership not found' }
+
+  const tierSlug = membership.tier.toLowerCase().replace(/\s+/g, '-')
+  const patronLink = membershipBeneficiaries.find(
+    mb => mb.membershipId === membershipId && mb.role === 'primary'
+  )
+  const patronId = patronLink?.patronId || ''
+  const link = `https://pay.fever.co/renew/${patronId}/${tierSlug}`
+
+  membership.membershipHistory.unshift({
+    date: new Date().toISOString().split('T')[0],
+    event: 'Renewal Requested',
+    tier: membership.tier,
+    program: membership.program,
+    details: `Renewal payment link sent to patron`
+  })
+
+  return { success: true, link }
+}
+
+// Pause / freeze membership (staff-direct)
+export const pauseMembership = (membershipId, options = {}) => {
+  const membership = memberships.find(m => m.id === membershipId)
+  if (!membership) return { success: false, error: 'Membership not found' }
+  if (membership.status === 'paused') return { success: false, error: 'Membership is already paused' }
+  if (membership.status !== 'active') return { success: false, error: 'Only active memberships can be paused' }
+
+  const { durationDays = 30, reason = '' } = options
+  const today = new Date()
+  const resumeDate = new Date(today)
+  resumeDate.setDate(resumeDate.getDate() + durationDays)
+
+  membership.status = 'paused'
+  membership.pausedDate = today.toISOString().split('T')[0]
+  membership.pausedUntil = resumeDate.toISOString().split('T')[0]
+
+  // Extend expiration by pause duration
+  if (membership.validUntil) {
+    const currentEnd = new Date(membership.validUntil)
+    currentEnd.setDate(currentEnd.getDate() + durationDays)
+    membership.validUntil = currentEnd.toISOString().split('T')[0]
+    membership.expirationDate = membership.validUntil
+    membership.renewalDate = membership.validUntil
+    membership.daysToRenewal = Math.ceil((currentEnd - today) / (1000 * 60 * 60 * 24))
+  }
+
+  const details = [`Paused for ${durationDays} days — resumes ${resumeDate.toISOString().split('T')[0]}`]
+  if (reason) details.push(reason)
+
+  membership.membershipHistory.unshift({
+    date: today.toISOString().split('T')[0],
+    event: 'Paused',
+    tier: membership.tier,
+    program: membership.program,
+    details: details.join(' — ')
+  })
+
+  return { success: true, resumeDate: resumeDate.toISOString().split('T')[0] }
+}
+
+// Extend membership (staff-direct, optionally complimentary)
+export const extendMembership = (membershipId, options = {}) => {
+  const membership = memberships.find(m => m.id === membershipId)
+  if (!membership) return { success: false, error: 'Membership not found' }
+
+  const { durationDays = 30, complimentary = true, reason = '', notes = '' } = options
+
+  if (membership.validUntil) {
+    const currentEnd = new Date(membership.validUntil)
+    currentEnd.setDate(currentEnd.getDate() + durationDays)
+    membership.validUntil = currentEnd.toISOString().split('T')[0]
+    membership.expirationDate = membership.validUntil
+    membership.renewalDate = membership.validUntil
+    membership.daysToRenewal = Math.ceil((currentEnd - new Date()) / (1000 * 60 * 60 * 24))
+  }
+
+  const detailParts = [`Extended by ${durationDays} days`]
+  if (complimentary) detailParts.push('Complimentary')
+  if (reason) detailParts.push(reason)
+  if (notes) detailParts.push(notes)
+
+  membership.membershipHistory.unshift({
+    date: new Date().toISOString().split('T')[0],
+    event: 'Extended',
+    tier: membership.tier,
+    program: membership.program,
+    details: detailParts.join(' — ')
+  })
+
+  return { success: true, newExpiration: membership.validUntil }
+}
+
+// Generate downgrade payment link (patron-action)
+export const downgradeMembership = (membershipId, newTier, options = {}) => {
+  const membership = memberships.find(m => m.id === membershipId)
+  if (!membership) return { success: false, error: 'Membership not found' }
+
+  const { timing = 'renewal' } = options // 'renewal' | 'immediate'
+  const tierSlug = newTier.toLowerCase().replace(/\s+/g, '-')
+  const patronLink = membershipBeneficiaries.find(
+    mb => mb.membershipId === membershipId && mb.role === 'primary'
+  )
+  const patronId = patronLink?.patronId || ''
+  const link = `https://pay.fever.co/downgrade/${patronId}/${tierSlug}`
+
+  // Calculate credit for immediate downgrades
+  const currentProgram = membershipPrograms.find(p => p.tier === membership.tier)
+  const newProgram = membershipPrograms.find(p => p.tier === newTier)
+  let creditAmount = 0
+  if (timing === 'immediate' && currentProgram && newProgram && membership.periodStart && membership.validUntil) {
+    const start = new Date(membership.periodStart)
+    const end = new Date(membership.validUntil)
+    const now = new Date()
+    const totalDays = (end - start) / (1000 * 60 * 60 * 24)
+    const remainingDays = Math.max(0, (end - now) / (1000 * 60 * 60 * 24))
+    const priceDiff = currentProgram.price - newProgram.price
+    creditAmount = Math.round((remainingDays / totalDays) * priceDiff * 100) / 100
+  }
+
+  const detailParts = [`${membership.tier} → ${newTier}`]
+  detailParts.push(timing === 'immediate' ? 'Effective immediately' : 'Effective at next renewal')
+  if (creditAmount > 0) detailParts.push(`Credit: $${creditAmount.toFixed(2)}`)
+
+  membership.membershipHistory.unshift({
+    date: new Date().toISOString().split('T')[0],
+    event: 'Downgraded',
+    tier: membership.tier,
+    program: membership.program,
+    details: detailParts.join(' — ')
+  })
+
+  return { success: true, link, creditAmount, newTier }
+}
+
+// Transfer primary account holder (staff-direct)
+export const transferPrimary = (membershipId, newPrimaryPatronId) => {
+  const membership = memberships.find(m => m.id === membershipId)
+  if (!membership) return { success: false, error: 'Membership not found' }
+
+  // Find current primary
+  const currentPrimaryLink = membershipBeneficiaries.find(
+    mb => mb.membershipId === membershipId && mb.role === 'primary' && mb.status === 'active'
+  )
+  if (!currentPrimaryLink) return { success: false, error: 'Current primary not found' }
+
+  // Find new primary in beneficiaries
+  const newPrimaryLink = membershipBeneficiaries.find(
+    mb => mb.membershipId === membershipId && mb.patronId === newPrimaryPatronId && mb.status === 'active'
+  )
+  if (!newPrimaryLink) return { success: false, error: 'New primary must be an active beneficiary on this membership' }
+
+  // Get patron names for history
+  const oldPrimaryPatron = patrons.find(p => p.id === currentPrimaryLink.patronId)
+  const newPrimaryPatron = patrons.find(p => p.id === newPrimaryPatronId)
+
+  // Swap roles
+  currentPrimaryLink.role = 'beneficiary'
+  currentPrimaryLink.roleLabel = newPrimaryLink.roleLabel || 'Beneficiary'
+  newPrimaryLink.role = 'primary'
+  newPrimaryLink.roleLabel = 'Primary'
+
+  const oldName = oldPrimaryPatron ? `${oldPrimaryPatron.firstName} ${oldPrimaryPatron.lastName}` : 'Unknown'
+  const newName = newPrimaryPatron ? `${newPrimaryPatron.firstName} ${newPrimaryPatron.lastName}` : 'Unknown'
+
+  membership.membershipHistory.unshift({
+    date: new Date().toISOString().split('T')[0],
+    event: 'Primary Transferred',
+    tier: membership.tier,
+    program: membership.program,
+    details: `${oldName} → ${newName}`
+  })
+
+  return { success: true }
+}
+
+// Issue complimentary membership (staff-direct, creates new membership)
+export const compMembership = (patronId, options = {}) => {
+  const { tier = 'Basic', durationMonths = 12, reason = '', notes = '', autoRenewal = false } = options
+
+  const patron = patrons.find(p => p.id === patronId)
+  if (!patron) return { success: false, error: 'Patron not found' }
+
+  // Check if patron already has an active membership
+  const existingMemberships = getMembershipsByPatronId(patronId)
+  const hasActive = existingMemberships.some(m => m.status === 'active' || m.status === 'paused')
+  if (hasActive) return { success: false, error: 'Patron already has an active membership' }
+
+  const today = new Date()
+  const expirationDate = new Date(today)
+  expirationDate.setMonth(expirationDate.getMonth() + durationMonths)
+
+  const config = tierConfig[tier]
+  const program = membershipPrograms.find(p => p.tier === tier)
+
+  const newMembership = {
+    id: `mem-comp-${Date.now()}`,
+    program: 'General Membership',
+    tier,
+    status: 'active',
+    startDate: today.toISOString().split('T')[0],
+    renewalDate: expirationDate.toISOString().split('T')[0],
+    expirationDate: expirationDate.toISOString().split('T')[0],
+    membershipId: `COMP-${Date.now().toString(36).toUpperCase()}`,
+    periodStart: today.toISOString().split('T')[0],
+    validUntil: expirationDate.toISOString().split('T')[0],
+    daysToRenewal: Math.ceil((expirationDate - today) / (1000 * 60 * 60 * 24)),
+    autoRenewal,
+    paymentMethod: null,
+    renewalReminders: [30, 14, 7],
+    gracePeriodDays: 14,
+    pendingRenewalChange: null,
+    memberYears: 0,
+    cardStyle: config?.cardStyle || {},
+    usageAnalytics: { overallPercentage: 0, categories: [], unusedBenefits: [], mostUsed: null },
+    upgradeEligible: tier !== 'Platinum',
+    upgradeTier: tier === 'Basic' ? 'Silver' : tier === 'Silver' ? 'Gold' : tier === 'Gold' ? 'Platinum' : null,
+    benefits: program ? program.highlights.map(h => ({
+      category: 'access',
+      title: h,
+      description: '',
+      usage: null,
+      icon: 'fa-check'
+    })) : [],
+    memberEvents: { earlyAccess: [], memberOnly: [] },
+    membershipHistory: [{
+      date: today.toISOString().split('T')[0],
+      event: 'Complimentary',
+      tier,
+      program: 'General Membership',
+      details: [reason, notes].filter(Boolean).join(' — ') || 'Complimentary membership issued'
+    }],
+    history: []
+  }
+
+  // Set legacy history alias
+  newMembership.history = newMembership.membershipHistory
+
+  memberships.push(newMembership)
+
+  // Create membership beneficiary link as primary
+  membershipBeneficiaries.push({
+    id: `mb-comp-${Date.now()}`,
+    membershipId: newMembership.id,
+    patronId,
+    role: 'primary',
+    roleLabel: 'Primary',
+    status: 'active',
+    addedDate: today.toISOString().split('T')[0]
+  })
+
+  return { success: true, membershipId: newMembership.id }
+}
+
+// Resend confirmation email (instant action, logs to history)
+export const resendConfirmationEmail = (membershipId) => {
+  const membership = memberships.find(m => m.id === membershipId)
+  if (!membership) return { success: false, error: 'Membership not found' }
+
+  membership.membershipHistory.unshift({
+    date: new Date().toISOString().split('T')[0],
+    event: 'Confirmation Resent',
+    tier: membership.tier,
+    program: membership.program,
+    details: 'Confirmation email resent to patron'
+  })
+
+  return { success: true }
+}
+
+// Add membership note (logs to history)
+export const addMembershipNote = (membershipId, note) => {
+  const membership = memberships.find(m => m.id === membershipId)
+  if (!membership) return { success: false, error: 'Membership not found' }
+  if (!note || !note.trim()) return { success: false, error: 'Note cannot be empty' }
+
+  membership.membershipHistory.unshift({
+    date: new Date().toISOString().split('T')[0],
+    event: 'Note Added',
+    tier: membership.tier,
+    program: membership.program,
+    details: note.trim()
+  })
+
+  return { success: true }
 }
 
 // ============================================

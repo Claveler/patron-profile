@@ -1,0 +1,331 @@
+/* ============================================================================
+   ProductGuidePanel — right-side slide-out for contextual product reasoning
+   Follows GiftDetailPanel CSS structure for consistency.
+   ============================================================================ */
+
+/* Overlay / backdrop — sits below the header (4.5rem = 72px) so the
+   header trigger button remains clickable at all times. */
+.guide-panel__overlay {
+  position: fixed;
+  top: 4.5rem;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 999;
+  background: rgba(0, 0, 0, 0.25);
+  animation: guidePanelFadeIn 0.2s ease-out;
+}
+
+@keyframes guidePanelFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* The panel itself — also starts below the header */
+.guide-panel {
+  position: fixed;
+  top: 4.5rem;
+  right: 0;
+  bottom: 0;
+  width: 420px;
+  max-width: 100vw;
+  background: var(--color-surface);
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.12);
+  display: flex;
+  flex-direction: column;
+  animation: guidePanelSlideIn 0.25s ease-out;
+  z-index: 1000;
+}
+
+@keyframes guidePanelSlideIn {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+
+/* ── Header ─────────────────────────────────────────────────────────────── */
+
+.guide-panel__header {
+  padding: var(--space-5) var(--space-5) var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+  flex-shrink: 0;
+  background: linear-gradient(135deg, var(--color-primary-50) 0%, var(--color-surface) 100%);
+}
+
+.guide-panel__header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-3);
+}
+
+.guide-panel__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.guide-panel__brand-icon {
+  font-size: var(--font-size-lg);
+  color: var(--color-primary);
+}
+
+.guide-panel__brand-label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.guide-panel__close {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: none;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-lg);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+
+.guide-panel__close:hover {
+  background: var(--color-background);
+  color: var(--color-text-primary);
+}
+
+.guide-panel__title {
+  font-size: 20px;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  line-height: 1.3;
+  margin: 0 0 var(--space-2) 0;
+}
+
+/* Badges row */
+.guide-panel__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.guide-panel__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: var(--font-weight-semibold);
+  white-space: nowrap;
+}
+
+.guide-panel__badge i {
+  font-size: 10px;
+}
+
+.guide-panel__badge--persona {
+  background-color: rgba(111, 65, 215, 0.1);
+  color: var(--color-accent);
+}
+
+.guide-panel__badge--epic {
+  background-color: var(--color-primary-100);
+  color: var(--color-primary-700);
+}
+
+/* ── Scrollable Body ────────────────────────────────────────────────────── */
+
+.guide-panel__body {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-4) var(--space-5);
+}
+
+/* ── Sections ───────────────────────────────────────────────────────────── */
+
+.guide-panel__section {
+  margin-bottom: var(--space-5);
+}
+
+.guide-panel__section:last-child {
+  margin-bottom: 0;
+}
+
+.guide-panel__section-title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 var(--space-3) 0;
+  padding: 0 0 var(--space-2) 0;
+  border-bottom: 1px solid var(--color-border-light);
+  background: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+}
+
+.guide-panel__section-title i {
+  font-size: 12px;
+  color: var(--color-primary);
+}
+
+/* Toggleable section title (Key Components) */
+.guide-panel__section-title--toggle {
+  cursor: pointer;
+  width: 100%;
+  justify-content: space-between;
+  transition: color var(--transition-fast);
+}
+
+.guide-panel__section-title--toggle:hover {
+  color: var(--color-text-secondary);
+}
+
+.guide-panel__section-title-left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.guide-panel__component-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: var(--radius-full);
+  background: var(--color-primary-100);
+  color: var(--color-primary-700);
+  font-size: 10px;
+  font-weight: var(--font-weight-bold);
+}
+
+.guide-panel__toggle-icon {
+  font-size: 10px;
+  color: var(--color-text-muted);
+  transition: transform var(--transition-fast);
+}
+
+/* ── Text ───────────────────────────────────────────────────────────────── */
+
+.guide-panel__text {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* ── Wow Moment Callout ─────────────────────────────────────────────────── */
+
+.guide-panel__callout {
+  background: var(--color-warning-100);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+  border-left: 3px solid var(--color-warning);
+}
+
+.guide-panel__callout .guide-panel__text {
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+/* ── Component Cards ────────────────────────────────────────────────────── */
+
+.guide-panel__components {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.guide-panel__component-card {
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-background);
+  border-radius: var(--radius-md);
+  border-left: 3px solid var(--color-primary-200);
+  transition: border-color var(--transition-fast);
+}
+
+.guide-panel__component-card:hover {
+  border-left-color: var(--color-primary);
+}
+
+.guide-panel__component-name {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-1);
+}
+
+.guide-panel__component-reasoning {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ── Empty State ────────────────────────────────────────────────────────── */
+
+.guide-panel__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--space-8) var(--space-4);
+  color: var(--color-text-muted);
+}
+
+.guide-panel__empty i {
+  font-size: 40px;
+  opacity: 0.2;
+  margin-bottom: var(--space-4);
+}
+
+.guide-panel__empty p {
+  margin: 0 0 var(--space-2) 0;
+  font-size: var(--font-size-sm);
+}
+
+.guide-panel__empty-hint {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  opacity: 0.7;
+}
+
+/* ── Footer ─────────────────────────────────────────────────────────────── */
+
+.guide-panel__footer {
+  padding: var(--space-3) var(--space-5);
+  border-top: 1px solid var(--color-border-light);
+  flex-shrink: 0;
+}
+
+.guide-panel__footer-text {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  opacity: 0.6;
+}
+
+.guide-panel__footer-text i {
+  font-size: 11px;
+}
+
+/* ── Responsive ─────────────────────────────────────────────────────────── */
+
+@media (max-width: 480px) {
+  .guide-panel {
+    width: 100vw;
+  }
+}
