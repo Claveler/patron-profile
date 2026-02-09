@@ -21,7 +21,8 @@ function MembershipsTab({
   onNavigateToPatron,
   onAddBeneficiary,
   onRemoveBeneficiary,
-  onReorderBeneficiaries
+  onReorderBeneficiaries,
+  onSettingsUpdate
 }) {
   // Get memberships using new data model if patronId is provided
   const membershipData = useMemo(() => {
@@ -157,6 +158,7 @@ function MembershipsTab({
             patronEmail={patronEmail || currentPatron?.email}
             patronPhoto={currentPatron?.photo}
             isPrimary={isPrimary}
+            onUpdate={onSettingsUpdate}
           />
           
           {/* Member Events (Early Access + Exclusive) */}

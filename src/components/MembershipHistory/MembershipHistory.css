@@ -148,6 +148,14 @@
   display: block;
 }
 
+.membership-history__details {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  display: block;
+  margin-top: 2px;
+  font-style: italic;
+}
+
 .membership-history__date {
   display: flex;
   align-items: center;

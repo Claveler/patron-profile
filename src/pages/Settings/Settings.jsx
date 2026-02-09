@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { patronTags, addCustomTag, updateTagLabel, deleteTag, getTagUsageCount } from '../../data/patrons'
+import { patronTags, addCustomTag, updateTagLabel, deleteTag, getTagUsageCount, computedTagRules, updateComputedTagThreshold } from '../../data/patrons'
 import './Settings.css'
 
 // Import sources configuration
@@ -66,6 +66,10 @@ function Settings() {
   const [selectedCategories, setSelectedCategories] = useState(
     DATA_CATEGORIES.reduce((acc, cat) => ({ ...acc, [cat.id]: true }), {})
   )
+
+  // Computed tag threshold editing state
+  const [editingThresholdId, setEditingThresholdId] = useState(null)
+  const [editingThresholdValue, setEditingThresholdValue] = useState('')
 
   // Force re-render after mutations
   const refresh = () => setRefreshKey(k => k + 1)
@@ -202,6 +206,126 @@ function Settings() {
     )
   }
 
+  // Handle computed tag threshold editing
+  const handleStartThresholdEdit = (rule) => {
+    setEditingThresholdId(rule.id)
+    setEditingThresholdValue(String(rule.threshold))
+  }
+
+  const handleSaveThreshold = () => {
+    if (editingThresholdId && editingThresholdValue !== '') {
+      updateComputedTagThreshold(editingThresholdId, editingThresholdValue)
+      setEditingThresholdId(null)
+      setEditingThresholdValue('')
+      refresh()
+    }
+  }
+
+  const handleCancelThreshold = () => {
+    setEditingThresholdId(null)
+    setEditingThresholdValue('')
+  }
+
+  const handleThresholdKeyPress = (e) => {
+    if (e.key === 'Enter') handleSaveThreshold()
+    else if (e.key === 'Escape') handleCancelThreshold()
+  }
+
+  // Format threshold for display
+  const formatThreshold = (rule) => {
+    if (rule.operator === 'older_than_months') {
+      return `${rule.threshold} month${rule.threshold !== 1 ? 's' : ''}`
+    }
+    return `$${Number(rule.threshold).toLocaleString()}`
+  }
+
+  // Format rule description for display
+  const formatRuleDescription = (rule) => {
+    switch (rule.operator) {
+      case '>': return `Lifetime gifts > ${formatThreshold(rule)}`
+      case '>=': return `Lifetime gifts \u2265 ${formatThreshold(rule)}`
+      case 'older_than_months': return `No gift in ${formatThreshold(rule)}`
+      default: return rule.description
+    }
+  }
+
+  // Render computed tag row
+  const renderComputedTagRow = (rule) => {
+    const usageCount = getTagUsageCount(rule.id)
+    const isEditingThreshold = editingThresholdId === rule.id
+
+    return (
+      <div key={rule.id} className="settings__tag-row settings__tag-row--computed">
+        <div className="settings__tag-info-block">
+          <div className="settings__tag-info">
+            <span className="settings__tag-label">{rule.label}</span>
+            <span className="settings__tag-badge settings__tag-badge--computed">Computed</span>
+          </div>
+          <div className="settings__tag-rule">
+            {isEditingThreshold ? (
+              <div className="settings__tag-threshold-edit">
+                <span className="settings__tag-threshold-label">
+                  {rule.operator === 'older_than_months' ? 'No gift in' : 'Lifetime gifts \u2265'}
+                </span>
+                <div className="settings__tag-threshold-input-group">
+                  {rule.operator !== 'older_than_months' && (
+                    <span className="settings__tag-threshold-prefix">$</span>
+                  )}
+                  <input
+                    type="number"
+                    className="settings__tag-threshold-input"
+                    value={editingThresholdValue}
+                    onChange={(e) => setEditingThresholdValue(e.target.value)}
+                    onKeyDown={handleThresholdKeyPress}
+                    min="0"
+                    autoFocus
+                  />
+                  {rule.operator === 'older_than_months' && (
+                    <span className="settings__tag-threshold-suffix">months</span>
+                  )}
+                </div>
+                <div className="settings__tag-edit-actions">
+                  <button 
+                    className="settings__tag-btn settings__tag-btn--save"
+                    onClick={handleSaveThreshold}
+                  >
+                    <i className="fa-solid fa-check"></i>
+                  </button>
+                  <button 
+                    className="settings__tag-btn settings__tag-btn--cancel"
+                    onClick={handleCancelThreshold}
+                  >
+                    <i className="fa-solid fa-xmark"></i>
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <span className="settings__tag-rule-text">
+                {formatRuleDescription(rule)}
+              </span>
+            )}
+          </div>
+        </div>
+        <div className="settings__tag-meta">
+          <span className="settings__tag-usage">
+            {usageCount} patron{usageCount !== 1 ? 's' : ''}
+          </span>
+          {rule.editable && !isEditingThreshold && (
+            <div className="settings__tag-actions">
+              <button 
+                className="settings__tag-btn settings__tag-btn--edit"
+                onClick={() => handleStartThresholdEdit(rule)}
+                title="Edit threshold"
+              >
+                <i className="fa-solid fa-sliders"></i>
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="settings" key={refreshKey}>
       {/* Page Header */}
@@ -282,6 +406,20 @@ function Settings() {
               </h3>
               <div className="settings__tag-list">
                 {systemTags.map(tag => renderTagRow(tag, true))}
+              </div>
+            </div>
+
+            {/* Computed Tags */}
+            <div className="settings__tag-group">
+              <h3 className="settings__tag-group-title">
+                Computed Tags
+                <span className="settings__tag-group-count">{computedTagRules.length}</span>
+              </h3>
+              <p className="settings__tag-group-description">
+                These tags are automatically assigned based on patron data. Edit thresholds to adjust criteria.
+              </p>
+              <div className="settings__tag-list">
+                {computedTagRules.map(rule => renderComputedTagRow(rule))}
               </div>
             </div>
 

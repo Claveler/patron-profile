@@ -205,6 +205,81 @@
   flex-shrink: 0;
 }
 
+/* Danger zone */
+.edit-hh-modal__danger-zone {
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+}
+
+.edit-hh-modal__delete-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) 0;
+  background: none;
+  border: none;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-error, #dc3545);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.edit-hh-modal__delete-btn:hover {
+  color: var(--color-error-600, #b91c1c);
+}
+
+.edit-hh-modal__confirm-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.edit-hh-modal__confirm-text {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.4;
+}
+
+.edit-hh-modal__confirm-row {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.edit-hh-modal__confirm-cancel {
+  padding: var(--space-2) var(--space-4);
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.edit-hh-modal__confirm-cancel:hover {
+  background: var(--color-neutral-50);
+}
+
+.edit-hh-modal__confirm-delete {
+  padding: var(--space-2) var(--space-4);
+  background: var(--color-error, #dc3545);
+  border: none;
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: white;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.edit-hh-modal__confirm-delete:hover:not(:disabled) {
+  background: var(--color-error-600, #b91c1c);
+}
+
 /* Actions */
 .edit-hh-modal__actions {
   display: flex;

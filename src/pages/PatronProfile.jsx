@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import PatronInfoBox from '../components/PatronInfoBox/PatronInfoBox'
 import TabNavigation from '../components/TabNavigation/TabNavigation'
@@ -18,7 +18,8 @@ import RelationshipsTab from '../components/RelationshipsTab/RelationshipsTab'
 import AddRelationshipModal from '../components/AddRelationshipModal/AddRelationshipModal'
 import EndRelationshipModal from '../components/EndRelationshipModal/EndRelationshipModal'
 import EditHouseholdModal from '../components/EditHouseholdModal/EditHouseholdModal'
-import { getPatronById, isManagedProspect, archivePatron, restorePatron, updatePatronTags, getMembershipsByPatronId, getPrimaryPatronForMembership, getGiftsByPatronId, getInteractionsByPatronId, hasHouseholdRelationship, reorderBeneficiaries, getHouseholdForPatron, getHouseholdMembers } from '../data/patrons'
+import ProfileTab from '../components/Tabs/ProfileTab'
+import { getPatronById, isManagedProspect, archivePatron, restorePatron, updatePatronTags, getMembershipsByPatronId, getPrimaryPatronForMembership, getGiftsByPatronId, getInteractionsByPatronId, hasHouseholdRelationship, reorderBeneficiaries, getHouseholdForPatron, getHouseholdMembers, deleteHousehold } from '../data/patrons'
 import './PatronProfile.css'
 
 const tabs = [
@@ -211,6 +212,11 @@ function PatronProfile() {
   const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState('summary')
   const [refreshKey, setRefreshKey] = useState(0)
+
+  // Scroll to top whenever the active tab changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, [activeTab]);
   
   // Modal states (managed at profile level for access from InfoBox and tabs)
   const [showOpportunityModal, setShowOpportunityModal] = useState(false)
@@ -337,6 +343,12 @@ function PatronProfile() {
     setShowEditHouseholdModal(true)
   }
 
+  const handleDeleteHousehold = (householdId) => {
+    deleteHousehold(householdId)
+    setShowEditHouseholdModal(false)
+    handleRelationshipSuccess()
+  }
+
   // Relationship management handlers
   const handleAddRelationship = (preselectedType = null) => {
     setAddRelationshipType(preselectedType)
@@ -372,6 +384,7 @@ function PatronProfile() {
             onRecordGift={handleRecordGift}
             onLogActivity={handleLogActivity}
             onNavigateToPatron={handleNavigateToPatron}
+            onViewRelationships={() => setActiveTab('relationships')}
           />
         )
       case 'giving':
@@ -389,15 +402,17 @@ function PatronProfile() {
             onAddBeneficiary={handleAddBeneficiary}
             onRemoveBeneficiary={handleRemoveBeneficiary}
             onReorderBeneficiaries={handleReorderBeneficiaries}
+            onSettingsUpdate={() => setRefreshKey(k => k + 1)}
           />
         )
       case 'profile':
         return (
-          <div className="empty-state">
-            <i className="fa-solid fa-user-pen empty-state__icon"></i>
-            <h3 className="empty-state__title">Profile Details</h3>
-            <p className="empty-state__text">Extended profile information, preferences, and custom fields will appear here.</p>
-          </div>
+          <ProfileTab
+            patron={patronData}
+            onPatronUpdate={() => setRefreshKey(k => k + 1)}
+            onSwitchTab={setActiveTab}
+            onAddRelationship={handleAddRelationship}
+          />
         )
       case 'timeline':
         return (
@@ -431,6 +446,7 @@ function PatronProfile() {
             onRecordGift={handleRecordGift}
             onLogActivity={handleLogActivity}
             onNavigateToPatron={handleNavigateToPatron}
+            onViewRelationships={() => setActiveTab('relationships')}
           />
         )
     }
@@ -595,6 +611,7 @@ function PatronProfile() {
         household={householdData}
         members={householdMembersData}
         onSuccess={handleRelationshipSuccess}
+        onDeleteHousehold={handleDeleteHousehold}
       />
 
       {selectedTimelineGift && (

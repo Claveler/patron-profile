@@ -306,20 +306,29 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
           </div>
         ) : (
           /* Standalone patron (no household) */
-          <div className="relationships-tab__graph-inner">
-            <div className="relationships-tab__patron-card">
-              <div className="relationships-tab__member-avatar">
-                {currentPatron?.photo ? (
-                  <img src={currentPatron.photo} alt={`${currentPatron.firstName} ${currentPatron.lastName}`} />
-                ) : (
-                  <span className="relationships-tab__member-initials">
-                    {getInitials(`${currentPatron?.firstName || ''} ${currentPatron?.lastName || ''}`)}
-                  </span>
-                )}
+          <div className="relationships-tab__graph-inner relationships-tab__graph-inner--standalone">
+            <div className="relationships-tab__standalone-column">
+              <div className="relationships-tab__patron-card">
+                <div className="relationships-tab__member-avatar">
+                  {currentPatron?.photo ? (
+                    <img src={currentPatron.photo} alt={`${currentPatron.firstName} ${currentPatron.lastName}`} />
+                  ) : (
+                    <span className="relationships-tab__member-initials">
+                      {getInitials(`${currentPatron?.firstName || ''} ${currentPatron?.lastName || ''}`)}
+                    </span>
+                  )}
+                </div>
+                <span className="relationships-tab__patron-card-name">
+                  {currentPatron?.firstName} {currentPatron?.lastName}
+                </span>
               </div>
-              <span className="relationships-tab__patron-card-name">
-                {currentPatron?.firstName} {currentPatron?.lastName}
-              </span>
+
+              <div className="relationships-tab__actions">
+                <button className="relationships-tab__action-btn" onClick={() => onAddRelationship && onAddRelationship()}>
+                  <i className="fa-solid fa-plus"></i>
+                  Add relationship
+                </button>
+              </div>
             </div>
 
             {standaloneExternalRels.length > 0 && (

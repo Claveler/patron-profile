@@ -680,56 +680,92 @@ const isManagedProspect = (patron) => Boolean(patron?.assignedTo)
 ## Patron Tagging System
 
 ### Overview
-Patrons are segmented using a flexible **tagging system** that replaces the previous single-category approach. This allows for more nuanced classification and segmentation.
+Patrons are segmented using a **3-tier tagging system**: manual system tags, computed tags (auto-derived from data), and custom tags. This replaces the previous approach where giving-status tags like "Donor" were manually assigned.
 
-### Tag Types
+### Tag Tiers
 
-**System Tags** (predefined, cannot be deleted):
+**1. Manual System Tags** (predefined, manually assigned, cannot be deleted):
 - Prospect
-- Donor
-- Major Donor
 - Board Member
 - Volunteer
 - Corporate
 - Foundation
+- Planned Giving
+- VIP
+- Subscriber
 
-**Custom Tags**: Users can create additional tags for organization-specific segmentation (e.g., "Gala 2026 Prospect", "Museum Circle").
+**2. Computed Tags** (auto-derived from patron data, configurable thresholds):
+- **Donor** — Automatically applied when `giving.totalGifts > 0`. Threshold is fixed.
+- **Major Donor** — Automatically applied when `giving.totalGifts >= $10,000`. Threshold is configurable in Settings.
+- **Lapsed Donor** — Automatically applied when a Donor has no gift in the last 18 months. Window is configurable in Settings.
+
+Computed tags cannot be manually added or removed from a patron. They appear and disappear automatically as patron data changes.
+
+**3. Custom Tags**: Users can create additional tags for organization-specific segmentation (e.g., "Gala 2026 Prospect", "Museum Circle").
 
 ### Tag Display
+
+**Effective Tags**: Everywhere tags are displayed, the system shows `getEffectiveTags(patron)` which merges manual tags + computed tags (deduplicated).
 
 **In Patron Profile (PatronInfoBox):**
 - Shows first tag + clickable "+N" indicator for additional tags
 - Clicking the indicator opens a **popover** with:
-  - Full list of assigned tags (removable)
-  - Search/add input with autocomplete
+  - Full list of assigned tags — computed tags show a bolt icon and are **not removable**
+  - Manual tags show an X button for removal
+  - Search/add input with autocomplete (only suggests manual tags)
   - Option to create new custom tags
 
 **In Patrons List:**
 - Shows up to 2 tags with "+N more" overflow indicator
 - Hover tooltip shows full tag list
+- Filter panel includes all 3 tiers (system + computed + custom)
 
 ### Tag Management (Settings Page)
-The **Fundraising > Settings** page provides global tag configuration:
-- View all system and custom tags
-- See usage count (number of patrons using each tag)
+The **Fundraising > Settings** page provides global tag configuration in 3 groups:
+
+**System Tags group:**
+- View predefined tags with usage counts
 - Edit tag labels (inline editing)
-- Delete custom tags (with confirmation if in use)
-- Create new custom tags
+- Cannot be deleted
+
+**Computed Tags group:**
+- View auto-derived tags with live patron counts
+- "Computed" badge distinguishes from system tags
+- Edit thresholds inline for configurable rules (Major Donor amount, Lapsed Donor months)
+- Rule description shows current criteria (e.g., "Lifetime gifts >= $10,000")
+- Cannot be deleted or renamed
+
+**Custom Tags group:**
+- Create, edit, delete user-defined tags
+- Usage count and delete confirmation when in use
 
 ### Data Model
 ```javascript
-// Patron record
+// Patron record — only stores MANUAL tags
 {
-  tags: ['major-donor', 'donor', 'board-member'], // Array of tag IDs
+  tags: ['board-member'],  // Array of manual tag IDs only
   // ...other fields
 }
 
-// Tag definition (src/data/patrons.js)
+// Manual tag definition (src/data/patrons.js)
+{
+  id: 'board-member',
+  label: 'Board Member',
+  system: true  // false for custom tags
+}
+
+// Computed tag rule (src/data/patrons.js)
 {
   id: 'major-donor',
   label: 'Major Donor',
-  system: true  // false for custom tags
+  description: 'Lifetime gift total meets or exceeds threshold',
+  field: 'giving.totalGifts',
+  operator: '>=',
+  threshold: 10000,  // configurable in Settings
+  editable: true,
 }
+
+// getEffectiveTags(patron) → merges manual tags + computed tags for display
 ```
 
 ---
@@ -880,11 +916,11 @@ The foundation. A searchable, filterable database of patrons enriched with Fever
 - Patron profile header (breadcrumb, managed prospect vs. general constituent badge)
 - Households entity and household member popover with cross-profile navigation
 - Relationships summary (household, professional, external contacts)
-- Tagging system (system + custom tags, popover UI for add/remove)
+- Tagging system (3-tier: manual system + computed + custom tags, popover UI for add/remove manual tags, computed tags auto-derived from giving data)
 - Archive / restore (soft delete with banner and restore action)
 - Engagement panel (level indicator, visit stats, 12-month activity heatmap with TTM toggle)
 - Activity Timeline (compact variant on Summary tab, full variant on Timeline tab)
-- Settings page (tag management: create, edit, delete, usage counts)
+- Settings page (tag management: 3-tier view with computed tag threshold editing, create/edit/delete custom tags, usage counts)
 - Add to Portfolio bar (promote general constituent to managed prospect)
 - Assign Portfolio modal
 
@@ -1168,7 +1204,7 @@ Museum boards demand data.
 | 9. Event/Gala Mgmt | **Partial** | MemberEvents component; no table seating |
 | 10. Financial Integration | Not Started | Future roadmap |
 | 11. Custom Reporting | Not Started | Dashboard with gift officer filter; Campaign ROI reports |
-| 12. Patron Segmentation | **Mockup Complete** | Multi-tag system (system + custom tags); Settings page for tag management; Popover UI for tag assignment |
+| 12. Patron Segmentation | **Mockup Complete** | 3-tier tag system (manual system + computed + custom); computed tags auto-derived from giving data with configurable thresholds; Settings page with threshold editing; Popover UI for tag assignment |
 | 13. Patron Lifecycle | **Mockup Complete** | Source tracking (Fever vs Manual); Archive/restore; "New" badge; Patron Since with relative dates |
 | 14. Dashboard | **Mockup Complete** | Quick stats, pipeline overview, closing soon, follow-ups needed, gift officer filtering |
 | 15. Data Import | **Mockup Complete** | 3-step wizard UI for Blackbaud, Tessitura, CSV imports; field mapping; preview with stats |
@@ -1185,7 +1221,7 @@ Museum boards demand data.
 ### Sample Data
 Using patron "Anderson Collingwood" with:
 - Household: Collingwood Family (verified)
-- Tags: Major Donor, Donor, Board Member
+- Tags: Board Member (manual), Donor + Major Donor (computed from giving data)
 - Membership: General Membership - Gold
 - Member since: 12/02/2023
 - Lifetime value: $19,231.97
@@ -1294,7 +1330,7 @@ Detailed membership sample data used in mockup:
 #### Summary Tab
 | Component | Description | Status |
 |-----------|-------------|--------|
-| PatronInfoBox | Profile photo, contact info, membership badge, tags popover (view/add/remove tags), actions dropdown (archive/restore), assign button for unassigned patrons, opportunity summary for managed prospects | Done |
+| PatronInfoBox | Profile photo, contact info, membership badge, tags popover (view/add/remove manual tags, computed tags shown with auto indicator and non-removable), actions dropdown (archive/restore), assign button for unassigned patrons, opportunity summary for managed prospects | Done |
 | GivingSummary | Lifetime value, donations/revenue split, avg gift, hybrid chart (stacked area cumulative / bar nominal), donation attribution (by Fund/Campaign/Year), transaction highlights | Done |
 | ActivityTimeline | Timeline with filters (Gifts, Events, Communications), "Add Activity" and "Record Gift" buttons | Done |
 | EngagementPanel | Visual engagement level (Cold → On Fire), visit stats, 12-month activity heatmap with TTM toggle | Done |
@@ -1385,11 +1421,12 @@ Detailed membership sample data used in mockup:
 #### Settings (Fundraising Settings)
 | Component | Description | Status |
 |-----------|-------------|--------|
-| Tags Section | Manage system and custom tags for patron segmentation | Done |
-| System Tags | View predefined tags with usage counts, edit labels | Done |
+| Tags Section | Manage 3-tier tags (system + computed + custom) for patron segmentation | Done |
+| System Tags | View predefined manual tags with usage counts, edit labels | Done |
+| Computed Tags | View auto-derived tags with live patron counts, edit configurable thresholds (Major Donor amount, Lapsed Donor months) | Done |
 | Custom Tags | Create, edit, delete user-defined tags | Done |
-| Usage Tracking | Shows number of patrons using each tag | Done |
-| Inline Editing | Click to edit tag labels | Done |
+| Usage Tracking | Shows number of patrons using each tag (manual and computed) | Done |
+| Inline Editing | Click to edit tag labels (system/custom) and thresholds (computed) | Done |
 | Delete Confirmation | Warns if tag is in use before deletion | Done |
 | Import Data Section | 3-step wizard for importing constituent data | Done (Mockup) |
 | Navigation Sidebar | Tags, Import Data (active); General, Users, Integrations (placeholders) | Done |

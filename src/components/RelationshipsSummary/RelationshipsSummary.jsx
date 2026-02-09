@@ -1,31 +1,34 @@
-import { getPatronRelationships } from '../../data/patrons'
+import { getPatronRelationships, getHouseholdForPatron, getHouseholdMembers } from '../../data/patrons'
 import './RelationshipsSummary.css'
 
-function RelationshipsSummary({ patronId, onNavigateToPatron }) {
-  // Get relationships from data layer
+function RelationshipsSummary({ patronId, onNavigateToPatron, onViewRelationships }) {
+  // Get household data
+  const household = getHouseholdForPatron(patronId)
+  const householdMembers = household
+    ? getHouseholdMembers(household.id).filter(m => m.patronId !== patronId)
+    : []
+
+  // Get non-household relationships (professional/organization)
   const relationships = getPatronRelationships(patronId)
-  
-  const getTypeColor = (type) => {
-    switch (type) {
-      case 'household':
-        return 'var(--color-primary)'
-      case 'professional':
-        return 'var(--color-warning)'
-      case 'organization':
-        return 'var(--color-success)'
-      default:
-        return 'var(--color-text-muted)'
+  const professionalRelationships = relationships.filter(r => r.type === 'organization' || r.type === 'professional')
+
+  const hasHousehold = household && householdMembers.length > 0
+  const hasProfessional = professionalRelationships.length > 0
+  const hasAny = hasHousehold || hasProfessional
+
+  const handleMemberClick = (memberPatronId) => {
+    if (memberPatronId && onNavigateToPatron) {
+      onNavigateToPatron(memberPatronId)
     }
   }
 
-  const handleRelationshipClick = (relationship) => {
-    // If linked patron exists and callback is provided, navigate to their profile
-    if (relationship.linkedPatron && onNavigateToPatron) {
-      onNavigateToPatron(relationship.linkedPatron.id)
+  const handleProfessionalClick = (rel) => {
+    if (rel.linkedPatron && onNavigateToPatron) {
+      onNavigateToPatron(rel.linkedPatron.id)
     }
   }
 
-  if (relationships.length === 0) {
+  if (!hasAny) {
     return (
       <div className="relationships-summary">
         <div className="relationships-summary__header">
@@ -34,9 +37,6 @@ function RelationshipsSummary({ patronId, onNavigateToPatron }) {
         <div className="relationships-summary__empty">
           <p>No relationships recorded yet.</p>
         </div>
-        <button className="relationships-summary__add">
-          Add relationship
-        </button>
       </div>
     )
   }
@@ -45,50 +45,111 @@ function RelationshipsSummary({ patronId, onNavigateToPatron }) {
     <div className="relationships-summary">
       <div className="relationships-summary__header">
         <h4 className="relationships-summary__title">Relationships</h4>
-        <button className="relationships-summary__view-all">
-          View All
-          <i className="fa-solid fa-arrow-right"></i>
+        <button 
+          className="relationships-summary__view-more"
+          onClick={onViewRelationships}
+        >
+          View more
         </button>
       </div>
 
-      <div className="relationships-summary__list">
-        {relationships.map((relationship) => (
-          <div 
-            key={relationship.id} 
-            className={`relationships-summary__item ${relationship.linkedPatron ? 'relationships-summary__item--clickable' : ''}`}
-            onClick={() => handleRelationshipClick(relationship)}
-          >
-            <div 
-              className="relationships-summary__avatar"
-              style={{ '--avatar-color': getTypeColor(relationship.type) }}
-            >
-              {relationship.linkedPatron?.photo ? (
-                <img src={relationship.linkedPatron.photo} alt={relationship.displayName} />
-              ) : (
-                <span>{relationship.initials}</span>
-              )}
-            </div>
-            <div className="relationships-summary__info">
-              <span className="relationships-summary__name">{relationship.displayName}</span>
-              <span className="relationships-summary__role">{relationship.role}</span>
-            </div>
-            {relationship.linkedPatron && (
-              <button className="relationships-summary__action" title="View profile">
-                <i className="fa-solid fa-chevron-right"></i>
-              </button>
-            )}
-            {!relationship.linkedPatron && relationship.externalContact && (
-              <span className="relationships-summary__external" title="External contact">
-                <i className="fa-solid fa-arrow-up-right-from-square"></i>
-              </span>
-            )}
+      {/* Household Section */}
+      {hasHousehold && (
+        <div className="relationships-summary__group">
+          <div className="relationships-summary__group-header">
+            <i className="fa-solid fa-house relationships-summary__group-icon"></i>
+            <button className="relationships-summary__group-link">
+              {household.name}
+              <i className="fa-solid fa-arrow-up-right-from-square relationships-summary__external-icon"></i>
+            </button>
           </div>
-        ))}
-      </div>
+          <div className="relationships-summary__members">
+            {householdMembers.map((member, index) => (
+              <div key={member.id} className="relationships-summary__member-item">
+                <div 
+                  className={`relationships-summary__member-row ${member.patronId ? 'relationships-summary__member-row--clickable' : ''}`}
+                  onClick={() => handleMemberClick(member.patronId)}
+                  role={member.patronId ? 'button' : undefined}
+                  tabIndex={member.patronId ? 0 : undefined}
+                  onKeyDown={(e) => {
+                    if (member.patronId && (e.key === 'Enter' || e.key === ' ')) {
+                      e.preventDefault()
+                      handleMemberClick(member.patronId)
+                    }
+                  }}
+                >
+                  <div className="relationships-summary__avatar relationships-summary__avatar--round">
+                    {member.patron?.photo ? (
+                      <img src={member.patron.photo} alt={member.patron?.name} />
+                    ) : (
+                      <span className="relationships-summary__avatar-initials">
+                        {member.patron?.firstName?.[0]}{member.patron?.lastName?.[0]}
+                      </span>
+                    )}
+                  </div>
+                  <div className="relationships-summary__member-info">
+                    <span className="relationships-summary__member-name">{member.patron?.name}</span>
+                    <span className="relationships-summary__tag relationships-summary__tag--household">
+                      {member.role}
+                    </span>
+                  </div>
+                </div>
+                {index < householdMembers.length - 1 && (
+                  <div className="relationships-summary__divider"></div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
-      <button className="relationships-summary__add">
-        Add relationship
-      </button>
+      {/* Professional Section */}
+      {hasProfessional && (
+        <div className="relationships-summary__group">
+          <div className="relationships-summary__group-header">
+            <i className="fa-solid fa-city relationships-summary__group-icon"></i>
+            <button className="relationships-summary__group-link">
+              Professional
+              <i className="fa-solid fa-arrow-up-right-from-square relationships-summary__external-icon"></i>
+            </button>
+          </div>
+          {professionalRelationships.map((rel) => (
+            <div 
+              key={rel.id} 
+              className={`relationships-summary__professional-card ${rel.linkedPatron ? 'relationships-summary__professional-card--clickable' : ''}`}
+              onClick={() => handleProfessionalClick(rel)}
+              role={rel.linkedPatron ? 'button' : undefined}
+              tabIndex={rel.linkedPatron ? 0 : undefined}
+              onKeyDown={(e) => {
+                if (rel.linkedPatron && (e.key === 'Enter' || e.key === ' ')) {
+                  e.preventDefault()
+                  handleProfessionalClick(rel)
+                }
+              }}
+            >
+              <div className="relationships-summary__member-row">
+                <div className="relationships-summary__avatar relationships-summary__avatar--square">
+                  {rel.linkedPatron?.photo ? (
+                    <img src={rel.linkedPatron.photo} alt={rel.displayName} />
+                  ) : (
+                    <span className="relationships-summary__avatar-initials">
+                      {rel.initials}
+                    </span>
+                  )}
+                </div>
+                <div className="relationships-summary__member-info">
+                  <span className="relationships-summary__member-name relationships-summary__member-name--org">
+                    {rel.displayName}
+                  </span>
+                  <span className="relationships-summary__tag relationships-summary__tag--professional">
+                    {rel.externalContact?.title || rel.role}
+                  </span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   )
 }

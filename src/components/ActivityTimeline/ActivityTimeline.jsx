@@ -9,7 +9,7 @@ import './ActivityTimeline.css'
 const activityTypes = {
   'one-time': {
     icon: 'fa-hand-holding-dollar',
-    title: 'Gift',
+    title: 'Donation',
     filter: 'gifts'
   },
   membership: {
@@ -49,7 +49,17 @@ const activityTypes = {
   },
   ticket: {
     icon: 'fa-ticket',
-    title: 'Ticket Purchase',
+    title: 'Buy ticket',
+    filter: 'events'
+  },
+  'buy-fnb': {
+    icon: 'fa-bags-shopping',
+    title: 'Buy F&B',
+    filter: 'events'
+  },
+  review: {
+    icon: 'fa-star',
+    title: 'Review',
     filter: 'events'
   },
   note: {
@@ -92,8 +102,10 @@ function ActivityTimeline({ gifts = [], activities = [], onAddActivity, onRecord
   const navigate = useNavigate()
   const [expandedItems, setExpandedItems] = useState(new Set())
   const [filter, setFilter] = useState('all')
+  const [searchQuery, setSearchQuery] = useState('')
+  const [showFilters, setShowFilters] = useState(false)
   const isFull = variant === 'full'
-  const [visibleCount, setVisibleCount] = useState(isFull ? 20 : 6)
+  const [visibleCount, setVisibleCount] = useState(isFull ? 10 : 6)
 
   // Map gift.type to activity type key
   const getGiftActivityType = (gift) => {
@@ -128,10 +140,21 @@ function ActivityTimeline({ gifts = [], activities = [], onAddActivity, onRecord
     (a, b) => new Date(b.date) - new Date(a.date)
   )
 
-  // Filter activities
-  const filteredActivities = filter === 'all' 
+  // Filter activities by category
+  const categoryFiltered = filter === 'all' 
     ? allActivities 
     : allActivities.filter(a => activityTypes[a.type]?.filter === filter)
+
+  // Filter activities by search query
+  const filteredActivities = searchQuery.trim()
+    ? categoryFiltered.filter(a => {
+        const query = searchQuery.toLowerCase()
+        const typeConfig = activityTypes[a.type]
+        const title = typeConfig?.title?.toLowerCase() || ''
+        const description = a.description?.toLowerCase() || ''
+        return title.includes(query) || description.includes(query)
+      })
+    : categoryFiltered
 
   // Paginate
   const displayedActivities = filteredActivities.slice(0, visibleCount)
@@ -158,58 +181,132 @@ function ActivityTimeline({ gifts = [], activities = [], onAddActivity, onRecord
   }
 
   const handleLoadMore = () => {
-    setVisibleCount(prev => prev + 5)
+    setVisibleCount(prev => prev + 10)
+  }
+
+  const handleFilterSelect = (selectedFilter) => {
+    setFilter(selectedFilter)
+    setShowFilters(false)
+    setVisibleCount(isFull ? 10 : 6)
   }
 
   return (
     <div className={`activity-timeline ${isFull ? 'activity-timeline--full' : ''}`}>
-      {/* Header */}
-      <div className="activity-timeline__header">
-        <h3 className="activity-timeline__title">{isFull ? 'Activity Timeline' : 'Recent Activity'}</h3>
-        <div className="activity-timeline__filters">
-          <button 
-            className={`activity-timeline__filter ${filter === 'all' ? 'activity-timeline__filter--active' : ''}`}
-            onClick={() => setFilter('all')}
-          >
-            All
-          </button>
-          <button 
-            className={`activity-timeline__filter ${filter === 'gifts' ? 'activity-timeline__filter--active' : ''}`}
-            onClick={() => setFilter('gifts')}
-          >
-            Gifts
-          </button>
-          <button 
-            className={`activity-timeline__filter ${filter === 'events' ? 'activity-timeline__filter--active' : ''}`}
-            onClick={() => setFilter('events')}
-          >
-            Events
-          </button>
-          <button 
-            className={`activity-timeline__filter ${filter === 'communications' ? 'activity-timeline__filter--active' : ''}`}
-            onClick={() => setFilter('communications')}
-          >
-            Communications
-          </button>
-        </div>
-        <div className="activity-timeline__actions">
-          {onRecordGift && (
-            <button className="activity-timeline__record-gift-btn" onClick={onRecordGift}>
-              Record gift
+      {/* Header - compact variant keeps old style, full variant matches Figma */}
+      {isFull ? (
+        <>
+          <div className="activity-timeline__header">
+            <div className="activity-timeline__header-spacer" />
+            <button className="activity-timeline__add-btn activity-timeline__add-btn--secondary" onClick={handleAddActivity}>
+              Add activity
             </button>
-          )}
-          <button className="activity-timeline__add-btn" onClick={handleAddActivity}>
-            Add activity
-          </button>
+          </div>
+
+          {/* Search and Filters bar */}
+          <div className="activity-timeline__search-bar">
+            <div className="activity-timeline__search-input-wrapper">
+              <i className="fa-solid fa-magnifying-glass activity-timeline__search-icon"></i>
+              <input
+                type="text"
+                className="activity-timeline__search-input"
+                placeholder="Search by activity"
+                value={searchQuery}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value)
+                  setVisibleCount(isFull ? 10 : 6)
+                }}
+              />
+            </div>
+            <div className="activity-timeline__filter-actions">
+              <div className="activity-timeline__filter-dropdown-wrapper">
+                <button
+                  className={`activity-timeline__filter-btn ${filter !== 'all' ? 'activity-timeline__filter-btn--active' : ''}`}
+                  onClick={() => setShowFilters(!showFilters)}
+                >
+                  <i className="fa-solid fa-sliders"></i>
+                  Filters
+                  {filter !== 'all' && <span className="activity-timeline__filter-badge">1</span>}
+                </button>
+                {showFilters && (
+                  <div className="activity-timeline__filter-dropdown">
+                    <button
+                      className={`activity-timeline__filter-option ${filter === 'all' ? 'activity-timeline__filter-option--active' : ''}`}
+                      onClick={() => handleFilterSelect('all')}
+                    >
+                      All activities
+                    </button>
+                    <button
+                      className={`activity-timeline__filter-option ${filter === 'gifts' ? 'activity-timeline__filter-option--active' : ''}`}
+                      onClick={() => handleFilterSelect('gifts')}
+                    >
+                      Gifts
+                    </button>
+                    <button
+                      className={`activity-timeline__filter-option ${filter === 'events' ? 'activity-timeline__filter-option--active' : ''}`}
+                      onClick={() => handleFilterSelect('events')}
+                    >
+                      Events
+                    </button>
+                    <button
+                      className={`activity-timeline__filter-option ${filter === 'communications' ? 'activity-timeline__filter-option--active' : ''}`}
+                      onClick={() => handleFilterSelect('communications')}
+                    >
+                      Communications
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </>
+      ) : (
+        <div className="activity-timeline__header">
+          <h3 className="activity-timeline__title">Recent Activity</h3>
+          <div className="activity-timeline__filters">
+            <button 
+              className={`activity-timeline__filter ${filter === 'all' ? 'activity-timeline__filter--active' : ''}`}
+              onClick={() => setFilter('all')}
+            >
+              All
+            </button>
+            <button 
+              className={`activity-timeline__filter ${filter === 'gifts' ? 'activity-timeline__filter--active' : ''}`}
+              onClick={() => setFilter('gifts')}
+            >
+              Gifts
+            </button>
+            <button 
+              className={`activity-timeline__filter ${filter === 'events' ? 'activity-timeline__filter--active' : ''}`}
+              onClick={() => setFilter('events')}
+            >
+              Events
+            </button>
+            <button 
+              className={`activity-timeline__filter ${filter === 'communications' ? 'activity-timeline__filter--active' : ''}`}
+              onClick={() => setFilter('communications')}
+            >
+              Communications
+            </button>
+          </div>
+          <div className="activity-timeline__actions">
+            {onRecordGift && (
+              <button className="activity-timeline__record-gift-btn" onClick={onRecordGift}>
+                Record gift
+              </button>
+            )}
+            <button className="activity-timeline__add-btn" onClick={handleAddActivity}>
+              Add activity
+            </button>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Activity List */}
       <div className="activity-timeline__list">
         {displayedActivities.length === 0 ? (
           <div className="activity-timeline__empty">
             <i className="fa-solid fa-clock-rotate-left"></i>
-            <p>No activities found</p>
+            <p>{searchQuery ? 'No matching activities found' : 'No activities found'}</p>
           </div>
         ) : (
           displayedActivities.map((activity, index) => {
@@ -241,52 +338,10 @@ function ActivityTimeline({ gifts = [], activities = [], onAddActivity, onRecord
                     onClick={() => toggleExpand(activity.id)}
                   >
                     <div className="activity-timeline__text">
-                      <div className="activity-timeline__title-row">
-                        <span className="activity-timeline__item-title">{typeConfig.title}</span>
-                        {activity.direction && (
-                          <span className={`activity-timeline__direction activity-timeline__direction--${activity.direction}`} title={activity.direction === 'outbound' ? 'Outbound' : 'Inbound'}>
-                            <i className={`fa-solid ${activity.direction === 'outbound' ? 'fa-share' : 'fa-reply'}`}></i>
-                          </span>
-                        )}
-                        {linkedOpportunity && (
-                          <span
-                            className="activity-timeline__opp-chip"
-                            title={`Linked to: ${linkedOpportunity.name}`}
-                            onClick={(e) => { e.stopPropagation(); navigate(`/opportunities/${activity.opportunityId}`); }}
-                          >
-                            <i className="fa-solid fa-bullseye"></i>
-                            {linkedOpportunity.name}
-                          </span>
-                        )}
-                      </div>
-                      {activity.eventUrl ? (
-                        <a
-                          href={activity.eventUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="activity-timeline__subtitle activity-timeline__event-link"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          {activity.description} <i className="fa-solid fa-arrow-up-right-from-square activity-timeline__external-icon"></i>
-                        </a>
-                      ) : (
-                        <span className="activity-timeline__subtitle">{activity.description}</span>
-                      )}
-                      {activity.orderId && (
-                        <a href="/#" className="activity-timeline__order-id" onClick={(e) => e.stopPropagation()}>
-                          {activity.orderId}
-                        </a>
-                      )}
+                      <span className="activity-timeline__item-title">{typeConfig.title}</span>
+                      <span className="activity-timeline__subtitle">{activity.description}</span>
                     </div>
                     <div className="activity-timeline__meta">
-                      {activity.amount && (
-                        <span className="activity-timeline__amount">{formatCurrency(activity.amount)}</span>
-                      )}
-                      {staffName && (
-                        <span className="activity-timeline__staff" data-tooltip={staffName}>
-                          {staffInitials}
-                        </span>
-                      )}
                       <span className="activity-timeline__date">{formatDate(activity.date)}</span>
                       <i className={`fa-solid fa-chevron-${isExpanded ? 'up' : 'down'} activity-timeline__chevron`}></i>
                     </div>
@@ -295,6 +350,71 @@ function ActivityTimeline({ gifts = [], activities = [], onAddActivity, onRecord
                   {/* Expanded details */}
                   {isExpanded && (
                     <div className="activity-timeline__details">
+                      {/* Extra context moved from collapsed row */}
+                      <div className="activity-details__context">
+                        {activity.amount && (
+                          <div className="activity-details__row">
+                            <span className="activity-details__label">Amount:</span>
+                            <span className="activity-details__value activity-details__value--amount">{formatCurrency(activity.amount)}</span>
+                          </div>
+                        )}
+                        {staffName && (
+                          <div className="activity-details__row">
+                            <span className="activity-details__label">Staff:</span>
+                            <span className="activity-details__value">
+                              <span className="activity-timeline__staff" data-tooltip={staffName}>
+                                {staffInitials}
+                              </span>
+                              {' '}{staffName}
+                            </span>
+                          </div>
+                        )}
+                        {activity.direction && (
+                          <div className="activity-details__row">
+                            <span className="activity-details__label">Direction:</span>
+                            <span className="activity-details__value">
+                              <span className={`activity-timeline__direction activity-timeline__direction--${activity.direction}`}>
+                                <i className={`fa-solid ${activity.direction === 'outbound' ? 'fa-share' : 'fa-reply'}`}></i>
+                              </span>
+                              {' '}{activity.direction === 'outbound' ? 'Outbound' : 'Inbound'}
+                            </span>
+                          </div>
+                        )}
+                        {linkedOpportunity && (
+                          <div className="activity-details__row">
+                            <span className="activity-details__label">Opportunity:</span>
+                            <span className="activity-details__value">
+                              <span
+                                className="activity-timeline__opp-chip"
+                                onClick={(e) => { e.stopPropagation(); navigate(`/opportunities/${activity.opportunityId}`); }}
+                              >
+                                <i className="fa-solid fa-bullseye"></i>
+                                {linkedOpportunity.name}
+                              </span>
+                            </span>
+                          </div>
+                        )}
+                        {activity.eventUrl && (
+                          <div className="activity-details__row">
+                            <span className="activity-details__label">Event:</span>
+                            <span className="activity-details__value">
+                              <a href={activity.eventUrl} target="_blank" rel="noopener noreferrer" className="activity-details__link" onClick={(e) => e.stopPropagation()}>
+                                View on Fever <i className="fa-solid fa-arrow-up-right-from-square activity-details__external-icon"></i>
+                              </a>
+                            </span>
+                          </div>
+                        )}
+                        {activity.orderId && (
+                          <div className="activity-details__row">
+                            <span className="activity-details__label">Order ID:</span>
+                            <span className="activity-details__value">
+                              <a href="/#" className="activity-details__link" onClick={(e) => e.stopPropagation()}>
+                                {activity.orderId}
+                              </a>
+                            </span>
+                          </div>
+                        )}
+                      </div>
                       <ActivityDetails activity={activity} onGiftSelect={onGiftSelect} />
                     </div>
                   )}
@@ -308,7 +428,7 @@ function ActivityTimeline({ gifts = [], activities = [], onAddActivity, onRecord
       {/* Load More */}
       {hasMore && (
         <button className="activity-timeline__load-more" onClick={handleLoadMore}>
-          View more activities
+          Load more activities
         </button>
       )}
     </div>
@@ -354,12 +474,12 @@ function ActivityDetails({ activity, onGiftSelect }) {
               </span>
             </div>
           )}
-          {(details.deductible || details.benefitsValue) && (
+          {(details.deductible != null || details.benefitsValue != null) && (
             <div className="activity-details__tax">
-              {details.deductible && (
+              {details.deductible != null && (
                 <span>Tax Deductible: {formatCurrency(details.deductible)}</span>
               )}
-              {details.benefitsValue && (
+              {details.benefitsValue != null && details.benefitsValue !== 0 && (
                 <span>Benefits Value: {formatCurrency(details.benefitsValue)}</span>
               )}
             </div>
@@ -437,24 +557,6 @@ function ActivityDetails({ activity, onGiftSelect }) {
     case 'event':
       return (
         <div className="activity-details activity-details--event">
-          {activity.orderId && (
-            <div className="activity-details__row">
-              <span className="activity-details__label">Order ID:</span>
-              <span className="activity-details__value">
-                <a href="/#" className="activity-details__link">{activity.orderId}</a>
-              </span>
-            </div>
-          )}
-          {activity.eventUrl && (
-            <div className="activity-details__row">
-              <span className="activity-details__label">Event:</span>
-              <span className="activity-details__value">
-                <a href={activity.eventUrl} target="_blank" rel="noopener noreferrer" className="activity-details__link">
-                  View on Fever <i className="fa-solid fa-arrow-up-right-from-square activity-details__external-icon"></i>
-                </a>
-              </span>
-            </div>
-          )}
           {details.venue && (
             <div className="activity-details__row">
               <span className="activity-details__label">Venue:</span>
@@ -479,38 +581,16 @@ function ActivityDetails({ activity, onGiftSelect }) {
     case 'ticket':
       return (
         <div className="activity-details activity-details--ticket">
-          {activity.orderId && (
-            <div className="activity-details__row">
-              <span className="activity-details__label">Order ID:</span>
-              <span className="activity-details__value">
-                <a href="/#" className="activity-details__link">{activity.orderId}</a>
-              </span>
-            </div>
-          )}
           {details.event && (
             <div className="activity-details__row">
               <span className="activity-details__label">Event:</span>
-              <span className="activity-details__value">
-                {activity.eventUrl ? (
-                  <a href={activity.eventUrl} target="_blank" rel="noopener noreferrer" className="activity-details__link">
-                    {details.event} <i className="fa-solid fa-arrow-up-right-from-square activity-details__external-icon"></i>
-                  </a>
-                ) : (
-                  details.event
-                )}
-              </span>
+              <span className="activity-details__value">{details.event}</span>
             </div>
           )}
           {details.quantity && (
             <div className="activity-details__row">
               <span className="activity-details__label">Quantity:</span>
               <span className="activity-details__value">{details.quantity}x {details.ticketType}</span>
-            </div>
-          )}
-          {amount && (
-            <div className="activity-details__row">
-              <span className="activity-details__label">Amount:</span>
-              <span className="activity-details__value">{formatCurrency(amount)}</span>
             </div>
           )}
         </div>

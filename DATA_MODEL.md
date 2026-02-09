@@ -1,6 +1,6 @@
 # Data Model - ER Diagram
 
-> **Last updated:** 2026-02-08
+> **Last updated:** 2026-02-09
 > Paste the mermaid block below into [mermaid.live](https://mermaid.live/) to view the diagram.
 
 ## What This Is
@@ -27,7 +27,7 @@ This is a **reference**, not a prescription for implementation. The production s
 
 | Preferred Term | Avoided Term | Notes |
 |---|---|---|
-| Patron | Donor / Constituent | Primary entity; "Donor" is a tag, not entity name |
+| Patron | Donor / Constituent | Primary entity; "Donor" is a computed tag (auto-derived from giving data), not entity name |
 | Gift | Donation | All philanthropic transactions |
 | One-Time (gift type) | Donation (gift type) | Distinguishes from membership, pledge-payment, recurring |
 | Gift (activity type) | Donation (activity type) | In engagement heatmap data |
@@ -355,7 +355,18 @@ erDiagram
     PATRON_TAG {
         string id PK
         string label
-        boolean system
+        boolean system "manual system tag vs custom"
+    }
+
+    COMPUTED_TAG_RULE {
+        string id PK
+        string label
+        string description
+        string field "e.g. giving.totalGifts"
+        string operator "greater-than|gte|older_than_months"
+        number threshold "configurable for editable rules"
+        boolean editable
+        string requiresTag "FK COMPUTED_TAG_RULE nullable"
     }
 
     GIFT_TYPE {
@@ -371,7 +382,8 @@ erDiagram
     PATRON ||--|| PATRON_ENGAGEMENT : "has"
     PATRON ||--|| PATRON_GIVING : "has"
     PATRON ||--o| PATRON_TAX_DOCUMENTS : "may have"
-    PATRON }o--o{ PATRON_TAG : "tagged with"
+    PATRON }o--o{ PATRON_TAG : "manually tagged with"
+    PATRON ..o{ COMPUTED_TAG_RULE : "auto-derived via getEffectiveTags"
 
     %% Patron -> Staff (portfolio assignment)
     PATRON }o--o| STAFF : "assignedToId"
@@ -454,14 +466,15 @@ erDiagram
 | HOUSEHOLD | `patrons.js` | Family/household grouping |
 | HOUSEHOLD_MEMBER | `patrons.js` | Join table: patron <-> household |
 | PATRON_RELATIONSHIP | `patrons.js` | CRM relationship between patrons |
-| PATRON_TAG | `patrons.js` | Segmentation tags (system + custom) |
+| PATRON_TAG | `patrons.js` | Manual segmentation tags (system + custom) |
+| COMPUTED_TAG_RULE | `patrons.js` | Auto-derived tags with configurable thresholds (Donor, Major Donor, Lapsed Donor) |
 | GIFT_TYPE | `campaigns.js` | Payment method types (cash, check, etc.) |
 
 ## Key Design Decisions
 
 1. **Fund -> Campaign -> Appeal** (3-level hierarchy, no Package). Fund is equivalent to "Designation" in traditional DCAP terminology.
 
-2. **Patron vs Donor**: "Patron" is the entity. "Donor" is a tag applied to patrons who have given.
+2. **Patron vs Donor**: "Patron" is the entity. "Donor" is a **computed tag** auto-derived from giving data (`giving.totalGifts > 0`). It is not manually assigned. Similarly, "Major Donor" is computed from a configurable lifetime threshold, and "Lapsed Donor" is computed from gift recency. Manual tags (Board Member, Volunteer, etc.) are stored on the patron record; computed tags are evaluated at read time via `getEffectiveTags(patron)`.
 
 3. **Managed Prospect vs General Constituent**: Determined by whether `assignedToId` is set on the patron. Not a separate field.
 

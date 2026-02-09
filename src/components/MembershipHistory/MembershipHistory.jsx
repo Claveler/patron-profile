@@ -10,6 +10,8 @@ const eventConfig = {
   'Cancelled': { icon: 'fa-xmark', color: 'error' },
   'Lapsed': { icon: 'fa-clock', color: 'warning' },
   'Reactivated': { icon: 'fa-play', color: 'success' },
+  'Settings Updated': { icon: 'fa-gear', color: 'neutral' },
+  'Renewal Change Requested': { icon: 'fa-envelope', color: 'primary' },
   'default': { icon: 'fa-circle', color: 'neutral' }
 }
 
@@ -63,6 +65,9 @@ function MembershipHistory({ history }) {
                   <span className="membership-history__tier">{item.tier}</span>
                 </div>
                 <span className="membership-history__programme">{item.program}</span>
+                {item.details && (
+                  <span className="membership-history__details">{item.details}</span>
+                )}
                 <div className="membership-history__date">
                   <span>{formatDate(item.date)}</span>
                   <span className="membership-history__ago">{getYearsAgo(item.date)}</span>

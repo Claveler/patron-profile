@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
-import { patronTags, addCustomTag, getPrimaryMembershipForPatron, formatDate, getHouseholdForPatron, getHouseholdMembers, getHouseholdAddress } from '../../data/patrons'
+import { patronTags, addCustomTag, getPrimaryMembershipForPatron, formatDate, getHouseholdForPatron, getHouseholdMembers, getHouseholdAddress, getEffectiveTags, isComputedTag, getTagConfig } from '../../data/patrons'
 import { getInitials } from '../../utils/getInitials'
 import './PatronInfoBox.css'
 
@@ -8,7 +8,7 @@ function PatronInfoBox({ patron, isManaged, onCreateOpportunity, onAddActivity, 
   const household = getHouseholdForPatron(patron.id)
   const householdMembers = household ? getHouseholdMembers(household.id) : []
   const getTagLabel = (tagId) => {
-    return patronTags.find(t => t.id === tagId)?.label || tagId
+    return getTagConfig(tagId).label
   }
   const [actionsOpen, setActionsOpen] = useState(false)
   const [tagsPopoverOpen, setTagsPopoverOpen] = useState(false)
@@ -18,12 +18,12 @@ function PatronInfoBox({ patron, isManaged, onCreateOpportunity, onAddActivity, 
   const householdPopoverRef = useRef(null)
   const actionsRef = useRef(null)
   
-  // Tags display logic - show 1 tag + count
-  const allTags = patron.tags || []
+  // Tags display logic - show 1 tag + count (uses effective = manual + computed)
+  const allTags = getEffectiveTags(patron)
   const firstTag = allTags[0]
   const remainingCount = allTags.length - 1
 
-  // Filter available tags for search (exclude already added)
+  // Filter available tags for search (only manual tags, exclude already added)
   const availableTags = patronTags.filter(t => !allTags.includes(t.id))
   const filteredTags = tagSearchTerm 
     ? availableTags.filter(t => t.label.toLowerCase().includes(tagSearchTerm.toLowerCase()))
@@ -73,16 +73,18 @@ function PatronInfoBox({ patron, isManaged, onCreateOpportunity, onAddActivity, 
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [actionsOpen])
 
-  // Tag management handlers
+  // Tag management handlers (only modify manual tags on the patron record)
+  const manualTags = patron.tags || []
+
   const handleRemoveTag = (tagId) => {
-    if (onUpdateTags) {
-      onUpdateTags(allTags.filter(t => t !== tagId))
+    if (onUpdateTags && !isComputedTag(tagId)) {
+      onUpdateTags(manualTags.filter(t => t !== tagId))
     }
   }
 
   const handleAddTag = (tagId) => {
-    if (onUpdateTags && !allTags.includes(tagId)) {
-      onUpdateTags([...allTags, tagId])
+    if (onUpdateTags && !manualTags.includes(tagId)) {
+      onUpdateTags([...manualTags, tagId])
     }
     setTagSearchTerm('')
   }
@@ -94,8 +96,11 @@ function PatronInfoBox({ patron, isManaged, onCreateOpportunity, onAddActivity, 
     }
   }
 
-  // Check if patron is archived
+  // Check patron status
   const isArchived = patron.status === 'archived'
+  const isDeceased = patron.status === 'deceased'
+  const isInactive = patron.status === 'inactive'
+  const isNonActive = isArchived || isDeceased
   
   const handleCreateOpportunity = () => {
     setActionsOpen(false)
@@ -140,7 +145,33 @@ function PatronInfoBox({ patron, isManaged, onCreateOpportunity, onAddActivity, 
   }
 
   return (
-    <div className={`patron-info-box ${isArchived ? 'patron-info-box--archived' : ''}`}>
+    <div className={`patron-info-box ${isNonActive ? 'patron-info-box--archived' : ''} ${isDeceased ? 'patron-info-box--deceased' : ''} ${isInactive ? 'patron-info-box--inactive' : ''}`}>
+      {/* Deceased Banner */}
+      {isDeceased && (
+        <div className="patron-info-box__status-banner patron-info-box__status-banner--deceased">
+          <i className="fa-solid fa-cross"></i>
+          <span>
+            This patron is deceased
+            {patron.deceasedDate && ` — ${new Date(patron.deceasedDate + 'T00:00:00').toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`}
+          </span>
+          <button className="patron-info-box__restore-btn" onClick={handleRestore}>
+            Change Status
+          </button>
+        </div>
+      )}
+      {/* Inactive Banner */}
+      {isInactive && (
+        <div className="patron-info-box__status-banner patron-info-box__status-banner--inactive">
+          <i className="fa-solid fa-clock"></i>
+          <span>
+            This patron is inactive
+            {patron.inactiveReason && ` — ${patron.inactiveReason}`}
+          </span>
+          <button className="patron-info-box__restore-btn patron-info-box__restore-btn--amber" onClick={handleRestore}>
+            Reactivate
+          </button>
+        </div>
+      )}
       {/* Archived Banner */}
       {isArchived && (
         <div className="patron-info-box__archived-banner">
@@ -280,19 +311,27 @@ function PatronInfoBox({ patron, isManaged, onCreateOpportunity, onAddActivity, 
                     {allTags.length === 0 ? (
                       <div className="patron-info-box__tags-popover-empty">No tags assigned</div>
                     ) : (
-                      allTags.map(tagId => (
-                        <div key={tagId} className="patron-info-box__tags-popover-item">
-                          <span className="patron-info-box__tags-popover-item-label">
-                            {getTagLabel(tagId)}
-                          </span>
-                          <button 
-                            className="patron-info-box__tags-popover-item-remove"
-                            onClick={() => handleRemoveTag(tagId)}
-                          >
-                            <i className="fa-solid fa-xmark"></i>
-                          </button>
-                        </div>
-                      ))
+                      allTags.map(tagId => {
+                        const computed = isComputedTag(tagId)
+                        return (
+                          <div key={tagId} className={`patron-info-box__tags-popover-item ${computed ? 'patron-info-box__tags-popover-item--computed' : ''}`}>
+                            <span className="patron-info-box__tags-popover-item-label">
+                              {getTagLabel(tagId)}
+                              {computed && (
+                                <i className="fa-solid fa-bolt patron-info-box__tags-popover-item-auto" title="Auto-computed from data"></i>
+                              )}
+                            </span>
+                            {!computed && (
+                              <button 
+                                className="patron-info-box__tags-popover-item-remove"
+                                onClick={() => handleRemoveTag(tagId)}
+                              >
+                                <i className="fa-solid fa-xmark"></i>
+                              </button>
+                            )}
+                          </div>
+                        )
+                      })
                     )}
                   </div>
                   

@@ -1,5 +1,4 @@
-/* Relationships Summary */
-
+/* Relationships Summary Card */
 .relationships-summary {
   background-color: var(--color-surface);
   border-radius: var(--radius-md);
@@ -7,11 +6,12 @@
   border: 1px solid var(--color-border);
 }
 
+/* Header */
 .relationships-summary__header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: var(--space-3);
+  margin-bottom: var(--space-4);
 }
 
 .relationships-summary__title {
@@ -21,142 +21,206 @@
   margin: 0;
 }
 
-
-.relationships-summary__view-all {
-  display: flex;
-  align-items: center;
-  gap: var(--space-1);
+.relationships-summary__view-more {
   font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
   color: var(--color-primary);
-  font-weight: var(--font-weight-medium);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0 var(--space-1);
 }
 
-.relationships-summary__view-all:hover {
+.relationships-summary__view-more:hover {
   text-decoration: underline;
 }
 
-/* List */
-.relationships-summary__list {
+/* Group (Household / Professional) */
+.relationships-summary__group {
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
-  margin-bottom: var(--space-3);
 }
 
-.relationships-summary__item {
+.relationships-summary__group + .relationships-summary__group {
+  margin-top: var(--space-4);
+}
+
+/* Group Header (icon + link) */
+.relationships-summary__group-header {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-2);
+  gap: var(--space-2);
+}
+
+.relationships-summary__group-icon {
+  font-size: var(--font-size-base);
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--color-primary);
+}
+
+.relationships-summary__group-link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-primary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.relationships-summary__group-link:hover {
+  text-decoration: underline;
+}
+
+.relationships-summary__external-icon {
+  font-size: 10px;
+  color: var(--color-primary);
+}
+
+/* Members List (Household) */
+.relationships-summary__members {
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  width: 100%;
+}
+
+.relationships-summary__member-item {
+  position: relative;
+}
+
+.relationships-summary__member-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
   border-radius: var(--radius-md);
   transition: background-color var(--transition-fast);
 }
 
-.relationships-summary__item--clickable {
+.relationships-summary__member-row--clickable {
   cursor: pointer;
 }
 
-.relationships-summary__item:hover {
-  background-color: var(--color-neutral-50);
+.relationships-summary__member-row--clickable:hover {
+  background-color: var(--color-primary-100);
 }
 
-.relationships-summary__item--clickable:hover {
-  background-color: var(--color-primary-50);
+.relationships-summary__divider {
+  height: 1px;
+  background-color: var(--color-border);
+  margin: 0 var(--space-4);
 }
 
+/* Avatars */
 .relationships-summary__avatar {
   width: 40px;
   height: 40px;
-  border-radius: var(--radius-full);
-  background-color: var(--avatar-color, var(--color-primary-100));
-  color: var(--avatar-color, var(--color-primary));
+  flex-shrink: 0;
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-semibold);
-  flex-shrink: 0;
+  background-color: var(--color-neutral-100);
+  border: 1px solid var(--color-neutral-100);
+}
+
+.relationships-summary__avatar--round {
+  border-radius: var(--radius-full);
+}
+
+.relationships-summary__avatar--square {
+  border-radius: 0;
 }
 
 .relationships-summary__avatar img {
   width: 100%;
   height: 100%;
-  border-radius: var(--radius-full);
   object-fit: cover;
+  display: block;
 }
 
-.relationships-summary__info {
-  flex: 1;
+.relationships-summary__avatar-initials {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-secondary);
+}
+
+/* Member Info */
+.relationships-summary__member-info {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: var(--space-1);
   min-width: 0;
 }
 
-.relationships-summary__name {
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
+.relationships-summary__member-name {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-regular);
   color: var(--color-text-primary);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  line-height: var(--line-height-normal);
 }
 
-.relationships-summary__role {
-  font-size: var(--font-size-xs);
-  color: var(--color-text-secondary);
+.relationships-summary__member-name--org {
+  font-size: var(--font-size-base);
 }
 
-.relationships-summary__action {
-  color: var(--color-text-muted);
-  padding: var(--space-1);
-  font-size: var(--font-size-sm);
-  opacity: 0;
-  transition: opacity var(--transition-fast);
-}
-
-.relationships-summary__item:hover .relationships-summary__action {
-  opacity: 1;
-}
-
-.relationships-summary__action:hover {
-  color: var(--color-primary);
-}
-
-/* Add Button */
-.relationships-summary__add {
-  display: flex;
+/* Tags */
+.relationships-summary__tag {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-2);
-  width: 100%;
-  padding: var(--space-2);
-  font-size: var(--font-size-sm);
-  color: var(--color-text-secondary);
-  border: 1px dashed var(--color-border);
-  border-radius: var(--radius-md);
-  transition: all var(--transition-fast);
+  min-width: 48px;
+  width: fit-content;
+  height: 20px;
+  padding: 2px var(--space-1);
+  border-radius: var(--radius-sm);
+  font-size: 10px;
+  font-weight: var(--font-weight-regular);
+  line-height: 1.4;
+  background: var(--color-surface);
+  border: 1px solid;
 }
 
-.relationships-summary__add:hover {
-  color: var(--color-primary);
+.relationships-summary__tag--household {
+  color: var(--color-primary-600);
   border-color: var(--color-primary);
-  background-color: var(--color-primary-100);
 }
 
-/* External contact indicator */
-.relationships-summary__external {
-  color: var(--color-text-muted);
-  padding: var(--space-1);
-  font-size: var(--font-size-xs);
+.relationships-summary__tag--professional {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
 }
 
-/* Empty state */
+/* Professional Card */
+.relationships-summary__professional-card {
+  border-radius: var(--radius-md);
+  width: 100%;
+  transition: background-color var(--transition-fast);
+}
+
+.relationships-summary__professional-card--clickable {
+  cursor: pointer;
+}
+
+.relationships-summary__professional-card--clickable:hover {
+  background-color: var(--color-neutral-200);
+}
+
+/* Empty State */
 .relationships-summary__empty {
   padding: var(--space-4);
   text-align: center;
   color: var(--color-text-muted);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-base);
 }
 
 .relationships-summary__empty p {

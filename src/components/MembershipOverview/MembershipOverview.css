@@ -1,7 +1,7 @@
 /* Membership Overview Component - Enhanced */
 
 .membership-overview {
-  background: var(--color-white);
+  background: var(--color-surface);
   border-radius: var(--radius-lg);
   padding: var(--space-4);
   border: 1px solid var(--color-border);
@@ -94,7 +94,7 @@
 /* Membership Card - CR80 standard aspect ratio (85.60mm × 53.98mm ≈ 1.586:1) */
 .membership-overview__card {
   position: relative;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   padding: 7.1cqi;
   width: 100%;
   max-width: 420px;
@@ -192,7 +192,7 @@
 .membership-overview__card-valid {
   font-size: var(--card-font-md);
   margin: 0;
-  color: #ffffff;
+  color: currentColor;
 }
 
 .membership-overview__card-valid {
@@ -237,10 +237,10 @@
   width: 10px;
   height: 10px;
   background: var(--color-primary-600);
-  border: 2px solid var(--color-white);
+  border: 2px solid var(--color-surface);
   border-radius: 50%;
   transform: translateX(-50%);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-sm);
 }
 
 .membership-overview__period-dates {
@@ -269,14 +269,14 @@
 .membership-overview__benefits-list {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: var(--space-1);
 }
 
 /* Category Group */
 .membership-overview__benefit-category {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: var(--space-1);
 }
 
 .membership-overview__category-label {
@@ -291,10 +291,10 @@
   display: grid;
   grid-template-columns: 40px 1fr auto;
   gap: var(--space-3);
-  padding: 12px;
+  padding: var(--space-3);
   align-items: center;
-  background-color: #f2f3f3;
-  border-radius: 8px;
+  background-color: var(--color-background);
+  border-radius: var(--radius-md);
 }
 
 .membership-overview__benefit-icon {
@@ -303,8 +303,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 4px;
-  background: white;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
   font-size: var(--font-size-sm);
   flex-shrink: 0;
 }
@@ -340,7 +340,7 @@
 
 /* Usage Pills */
 .membership-overview__usage-pill {
-  padding: 2px 8px;
+  padding: 2px var(--space-2);
   border-radius: var(--radius-full);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
@@ -386,6 +386,34 @@
   background: var(--color-background);
   border-radius: var(--radius-md);
   font-size: var(--font-size-xs);
+}
+
+.membership-overview__auto-renewal-row--clickable {
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border: 1px solid transparent;
+}
+
+.membership-overview__auto-renewal-row--clickable:hover {
+  background: var(--color-neutral-100);
+  border-color: var(--color-border);
+}
+
+.membership-overview__auto-renewal-row--clickable:focus-visible {
+  outline: 2px solid var(--color-primary-300);
+  outline-offset: 1px;
+}
+
+.membership-overview__renewal-settings-icon {
+  margin-left: auto;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-tertiary);
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.membership-overview__auto-renewal-row--clickable:hover .membership-overview__renewal-settings-icon {
+  opacity: 1;
 }
 
 .membership-overview__renewal-label {
@@ -495,7 +523,7 @@
   width: 100%;
   max-width: 420px;
   padding: var(--space-2);
-  background: var(--color-white);
+  background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   font-size: var(--font-size-sm);

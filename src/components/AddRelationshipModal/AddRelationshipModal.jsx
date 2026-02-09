@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { searchPatrons, addPatronRelationship, getReciprocalRole, patronRelationships } from '../../data/patrons'
+import { searchPatrons, addPatronRelationship, getReciprocalRole, patronRelationships, getPatronById, createHousehold } from '../../data/patrons'
 import { getInitials } from '../../utils/getInitials'
 import './AddRelationshipModal.css'
 
@@ -52,7 +52,7 @@ function AddRelationshipModal({
   preselectedType,
   onSuccess,
 }) {
-  const [step, setStep] = useState('type') // 'type' | 'contact' | 'roles'
+  const [step, setStep] = useState('type') // 'type' | 'contact' | 'roles' | 'household'
   const [relType, setRelType] = useState('')
   const [contactMode, setContactMode] = useState('search') // 'search' | 'external'
   const [searchQuery, setSearchQuery] = useState('')
@@ -70,10 +70,17 @@ function AddRelationshipModal({
   const [reciprocalRole, setReciprocalRole] = useState('')
   const [customReciprocalRole, setCustomReciprocalRole] = useState('')
 
+  // Household creation fields (step 4)
+  const [householdName, setHouseholdName] = useState('')
+  const [selectedHead, setSelectedHead] = useState('')
+
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
 
   const searchInputRef = useRef(null)
+
+  // Get current patron data for household checks
+  const currentPatronData = getPatronById(patronId)
 
   // Reset when modal opens
   useEffect(() => {
@@ -92,6 +99,8 @@ function AddRelationshipModal({
       setCustomRole('')
       setReciprocalRole('')
       setCustomReciprocalRole('')
+      setHouseholdName('')
+      setSelectedHead('')
       setError('')
       setIsLoading(false)
     }
@@ -107,10 +116,11 @@ function AddRelationshipModal({
     }
   }, [searchQuery, patronId])
 
-  // Auto-suggest reciprocal when role changes
+  // Auto-suggest reciprocal when role changes (gender-aware)
   useEffect(() => {
     if (selectedRole && selectedRole !== 'other') {
-      const suggested = getReciprocalRole(selectedRole)
+      const patronGender = currentPatronData?.gender || null
+      const suggested = getReciprocalRole(selectedRole, patronGender)
       const currentRoles = roleOptionsByType[relType] || []
       const matchingOption = currentRoles.find(r => r.id === suggested)
       setReciprocalRole(matchingOption ? matchingOption.id : 'other')
@@ -167,6 +177,14 @@ function AddRelationshipModal({
     setError('')
   }
 
+  // Check whether we need a household creation step
+  const needsHouseholdCreation = () => {
+    if (relType !== 'household' || !selectedPatron) return false
+    const currentPatron = getPatronById(patronId)
+    const otherPatron = getPatronById(selectedPatron.id)
+    return !currentPatron?.householdId && !otherPatron?.householdId
+  }
+
   const handleSubmit = () => {
     if (!selectedRole) {
       setError('Please select a role')
@@ -177,6 +195,21 @@ function AddRelationshipModal({
       return
     }
 
+    // If this is a household relationship and neither patron has a household,
+    // advance to the household creation step instead of submitting
+    if (needsHouseholdCreation()) {
+      const lastName = currentPatronData?.lastName || patronName.split(' ').pop()
+      setHouseholdName(`${lastName} Family`)
+      setSelectedHead(patronId)
+      setStep('household')
+      setError('')
+      return
+    }
+
+    submitRelationship()
+  }
+
+  const submitRelationship = () => {
     setIsLoading(true)
     setError('')
 
@@ -228,6 +261,48 @@ function AddRelationshipModal({
     }
   }
 
+  const handleBackToRoles = () => {
+    setStep('roles')
+    setError('')
+  }
+
+  const handleHouseholdSubmit = () => {
+    if (!householdName.trim()) {
+      setError('Please enter a household name')
+      return
+    }
+
+    setIsLoading(true)
+    setError('')
+
+    const resolvedRole = selectedRole === 'other' ? customRole.trim() : selectedRole
+    const resolvedReciprocal = reciprocalRole === 'other'
+      ? customReciprocalRole.trim()
+      : reciprocalRole
+
+    try {
+      // Determine head vs other patron
+      const headId = selectedHead
+      const otherId = headId === patronId ? selectedPatron.id : patronId
+      // The "other" member's role: if the head is the current patron, the other gets resolvedRole;
+      // if the head is the selected patron, the other gets resolvedReciprocal
+      const otherMemberRole = headId === patronId ? resolvedRole : (resolvedReciprocal || resolvedRole)
+
+      // Create the household first
+      createHousehold(headId, otherId, householdName.trim(), otherMemberRole)
+
+      // Now create the relationship (addPatronRelationship will find the household)
+      addPatronRelationship(patronId, selectedPatron.id, relType, resolvedRole, resolvedReciprocal || resolvedRole)
+
+      setIsLoading(false)
+      onSuccess && onSuccess()
+      onClose()
+    } catch (err) {
+      setIsLoading(false)
+      setError('Failed to create household')
+    }
+  }
+
   if (!isOpen) return null
 
   const currentRoles = roleOptionsByType[relType] || []
@@ -241,6 +316,7 @@ function AddRelationshipModal({
             {step === 'type' && 'Add relationship'}
             {step === 'contact' && 'Find contact'}
             {step === 'roles' && 'Define relationship'}
+            {step === 'household' && 'Create household'}
           </h2>
           <button className="add-rel-modal__close" onClick={onClose}>
             <i className="fa-solid fa-xmark"></i>
@@ -496,7 +572,98 @@ function AddRelationshipModal({
                   onClick={handleSubmit}
                   disabled={isLoading}
                 >
-                  {isLoading ? 'Saving...' : 'Add relationship'}
+                  {isLoading ? 'Saving...' : (needsHouseholdCreation() ? 'Continue' : 'Add relationship')}
+                </button>
+              </div>
+            </>
+          )}
+
+          {/* Step 4: Create household (only when neither patron has a household) */}
+          {step === 'household' && (
+            <>
+              <button className="add-rel-modal__back" onClick={handleBackToRoles}>
+                <i className="fa-solid fa-arrow-left"></i>
+                Back
+              </button>
+
+              <p className="add-rel-modal__description">
+                Neither <strong>{patronName}</strong> nor <strong>{selectedPatron?.name}</strong> belongs to a household yet. Create one to group them together.
+              </p>
+
+              {/* Household name */}
+              <div className="add-rel-modal__hh-field">
+                <label className="add-rel-modal__hh-label">Household name</label>
+                <input
+                  type="text"
+                  className="add-rel-modal__hh-input"
+                  value={householdName}
+                  onChange={e => setHouseholdName(e.target.value)}
+                  placeholder="e.g. Davis Family"
+                />
+              </div>
+
+              {/* Head of household selector */}
+              <div className="add-rel-modal__hh-field">
+                <label className="add-rel-modal__hh-label">Head of household</label>
+                <p className="add-rel-modal__hh-hint">
+                  Select the primary contact for this household.
+                </p>
+                <div className="add-rel-modal__hh-member-list">
+                  {/* Current patron */}
+                  <label className={`add-rel-modal__hh-member ${selectedHead === patronId ? 'add-rel-modal__hh-member--selected' : ''}`}>
+                    <input
+                      type="radio"
+                      name="head-of-household"
+                      className="add-rel-modal__hh-radio"
+                      checked={selectedHead === patronId}
+                      onChange={() => setSelectedHead(patronId)}
+                    />
+                    <div className="add-rel-modal__hh-avatar">
+                      {currentPatronData?.photo ? (
+                        <img src={currentPatronData.photo} alt={patronName} />
+                      ) : (
+                        <span>{getInitials(patronName)}</span>
+                      )}
+                    </div>
+                    <span className="add-rel-modal__hh-name">{patronName}</span>
+                  </label>
+
+                  {/* Selected patron */}
+                  <label className={`add-rel-modal__hh-member ${selectedHead === selectedPatron?.id ? 'add-rel-modal__hh-member--selected' : ''}`}>
+                    <input
+                      type="radio"
+                      name="head-of-household"
+                      className="add-rel-modal__hh-radio"
+                      checked={selectedHead === selectedPatron?.id}
+                      onChange={() => setSelectedHead(selectedPatron?.id)}
+                    />
+                    <div className="add-rel-modal__hh-avatar">
+                      {selectedPatron?.photo ? (
+                        <img src={selectedPatron.photo} alt={selectedPatron.name} />
+                      ) : (
+                        <span>{getInitials(selectedPatron?.name || '')}</span>
+                      )}
+                    </div>
+                    <span className="add-rel-modal__hh-name">{selectedPatron?.name}</span>
+                  </label>
+                </div>
+              </div>
+
+              {error && (
+                <div className="add-rel-modal__error">
+                  <i className="fa-solid fa-exclamation-circle"></i>
+                  {error}
+                </div>
+              )}
+
+              <div className="add-rel-modal__actions">
+                <button className="add-rel-modal__cancel" onClick={onClose}>Cancel</button>
+                <button
+                  className="add-rel-modal__submit"
+                  onClick={handleHouseholdSubmit}
+                  disabled={isLoading || !householdName.trim()}
+                >
+                  {isLoading ? 'Creating...' : 'Create household'}
                 </button>
               </div>
             </>

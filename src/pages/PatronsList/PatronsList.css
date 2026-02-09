@@ -648,6 +648,22 @@
   width: fit-content;
 }
 
+.patrons-list__archived-badge--deceased {
+  color: var(--color-text-muted);
+  background-color: var(--color-neutral-100, #f3f4f6);
+  border-color: var(--color-neutral-300, #d1d5db);
+}
+
+.patrons-list__archived-badge--inactive {
+  color: #92400e;
+  background-color: #fef3c7;
+  border-color: #fbbf24;
+}
+
+.patrons-list__row--inactive {
+  opacity: 0.8;
+}
+
 /* Footer */
 .patrons-list__footer {
   padding-top: var(--space-4);

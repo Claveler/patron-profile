@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { QRCodeSVG } from 'qrcode.react'
 import UpgradeModal from '../UpgradeModal/UpgradeModal'
+import AutoRenewalModal from '../AutoRenewalModal/AutoRenewalModal'
 import { formatDate } from '../../data/patrons'
 import { getInitials } from '../../utils/getInitials'
 import './MembershipOverview.css'
@@ -31,9 +32,10 @@ const paymentIcons = {
   default: 'fa-credit-card'
 }
 
-function MembershipOverview({ membership, patronName, patronEmail, patronPhoto, isPrimary = true }) {
+function MembershipOverview({ membership, patronName, patronEmail, patronPhoto, isPrimary = true, onUpdate }) {
   // IMPORTANT: All hooks must be called before any early returns (Rules of Hooks)
   const [showUpgradeModal, setShowUpgradeModal] = useState(false)
+  const [showAutoRenewalModal, setShowAutoRenewalModal] = useState(false)
   
   // Guard for incomplete membership data
   if (!membership?.program || !membership?.benefits) {
@@ -191,9 +193,15 @@ function MembershipOverview({ membership, patronName, patronEmail, patronPhoto, 
               </button>
             )}
             
-            {/* Auto-Renewal Status */}
+            {/* Auto-Renewal Status (clickable to open settings modal) */}
             <div className="membership-overview__renewal-info">
-              <div className="membership-overview__auto-renewal-row">
+              <div
+                className="membership-overview__auto-renewal-row membership-overview__auto-renewal-row--clickable"
+                onClick={() => setShowAutoRenewalModal(true)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setShowAutoRenewalModal(true) }}
+              >
                 <span className="membership-overview__renewal-label">Auto-renewal</span>
                 <span className={`membership-overview__auto-renewal membership-overview__auto-renewal--${membership.autoRenewal ? 'on' : 'off'}`}>
                   {membership.autoRenewal ? 'ON' : 'OFF'}
@@ -204,6 +212,7 @@ function MembershipOverview({ membership, patronName, patronEmail, patronPhoto, 
                     <span>•••• {membership.paymentMethod.last4}</span>
                   </div>
                 )}
+                <i className="fa-solid fa-gear membership-overview__renewal-settings-icon"></i>
               </div>
               
               {/* Churn Risk Indicator */}
@@ -288,6 +297,17 @@ function MembershipOverview({ membership, patronName, patronEmail, patronPhoto, 
           patronEmail={patronEmail}
           patronName={patronName}
           onClose={() => setShowUpgradeModal(false)}
+        />
+      )}
+      
+      {/* Auto-Renewal Settings Modal */}
+      {showAutoRenewalModal && (
+        <AutoRenewalModal
+          membership={membership}
+          patronEmail={patronEmail}
+          patronName={patronName}
+          onClose={() => setShowAutoRenewalModal(false)}
+          onUpdate={onUpdate}
         />
       )}
     </div>

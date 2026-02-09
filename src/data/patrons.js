@@ -22,18 +22,113 @@ import { shiftDemoData, computeDaysToRenewal } from '../utils/demoDate'
 // This alias is kept for backwards compatibility during migration.
 export { STAFF as giftOfficers } from './campaigns'
 
-// Patron tags (for segmentation)
+// Patron tags (for segmentation) — manually assigned
 export const patronTags = [
-  // System tags (common classifications)
+  // System tags (role/entity classifications — manually assigned, cannot be deleted)
   { id: 'prospect', label: 'Prospect', system: true },
-  { id: 'donor', label: 'Donor', system: true },
-  { id: 'major-donor', label: 'Major Donor', system: true },
   { id: 'board-member', label: 'Board Member', system: true },
   { id: 'volunteer', label: 'Volunteer', system: true },
   { id: 'corporate', label: 'Corporate', system: true },
   { id: 'foundation', label: 'Foundation', system: true },
+  { id: 'planned-giving', label: 'Planned Giving', system: true },
+  { id: 'vip', label: 'VIP', system: true },
+  { id: 'subscriber', label: 'Subscriber', system: true },
   // Custom tags can be added dynamically by users
 ]
+
+// Computed tag rules — auto-derived from patron data, configurable thresholds
+export const computedTagRules = [
+  {
+    id: 'donor',
+    label: 'Donor',
+    description: 'Has made at least one gift',
+    field: 'giving.totalGifts',
+    operator: '>',
+    threshold: 0,
+    editable: false,
+  },
+  {
+    id: 'major-donor',
+    label: 'Major Donor',
+    description: 'Lifetime gift total meets or exceeds threshold',
+    field: 'giving.totalGifts',
+    operator: '>=',
+    threshold: 10000,
+    editable: true,
+  },
+  {
+    id: 'lapsed-donor',
+    label: 'Lapsed Donor',
+    description: 'No gift in the configured number of months',
+    field: 'giving.lastGift',
+    operator: 'older_than_months',
+    threshold: 18,
+    editable: true,
+    requiresTag: 'donor',
+  },
+]
+
+// Evaluate a single computed tag rule against a patron
+const evaluateRule = (patron, rule) => {
+  // Check prerequisite tag (e.g., lapsed-donor requires donor)
+  if (rule.requiresTag) {
+    const prereq = computedTagRules.find(r => r.id === rule.requiresTag)
+    if (prereq && !evaluateRule(patron, prereq)) return false
+  }
+
+  // Resolve nested field path (e.g., 'giving.totalGifts')
+  const value = rule.field.split('.').reduce((obj, key) => obj?.[key], patron)
+
+  switch (rule.operator) {
+    case '>': return (value || 0) > rule.threshold
+    case '>=': return (value || 0) >= rule.threshold
+    case 'older_than_months': {
+      if (!value) return false // no gift date means never gave — not lapsed
+      const cutoff = new Date()
+      cutoff.setMonth(cutoff.getMonth() - rule.threshold)
+      return new Date(value) < cutoff
+    }
+    default: return false
+  }
+}
+
+// Get all computed tag IDs that apply to a patron
+export const getComputedTags = (patron) => {
+  return computedTagRules
+    .filter(rule => evaluateRule(patron, rule))
+    .map(rule => rule.id)
+}
+
+// Get effective tags: manual tags + computed tags, deduplicated
+export const getEffectiveTags = (patron) => {
+  const manual = patron.tags || []
+  const computed = getComputedTags(patron)
+  return [...new Set([...manual, ...computed])]
+}
+
+// Check if a tag ID belongs to the computed tier
+export const isComputedTag = (tagId) => {
+  return computedTagRules.some(r => r.id === tagId)
+}
+
+// Update a computed tag's threshold (only for editable rules)
+export const updateComputedTagThreshold = (tagId, newThreshold) => {
+  const rule = computedTagRules.find(r => r.id === tagId)
+  if (rule && rule.editable) {
+    rule.threshold = Number(newThreshold)
+  }
+}
+
+// Unified tag config lookup across all 3 tiers
+export const getTagConfig = (tagId) => {
+  const manual = patronTags.find(t => t.id === tagId)
+  if (manual) return { id: manual.id, label: manual.label, type: manual.system ? 'system' : 'custom' }
+
+  const computed = computedTagRules.find(r => r.id === tagId)
+  if (computed) return { id: computed.id, label: computed.label, type: 'computed' }
+
+  return { id: tagId, label: tagId, type: 'unknown' }
+}
 
 // Legacy: kept for backwards compatibility during migration
 export const patronCategories = patronTags
@@ -54,6 +149,14 @@ export const pipelineStages = [
   { id: 'cultivation', label: 'Cultivation' },
   { id: 'solicitation', label: 'Solicitation' },
   { id: 'stewardship', label: 'Stewardship' },
+]
+
+// Patron statuses (lifecycle states)
+export const PATRON_STATUSES = [
+  { id: 'active', label: 'Active', icon: 'fa-circle-check', color: 'green', description: 'Normal operating status — patron is contactable and included in campaigns.' },
+  { id: 'inactive', label: 'Inactive', icon: 'fa-clock', color: 'amber', description: 'No engagement in an extended period — still contactable but flagged for review.' },
+  { id: 'deceased', label: 'Deceased', icon: 'fa-cross', color: 'gray', description: 'Patron has passed away — all outreach will stop. Giving history is preserved.' },
+  { id: 'archived', label: 'Archived', icon: 'fa-box-archive', color: 'neutral', description: 'Soft-deleted — removed from all active lists. Can be restored.' },
 ]
 
 // Patron sources (how they entered the system)
@@ -86,11 +189,31 @@ export const patrons = [
     id: '7962415',
     firstName: 'Anderson',
     lastName: 'Collingwood',
+    prefix: 'Mr.',
+    suffix: null,
+    preferredName: 'Andy',
+    gender: 'male',
+    dateOfBirth: '1972-08-14',
     photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
     email: 'anderson.collingwood@gmail.com',
     phone: '(415) 555-4567',
     address: '45 Paradise Dr, Tiburon, CA 94920',
-    tags: ['major-donor', 'donor', 'board-member'],
+    addressStreet: '45 Paradise Dr',
+    addressCity: 'Tiburon',
+    addressState: 'CA',
+    addressZip: '94920',
+    addressCountry: 'United States',
+    employer: 'Collingwood Capital Partners',
+    jobTitle: 'Managing Partner',
+    communicationPreferences: {
+      preferredMethod: 'email',
+      emailOptIn: true,
+      phoneOptIn: true,
+      mailOptIn: true,
+      doNotContact: false,
+    },
+    notes: 'Board member since 2020. Prefers morning meetings. Interested in naming opportunities for the new wing. Wife Sarah is also active in the community.',
+    tags: ['board-member'],
     householdId: 'hh-collingwood',
     // MANAGED PROSPECT - has assignedToId (opportunities tracked separately)
     assignedToId: 'lj',
@@ -232,10 +355,30 @@ export const patrons = [
     id: '7962416',
     firstName: 'Paul',
     lastName: 'Fairfax',
+    prefix: 'Mr.',
+    suffix: null,
+    preferredName: null,
+    gender: 'male',
+    dateOfBirth: '1968-03-22',
     photo: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150&h=150&fit=crop&crop=face',
     email: 'paul.fairfax@outlook.com',
     phone: '(555) 111-2222',
-    tags: ['donor'],
+    addressStreet: '280 Cascade Dr',
+    addressCity: 'Mill Valley',
+    addressState: 'CA',
+    addressZip: '94941',
+    addressCountry: 'United States',
+    employer: 'Fairfax & Associates Law Firm',
+    jobTitle: 'Senior Partner',
+    communicationPreferences: {
+      preferredMethod: 'phone',
+      emailOptIn: true,
+      phoneOptIn: true,
+      mailOptIn: false,
+      doNotContact: false,
+    },
+    notes: 'Long-time supporter. Prefers phone calls over email. Interested in education programs. Wife Elizabeth also donates separately.',
+    tags: [],
     householdId: 'hh-fairfax',
     // NO assignedToId - General Constituent
     // NO prospect data - not in pipeline
@@ -367,6 +510,7 @@ export const patrons = [
     id: '7962417',
     firstName: 'Jake',
     lastName: 'Thompson',
+    gender: 'male',
     photo: null,
     email: 'jake_thompson@gmail.com',
     phone: '(555) 234-5678',
@@ -399,11 +543,12 @@ export const patrons = [
     id: '7962418',
     firstName: 'Sophia',
     lastName: 'Thomas',
+    gender: 'female',
     photo: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face',
     email: 'sophia1234@gmail.com',
     phone: '(555) 345-6789',
     address: '1425 Second St, San Rafael, CA 94901',
-    tags: ['donor'],
+    tags: [],
     householdId: 'hh-taylor-thomas',
     assignedToId: 'es',
     engagement: {
@@ -440,11 +585,12 @@ export const patrons = [
     id: '7962419',
     firstName: 'Lucas',
     lastName: 'Taylor',
+    gender: 'male',
     photo: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
     email: 'lucas_taylor@yahoo.com',
     phone: '(555) 456-7890',
     address: '1425 Second St, San Rafael, CA 94901',
-    tags: ['donor'],
+    tags: [],
     householdId: 'hh-taylor-thomas',
     assignedToId: 'lj',
     engagement: {
@@ -481,10 +627,11 @@ export const patrons = [
     id: '7962420',
     firstName: 'Ava',
     lastName: 'Anderson',
+    gender: 'female',
     photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face',
     email: 'anderava@gmail.com',
     phone: '(555) 567-8901',
-    tags: ['donor', 'volunteer'],
+    tags: ['volunteer'],
     assignedToId: 'lj',
     engagement: {
       level: 'hot',
@@ -520,11 +667,12 @@ export const patrons = [
     id: '7962421',
     firstName: 'Samantha',
     lastName: 'Carter',
+    gender: 'female',
     photo: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face',
     email: 'samantha_itsme@gmail.com',
     phone: '(555) 678-9012',
     address: '105 Meadowsweet Way, Corte Madera, CA 94925',
-    tags: ['major-donor', 'donor'],
+    tags: [],
     householdId: 'hh-martinez-carter',
     assignedToId: 'es',
     engagement: {
@@ -561,11 +709,12 @@ export const patrons = [
     id: '7962422',
     firstName: 'John',
     lastName: 'Martinez',
+    gender: 'male',
     photo: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&h=150&fit=crop&crop=face',
     email: 'johnsonmchl@microsoft.com',
     phone: '(555) 789-0123',
     address: '105 Meadowsweet Way, Corte Madera, CA 94925',
-    tags: ['donor', 'corporate'],
+    tags: ['corporate'],
     householdId: 'hh-martinez-carter',
     assignedToId: 'es',
     engagement: {
@@ -602,10 +751,11 @@ export const patrons = [
     id: '7962423',
     firstName: 'Mia',
     lastName: 'Wilson',
+    gender: 'female',
     photo: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=150&h=150&fit=crop&crop=face',
     email: 'mia_wilson1960@gmail.com',
     phone: '(555) 890-1234',
-    tags: ['donor'],
+    tags: [],
     assignedToId: 'sa',
     engagement: {
       level: 'on-fire',
@@ -641,10 +791,11 @@ export const patrons = [
     id: '7962424',
     firstName: 'Olivia',
     lastName: 'Brown',
+    gender: 'female',
     photo: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&h=150&fit=crop&crop=face',
     email: 'olibrown@gmail.com',
     phone: '(555) 901-2345',
-    tags: ['donor'],
+    tags: [],
     assignedToId: 'lt',
     engagement: {
       level: 'cool',
@@ -680,10 +831,11 @@ export const patrons = [
     id: '7962425',
     firstName: 'Ethan',
     lastName: 'Davis',
+    gender: 'male',
     photo: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&h=150&fit=crop&crop=face',
     email: 'ethan_davies_1234@gmail.com',
     phone: '(555) 012-3456',
-    tags: ['donor'],
+    tags: [],
     assignedToId: 'es',
     engagement: {
       level: 'cool',
@@ -727,10 +879,11 @@ export const patrons = [
     id: '7962426',
     firstName: 'Rachel',
     lastName: 'Kim',
+    gender: 'female',
     photo: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&h=150&fit=crop&crop=face',
     email: 'rachel.kim@gmail.com',
     phone: '(555) 222-3333',
-    tags: ['donor'],
+    tags: [],
     // General Constituent - RECENTLY ADDED via ticket purchase
     engagement: {
       level: 'cool',
@@ -766,10 +919,11 @@ export const patrons = [
     id: '7962427',
     firstName: 'David',
     lastName: 'Chen',
+    gender: 'male',
     photo: null,
     email: 'd.chen@company.com',
     phone: '(555) 333-4444',
-    tags: ['donor'],
+    tags: [],
     // General Constituent - RECENTLY ADDED via online gift
     engagement: {
       level: 'cold',
@@ -805,10 +959,11 @@ export const patrons = [
     id: '7962428',
     firstName: 'Maria',
     lastName: 'Santos',
+    gender: 'female',
     photo: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=150&h=150&fit=crop&crop=face',
     email: 'maria.santos@email.com',
     phone: '(555) 444-5555',
-    tags: ['donor'],
+    tags: [],
     // General Constituent - RECENTLY ADDED via membership signup
     engagement: {
       level: 'warm',
@@ -844,6 +999,7 @@ export const patrons = [
     id: '7962429',
     firstName: 'James',
     lastName: 'Wilson',
+    gender: 'male',
     photo: null,
     email: 'jwilson@business.net',
     phone: '(555) 555-6666',
@@ -882,11 +1038,30 @@ export const patrons = [
     id: '7962430',
     firstName: 'Sarah',
     lastName: 'Collingwood',
+    prefix: 'Mrs.',
+    suffix: null,
+    preferredName: null,
+    gender: 'female',
+    dateOfBirth: '1975-11-03',
     photo: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop&crop=face',
     email: 'sarah@collingwood.com',
     phone: '(555) 123-4568',
     address: '45 Paradise Dr, Tiburon, CA 94920',
-    tags: ['donor'],
+    addressStreet: '45 Paradise Dr',
+    addressCity: 'Tiburon',
+    addressState: 'CA',
+    addressZip: '94920',
+    addressCountry: 'United States',
+    employer: 'Bay Area Arts Council',
+    jobTitle: 'Executive Director',
+    communicationPreferences: {
+      preferredMethod: 'email',
+      emailOptIn: true,
+      phoneOptIn: true,
+      mailOptIn: true,
+      doNotContact: false,
+    },
+    tags: [],
     recordStatus: 'active',
     householdId: 'hh-collingwood',
     // No assignedToId - not individually managed, but part of household
@@ -933,6 +1108,7 @@ export const patrons = [
     id: '7962431',
     firstName: 'Emma',
     lastName: 'Collingwood',
+    gender: 'female',
     photo: null,
     email: 'emma.collingwood@gmail.com',
     phone: null,
@@ -982,10 +1158,11 @@ export const patrons = [
     id: '7962432',
     firstName: 'Eleanor',
     lastName: 'Whitfield',
+    gender: 'female',
     photo: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face',
     email: 'eleanor.whitfield@gmail.com',
     phone: '(512) 555-3001',
-    tags: ['major-donor', 'donor'],
+    tags: [],
     assignedToId: 'jm',
     engagement: {
       level: 'hot',
@@ -1024,10 +1201,11 @@ export const patrons = [
     id: '7962433',
     firstName: 'Marcus',
     lastName: 'Chen',
+    gender: 'male',
     photo: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&h=150&fit=crop&crop=face',
     email: 'marcus.chen@chenenterprises.com',
     phone: '(512) 555-3002',
-    tags: ['corporate', 'donor'],
+    tags: ['corporate'],
     assignedToId: 'rb',
     engagement: {
       level: 'warm',
@@ -1066,10 +1244,11 @@ export const patrons = [
     id: '7962434',
     firstName: 'Patricia',
     lastName: 'Hawthorne',
+    gender: 'female',
     photo: 'https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=150&h=150&fit=crop&crop=face',
     email: 'p.hawthorne@hawthornefoundation.org',
     phone: '(512) 555-3003',
-    tags: ['foundation', 'donor'],
+    tags: ['foundation'],
     assignedToId: 'rb',
     engagement: {
       level: 'cool',
@@ -1108,10 +1287,11 @@ export const patrons = [
     id: '7962435',
     firstName: 'James',
     lastName: 'Morrison',
+    gender: 'male',
     photo: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
     email: 'james.morrison@gmail.com',
     phone: '(512) 555-3004',
-    tags: ['major-donor', 'donor', 'board-member'],
+    tags: ['board-member'],
     assignedToId: 'jm',
     engagement: {
       level: 'hot',
@@ -1150,6 +1330,7 @@ export const patrons = [
     id: '7962436',
     firstName: 'Sarah',
     lastName: 'Blackwood',
+    gender: 'female',
     photo: null,
     email: 'sarah.blackwood@outlook.com',
     phone: '(512) 555-3005',
@@ -1185,10 +1366,11 @@ export const patrons = [
     id: '7962437',
     firstName: 'William',
     lastName: 'Hartford',
+    gender: 'male',
     photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face',
     email: 'w.hartford@hartfordlaw.com',
     phone: '(512) 555-3006',
-    tags: ['major-donor', 'donor'],
+    tags: [],
     assignedToId: 'jm',
     engagement: {
       level: 'warm',
@@ -1227,10 +1409,11 @@ export const patrons = [
     id: '7962438',
     firstName: 'Diana',
     lastName: 'Rothschild',
+    gender: 'female',
     photo: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face',
     email: 'diana.rothschild@yahoo.com',
     phone: '(512) 555-3007',
-    tags: ['donor', 'volunteer'],
+    tags: ['volunteer'],
     assignedToId: 'al',
     engagement: {
       level: 'warm',
@@ -1269,10 +1452,11 @@ export const patrons = [
     id: '7962439',
     firstName: 'Theodore',
     lastName: 'Banks',
+    gender: 'male',
     photo: 'https://images.unsplash.com/photo-1548372290-8d01b6c8e78c?w=150&h=150&fit=crop&crop=face',
     email: 'ted.banks@bankscapital.com',
     phone: '(512) 555-3008',
-    tags: ['major-donor', 'donor'],
+    tags: [],
     assignedToId: 'rb',
     engagement: {
       level: 'warm',
@@ -1311,10 +1495,11 @@ export const patrons = [
     id: '7962440',
     firstName: 'Victoria',
     lastName: 'Sterling',
+    gender: 'female',
     photo: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&h=150&fit=crop&crop=face',
     email: 'victoria@sterlingfamilyoffice.com',
     phone: '(512) 555-3009',
-    tags: ['major-donor', 'donor', 'prospect'],
+    tags: ['prospect'],
     assignedToId: 'jm',
     engagement: {
       level: 'warm',
@@ -1353,10 +1538,11 @@ export const patrons = [
     id: '7962441',
     firstName: 'Margaret',
     lastName: 'Chen',
+    gender: 'female',
     photo: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=150&h=150&fit=crop&crop=face',
     email: 'margaret.chen@utexas.edu',
     phone: '(512) 555-3010',
-    tags: ['donor', 'prospect'],
+    tags: ['prospect'],
     assignedToId: 'lj',
     engagement: {
       level: 'cool',
@@ -1395,10 +1581,11 @@ export const patrons = [
     id: '7962442',
     firstName: 'Elizabeth',
     lastName: 'Fairfax',
+    gender: 'female',
     photo: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=150&h=150&fit=crop&crop=face',
     email: 'elizabeth.fairfax@outlook.com',
     phone: '(555) 111-2223',
-    tags: ['donor'],
+    tags: [],
     householdId: 'hh-fairfax',
     assignedToId: 'lj',
     engagement: {
@@ -1432,6 +1619,7 @@ export const patrons = [
     id: '7962443',
     firstName: 'Thomas',
     lastName: 'Fairfax',
+    gender: 'male',
     photo: null,
     email: 'thomas.fairfax@outlook.com',
     phone: null,
@@ -1557,10 +1745,29 @@ export const addPatron = (patronData) => {
     id: generatePatronId(),
     firstName: patronData.firstName,
     lastName: patronData.lastName,
+    prefix: patronData.prefix || null,
+    suffix: patronData.suffix || null,
+    preferredName: patronData.preferredName || null,
+    gender: patronData.gender || null,
+    dateOfBirth: patronData.dateOfBirth || null,
     photo: null,
     email: patronData.email || '',
     phone: patronData.phone || null,
     address: patronData.address || null,
+    addressStreet: patronData.addressStreet || null,
+    addressCity: patronData.addressCity || null,
+    addressState: patronData.addressState || null,
+    addressZip: patronData.addressZip || null,
+    addressCountry: patronData.addressCountry || 'United States',
+    employer: patronData.employer || null,
+    jobTitle: patronData.jobTitle || null,
+    communicationPreferences: patronData.communicationPreferences || {
+      preferredMethod: 'email',
+      emailOptIn: true,
+      phoneOptIn: true,
+      mailOptIn: true,
+      doNotContact: false,
+    },
     tags: patronData.tags || ['prospect'],
     // Default empty engagement
     engagement: {
@@ -1622,12 +1829,60 @@ export const restorePatron = (patronId) => {
   return updatePatron(patronId, { 
     status: 'active',
     archivedDate: null,
-    archivedReason: null
+    archivedReason: null,
+    deceasedDate: null,
+    inactiveDate: null,
+    inactiveReason: null
   })
 }
 
-// Get active patrons only (excludes archived)
-export const getActivePatrons = () => patrons.filter(p => p.status !== 'archived')
+// Mark a patron as deceased
+export const markPatronDeceased = (patronId, deceasedDate, notes = null) => {
+  const updates = {
+    status: 'deceased',
+    deceasedDate: deceasedDate || new Date().toISOString().split('T')[0],
+  }
+  // Append deceased note to existing notes if provided
+  if (notes) {
+    const patron = patrons.find(p => p.id === patronId)
+    const existingNotes = patron?.notes || ''
+    updates.notes = existingNotes 
+      ? `${existingNotes}\n\n[Deceased] ${notes}`
+      : `[Deceased] ${notes}`
+  }
+  return updatePatron(patronId, updates)
+}
+
+// Mark a patron as inactive
+export const markPatronInactive = (patronId, reason = null) => {
+  return updatePatron(patronId, {
+    status: 'inactive',
+    inactiveDate: new Date().toISOString().split('T')[0],
+    inactiveReason: reason || null
+  })
+}
+
+// Reactivate a patron (from any non-active status)
+export const reactivatePatron = (patronId) => {
+  return updatePatron(patronId, {
+    status: 'active',
+    archivedDate: null,
+    archivedReason: null,
+    deceasedDate: null,
+    inactiveDate: null,
+    inactiveReason: null
+  })
+}
+
+// Get active patrons only (excludes archived and deceased)
+export const getActivePatrons = () => patrons.filter(p => p.status !== 'archived' && p.status !== 'deceased')
+
+// Get contactable patrons (excludes archived, deceased, and do-not-contact)
+export const getContactablePatrons = () => patrons.filter(p => 
+  p.status !== 'archived' && 
+  p.status !== 'deceased' && 
+  !p.communicationPreferences?.doNotContact
+)
 
 // ============================================
 // TAG MANAGEMENT FUNCTIONS
@@ -1681,8 +1936,11 @@ export const deleteTag = (tagId) => {
   return true
 }
 
-// Get count of patrons using a specific tag
+// Get count of patrons using a specific tag (supports both manual and computed)
 export const getTagUsageCount = (tagId) => {
+  if (isComputedTag(tagId)) {
+    return patrons.filter(p => getComputedTags(p).includes(tagId)).length
+  }
   return patrons.filter(p => p.tags && p.tags.includes(tagId)).length
 }
 
@@ -1734,6 +1992,9 @@ export const memberships = [
     // Auto-renewal
     autoRenewal: true,
     paymentMethod: { type: 'visa', last4: '4242' },
+    renewalReminders: [30, 14, 7],
+    gracePeriodDays: 14,
+    pendingRenewalChange: null,
     memberYears: 2,
     
     // Card styling resolved from tierConfig at query time (not stored per-member)
@@ -1835,6 +2096,9 @@ export const memberships = [
     // Auto-renewal
     autoRenewal: false,
     paymentMethod: { type: 'mastercard', last4: '8832' },
+    renewalReminders: [30, 14, 7],
+    gracePeriodDays: 7,
+    pendingRenewalChange: null,
     memberYears: 1,
 
     // Upgrade options
@@ -1952,6 +2216,9 @@ export const memberships = [
     // Auto-renewal
     autoRenewal: false,
     paymentMethod: { type: 'visa', last4: '7721' },
+    renewalReminders: [30, 14, 7],
+    gracePeriodDays: 14,
+    pendingRenewalChange: null,
     memberYears: 1,
 
     // Upgrade options
@@ -2012,6 +2279,9 @@ export const memberships = [
     // Auto-renewal
     autoRenewal: true,
     paymentMethod: { type: 'amex', last4: '1008' },
+    renewalReminders: [60, 30, 14, 7],
+    gracePeriodDays: 14,
+    pendingRenewalChange: null,
     memberYears: 2,
 
     // Upgrade options
@@ -2079,6 +2349,9 @@ export const memberships = [
     // Auto-renewal
     autoRenewal: true,
     paymentMethod: { type: 'mastercard', last4: '3344' },
+    renewalReminders: [30, 14, 7],
+    gracePeriodDays: 14,
+    pendingRenewalChange: null,
     memberYears: 1,
 
     // Upgrade options
@@ -2140,6 +2413,9 @@ export const memberships = [
     // Auto-renewal
     autoRenewal: false,
     paymentMethod: { type: 'mastercard', last4: '6622' },
+    renewalReminders: [30, 7],
+    gracePeriodDays: 0,
+    pendingRenewalChange: null,
     memberYears: 0,
 
     // Upgrade options
@@ -2192,6 +2468,9 @@ export const memberships = [
     // Auto-renewal
     autoRenewal: true,
     paymentMethod: { type: 'visa', last4: '9156' },
+    renewalReminders: [30, 14, 7],
+    gracePeriodDays: 14,
+    pendingRenewalChange: null,
     memberYears: 1,
 
     // Usage analytics
@@ -3517,11 +3796,11 @@ export const patronRelationships = [
     type: 'organization',
     role: 'Employee',
     reciprocalRole: 'Employer',
-    isPrimary: false,
-    startDate: '2018-03-01',
+    isPrimary: true,
+    startDate: '2015-06-01',
     endDate: null,
-    notes: 'Chief Technology Officer',
-    externalContact: { name: 'Apex Innovations', company: 'Apex Innovations', initials: 'AI', title: 'CTO' }
+    notes: 'Managing Partner',
+    externalContact: { name: 'Collingwood Capital Partners', company: 'Collingwood Capital Partners', initials: 'CP', title: 'Managing Partner' }
   },
   // Fairfax household relationships
   {
@@ -3836,6 +4115,101 @@ export const removeBeneficiaryFromMembership = (membershipId, patronId, removeRe
 }
 
 // ============================================
+// AUTO-RENEWAL MANAGEMENT HELPERS
+// ============================================
+
+// Update renewal reminders (staff-direct action)
+export const updateRenewalReminders = (membershipId, reminders) => {
+  const membership = memberships.find(m => m.id === membershipId)
+  if (!membership) return { success: false, error: 'Membership not found' }
+  
+  membership.renewalReminders = [...reminders].sort((a, b) => b - a)
+  
+  // Log to history
+  const reminderText = reminders.length > 0
+    ? reminders.sort((a, b) => b - a).join(', ') + ' days before renewal'
+    : 'No reminders'
+  membership.membershipHistory.unshift({
+    date: new Date().toISOString().split('T')[0],
+    event: 'Settings Updated',
+    tier: membership.tier,
+    program: membership.program,
+    details: `Renewal reminders set to ${reminderText}`
+  })
+  
+  return { success: true }
+}
+
+// Update grace period (staff-direct action)
+export const updateGracePeriod = (membershipId, days) => {
+  const membership = memberships.find(m => m.id === membershipId)
+  if (!membership) return { success: false, error: 'Membership not found' }
+  
+  membership.gracePeriodDays = days
+  
+  // Log to history
+  const label = days === 0 ? 'No grace period' : `${days} days`
+  membership.membershipHistory.unshift({
+    date: new Date().toISOString().split('T')[0],
+    event: 'Settings Updated',
+    tier: membership.tier,
+    program: membership.program,
+    details: `Grace period changed to ${label}`
+  })
+  
+  return { success: true }
+}
+
+// Request auto-renewal toggle change (patron-action — generates link)
+export const requestAutoRenewalChange = (membershipId, patronEmail) => {
+  const membership = memberships.find(m => m.id === membershipId)
+  if (!membership) return { success: false, error: 'Membership not found' }
+  
+  const newStatus = membership.autoRenewal ? 'off' : 'on'
+  const changeType = newStatus === 'on' ? 'toggle_on' : 'toggle_off'
+  
+  membership.pendingRenewalChange = {
+    type: changeType,
+    requestedAt: new Date().toISOString().split('T')[0],
+    sentTo: patronEmail
+  }
+  
+  // Log to history
+  membership.membershipHistory.unshift({
+    date: new Date().toISOString().split('T')[0],
+    event: 'Renewal Change Requested',
+    tier: membership.tier,
+    program: membership.program,
+    details: `Auto-renewal ${membership.autoRenewal ? 'ON' : 'OFF'} \u2192 ${newStatus.toUpperCase()} \u2014 link sent to patron`
+  })
+  
+  return { success: true, changeType, link: `https://account.fever.co/renewal/${membershipId}/${changeType}` }
+}
+
+// Request payment method update (patron-action — generates link)
+export const requestPaymentMethodUpdate = (membershipId, patronEmail) => {
+  const membership = memberships.find(m => m.id === membershipId)
+  if (!membership) return { success: false, error: 'Membership not found' }
+  
+  membership.pendingRenewalChange = {
+    type: 'payment_update',
+    requestedAt: new Date().toISOString().split('T')[0],
+    sentTo: patronEmail
+  }
+  
+  // Log to history
+  membership.membershipHistory.unshift({
+    date: new Date().toISOString().split('T')[0],
+    event: 'Renewal Change Requested',
+    tier: membership.tier,
+    program: membership.program,
+    details: 'Payment method update \u2014 link sent to patron'
+  })
+  
+  return { success: true, link: `https://account.fever.co/payment/${membershipId}/update` }
+}
+
+// ============================================
 // RELATIONSHIP HELPER FUNCTIONS
 // ============================================
 
@@ -3871,6 +4245,41 @@ export const getPatronRelationships = (patronId) => {
         : rel.externalContact?.initials || '??'
     }
   })
+}
+
+// Get organization relationships for a patron (used by Profile tab)
+export const getOrgRelationships = (patronId) => {
+  const rels = getPatronRelationships(patronId)
+  return rels.filter(r => r.type === 'organization' || r.type === 'professional')
+}
+
+// Get the primary employer for a patron
+// Returns { company, title, relationship } or null
+export const getPrimaryEmployer = (patronId) => {
+  const orgRels = getOrgRelationships(patronId)
+  // Look for an Employee relationship first (primary employer)
+  const employeeRel = orgRels.find(r => r.role === 'Employee' && r.isPrimary) 
+    || orgRels.find(r => r.role === 'Employee')
+  
+  if (employeeRel) {
+    return {
+      company: employeeRel.externalContact?.company || employeeRel.displayName,
+      title: employeeRel.externalContact?.title || employeeRel.notes || null,
+      relationship: employeeRel,
+    }
+  }
+
+  // Fallback to flat patron fields if no org relationship exists
+  const patron = patrons.find(p => p.id === patronId)
+  if (patron?.employer) {
+    return {
+      company: patron.employer,
+      title: patron.jobTitle || null,
+      relationship: null, // no relationship record
+    }
+  }
+
+  return null
 }
 
 // Add a relationship between patrons
@@ -3977,6 +4386,9 @@ export const endPatronRelationship = (fromPatronId, toPatronId) => {
     const fromMember = HOUSEHOLD_MEMBERS.find(m => m.patronId === fromPatronId)
     const toMember = HOUSEHOLD_MEMBERS.find(m => m.patronId === toPatronId)
     
+    // Capture the householdId before any removals
+    const affectedHouseholdId = (fromMember || toMember)?.householdId
+    
     // Remove the non-primary member (the one being disconnected)
     // If toPatron is not primary, remove them; otherwise remove fromPatron
     const memberToRemove = toMember && !toMember.isPrimary ? toMember : (fromMember && !fromMember.isPrimary ? fromMember : null)
@@ -3992,7 +4404,69 @@ export const endPatronRelationship = (fromPatronId, toPatronId) => {
         patron.householdId = null
       }
     }
+    
+    // Auto-dissolve household if only one member remains
+    if (affectedHouseholdId) {
+      const remainingMembers = HOUSEHOLD_MEMBERS.filter(
+        m => m.householdId === affectedHouseholdId
+      )
+      if (remainingMembers.length <= 1) {
+        deleteHousehold(affectedHouseholdId)
+      }
+    }
   }
+}
+
+// Delete (dissolve) a household entirely
+export const deleteHousehold = (householdId) => {
+  if (!householdId) return
+
+  // Clear householdId on all member patrons
+  const memberEntries = HOUSEHOLD_MEMBERS.filter(m => m.householdId === householdId)
+  memberEntries.forEach(entry => {
+    const patron = patrons.find(p => p.id === entry.patronId)
+    if (patron) patron.householdId = null
+  })
+
+  // Remove all HOUSEHOLD_MEMBERS entries for this household
+  for (let i = HOUSEHOLD_MEMBERS.length - 1; i >= 0; i--) {
+    if (HOUSEHOLD_MEMBERS[i].householdId === householdId) {
+      HOUSEHOLD_MEMBERS.splice(i, 1)
+    }
+  }
+
+  // Remove the HOUSEHOLDS entry
+  const hhIdx = HOUSEHOLDS.findIndex(h => h.id === householdId)
+  if (hhIdx !== -1) HOUSEHOLDS.splice(hhIdx, 1)
+}
+
+// Create a brand-new household for two patrons who don't belong to one yet
+export const createHousehold = (headPatronId, otherPatronId, name, otherRole = 'Spouse') => {
+  const id = `hh-${Date.now()}`
+  const headPatron = patrons.find(p => p.id === headPatronId)
+  const otherPatron = patrons.find(p => p.id === otherPatronId)
+  const today = new Date().toISOString().split('T')[0]
+
+  HOUSEHOLDS.push({
+    id,
+    name,
+    formalSalutation: `${headPatron?.firstName || ''} & ${otherPatron?.firstName || ''}`,
+    informalSalutation: `${headPatron?.firstName || ''} & ${otherPatron?.firstName || ''}`,
+    primaryContactId: headPatronId,
+    verified: false,
+    createdDate: today
+  })
+
+  HOUSEHOLD_MEMBERS.push(
+    { id: `hhm-${Date.now()}-1`, householdId: id, patronId: headPatronId,
+      role: 'Head', isPrimary: true, joinedDate: today },
+    { id: `hhm-${Date.now()}-2`, householdId: id, patronId: otherPatronId,
+      role: otherRole, isPrimary: false, joinedDate: today }
+  )
+
+  if (headPatron) headPatron.householdId = id
+  if (otherPatron) otherPatron.householdId = id
+  return id
 }
 
 // Change the Head of Household
@@ -4016,19 +4490,34 @@ export const changeHeadOfHousehold = (householdId, newHeadPatronId) => {
 }
 
 // Get reciprocal role (exported for UI auto-suggest)
-export const getReciprocalRole = (role) => {
-  const reciprocals = {
+// gender: optional — 'male' | 'female' | null/undefined
+// When provided, gendered roles are returned (e.g. Father→Daughter for female).
+// When absent, gender-neutral defaults are used (e.g. Father→Child).
+export const getReciprocalRole = (role, gender) => {
+  // Gendered reciprocal table: role → { male, female, neutral }
+  const genderedReciprocals = {
+    'Father':   { male: 'Son',     female: 'Daughter', neutral: 'Child' },
+    'Mother':   { male: 'Son',     female: 'Daughter', neutral: 'Child' },
+    'Parent':   { male: 'Son',     female: 'Daughter', neutral: 'Child' },
+    'Son':      { male: 'Father',  female: 'Mother',   neutral: 'Parent' },
+    'Daughter': { male: 'Father',  female: 'Mother',   neutral: 'Parent' },
+    'Child':    { male: 'Father',  female: 'Mother',   neutral: 'Parent' },
+    'Brother':  { male: 'Brother', female: 'Sister',   neutral: 'Sibling' },
+    'Sister':   { male: 'Brother', female: 'Sister',   neutral: 'Sibling' },
+    'Sibling':  { male: 'Brother', female: 'Sister',   neutral: 'Sibling' },
+  }
+
+  const gendered = genderedReciprocals[role]
+  if (gendered) {
+    if (gender === 'male') return gendered.male
+    if (gender === 'female') return gendered.female
+    return gendered.neutral
+  }
+
+  // Non-gendered reciprocals (unchanged)
+  const simpleReciprocals = {
     'Spouse': 'Spouse',
     'Partner': 'Partner',
-    'Child': 'Parent',
-    'Son': 'Father',
-    'Daughter': 'Mother',
-    'Parent': 'Child',
-    'Father': 'Son',
-    'Mother': 'Daughter',
-    'Sibling': 'Sibling',
-    'Brother': 'Sibling',
-    'Sister': 'Sibling',
     'Friend': 'Friend',
     'Colleague': 'Colleague',
     'Financial Advisor': 'Client',
@@ -4038,7 +4527,7 @@ export const getReciprocalRole = (role) => {
     'Board Member': 'Organization',
     'Volunteer': 'Organization'
   }
-  return reciprocals[role] || role
+  return simpleReciprocals[role] || role
 }
 
 // Check if an active household relationship exists between two patrons

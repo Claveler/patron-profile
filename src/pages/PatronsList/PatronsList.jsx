@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { patrons, patronTags, engagementLevels, giftOfficers, patronSources, isManagedProspect, formatRelativeDate, getActivePatrons, getPatronOrigin, getPrimaryMembershipForPatron } from '../../data/patrons'
+import { patrons, patronTags, engagementLevels, giftOfficers, patronSources, isManagedProspect, formatRelativeDate, getActivePatrons, getPatronOrigin, getPrimaryMembershipForPatron, getEffectiveTags, computedTagRules, getTagConfig as getTagConfigUtil } from '../../data/patrons'
 import { getStaffNameById } from '../../data/campaigns'
 import { getInitials } from '../../utils/getInitials'
 import PatronModal from '../../components/PatronModal/PatronModal'
@@ -113,9 +113,9 @@ function PatronsList() {
       )
     }
 
-    // Filter by tags (OR match - patron must have at least one of the selected tags)
+    // Filter by tags (OR match - patron must have at least one of the selected tags, including computed)
     if (filterTags.length > 0) {
-      result = result.filter(p => filterTags.some(t => (p.tags || []).includes(t)))
+      result = result.filter(p => filterTags.some(t => getEffectiveTags(p).includes(t)))
     }
 
     // Filter by membership tier
@@ -234,7 +234,7 @@ function PatronsList() {
   }
 
   const getTagConfig = (tagId) => {
-    return patronTags.find(t => t.id === tagId) || { id: tagId, label: tagId }
+    return getTagConfigUtil(tagId)
   }
 
   const getMembershipInfo = (patron) => {
@@ -312,9 +312,8 @@ function PatronsList() {
       p.giving?.lifetimeValue || 0,
       p.giving?.giftCount || 0,
       p.giving?.lastGift || '',
-      (p.tags || []).map(t => {
-        const tag = patronTags.find(pt => pt.id === t)
-        return tag ? tag.label : t
+      getEffectiveTags(p).map(t => {
+        return getTagConfig(t).label
       }).join('; '),
       (p.assignedToId ? getStaffNameById(p.assignedToId) : ''),
       p.engagement?.level || 'cold',
@@ -378,7 +377,7 @@ function PatronsList() {
                 checked={showArchived}
                 onChange={(e) => setShowArchived(e.target.checked)}
               />
-              <span>Show archived</span>
+              <span>Show all statuses</span>
             </label>
             <button
               className="patrons-list__export-btn"
@@ -412,7 +411,7 @@ function PatronsList() {
               <div className="patrons-list__filter-group">
                 <label className="patrons-list__filter-label">Tags</label>
                 <div className="patrons-list__filter-checkbox-group">
-                  {patronTags.map(tag => (
+                  {[...patronTags, ...computedTagRules].map(tag => (
                     <label key={tag.id} className="patrons-list__filter-checkbox">
                       <input
                         type="checkbox"
@@ -568,10 +567,7 @@ function PatronsList() {
           <div className="patrons-list__chips">
             {filterTags.length > 0 && (
               <span className="patrons-list__chip">
-                Tags: {filterTags.map(t => {
-                  const tag = patronTags.find(pt => pt.id === t)
-                  return tag ? tag.label : t
-                }).join(', ')}
+                Tags: {filterTags.map(t => getTagConfig(t).label).join(', ')}
                 <button className="patrons-list__chip-remove" onClick={() => setFilterTags([])}>
                   <i className="fa-solid fa-xmark"></i>
                 </button>
@@ -695,17 +691,20 @@ function PatronsList() {
               {filteredPatrons.map(patron => {
                 const isManaged = isManagedProspect(patron)
                 const isArchived = patron.status === 'archived'
+                const isDeceased = patron.status === 'deceased'
+                const isInactive = patron.status === 'inactive'
+                const isNonActive = isArchived || isDeceased
                 const isNew = isRecentlyAdded(patron.createdDate)
                 const origin = getPatronOrigin(patron.source)
                 const { tier: membershipTier, cardStyle: membershipCardStyle, patronRole, patronRoleLabel } = getMembershipInfo(patron)
-                const tags = patron.tags || []
+                const tags = getEffectiveTags(patron)
                 const displayTags = tags.slice(0, 2)
                 const remainingTags = tags.length - 2
                 
                 return (
                   <tr 
                     key={patron.id} 
-                    className={`patrons-list__row ${isManaged ? 'patrons-list__row--managed' : ''} ${isArchived ? 'patrons-list__row--archived' : ''} ${isNew ? 'patrons-list__row--new' : ''}`}
+                    className={`patrons-list__row ${isManaged ? 'patrons-list__row--managed' : ''} ${isNonActive ? 'patrons-list__row--archived' : ''} ${isInactive ? 'patrons-list__row--inactive' : ''} ${isNew ? 'patrons-list__row--new' : ''}`}
                     onClick={() => handleRowClick(patron)}
                   >
                     <td className="patrons-list__td patrons-list__td--name">
@@ -714,10 +713,10 @@ function PatronsList() {
                           <img 
                             src={patron.photo} 
                             alt="" 
-                            className={`patrons-list__avatar ${isArchived ? 'patrons-list__avatar--archived' : ''}`}
+                            className={`patrons-list__avatar ${isNonActive ? 'patrons-list__avatar--archived' : ''}`}
                           />
                         ) : (
-                          <div className={`patrons-list__avatar patrons-list__avatar--placeholder ${isArchived ? 'patrons-list__avatar--archived' : ''}`}>
+                          <div className={`patrons-list__avatar patrons-list__avatar--placeholder ${isNonActive ? 'patrons-list__avatar--archived' : ''}`}>
                             <span className="patrons-list__avatar-initials">{getInitials(`${patron.firstName} ${patron.lastName}`)}</span>
                           </div>
                         )}
@@ -736,6 +735,12 @@ function PatronsList() {
                           </div>
                           {isArchived && (
                             <span className="patrons-list__archived-badge">Archived</span>
+                          )}
+                          {isDeceased && (
+                            <span className="patrons-list__archived-badge patrons-list__archived-badge--deceased">Deceased</span>
+                          )}
+                          {isInactive && (
+                            <span className="patrons-list__archived-badge patrons-list__archived-badge--inactive">Inactive</span>
                           )}
                         </div>
                       </div>
@@ -834,7 +839,7 @@ function PatronsList() {
         <div className="patrons-list__footer">
           <span className="patrons-list__count">
             Showing {filteredPatrons.length} of {showArchived ? patrons.length : getActivePatrons().length} patrons
-            {showArchived && ` (including archived)`}
+            {showArchived && ` (including archived, deceased & inactive)`}
             {activeFilterCount > 0 && (
               <span className="patrons-list__count-filters">
                 {' '} | Filtered by: {[

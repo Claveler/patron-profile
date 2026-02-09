@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from 'react'
-import { searchPatrons, addBeneficiaryToMembership, addPatron, getReciprocalRole, getHouseholdForPatron, getHouseholdMembers, getBeneficiariesByMembershipId, patronRelationships } from '../../data/patrons'
+import { searchPatrons, addBeneficiaryToMembership, addPatron, getReciprocalRole, getHouseholdForPatron, getHouseholdMembers, getBeneficiariesByMembershipId, patronRelationships, getPatronById, createHousehold } from '../../data/patrons'
 import { getInitials } from '../../utils/getInitials'
 import './AddBeneficiaryModal.css'
 
@@ -33,7 +33,7 @@ function AddBeneficiaryModal({
   primaryPatronName,
   onSuccess 
 }) {
-  const [step, setStep] = useState('search') // 'search' | 'create' | 'assign'
+  const [step, setStep] = useState('search') // 'search' | 'create' | 'assign' | 'household'
   const [searchQuery, setSearchQuery] = useState('')
   const [searchResults, setSearchResults] = useState([])
   const [selectedPatron, setSelectedPatron] = useState(null)
@@ -47,6 +47,10 @@ function AddBeneficiaryModal({
   const [existingRelLabel, setExistingRelLabel] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
+  
+  // Household creation state (Step 4)
+  const [householdName, setHouseholdName] = useState('')
+  const [selectedHead, setSelectedHead] = useState(null)
   
   // New patron form state
   const [newPatron, setNewPatron] = useState({
@@ -104,6 +108,8 @@ function AddBeneficiaryModal({
       setHasExistingRelationship(false)
       setExistingRelLabel('')
       setError('')
+      setHouseholdName('')
+      setSelectedHead(null)
       setNewPatron({ firstName: '', lastName: '', email: '', dateOfBirth: '' })
       
       // Focus search input after modal opens
@@ -123,11 +129,12 @@ function AddBeneficiaryModal({
     }
   }, [searchQuery])
 
-  // Auto-suggest reciprocal when relationship changes
+  // Auto-suggest reciprocal when relationship changes (gender-aware)
   useEffect(() => {
     if (selectedRelationship && selectedRelationship !== 'other') {
       const label = relationshipOptions.find(r => r.id === selectedRelationship)?.label || selectedRelationship
-      const suggested = getReciprocalRole(label)
+      const primaryGender = currentPatronData?.gender || null
+      const suggested = getReciprocalRole(label, primaryGender)
       // Find matching option ID for the suggested reciprocal
       const matchingOption = relationshipOptions.find(r => r.label === suggested)
       setReciprocalRelationship(matchingOption ? matchingOption.id : 'other')
@@ -209,6 +216,17 @@ function AddBeneficiaryModal({
     setError('')
   }
 
+  // Check whether we need a household creation step
+  const needsHouseholdCreation = () => {
+    if (!createRelationship || !selectedPatron) return false
+    const currentPatron = getPatronById(primaryPatronId)
+    const otherPatron = getPatronById(selectedPatron.id)
+    return !currentPatron?.householdId && !otherPatron?.householdId
+  }
+
+  // Get current patron data for the household step UI
+  const currentPatronData = primaryPatronId ? getPatronById(primaryPatronId) : null
+
   const handleAssignSubmit = () => {
     if (!selectedMembershipRole) {
       setError('Please select a membership role')
@@ -220,22 +238,45 @@ function AddBeneficiaryModal({
       return
     }
 
+    // If creating a household relationship and neither patron has a household,
+    // redirect to the household creation step
+    if (needsHouseholdCreation()) {
+      const lastName = currentPatronData?.lastName || primaryPatronName?.split(' ').pop() || ''
+      setHouseholdName(`${lastName} Family`)
+      setSelectedHead(primaryPatronId)
+      setStep('household')
+      setError('')
+      return
+    }
+
+    submitBeneficiary()
+  }
+
+  const handleBackToAssign = () => {
+    setStep('assign')
+    setError('')
+  }
+
+  // Shared submit logic — adds beneficiary and optionally creates the relationship
+  const submitBeneficiary = (relationship = undefined) => {
     setIsLoading(true)
     setError('')
 
     // Build relationship object with both directions (separate from membership role)
-    const resolvedRelationship = selectedRelationship === 'other' 
-      ? customRelationship 
-      : relationshipOptions.find(r => r.id === selectedRelationship)?.label || selectedRelationship
-    const resolvedReciprocal = reciprocalRelationship === 'other'
-      ? customReciprocalRelationship
-      : relationshipOptions.find(r => r.id === reciprocalRelationship)?.label || reciprocalRelationship
+    if (relationship === undefined) {
+      const resolvedRelationship = selectedRelationship === 'other' 
+        ? customRelationship 
+        : relationshipOptions.find(r => r.id === selectedRelationship)?.label || selectedRelationship
+      const resolvedReciprocal = reciprocalRelationship === 'other'
+        ? customReciprocalRelationship
+        : relationshipOptions.find(r => r.id === reciprocalRelationship)?.label || reciprocalRelationship
 
-    const relationship = createRelationship ? {
-      create: true,
-      type: resolvedRelationship,
-      reciprocalType: resolvedReciprocal
-    } : null
+      relationship = createRelationship ? {
+        create: true,
+        type: resolvedRelationship,
+        reciprocalType: resolvedReciprocal
+      } : null
+    }
 
     const result = addBeneficiaryToMembership(
       membershipId,
@@ -254,6 +295,49 @@ function AddBeneficiaryModal({
     }
   }
 
+  // Handle household creation step submit
+  const handleHouseholdSubmit = () => {
+    if (!householdName.trim()) {
+      setError('Please enter a household name')
+      return
+    }
+
+    setIsLoading(true)
+    setError('')
+
+    const resolvedRelationship = selectedRelationship === 'other' 
+      ? customRelationship 
+      : relationshipOptions.find(r => r.id === selectedRelationship)?.label || selectedRelationship
+    const resolvedReciprocal = reciprocalRelationship === 'other'
+      ? customReciprocalRelationship
+      : relationshipOptions.find(r => r.id === reciprocalRelationship)?.label || reciprocalRelationship
+
+    try {
+      // Determine head vs other patron
+      const headId = selectedHead
+      const otherId = headId === primaryPatronId ? selectedPatron.id : primaryPatronId
+      // The "other" member's role: if the head is the primary patron, the other gets the relationship label;
+      // if the head is the selected patron, the other gets the reciprocal label
+      const otherMemberRole = headId === primaryPatronId ? resolvedRelationship : (resolvedReciprocal || resolvedRelationship)
+
+      // Create the household first — this sets householdId on both patrons
+      createHousehold(headId, otherId, householdName.trim(), otherMemberRole)
+
+      // Now add the beneficiary with the relationship — addPatronRelationship will find the household
+      const relationship = {
+        create: true,
+        type: resolvedRelationship,
+        reciprocalType: resolvedReciprocal
+      }
+
+      setIsLoading(false)
+      submitBeneficiary(relationship)
+    } catch (err) {
+      setIsLoading(false)
+      setError('Failed to create household')
+    }
+  }
+
   if (!isOpen) return null
 
   return (
@@ -264,6 +348,7 @@ function AddBeneficiaryModal({
             {step === 'search' && 'Add beneficiary'}
             {step === 'create' && 'Create new patron'}
             {step === 'assign' && 'Assign role'}
+            {step === 'household' && 'Create household'}
           </h2>
           <button className="add-beneficiary-modal__close" onClick={onClose}>
             <i className="fa-solid fa-xmark"></i>
@@ -597,7 +682,100 @@ function AddBeneficiaryModal({
                   onClick={handleAssignSubmit}
                   disabled={isLoading}
                 >
-                  {isLoading ? 'Adding...' : 'Add as beneficiary'}
+                  {isLoading ? 'Adding...' : (needsHouseholdCreation() ? 'Continue' : 'Add as beneficiary')}
+                </button>
+              </div>
+            </>
+          )}
+
+          {/* Step 4: Create Household (when neither patron has one) */}
+          {step === 'household' && (
+            <>
+              <button className="add-beneficiary-modal__back" onClick={handleBackToAssign}>
+                <i className="fa-solid fa-arrow-left"></i>
+                Back
+              </button>
+
+              <p className="add-beneficiary-modal__description">
+                Neither <strong>{primaryPatronName}</strong> nor <strong>{selectedPatron?.name}</strong> belongs to a household yet. Create one to group them together.
+              </p>
+
+              {/* Household name */}
+              <div className="add-beneficiary-modal__hh-field">
+                <label className="add-beneficiary-modal__hh-label">Household name</label>
+                <input
+                  type="text"
+                  className="add-beneficiary-modal__hh-input"
+                  value={householdName}
+                  onChange={e => setHouseholdName(e.target.value)}
+                  placeholder="e.g. Anderson Family"
+                />
+              </div>
+
+              {/* Head of household selector */}
+              <div className="add-beneficiary-modal__hh-field">
+                <label className="add-beneficiary-modal__hh-label">Head of household</label>
+                <p className="add-beneficiary-modal__hh-hint">
+                  Select the primary contact for this household.
+                </p>
+                <div className="add-beneficiary-modal__hh-member-list">
+                  {/* Primary patron */}
+                  <label className={`add-beneficiary-modal__hh-member ${selectedHead === primaryPatronId ? 'add-beneficiary-modal__hh-member--selected' : ''}`}>
+                    <input
+                      type="radio"
+                      name="head-of-household"
+                      className="add-beneficiary-modal__hh-radio"
+                      checked={selectedHead === primaryPatronId}
+                      onChange={() => setSelectedHead(primaryPatronId)}
+                    />
+                    <div className="add-beneficiary-modal__hh-avatar">
+                      {currentPatronData?.photo ? (
+                        <img src={currentPatronData.photo} alt={primaryPatronName} />
+                      ) : (
+                        <span>{getInitials(primaryPatronName)}</span>
+                      )}
+                    </div>
+                    <span className="add-beneficiary-modal__hh-name">{primaryPatronName}</span>
+                  </label>
+
+                  {/* Selected patron */}
+                  <label className={`add-beneficiary-modal__hh-member ${selectedHead === selectedPatron?.id ? 'add-beneficiary-modal__hh-member--selected' : ''}`}>
+                    <input
+                      type="radio"
+                      name="head-of-household"
+                      className="add-beneficiary-modal__hh-radio"
+                      checked={selectedHead === selectedPatron?.id}
+                      onChange={() => setSelectedHead(selectedPatron?.id)}
+                    />
+                    <div className="add-beneficiary-modal__hh-avatar">
+                      {selectedPatron?.photo ? (
+                        <img src={selectedPatron.photo} alt={selectedPatron.name} />
+                      ) : (
+                        <span>{getInitials(selectedPatron?.name || '')}</span>
+                      )}
+                    </div>
+                    <span className="add-beneficiary-modal__hh-name">{selectedPatron?.name}</span>
+                  </label>
+                </div>
+              </div>
+
+              {error && (
+                <div className="add-beneficiary-modal__error">
+                  <i className="fa-solid fa-exclamation-circle"></i>
+                  {error}
+                </div>
+              )}
+
+              <div className="add-beneficiary-modal__actions">
+                <button className="add-beneficiary-modal__cancel" onClick={onClose}>
+                  Cancel
+                </button>
+                <button
+                  className="add-beneficiary-modal__submit"
+                  onClick={handleHouseholdSubmit}
+                  disabled={isLoading || !householdName.trim()}
+                >
+                  {isLoading ? 'Creating...' : 'Create household & add'}
                 </button>
               </div>
             </>

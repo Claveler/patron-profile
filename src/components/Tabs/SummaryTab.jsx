@@ -16,7 +16,8 @@ function SummaryTab({
   onCreateOpportunity,
   onRecordGift,
   onLogActivity,
-  onNavigateToPatron
+  onNavigateToPatron,
+  onViewRelationships
 }) {
   const isManaged = isManagedProspect(patron)
   const [selectedGift, setSelectedGift] = useState(null)
@@ -55,6 +56,7 @@ function SummaryTab({
           <RelationshipsSummary 
             patronId={patron.id}
             onNavigateToPatron={onNavigateToPatron}
+            onViewRelationships={onViewRelationships}
           />
         </div>
       </div>

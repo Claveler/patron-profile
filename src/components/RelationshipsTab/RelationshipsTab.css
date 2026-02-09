@@ -13,9 +13,7 @@
   justify-content: center;
   align-items: flex-start;
   min-height: 200px;
-  background: var(--color-neutral-50, #f5f7fa);
-  border-radius: 12px;
-  padding: 32px;
+  padding: 32px 0;
 }
 
 /* ============================================
@@ -38,7 +36,7 @@
 .relationships-tab__household-wrapper {
   background: #e6f4ff;
   border-radius: 24px;
-  padding: 40px;
+  padding: 24px;
   flex-shrink: 0;
 }
 
@@ -110,16 +108,17 @@
 .relationships-tab__ext-column {
   display: flex;
   flex-direction: column;
-  /* Offset = wrapper-padding-top(40) + title-line-height(24) + title-margin-bottom(16) + card-border(1) = 81px */
-  padding-top: 81px;
-  /* Pull left into the wrapper's right padding so connector starts at card edge */
-  margin-left: -40px;
+  /* Offset = wrapper-padding-top(24) + title-height(32) + title-margin-bottom(16) + card-border(1) = 73px */
+  padding-top: 73px;
+  /* Pull into wrapper's right padding (24px) so connector starts at card edge */
+  margin-left: -24px;
   position: relative;
 }
 
-/* No offset needed for standalone patron */
+/* No offset needed for standalone patron — reset household overrides */
 .relationships-tab__ext-column--standalone {
   padding-top: 0;
+  margin-left: 0;
   justify-content: center;
 }
 
@@ -240,7 +239,7 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  margin-top: 24px;
+  margin-top: 16px;
 }
 
 .relationships-tab__action-btn {
@@ -281,6 +280,8 @@
   border-radius: 8px;
   padding: 12px 16px;
   min-width: 260px;
+  height: 72px;
+  box-sizing: border-box;
   flex-shrink: 0;
 }
 
@@ -288,6 +289,12 @@
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-normal);
   color: var(--color-text-primary);
+}
+
+.relationships-tab__standalone-column {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
 }
 
 /* ============================================

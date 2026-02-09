@@ -60,13 +60,9 @@
 
 .patron-info-box__name {
   font-size: var(--font-size-md);
-  font-weight: var(--font-weight-regular);
+  font-weight: var(--font-weight-semibold);
   margin: 0;
   color: var(--color-text-primary);
-}
-
-.patron-info-box__name-last {
-  font-weight: var(--font-weight-semibold);
 }
 
 .patron-info-box__household {
@@ -289,6 +285,12 @@
   transition: all 0.15s ease;
   min-width: 24px;
   justify-content: center;
+  line-height: inherit;
+  box-sizing: content-box;
+}
+
+.patron-info-box__tag--count i {
+  line-height: inherit;
 }
 
 .patron-info-box__tag--count:hover {
@@ -300,6 +302,8 @@
 /* Tags Popover */
 .patron-info-box__tags-popover-container {
   position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .patron-info-box__tags-popover {
@@ -380,6 +384,18 @@
 
 .patron-info-box__tags-popover-item-remove:hover {
   color: var(--color-error);
+}
+
+/* Computed tag indicator in popover */
+.patron-info-box__tags-popover-item--computed {
+  opacity: 0.85;
+}
+
+.patron-info-box__tags-popover-item-auto {
+  font-size: 9px;
+  color: var(--color-primary);
+  margin-left: var(--space-1);
+  opacity: 0.7;
 }
 
 .patron-info-box__tags-popover-search {
@@ -620,8 +636,9 @@
   background-color: var(--color-success-bg, #f0fdf4);
 }
 
-/* Archived patron styling */
-.patron-info-box--archived {
+/* Non-active patron styling */
+.patron-info-box--archived,
+.patron-info-box--deceased {
   opacity: 0.85;
 }
 
@@ -646,6 +663,37 @@
   flex: 1;
 }
 
+/* Generic status banner (deceased, inactive) */
+.patron-info-box__status-banner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-4);
+  font-size: var(--font-size-sm);
+}
+
+.patron-info-box__status-banner i {
+  font-size: var(--font-size-lg);
+}
+
+.patron-info-box__status-banner span {
+  flex: 1;
+}
+
+.patron-info-box__status-banner--deceased {
+  background-color: var(--color-neutral-100, #f3f4f6);
+  border: 1px solid var(--color-neutral-300, #d1d5db);
+  color: var(--color-text-secondary);
+}
+
+.patron-info-box__status-banner--inactive {
+  background-color: #fef3c7;
+  border: 1px solid #fbbf24;
+  color: #92400e;
+}
+
 .patron-info-box__restore-btn {
   padding: var(--space-2) var(--space-3);
   font-size: var(--font-size-sm);
@@ -660,6 +708,16 @@
 
 .patron-info-box__restore-btn:hover {
   background-color: white;
+}
+
+.patron-info-box__status-banner--deceased .patron-info-box__restore-btn {
+  color: var(--color-text-secondary);
+  border-color: var(--color-neutral-300, #d1d5db);
+}
+
+.patron-info-box__restore-btn--amber {
+  color: #92400e;
+  border-color: #fbbf24;
 }
 
 /* Responsive */

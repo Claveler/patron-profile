@@ -371,6 +371,108 @@
   gap: var(--space-1);
 }
 
+/* Computed Tags */
+.settings__tag-group-description {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin: 0 0 var(--space-3) 0;
+  line-height: 1.4;
+}
+
+.settings__tag-row--computed {
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-1);
+}
+
+.settings__tag-row--computed > .settings__tag-meta {
+  padding-left: 0;
+}
+
+.settings__tag-info-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  flex: 1;
+}
+
+.settings__tag-row--computed .settings__tag-info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.settings__tag-row--computed .settings__tag-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.settings__tag-badge--computed {
+  padding: 2px var(--space-2);
+  background: var(--color-primary-50);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  color: var(--color-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+.settings__tag-rule {
+  padding-left: 0;
+}
+
+.settings__tag-rule-text {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+/* Threshold editing */
+.settings__tag-threshold-edit {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.settings__tag-threshold-label {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.settings__tag-threshold-input-group {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.settings__tag-threshold-prefix,
+.settings__tag-threshold-suffix {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  font-weight: var(--font-weight-medium);
+}
+
+.settings__tag-threshold-input {
+  width: 90px;
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  outline: none;
+  text-align: right;
+}
+
+.settings__tag-threshold-input::-webkit-inner-spin-button,
+.settings__tag-threshold-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.settings__tag-threshold-input {
+  -moz-appearance: textfield;
+}
+
 /* Empty State */
 .settings__tag-empty {
   padding: var(--space-6);

@@ -15,6 +15,10 @@
   margin-bottom: var(--space-4);
 }
 
+.activity-timeline__header-spacer {
+  flex: 1;
+}
+
 .activity-timeline__title {
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-semibold);
@@ -23,7 +27,7 @@
   flex-shrink: 0;
 }
 
-/* Filter tabs */
+/* Filter tabs (compact variant) */
 .activity-timeline__filters {
   display: flex;
   align-items: center;
@@ -76,7 +80,7 @@
   text-decoration: underline;
 }
 
-/* Add activity button */
+/* Add activity button - link style (compact) */
 .activity-timeline__add-btn {
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
@@ -92,10 +96,181 @@
   text-decoration: underline;
 }
 
-/* Activity List */
+/* Add activity button - secondary outlined (full variant) */
+.activity-timeline__add-btn--secondary {
+  padding: 8px 16px;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  background: var(--color-surface, #fff);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full, 64px);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+}
+
+.activity-timeline__add-btn--secondary:hover {
+  background-color: var(--color-gray-50);
+  border-color: var(--color-text-secondary);
+  text-decoration: none;
+}
+
+/* ============================================ */
+/* Search & Filters Bar (full variant)          */
+/* ============================================ */
+
+.activity-timeline__search-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-2);
+}
+
+.activity-timeline__search-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 430px;
+  max-width: 100%;
+  height: 56px;
+  padding: 0 var(--space-3);
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md, 8px);
+  transition: border-color var(--transition-fast);
+}
+
+.activity-timeline__search-input-wrapper:focus-within {
+  border-color: var(--color-primary);
+}
+
+.activity-timeline__search-icon {
+  font-size: 20px;
+  color: var(--color-text-secondary);
+  flex-shrink: 0;
+}
+
+.activity-timeline__search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: var(--font-size-base, 16px);
+  font-family: var(--font-family);
+  color: var(--color-text-primary);
+  line-height: 24px;
+}
+
+.activity-timeline__search-input::placeholder {
+  color: var(--color-text-secondary, #536b75);
+}
+
+/* Filter actions */
+.activity-timeline__filter-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.activity-timeline__filter-dropdown-wrapper {
+  position: relative;
+}
+
+/* Filters button (tertiary) */
+.activity-timeline__filter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 8px 16px;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  font-family: var(--font-family);
+  color: var(--color-primary);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-full, 64px);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+}
+
+.activity-timeline__filter-btn:hover {
+  background-color: var(--color-primary-50, #e6f4ff);
+}
+
+.activity-timeline__filter-btn--active {
+  color: var(--color-primary);
+  background-color: var(--color-primary-50, #e6f4ff);
+}
+
+.activity-timeline__filter-btn i {
+  font-size: 14px;
+}
+
+.activity-timeline__filter-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  font-size: 11px;
+  font-weight: var(--font-weight-semibold);
+  color: #fff;
+  background-color: var(--color-primary);
+  border-radius: var(--radius-full);
+}
+
+/* Filter dropdown panel */
+.activity-timeline__filter-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  min-width: 200px;
+  padding: var(--space-2);
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md, 8px);
+  box-shadow: 0 6px 16px rgba(0, 70, 121, 0.12);
+  z-index: 20;
+}
+
+.activity-timeline__filter-option {
+  display: block;
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-regular);
+  font-family: var(--font-family);
+  color: var(--color-text-primary);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm, 4px);
+  cursor: pointer;
+  text-align: left;
+  transition: background-color var(--transition-fast);
+}
+
+.activity-timeline__filter-option:hover {
+  background-color: var(--color-gray-50);
+}
+
+.activity-timeline__filter-option--active {
+  color: var(--color-primary);
+  font-weight: var(--font-weight-semibold);
+  background-color: var(--color-primary-50, #e6f4ff);
+}
+
+/* ============================================ */
+/* Activity List                                */
+/* ============================================ */
+
 .activity-timeline__list {
   display: flex;
   flex-direction: column;
+  gap: 0;
   position: relative;
 }
 
@@ -125,9 +300,10 @@
   display: flex;
   gap: var(--space-4);
   position: relative;
+  background-color: #fff;
 }
 
-/* Timeline connector (dot + line) */
+/* Timeline connector (dot + line) — continuous, no gaps */
 .activity-timeline__connector {
   display: flex;
   flex-direction: column;
@@ -135,6 +311,19 @@
   width: 24px;
   flex-shrink: 0;
   padding-top: var(--space-3);
+  position: relative;
+}
+
+/* Top line segment: fills the gap above the dot for non-first items */
+.activity-timeline__item:not(:first-child) .activity-timeline__connector::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1px;
+  height: var(--space-3);
+  background-color: var(--color-border);
 }
 
 .activity-timeline__dot {
@@ -159,7 +348,7 @@
   width: 1px;
   flex: 1;
   background-color: var(--color-border);
-  margin-top: 4px;
+  margin-top: 0;
   min-height: 20px;
 }
 
@@ -167,12 +356,7 @@
 .activity-timeline__content {
   flex: 1;
   min-width: 0;
-  padding: var(--space-3) 0;
-  border-bottom: 1px solid transparent;
-}
-
-.activity-timeline__item:not(:last-child) .activity-timeline__content {
-  border-bottom-color: var(--color-border-light, #eef1f3);
+  padding: var(--space-3) var(--space-4) var(--space-3) var(--space-4);
 }
 
 /* Main row (clickable) */
@@ -235,32 +419,12 @@
   opacity: 0.7;
 }
 
-/* Order ID badge in timeline row */
-.activity-timeline__order-id {
-  font-size: var(--font-size-xs);
-  font-family: var(--font-family-mono, 'SF Mono', 'Fira Code', monospace);
-  color: var(--color-text-muted);
-  text-decoration: none;
-  transition: color var(--transition-fast);
-}
-
-.activity-timeline__order-id:hover {
-  color: var(--color-primary);
-  text-decoration: underline;
-}
-
-/* Meta (amount + date + chevron) */
+/* Meta (date + chevron) */
 .activity-timeline__meta {
   display: flex;
   align-items: center;
   gap: var(--space-3);
   flex-shrink: 0;
-}
-
-.activity-timeline__amount {
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-success);
 }
 
 .activity-timeline__date {
@@ -288,11 +452,26 @@
   border-radius: var(--radius-md);
 }
 
+/* Context section in expanded details (amount, staff, direction, etc.) */
+.activity-details__context {
+  margin-bottom: var(--space-3);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--color-border-light, #eef1f3);
+}
+
+.activity-details__context:empty {
+  display: none;
+}
+
+.activity-details__value--amount {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-success);
+}
+
 /* Activity Details Styles */
 .activity-details {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
 }
 
 .activity-details__row {
@@ -473,6 +652,19 @@
   .activity-timeline__subtitle {
     white-space: normal;
   }
+
+  .activity-timeline__search-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .activity-timeline__search-input-wrapper {
+    width: 100%;
+  }
+
+  .activity-timeline__filter-actions {
+    justify-content: flex-end;
+  }
 }
 
 @media (max-width: 480px) {
@@ -494,15 +686,7 @@
   }
 }
 
-/* Title row - holds title + direction badge + opportunity chip */
-.activity-timeline__title-row {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  flex-wrap: wrap;
-}
-
-/* Direction indicator (inbound / outbound) */
+/* Direction indicator (inbound / outbound) - now in expanded details */
 .activity-timeline__direction {
   display: inline-flex;
   align-items: center;
@@ -524,7 +708,7 @@
   color: var(--color-success);
 }
 
-/* Opportunity chip */
+/* Opportunity chip - now in expanded details */
 .activity-timeline__opp-chip {
   display: inline-flex;
   align-items: center;
@@ -555,7 +739,7 @@
   flex-shrink: 0;
 }
 
-/* Staff initials badge */
+/* Staff initials badge - now in expanded details */
 .activity-timeline__staff {
   display: inline-flex;
   align-items: center;
@@ -601,11 +785,12 @@
 /* Full-page variant */
 .activity-timeline--full {
   background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
+  border: none;
   border-radius: var(--radius-md);
-  padding: var(--space-4);
+  padding: 0;
 }
 
-.activity-timeline--full .activity-timeline__title {
-  font-size: var(--font-size-lg);
+/* Close filter dropdown when clicking outside */
+.activity-timeline__filter-dropdown-wrapper {
+  position: relative;
 }

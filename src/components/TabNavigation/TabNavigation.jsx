@@ -18,7 +18,7 @@ function TabNavigation({ tabs, activeTab, onTabChange, assignedToId, onAssign })
       
       {assignedToId ? (
         <div className="tab-navigation__assigned">
-          <span className="tab-navigation__assigned-label">Assigned To:</span>
+          <span className="tab-navigation__assigned-label">Gift Officer:</span>
           <a href="#" className="tab-navigation__assigned-link">
             {getStaffNameById(assignedToId)}
             <i className="fa-solid fa-arrow-up-right-from-square"></i>
@@ -26,7 +26,7 @@ function TabNavigation({ tabs, activeTab, onTabChange, assignedToId, onAssign })
         </div>
       ) : onAssign && (
         <div className="tab-navigation__assigned">
-          <span className="tab-navigation__assigned-label">Assigned To:</span>
+          <span className="tab-navigation__assigned-label">Gift Officer:</span>
           <button className="tab-navigation__assign-btn" onClick={onAssign}>
             Assign
           </button>

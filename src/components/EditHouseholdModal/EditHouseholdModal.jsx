@@ -3,9 +3,10 @@ import { updateHouseholdName, changeHeadOfHousehold } from '../../data/patrons'
 import { getInitials } from '../../utils/getInitials'
 import './EditHouseholdModal.css'
 
-function EditHouseholdModal({ isOpen, onClose, household, members, onSuccess }) {
+function EditHouseholdModal({ isOpen, onClose, household, members, onSuccess, onDeleteHousehold }) {
   const [name, setName] = useState('')
   const [selectedHead, setSelectedHead] = useState('')
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
 
   // Sync state when modal opens
   useEffect(() => {
@@ -13,6 +14,7 @@ function EditHouseholdModal({ isOpen, onClose, household, members, onSuccess }) 
       setName(household.name)
       const currentHead = members.find(m => m.role === 'Head')
       setSelectedHead(currentHead ? currentHead.patronId : '')
+      setShowDeleteConfirm(false)
     }
   }, [isOpen, household, members])
 
@@ -107,6 +109,44 @@ function EditHouseholdModal({ isOpen, onClose, household, members, onSuccess }) 
               })}
             </div>
           </div>
+
+          {/* Danger zone: delete household */}
+          {onDeleteHousehold && (
+            <div className="edit-hh-modal__danger-zone">
+              {!showDeleteConfirm ? (
+                <button
+                  className="edit-hh-modal__delete-btn"
+                  onClick={() => setShowDeleteConfirm(true)}
+                >
+                  <i className="fa-solid fa-trash-can"></i>
+                  Delete household
+                </button>
+              ) : (
+                <div className="edit-hh-modal__confirm-block">
+                  <p className="edit-hh-modal__confirm-text">
+                    This will remove all members from the household. Are you sure?
+                  </p>
+                  <div className="edit-hh-modal__confirm-row">
+                    <button
+                      className="edit-hh-modal__confirm-cancel"
+                      onClick={() => setShowDeleteConfirm(false)}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      className="edit-hh-modal__confirm-delete"
+                      onClick={() => {
+                        onDeleteHousehold(household.id)
+                        onClose()
+                      }}
+                    >
+                      Confirm delete
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         <div className="edit-hh-modal__actions">
