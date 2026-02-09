@@ -84,6 +84,11 @@ const GUIDE_CONTENT = {
           'Up to 2 tags visible + overflow. Tags replaced a single-category system for richer segmentation. The 3-tier tagging model (system + computed + custom) gives museums flexibility.',
       },
       {
+        name: 'Filter Panel',
+        reasoning:
+          'Multi-facet filtering lets gift officers slice the database by Tags, Membership Tier, Engagement Level, Patron Type, Gift Officer, Source, Lifetime Value range, and Last Gift — including industry-standard LYBUNT/SYBUNT donor lapse segmentation. Combined with CSV export, this replaces the need for a separate report builder for most daily workflows.',
+      },
+      {
         name: 'Add New Patron Modal',
         reasoning:
           'Includes duplicate prevention: email uniqueness check and fuzzy name suggestions. Reduces duplicates at the point of entry while preserving staff autonomy to override.',
@@ -210,6 +215,11 @@ const GUIDE_CONTENT = {
             name: 'Empty State (No Membership)',
             reasoning:
               'Instead of a bland "No active membership," shows actionable tier cards with pricing and a behavioral nudge banner ("47 visits this year — membership would save them $X"). Powered by Fever\'s own engagement data, this is something no competitor can replicate.',
+          },
+          {
+            name: 'MembershipActions',
+            reasoning:
+              'Grouped action panel covering the full membership lifecycle — Cancel, Pause, and Extend (lifecycle); Renew and Downgrade (tier changes); Transfer Primary (account). Each action opens a dedicated modal with multi-step confirmations, impact warnings (beneficiary effects, refund options, slot changes), and safety gates (e.g., "Type CANCEL to confirm"). Only visible to primary members, ensuring role-aware access control.',
           },
         ],
       },
