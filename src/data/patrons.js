@@ -3892,6 +3892,31 @@ export const patronRelationships = [
     notes: 'Managing Partner',
     externalContact: { name: 'Collingwood Capital Partners', company: 'Collingwood Capital Partners', initials: 'CP', title: 'Managing Partner' }
   },
+  // Anderson ↔ Marcus Chen professional relationship (patron-to-patron)
+  {
+    id: 'rel-15',
+    fromPatronId: '7962415',
+    toPatronId: '7962433',
+    type: 'professional',
+    role: 'Financial Advisor',
+    reciprocalRole: 'Client',
+    isPrimary: false,
+    startDate: '2020-03-01',
+    endDate: null,
+    notes: null
+  },
+  {
+    id: 'rel-16',
+    fromPatronId: '7962433',
+    toPatronId: '7962415',
+    type: 'professional',
+    role: 'Client',
+    reciprocalRole: 'Financial Advisor',
+    isPrimary: false,
+    startDate: '2020-03-01',
+    endDate: null,
+    notes: null
+  },
   // Fairfax household relationships
   {
     id: 'rel-8',
@@ -4848,7 +4873,10 @@ export const endPatronRelationship = (fromPatronId, toPatronId) => {
     // If toPatron is not primary, remove them; otherwise remove fromPatron
     const memberToRemove = toMember && !toMember.isPrimary ? toMember : (fromMember && !fromMember.isPrimary ? fromMember : null)
     
-    if (memberToRemove) {
+    if (memberToRemove && affectedHouseholdId) {
+      // Cascade-end ALL household relationships between the removed patron and remaining members
+      endAllHouseholdRelationshipsForPatron(memberToRemove.patronId, affectedHouseholdId)
+
       const idx = HOUSEHOLD_MEMBERS.indexOf(memberToRemove)
       if (idx !== -1) {
         HOUSEHOLD_MEMBERS.splice(idx, 1)
@@ -4926,15 +4954,18 @@ export const createHousehold = (headPatronId, otherPatronId, name, otherRole = '
 
 // Change the Head of Household
 export const changeHeadOfHousehold = (householdId, newHeadPatronId) => {
-  // 1. Update HOUSEHOLD_MEMBERS: old head -> role 'Spouse', isPrimary false
-  //    new head -> role 'Head', isPrimary true
+  // 1. Update HOUSEHOLD_MEMBERS:
+  //    - Old head: keep their original role (don't force 'Spouse') and set isPrimary false
+  //    - New head: set role 'Head' and isPrimary true
   HOUSEHOLD_MEMBERS.forEach(m => {
     if (m.householdId === householdId) {
       if (m.patronId === newHeadPatronId) {
         m.role = 'Head'
         m.isPrimary = true
-      } else if (m.role === 'Head') {
-        m.role = 'Spouse'
+      } else if (m.isPrimary) {
+        // Preserve the member's actual family role; only demote from primary
+        // If their role was 'Head' (generic), fall back to 'Spouse'
+        if (m.role === 'Head') m.role = 'Spouse'
         m.isPrimary = false
       }
     }
@@ -4991,6 +5022,107 @@ export const hasHouseholdRelationship = (patronId1, patronId2) => {
     r => r.fromPatronId === patronId1 && r.toPatronId === patronId2
       && r.type === 'household' && !r.endDate
   )
+}
+
+// Check if a patron already belongs to a household — returns conflict info or null
+// Pass excludeHouseholdId to skip the current patron's own household (avoids false positives)
+export const getHouseholdConflict = (patronId, excludeHouseholdId = null) => {
+  if (!patronId) return null
+  const household = getHouseholdForPatron(patronId)
+  if (!household) return null
+  // If the patron is in the same household as the caller, no conflict
+  if (excludeHouseholdId && household.id === excludeHouseholdId) return null
+  const members = HOUSEHOLD_MEMBERS.filter(m => m.householdId === household.id)
+  const thisMember = members.find(m => m.patronId === patronId)
+  return {
+    household,
+    isHead: thisMember?.isPrimary === true,
+    memberCount: members.length,
+  }
+}
+
+// Check if an active (non-ended) relationship of a given type already exists between two patrons
+export const hasActiveRelationship = (patronId1, patronId2, type) => {
+  return patronRelationships.some(
+    r => r.fromPatronId === patronId1 && r.toPatronId === patronId2
+      && r.type === type && !r.endDate
+  )
+}
+
+// Cascade-end ALL household relationships between a patron and every other member of a household
+export const endAllHouseholdRelationshipsForPatron = (patronId, householdId) => {
+  if (!patronId || !householdId) return
+  const today = new Date().toISOString().split('T')[0]
+  const otherMemberIds = HOUSEHOLD_MEMBERS
+    .filter(m => m.householdId === householdId && m.patronId !== patronId)
+    .map(m => m.patronId)
+
+  patronRelationships.forEach(rel => {
+    if (rel.type !== 'household' || rel.endDate) return
+    // End in both directions: patron→other and other→patron
+    const isFromPatron = rel.fromPatronId === patronId && otherMemberIds.includes(rel.toPatronId)
+    const isToPatron = rel.toPatronId === patronId && otherMemberIds.includes(rel.fromPatronId)
+    if (isFromPatron || isToPatron) {
+      rel.endDate = today
+    }
+  })
+}
+
+// Dissolve a household AND end all household-type relationships between its members
+export const dissolveHouseholdWithRelationships = (householdId) => {
+  if (!householdId) return
+  const today = new Date().toISOString().split('T')[0]
+  const memberIds = HOUSEHOLD_MEMBERS
+    .filter(m => m.householdId === householdId)
+    .map(m => m.patronId)
+
+  // End all household relationships between any two members of this household
+  patronRelationships.forEach(rel => {
+    if (rel.type !== 'household' || rel.endDate) return
+    if (memberIds.includes(rel.fromPatronId) && memberIds.includes(rel.toPatronId)) {
+      rel.endDate = today
+    }
+  })
+
+  // Now delete the household entity itself (clears householdId, removes members & household record)
+  deleteHousehold(householdId)
+}
+
+// Transfer a patron from their old household into a new one (used when adding to a household that conflicts)
+export const transferPatronToHousehold = (patronId, newHouseholdId, role) => {
+  if (!patronId || !newHouseholdId) return
+  const patron = patrons.find(p => p.id === patronId)
+  const oldHouseholdId = patron?.householdId
+
+  // Remove from old household if they have one
+  if (oldHouseholdId) {
+    endAllHouseholdRelationshipsForPatron(patronId, oldHouseholdId)
+
+    // Remove from HOUSEHOLD_MEMBERS
+    const idx = HOUSEHOLD_MEMBERS.findIndex(m => m.householdId === oldHouseholdId && m.patronId === patronId)
+    if (idx !== -1) HOUSEHOLD_MEMBERS.splice(idx, 1)
+
+    // Auto-dissolve old household if only 1 member remains
+    const remaining = HOUSEHOLD_MEMBERS.filter(m => m.householdId === oldHouseholdId)
+    if (remaining.length <= 1) {
+      deleteHousehold(oldHouseholdId)
+    }
+  }
+
+  // Add to new household
+  const alreadyMember = HOUSEHOLD_MEMBERS.some(m => m.householdId === newHouseholdId && m.patronId === patronId)
+  if (!alreadyMember) {
+    HOUSEHOLD_MEMBERS.push({
+      id: `hhm-${Date.now()}-transfer`,
+      householdId: newHouseholdId,
+      patronId,
+      role: role || 'Spouse',
+      isPrimary: false,
+      joinedDate: new Date().toISOString().split('T')[0],
+    })
+  }
+
+  if (patron) patron.householdId = newHouseholdId
 }
 
 // Search patrons by name or email (for add beneficiary modal)

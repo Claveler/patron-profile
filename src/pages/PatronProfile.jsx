@@ -627,6 +627,8 @@ function PatronProfile() {
         relationship={relationshipToEnd}
         patronName={patronFullName}
         onSuccess={handleRelationshipSuccess}
+        householdName={householdData?.name || null}
+        householdMemberCount={householdMembersData?.length || 0}
       />
 
       <EditHouseholdModal

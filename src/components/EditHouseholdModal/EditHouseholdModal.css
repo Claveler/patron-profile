@@ -236,10 +236,84 @@
   gap: var(--space-3);
 }
 
+.edit-hh-modal__confirm-heading {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-error, #dc3545);
+  line-height: 1.4;
+}
+
+.edit-hh-modal__confirm-heading i {
+  flex-shrink: 0;
+}
+
 .edit-hh-modal__confirm-text {
   margin: 0;
   font-size: var(--font-size-sm);
   color: var(--color-text-secondary);
+  line-height: 1.4;
+}
+
+.edit-hh-modal__delete-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.edit-hh-modal__delete-option {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.edit-hh-modal__delete-option:hover {
+  background: var(--color-neutral-50, #f5f7fa);
+}
+
+.edit-hh-modal__delete-option--selected {
+  border-color: var(--color-error, #dc3545);
+  background: var(--color-error-50, #fef2f2);
+}
+
+.edit-hh-modal__delete-option--selected:hover {
+  background: var(--color-error-50, #fef2f2);
+}
+
+.edit-hh-modal__delete-radio {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--color-error, #dc3545);
+  cursor: pointer;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.edit-hh-modal__delete-option-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.edit-hh-modal__delete-option-title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+}
+
+.edit-hh-modal__delete-option-desc {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
   line-height: 1.4;
 }
 

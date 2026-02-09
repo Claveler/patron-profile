@@ -494,6 +494,91 @@
 }
 
 /* ============================================
+   HOUSEHOLD CONFLICT (Step 2b)
+   ============================================ */
+
+.add-rel-modal__conflict-warning {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  background: var(--color-warning-50, #fffbeb);
+  border: 1px solid var(--color-warning-200, #fde68a);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-3);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  line-height: 1.5;
+}
+
+.add-rel-modal__conflict-warning i {
+  color: var(--color-warning, #f59e0b);
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.add-rel-modal__conflict-info {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  background: var(--color-primary-50, #eff6ff);
+  border: 1px solid var(--color-primary-200, #bfdbfe);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-3);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  line-height: 1.5;
+}
+
+.add-rel-modal__conflict-info i {
+  color: var(--color-primary);
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.add-rel-modal__conflict-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+
+.add-rel-modal__conflict-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  width: 100%;
+}
+
+.add-rel-modal__conflict-btn--primary {
+  background: var(--color-warning, #f59e0b);
+  border: none;
+  color: white;
+}
+
+.add-rel-modal__conflict-btn--primary:hover {
+  background: var(--color-warning-600, #d97706);
+}
+
+.add-rel-modal__conflict-btn--secondary {
+  background: none;
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+}
+
+.add-rel-modal__conflict-btn--secondary:hover {
+  background: var(--color-neutral-50);
+}
+
+/* ============================================
    ERROR & ACTIONS
    ============================================ */
 

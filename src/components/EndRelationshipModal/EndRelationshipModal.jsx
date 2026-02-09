@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { endPatronRelationship, patronRelationships } from '../../data/patrons'
+import { endPatronRelationship, patronRelationships, HOUSEHOLD_MEMBERS } from '../../data/patrons'
 import './EndRelationshipModal.css'
 
 function EndRelationshipModal({
@@ -8,6 +8,8 @@ function EndRelationshipModal({
   relationship,
   patronName,
   onSuccess,
+  householdName,
+  householdMemberCount,
 }) {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
@@ -47,6 +49,14 @@ function EndRelationshipModal({
 
   const isHousehold = relationship.type === 'household'
 
+  // Determine if the other patron (the one being removed) is the Head
+  const isRemovingHead = isHousehold && relationship.toPatronId
+    ? HOUSEHOLD_MEMBERS.some(m => m.patronId === relationship.toPatronId && m.isPrimary)
+    : false
+
+  // Will the household dissolve? (2 members -> removing one leaves 1 -> auto-dissolve)
+  const willDissolve = isHousehold && householdMemberCount <= 2
+
   return (
     <div className="end-rel-modal__overlay" onClick={onClose}>
       <div className="end-rel-modal" onClick={e => e.stopPropagation()}>
@@ -69,6 +79,37 @@ function EndRelationshipModal({
           <p className="end-rel-modal__description">
             This will mark the relationship as ended. The record will be preserved for historical tracking.
           </p>
+
+          {/* Context-aware household warnings */}
+          {isHousehold && willDissolve && (
+            <div className="end-rel-modal__warning end-rel-modal__warning--household">
+              <i className="fa-solid fa-house-circle-xmark"></i>
+              <span>
+                Ending this relationship will <strong>dissolve</strong> the <strong>{householdName || 'household'}</strong>.
+                Both patrons will become standalone.
+              </span>
+            </div>
+          )}
+
+          {isHousehold && !willDissolve && householdMemberCount > 2 && (
+            <div className="end-rel-modal__warning end-rel-modal__warning--household">
+              <i className="fa-solid fa-user-minus"></i>
+              <span>
+                <strong>{contactName}</strong> will be removed from the <strong>{householdName || 'household'}</strong>.
+                Their relationships with other household members will also be ended.
+              </span>
+            </div>
+          )}
+
+          {isHousehold && isRemovingHead && !willDissolve && (
+            <div className="end-rel-modal__info end-rel-modal__info--head">
+              <i className="fa-solid fa-crown"></i>
+              <span>
+                <strong>{contactName}</strong> is the Head of this household.
+                A new Head may need to be assigned after removal.
+              </span>
+            </div>
+          )}
 
           {isHousehold && (
             <div className="end-rel-modal__info">

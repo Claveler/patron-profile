@@ -292,13 +292,28 @@ const GUIDE_CONTENT = {
         why:
           'Donors exist in networks. The Relationships tab maps household, professional, and organization connections. Understanding that Anderson\'s financial advisor is Robert Chen, or that his wife Sarah is also a Gold member, fundamentally changes the cultivation approach.',
         competitive:
-          'Raiser\'s Edge has strong relationship mapping but requires a separate module. Tessitura embeds relationships but with dated UI. Bloomerang has basic household linking. Fever\'s approach groups relationships by type (household, professional, organization) with cross-profile navigation.',
-        wowMoment: null,
+          'Raiser\'s Edge has strong relationship mapping but requires a separate module. Tessitura embeds relationships but with dated UI. Bloomerang has basic household linking. Fever\'s approach groups relationships by type (household, professional, organization) with cross-profile navigation, plus smart edge case handling (conflict detection, cascade removal, two-option dissolution).',
+        wowMoment: 'Try adding a patron who already belongs to another household — the system detects the conflict and lets you choose whether to transfer them or pick someone else.',
         components: [
           {
             name: 'Household Section',
             reasoning:
               'Groups family members with head-of-household designation, verified badge, and cross-profile navigation. The household popover in PatronInfoBox is a compact version; this tab is the full management view with add/edit/end capabilities.',
+          },
+          {
+            name: 'Household Conflict Detection',
+            reasoning:
+              'When adding a household relationship, detects if the selected patron already belongs to another household. Shows a warning with transfer or cancel options. Prevents silent data corruption — a patron cannot belong to two households.',
+          },
+          {
+            name: 'Context-Aware End Relationship',
+            reasoning:
+              'End Relationship warnings adapt to household size: 2-member households show a dissolution warning, 3+ member households explain the cascade removal. Removing the Head of household triggers an additional warning.',
+          },
+          {
+            name: 'Two-Option Household Dissolution',
+            reasoning:
+              'Delete household offers "dissolve everything" (ends all relationships) or "dissolve grouping only" (keeps relationship records). Supports both clean breaks and scenarios where family still exists but no longer needs CRM grouping.',
           },
           {
             name: 'Professional Relationships',

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { updateHouseholdName, changeHeadOfHousehold } from '../../data/patrons'
+import { updateHouseholdName, changeHeadOfHousehold, dissolveHouseholdWithRelationships } from '../../data/patrons'
 import { getInitials } from '../../utils/getInitials'
 import './EditHouseholdModal.css'
 
@@ -7,6 +7,7 @@ function EditHouseholdModal({ isOpen, onClose, household, members, onSuccess, on
   const [name, setName] = useState('')
   const [selectedHead, setSelectedHead] = useState('')
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [deleteOption, setDeleteOption] = useState('dissolve-all') // 'dissolve-all' | 'keep-relationships'
 
   // Sync state when modal opens
   useEffect(() => {
@@ -15,6 +16,7 @@ function EditHouseholdModal({ isOpen, onClose, household, members, onSuccess, on
       const currentHead = members.find(m => m.role === 'Head')
       setSelectedHead(currentHead ? currentHead.patronId : '')
       setShowDeleteConfirm(false)
+      setDeleteOption('dissolve-all')
     }
   }, [isOpen, household, members])
 
@@ -123,9 +125,45 @@ function EditHouseholdModal({ isOpen, onClose, household, members, onSuccess, on
                 </button>
               ) : (
                 <div className="edit-hh-modal__confirm-block">
-                  <p className="edit-hh-modal__confirm-text">
-                    This will remove all members from the household. Are you sure?
+                  <p className="edit-hh-modal__confirm-heading">
+                    <i className="fa-solid fa-triangle-exclamation"></i>
+                    How should the household be dissolved?
                   </p>
+
+                  <div className="edit-hh-modal__delete-options">
+                    <label className={`edit-hh-modal__delete-option ${deleteOption === 'dissolve-all' ? 'edit-hh-modal__delete-option--selected' : ''}`}>
+                      <input
+                        type="radio"
+                        name="delete-option"
+                        className="edit-hh-modal__delete-radio"
+                        checked={deleteOption === 'dissolve-all'}
+                        onChange={() => setDeleteOption('dissolve-all')}
+                      />
+                      <div className="edit-hh-modal__delete-option-content">
+                        <span className="edit-hh-modal__delete-option-title">Dissolve household and end all family relationships</span>
+                        <span className="edit-hh-modal__delete-option-desc">
+                          Removes the household and marks all household relationships between members as ended.
+                        </span>
+                      </div>
+                    </label>
+
+                    <label className={`edit-hh-modal__delete-option ${deleteOption === 'keep-relationships' ? 'edit-hh-modal__delete-option--selected' : ''}`}>
+                      <input
+                        type="radio"
+                        name="delete-option"
+                        className="edit-hh-modal__delete-radio"
+                        checked={deleteOption === 'keep-relationships'}
+                        onChange={() => setDeleteOption('keep-relationships')}
+                      />
+                      <div className="edit-hh-modal__delete-option-content">
+                        <span className="edit-hh-modal__delete-option-title">Dissolve household but keep relationship records</span>
+                        <span className="edit-hh-modal__delete-option-desc">
+                          Removes the household grouping only. Individual family relationships remain active.
+                        </span>
+                      </div>
+                    </label>
+                  </div>
+
                   <div className="edit-hh-modal__confirm-row">
                     <button
                       className="edit-hh-modal__confirm-cancel"
@@ -136,11 +174,16 @@ function EditHouseholdModal({ isOpen, onClose, household, members, onSuccess, on
                     <button
                       className="edit-hh-modal__confirm-delete"
                       onClick={() => {
-                        onDeleteHousehold(household.id)
+                        if (deleteOption === 'dissolve-all') {
+                          dissolveHouseholdWithRelationships(household.id)
+                        } else {
+                          onDeleteHousehold(household.id)
+                        }
+                        onSuccess && onSuccess()
                         onClose()
                       }}
                     >
-                      Confirm delete
+                      {deleteOption === 'dissolve-all' ? 'Dissolve everything' : 'Dissolve household only'}
                     </button>
                   </div>
                 </div>
