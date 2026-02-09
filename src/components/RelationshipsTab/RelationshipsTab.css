@@ -103,8 +103,8 @@
 }
 
 /* ============================================
-   RIGHT SECTION: EXTERNAL CONNECTIONS COLUMN
-   One slot per household member, 72px each.
+   RIGHT SECTION: EXTERNAL CONNECTIONS — TREE LAYOUT
+   Trunk from card edge → vertical spine → horizontal branches
    Padding-top offsets for title + spacing above card.
    ============================================ */
 
@@ -113,7 +113,7 @@
   flex-direction: column;
   /* Offset = wrapper-padding-top(40) + title-line-height(24) + wrapper-gap(24) + card-border(1) = 89px */
   padding-top: 89px;
-  /* Pull into wrapper's right padding (40px) so connector starts at card edge */
+  /* Pull into wrapper's right padding (40px) so trunk starts at card edge */
   margin-left: -40px;
   position: relative;
 }
@@ -125,13 +125,94 @@
   justify-content: center;
 }
 
-/* Each slot matches a member row height (72px) */
+/* Standalone ext-slot (kept for standalone patron case) */
 .relationships-tab__ext-slot {
-  height: 72px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 4px;
+}
+
+/* ---- Tree group: one patron's external connections ---- */
+
+.relationships-tab__ext-group {
+  display: flex;
+  align-items: center;
+  /* Push down to the correct member row, then center the group on that row's midpoint (36px) */
+  margin-top: calc(var(--member-index, 0) * 72px);
+  transform: translateY(calc(-50% + 36px));
+}
+
+/* Single connection — straight line, no branching needed */
+.relationships-tab__ext-group--single {
+  /* Same positioning, but spine is hidden via :only-child below */
+}
+
+/* ---- Trunk: horizontal line from household card edge to spine ---- */
+
+.relationships-tab__trunk {
+  width: 72px;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.relationships-tab__trunk-line {
+  width: 100%;
+  height: 0;
+  border-top: 1px solid var(--color-primary-300);
+}
+
+/* ---- Branches column ---- */
+
+.relationships-tab__branches {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---- Individual branch ---- */
+
+.relationships-tab__branch {
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding: 8px 0;
+}
+
+/* Vertical spine segment on each branch's left edge.
+   First branch: spine from center down.
+   Last branch: spine from top to center.
+   Only child: no spine. */
+.relationships-tab__branch::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  border-left: 1px solid var(--color-primary-300);
+}
+
+.relationships-tab__branch:first-child::before {
+  top: 50%;
+}
+
+.relationships-tab__branch:last-child::before {
+  bottom: 50%;
+}
+
+.relationships-tab__branch:only-child::before {
+  display: none;
+}
+
+/* ---- Branch connector: horizontal line + label + line ---- */
+
+.relationships-tab__branch-connector {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  width: 140px;
+  flex-shrink: 0;
 }
 
 /* ============================================
@@ -537,12 +618,27 @@
     width: 100%;
   }
 
+  /* Reset tree positioning on mobile — stack vertically */
   .relationships-tab__ext-column {
     padding-top: 0;
+    margin-left: 0;
   }
 
+  .relationships-tab__ext-group {
+    margin-top: 0;
+    transform: none;
+  }
+
+  .relationships-tab__trunk {
+    width: 24px;
+  }
+
+  .relationships-tab__branch-connector {
+    width: 80px;
+  }
+
+  /* Standalone slot */
   .relationships-tab__ext-slot {
-    height: auto;
     min-height: 72px;
   }
 
