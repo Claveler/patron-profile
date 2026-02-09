@@ -175,7 +175,7 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
             className={`relationships-tab__org-card ${rel.linkedPatron ? 'relationships-tab__org-card--clickable' : ''}`}
             onClick={() => handleExternalClick(rel)}
           >
-            <div className="relationships-tab__org-avatar">
+            <div className={rel.type === 'organization' ? 'relationships-tab__org-avatar' : 'relationships-tab__member-avatar'}>
               {rel.linkedPatron?.photo ? (
                 <img src={rel.linkedPatron.photo} alt={rel.displayName} />
               ) : (

@@ -128,7 +128,7 @@ function RelationshipsSummary({ patronId, onNavigateToPatron, onViewRelationship
               }}
             >
               <div className="relationships-summary__member-row">
-                <div className="relationships-summary__avatar relationships-summary__avatar--square">
+                <div className={`relationships-summary__avatar ${rel.type === 'organization' ? 'relationships-summary__avatar--square' : 'relationships-summary__avatar--round'}`}>
                   {rel.linkedPatron?.photo ? (
                     <img src={rel.linkedPatron.photo} alt={rel.displayName} />
                   ) : (
