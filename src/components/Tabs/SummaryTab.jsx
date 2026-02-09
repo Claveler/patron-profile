@@ -1,4 +1,6 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
+import { GuideContext } from '../../App'
+import { EPIC_SCOPE, isInScope } from '../../data/epicScope'
 import OpportunitiesPanel from '../OpportunitiesPanel/OpportunitiesPanel'
 import GivingSummary from '../GivingSummary/GivingSummary'
 import ActivityTimeline from '../ActivityTimeline/ActivityTimeline'
@@ -21,43 +23,65 @@ function SummaryTab({
 }) {
   const isManaged = isManagedProspect(patron)
   const [selectedGift, setSelectedGift] = useState(null)
+  const { activeEpic } = useContext(GuideContext)
+
+  const sc = EPIC_SCOPE.summaryComponents
+  const showGiving = isInScope(sc.GivingSummary, activeEpic)
+  const showOpportunities = isInScope(sc.OpportunitiesPanel, activeEpic)
+  const showEngagement = isInScope(sc.EngagementPanel, activeEpic)
+  const showTimeline = isInScope(sc.ActivityTimeline, activeEpic)
+  const showRelationships = isInScope(sc.RelationshipsSummary, activeEpic)
+  const showWealth = isInScope(sc.WealthInsights, activeEpic)
+  const showSmartTips = isInScope(sc.SmartTips, activeEpic)
 
   return (
     <div className="summary-tab">
       <div className="summary-tab__main">
         {/* Left Column - Giving Summary & Activity */}
         <div className="summary-tab__left">
-          <GivingSummary 
-            giving={patron.giving} 
-            gifts={getGiftsByPatronId(patron.id)}
-            activityHistory={patron.engagement?.activityHistory}
-          />
-          <ActivityTimeline 
-            gifts={getGiftsByPatronId(patron.id)} 
-            activities={getInteractionsByPatronId(patron.id)}
-            onAddActivity={onLogActivity}
-            onRecordGift={onRecordGift}
-            onGiftSelect={setSelectedGift}
-          />
+          {showGiving && (
+            <GivingSummary 
+              giving={patron.giving} 
+              gifts={getGiftsByPatronId(patron.id)}
+              activityHistory={patron.engagement?.activityHistory}
+            />
+          )}
+          {showTimeline && (
+            <ActivityTimeline 
+              gifts={getGiftsByPatronId(patron.id)} 
+              activities={getInteractionsByPatronId(patron.id)}
+              onAddActivity={onLogActivity}
+              onRecordGift={onRecordGift}
+              onGiftSelect={setSelectedGift}
+            />
+          )}
         </div>
         
         {/* Right Column - Sidebar Widgets */}
         <div className="summary-tab__right">
-          {isManaged && (
+          {showOpportunities && isManaged && (
             <OpportunitiesPanel 
               patronId={patron.id}
               onSelectOpportunity={onSelectOpportunity}
               onCreateOpportunity={onCreateOpportunity}
             />
           )}
-          <EngagementPanel engagement={patron.engagement} />
-          <WealthInsights insights={patron.wealthInsights} />
-          <SmartTips patron={patron} />
-          <RelationshipsSummary 
-            patronId={patron.id}
-            onNavigateToPatron={onNavigateToPatron}
-            onViewRelationships={onViewRelationships}
-          />
+          {showEngagement && (
+            <EngagementPanel engagement={patron.engagement} />
+          )}
+          {showWealth && (
+            <WealthInsights insights={patron.wealthInsights} />
+          )}
+          {showSmartTips && (
+            <SmartTips patron={patron} />
+          )}
+          {showRelationships && (
+            <RelationshipsSummary 
+              patronId={patron.id}
+              onNavigateToPatron={onNavigateToPatron}
+              onViewRelationships={onViewRelationships}
+            />
+          )}
         </div>
       </div>
 

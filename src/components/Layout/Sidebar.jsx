@@ -1,4 +1,7 @@
+import { useContext } from 'react'
 import { NavLink } from 'react-router-dom'
+import { GuideContext } from '../../App'
+import { EPIC_SCOPE, isInScope } from '../../data/epicScope'
 import './Sidebar.css'
 
 const menuItems = [
@@ -11,14 +14,14 @@ const menuItems = [
     hasSubmenu: true,
     expanded: true,
     submenu: [
-      { label: 'Dashboard', to: '/' },
-      { label: 'Patrons', to: '/patrons' },
-      { label: 'Gifts', to: '/gifts' },
-      { label: 'Opportunities', to: '/opportunities' },
-      { label: 'Campaigns', to: '/campaigns' },
-      { label: 'Donation Prompts' },
-      { label: 'Donation Pages' },
-      { label: 'Settings', to: '/settings' },
+      { label: 'Dashboard', to: '/', minEpic: EPIC_SCOPE.sidebar.Dashboard },
+      { label: 'Patrons', to: '/patrons', minEpic: EPIC_SCOPE.sidebar.Patrons },
+      { label: 'Gifts', to: '/gifts', minEpic: EPIC_SCOPE.sidebar.Gifts },
+      { label: 'Opportunities', to: '/opportunities', minEpic: EPIC_SCOPE.sidebar.Opportunities },
+      { label: 'Campaigns', to: '/campaigns', minEpic: EPIC_SCOPE.sidebar.Campaigns },
+      { label: 'Donation Prompts', minEpic: EPIC_SCOPE.sidebar['Donation Prompts'] },
+      { label: 'Donation Pages', minEpic: EPIC_SCOPE.sidebar['Donation Pages'] },
+      { label: 'Settings', to: '/settings', minEpic: EPIC_SCOPE.sidebar.Settings },
     ]
   },
   { icon: 'fa-chart-line', label: 'Report', href: '#' },
@@ -34,6 +37,8 @@ const menuItems = [
 ]
 
 function Sidebar({ collapsed }) {
+  const { activeEpic } = useContext(GuideContext)
+
   return (
     <aside className={`sidebar ${collapsed ? 'sidebar--collapsed' : ''}`}>
       <nav className="sidebar__nav">
@@ -57,7 +62,9 @@ function Sidebar({ collapsed }) {
               
               {item.expanded && item.submenu && !collapsed && (
                 <ul className="sidebar__submenu">
-                  {item.submenu.map((subitem, subindex) => (
+                  {item.submenu
+                    .filter((subitem) => !subitem.minEpic || isInScope(subitem.minEpic, activeEpic))
+                    .map((subitem, subindex) => (
                     <li key={subindex} className="sidebar__subitem">
                       {subitem.to ? (
                         <NavLink

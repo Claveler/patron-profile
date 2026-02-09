@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo, useContext } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { GuideContext } from '../App'
+import { EPIC_SCOPE, isInScope } from '../data/epicScope'
 import PatronInfoBox from '../components/PatronInfoBox/PatronInfoBox'
 import TabNavigation from '../components/TabNavigation/TabNavigation'
 import SummaryTab from '../components/Tabs/SummaryTab'
@@ -213,7 +214,22 @@ function PatronProfile() {
   const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState('summary')
   const [refreshKey, setRefreshKey] = useState(0)
-  const { setGuideTab } = useContext(GuideContext)
+  const { setGuideTab, activeEpic } = useContext(GuideContext)
+
+  // Filter tabs based on the active epic scope
+  const visibleTabs = useMemo(() => {
+    return tabs.filter(tab => {
+      const minEpic = EPIC_SCOPE.patronTabs[tab.id]
+      return minEpic == null || isInScope(minEpic, activeEpic)
+    })
+  }, [activeEpic])
+
+  // Reset to 'summary' if the active tab is no longer visible
+  useEffect(() => {
+    if (!visibleTabs.find(t => t.id === activeTab)) {
+      setActiveTab('summary')
+    }
+  }, [visibleTabs, activeTab])
 
   // Scroll to top whenever the active tab changes
   useEffect(() => {
@@ -514,7 +530,7 @@ function PatronProfile() {
         {/* Tab Section */}
         <div className="patron-profile__tabs-wrapper">
           <TabNavigation 
-            tabs={tabs} 
+            tabs={visibleTabs} 
             activeTab={activeTab} 
             onTabChange={setActiveTab}
             assignedToId={patronData.assignedToId}

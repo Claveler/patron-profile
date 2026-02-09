@@ -1,6 +1,11 @@
+import { useContext } from 'react'
+import { GuideContext } from '../../App'
+import { EPIC_LABELS } from '../../data/epicScope'
 import './Header.css'
 
 function Header({ onToggleSidebar, onToggleGuide, guideOpen }) {
+  const { activeEpic, setActiveEpic } = useContext(GuideContext)
+
   return (
     <header className="header">
       <div className="header__left">
@@ -19,6 +24,29 @@ function Header({ onToggleSidebar, onToggleGuide, guideOpen }) {
           />
         </a>
       </div>
+
+      {/* Epic Scope Stepper */}
+      <nav className="header__stepper" aria-label="Epic scope selector">
+        {EPIC_LABELS.map((step) => {
+          const isActive = activeEpic === step.value
+          const isCompleted = step.value < activeEpic && !isActive
+          return (
+            <button
+              key={step.label}
+              className={[
+                'header__step',
+                isActive && 'header__step--active',
+                isCompleted && 'header__step--completed',
+              ].filter(Boolean).join(' ')}
+              onClick={() => setActiveEpic(step.value)}
+              title={`${step.label}: ${step.subtitle}`}
+            >
+              <span className="header__step-label">{step.label}</span>
+              <span className="header__step-subtitle">{step.subtitle}</span>
+            </button>
+          )
+        })}
+      </nav>
       
       <div className="header__right">
         <button className="header__create-btn">

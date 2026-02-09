@@ -56,6 +56,91 @@
   width: auto;
 }
 
+/* ── Epic Scope Stepper ─────────────────────────────────────── */
+
+.header__stepper {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  flex-shrink: 0;
+}
+
+.header__step {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  height: 1.75rem;
+  padding-inline: 0.625rem;
+  border: 1px solid var(--color-neutral-700);
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--color-neutral-400);
+  font-size: 0.6875rem;
+  font-weight: 400;
+  line-height: 1;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.header__step:hover {
+  border-color: var(--color-neutral-500);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.header__step--active {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--color-neutral-500);
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 500;
+}
+
+.header__step--active:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: var(--color-neutral-400);
+  color: #fff;
+}
+
+.header__step--completed {
+  border-color: var(--color-neutral-600);
+  color: var(--color-neutral-300);
+  background: transparent;
+}
+
+.header__step--completed:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--color-neutral-500);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.header__step-label {
+  font-weight: inherit;
+}
+
+.header__step-subtitle {
+  font-weight: 400;
+  opacity: 0.85;
+}
+
+/* Responsive: hide subtitle on narrow viewports */
+@media (max-width: 900px) {
+  .header__step-subtitle {
+    display: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .header__stepper {
+    gap: 0.25rem;
+  }
+  .header__step {
+    padding-inline: 0.4rem;
+    font-size: 0.625rem;
+  }
+}
+
+/* ── Right Section ──────────────────────────────────────────── */
+
 .header__right {
   display: flex;
   align-items: center;
