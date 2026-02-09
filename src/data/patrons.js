@@ -212,7 +212,7 @@ export const patrons = [
       mailOptIn: true,
       doNotContact: false,
     },
-    notes: 'Board member since 2020. Prefers morning meetings. Interested in naming opportunities for the new wing. Wife Sarah is also active in the community.',
+    notes: 'Board member since 2020. Prefers morning meetings. Interested in naming opportunities for the new wing. Wife Marianne is also active in the community.',
     tags: ['board-member'],
     householdId: 'hh-collingwood',
     // MANAGED PROSPECT - has assignedToId (opportunities tracked separately)
@@ -1033,10 +1033,10 @@ export const patrons = [
   // BENEFICIARY PATRONS (Family members with own records)
   // ============================================
   
-  // Sarah Collingwood - Anderson's spouse, beneficiary on his membership
+  // Marianne Collingwood - Anderson's spouse, beneficiary on his membership
   {
     id: '7962430',
-    firstName: 'Sarah',
+    firstName: 'Marianne',
     lastName: 'Collingwood',
     prefix: 'Mrs.',
     suffix: null,
@@ -1044,7 +1044,7 @@ export const patrons = [
     gender: 'female',
     dateOfBirth: '1975-11-03',
     photo: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop&crop=face',
-    email: 'sarah@collingwood.com',
+    email: 'marianne@collingwood.com',
     phone: '(555) 123-4568',
     address: '45 Paradise Dr, Tiburon, CA 94920',
     addressStreet: '45 Paradise Dr',
@@ -1103,14 +1103,14 @@ export const patrons = [
     source: 'manual'
   },
   
-  // Emma Collingwood - Anderson's daughter, dependent on his membership
+  // Josiah Collingwood - Anderson's son, dependent on his membership
   {
     id: '7962431',
-    firstName: 'Emma',
+    firstName: 'Josiah',
     lastName: 'Collingwood',
-    gender: 'female',
+    gender: 'male',
     photo: null,
-    email: 'emma.collingwood@gmail.com',
+    email: 'josiah.collingwood@gmail.com',
     phone: null,
     address: '45 Paradise Dr, Tiburon, CA 94920',
     dateOfBirth: '2012-03-15', // 13 years old
@@ -1144,7 +1144,7 @@ export const patrons = [
       giftCount: 0,
       lastGift: null
     },
-    // No separate membership - she's a dependent on Anderson's
+    // No separate membership - he's a dependent on Anderson's
     createdDate: '2024-01-15',
     source: 'manual'
   },
@@ -2745,11 +2745,11 @@ export const membershipUsage = [
   { id: 'usage-1', membershipId: 'mem-anderson-gold', patronId: '7962415', benefitType: 'admission', quantity: 12 },
   { id: 'usage-2', membershipId: 'mem-anderson-gold', patronId: '7962415', benefitType: 'guest_pass', quantity: 1 },
   { id: 'usage-3', membershipId: 'mem-anderson-gold', patronId: '7962415', benefitType: 'fb_discount', quantity: 4 },
-  // Sarah's usage
+  // Marianne's usage
   { id: 'usage-4', membershipId: 'mem-anderson-gold', patronId: '7962430', benefitType: 'admission', quantity: 28 },
   { id: 'usage-5', membershipId: 'mem-anderson-gold', patronId: '7962430', benefitType: 'guest_pass', quantity: 2 },
   { id: 'usage-6', membershipId: 'mem-anderson-gold', patronId: '7962430', benefitType: 'fb_discount', quantity: 8 },
-  // Emma's usage
+  // Josiah's usage
   { id: 'usage-7', membershipId: 'mem-anderson-gold', patronId: '7962431', benefitType: 'admission', quantity: 7 },
   { id: 'usage-8', membershipId: 'mem-anderson-gold', patronId: '7962431', benefitType: 'guest_pass', quantity: 0 },
   { id: 'usage-9', membershipId: 'mem-anderson-gold', patronId: '7962431', benefitType: 'fb_discount', quantity: 0 },
@@ -2917,7 +2917,7 @@ export const GIFTS = [
   // ── Ethan Davis (1 gift: $250) ─────────────────────────────────────────
   { id: 'gift-120', patronId: '7962425', date: '2025-05-25', amount: 250.00, type: 'one-time', description: 'Online Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'online-giving', deductible: 250.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
 
-  // ── Sarah Collingwood (1 gift: $250, Anderson's spouse) ────────────────
+  // ── Marianne Collingwood (1 gift: $250, Anderson's spouse) ─────────────
   { id: 'gift-121', patronId: '7962430', date: '2024-07-20', amount: 250.00, type: 'one-time', description: 'Personal Gift', fundId: 'annual-operating', campaignId: 'annual-2025', appealId: 'online-2025', deductible: 250.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
 
   // ── David Chen (1 gift: $200, online donor) ────────────────────────────
@@ -3701,8 +3701,8 @@ export const HOUSEHOLDS = [
   {
     id: 'hh-collingwood',
     name: 'Collingwood Family',
-    formalSalutation: 'Mr. Anderson & Mrs. Sarah Collingwood',
-    informalSalutation: 'Anderson & Sarah',
+    formalSalutation: 'Mr. Anderson & Mrs. Marianne Collingwood',
+    informalSalutation: 'Anderson & Marianne',
     primaryContactId: '7962415',
     verified: true,
     createdDate: '2024-06-15'
@@ -3821,14 +3821,14 @@ export const patronRelationships = [
     fromPatronId: '7962415',
     toPatronId: '7962431',
     type: 'household',
-    role: 'Daughter',
+    role: 'Son',
     reciprocalRole: 'Father',
     isPrimary: false,
     startDate: null,
     endDate: null,
     notes: null
   },
-  // Sarah's reverse relationships (auto-created)
+  // Marianne's reverse relationships (auto-created)
   {
     id: 'rel-3',
     fromPatronId: '7962430',
@@ -3846,21 +3846,21 @@ export const patronRelationships = [
     fromPatronId: '7962430',
     toPatronId: '7962431',
     type: 'household',
-    role: 'Daughter',
+    role: 'Son',
     reciprocalRole: 'Mother',
     isPrimary: false,
     startDate: null,
     endDate: null,
     notes: null
   },
-  // Emma's reverse relationships
+  // Josiah's reverse relationships
   {
     id: 'rel-5',
     fromPatronId: '7962431',
     toPatronId: '7962415',
     type: 'household',
     role: 'Father',
-    reciprocalRole: 'Daughter',
+    reciprocalRole: 'Son',
     isPrimary: true,
     startDate: null,
     endDate: null,
@@ -3872,7 +3872,7 @@ export const patronRelationships = [
     toPatronId: '7962430',
     type: 'household',
     role: 'Mother',
-    reciprocalRole: 'Daughter',
+    reciprocalRole: 'Son',
     isPrimary: false,
     startDate: null,
     endDate: null,

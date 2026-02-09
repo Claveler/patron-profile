@@ -4,6 +4,7 @@ import Header from './components/Layout/Header'
 import Sidebar from './components/Layout/Sidebar'
 import Footer from './components/Layout/Footer'
 import ProductGuidePanel from './components/ProductGuidePanel/ProductGuidePanel'
+import LoginPage from './pages/LoginPage/LoginPage'
 import Dashboard from './pages/Dashboard/Dashboard'
 import PatronsList from './pages/PatronsList/PatronsList'
 import PatronProfile from './pages/PatronProfile'
@@ -34,6 +35,9 @@ function ScrollToTop() {
 }
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    () => sessionStorage.getItem('fz_auth') === 'true'
+  )
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [guideOpen, setGuideOpen] = useState(false)
   const [guideTab, setGuideTab] = useState(null)
@@ -41,11 +45,21 @@ function App() {
 
   const toggleGuide = useCallback(() => setGuideOpen(prev => !prev), [])
 
+  const handleLogin = useCallback(() => {
+    sessionStorage.setItem('fz_auth', 'true')
+    setIsAuthenticated(true)
+  }, [])
+
   // Determine the fallback route based on active epic
   const fallbackRoute = useMemo(() => {
     if (isInScope(EPIC_SCOPE.routes['/'], activeEpic)) return '/'
     return '/patrons'
   }, [activeEpic])
+
+  // ── Login gate ──
+  if (!isAuthenticated) {
+    return <LoginPage onLogin={handleLogin} />
+  }
 
   return (
     <GuideContext.Provider value={{ guideOpen, toggleGuide, guideTab, setGuideTab, activeEpic, setActiveEpic }}>
