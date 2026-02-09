@@ -1154,6 +1154,7 @@ export const patrons = [
   // =====================================================================
 
   // Eleanor Whitfield - major donor, $100k leadership gift opp (assigned to JM)
+  // Anderson Collingwood's sister, married into the Whitfield family (cross-household family relationship)
   {
     id: '7962432',
     firstName: 'Eleanor',
@@ -1163,6 +1164,7 @@ export const patrons = [
     email: 'eleanor.whitfield@gmail.com',
     phone: '(512) 555-3001',
     tags: [],
+    householdId: 'hh-whitfield',
     assignedToId: 'jm',
     engagement: {
       level: 'hot',
@@ -3733,6 +3735,15 @@ export const HOUSEHOLDS = [
     primaryContactId: '7962419',
     verified: true,
     createdDate: '2025-03-20'
+  },
+  {
+    id: 'hh-whitfield',
+    name: 'Whitfield Family',
+    formalSalutation: 'Mrs. Eleanor Whitfield',
+    informalSalutation: 'Eleanor',
+    primaryContactId: '7962432',
+    verified: true,
+    createdDate: '2025-06-01'
   }
 ]
 
@@ -3749,7 +3760,9 @@ export const HOUSEHOLD_MEMBERS = [
   { id: 'hhm-7', householdId: 'hh-martinez-carter', patronId: '7962421', role: 'Spouse', isPrimary: false, joinedDate: '2025-01-10' },
   // Taylor-Thomas Family
   { id: 'hhm-8', householdId: 'hh-taylor-thomas', patronId: '7962419', role: 'Head', isPrimary: true, joinedDate: '2025-03-20' },
-  { id: 'hhm-9', householdId: 'hh-taylor-thomas', patronId: '7962418', role: 'Spouse', isPrimary: false, joinedDate: '2025-03-20' }
+  { id: 'hhm-9', householdId: 'hh-taylor-thomas', patronId: '7962418', role: 'Spouse', isPrimary: false, joinedDate: '2025-03-20' },
+  // Whitfield Family
+  { id: 'hhm-10', householdId: 'hh-whitfield', patronId: '7962432', role: 'Head', isPrimary: true, joinedDate: '2022-06-15' }
 ]
 
 // Household helper functions
@@ -3991,6 +4004,31 @@ export const patronRelationships = [
     startDate: null,
     endDate: null,
     notes: null
+  },
+  // Cross-household family relationships: Anderson Collingwood <-> Eleanor Whitfield (siblings)
+  {
+    id: 'rel-family-1',
+    fromPatronId: '7962415',
+    toPatronId: '7962432',
+    type: 'family',
+    role: 'Sister',
+    reciprocalRole: 'Brother',
+    isPrimary: false,
+    startDate: null,
+    endDate: null,
+    notes: 'Anderson\'s sister, married into the Whitfield family'
+  },
+  {
+    id: 'rel-family-2',
+    fromPatronId: '7962432',
+    toPatronId: '7962415',
+    type: 'family',
+    role: 'Brother',
+    reciprocalRole: 'Sister',
+    isPrimary: false,
+    startDate: null,
+    endDate: null,
+    notes: 'Eleanor\'s brother, head of the Collingwood household'
   }
 ]
 
@@ -5006,12 +5044,19 @@ export const getReciprocalRole = (role, gender) => {
     'Partner': 'Partner',
     'Friend': 'Friend',
     'Colleague': 'Colleague',
+    'Cousin': 'Cousin',
     'Financial Advisor': 'Client',
     'Client': 'Financial Advisor',
     'Employee': 'Employer',
     'Employer': 'Employee',
     'Board Member': 'Organization',
-    'Volunteer': 'Organization'
+    'Volunteer': 'Organization',
+    'Grandparent': 'Grandchild',
+    'Grandchild': 'Grandparent',
+    'Uncle': 'Nephew',
+    'Aunt': 'Niece',
+    'Nephew': 'Uncle',
+    'Niece': 'Aunt',
   }
   return simpleReciprocals[role] || role
 }

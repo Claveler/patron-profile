@@ -127,7 +127,7 @@ const GUIDE_CONTENT = {
           {
             name: 'RelationshipsSummary',
             reasoning:
-              'Shows household and professional relationships at a glance. Cross-profile navigation lets gift officers understand the family context before a conversation. Knowing Anderson\'s wife Sarah and daughter Emma are also patrons changes the cultivation strategy.',
+              'Shows household, family (cross-household), and professional relationships at a glance. The Family section bridges the gap between household cohabitation and broader family networks — e.g., Anderson\'s sister Eleanor who married into the Whitfield family. Cross-profile navigation lets gift officers understand the full family context before a conversation.',
           },
           {
             name: 'OpportunitiesPanel / AddToPortfolioBar',
@@ -290,9 +290,9 @@ const GUIDE_CONTENT = {
         persona: 'Gift Officer',
         epic: 'Epic 1 — Patron Data Platform',
         why:
-          'Donors exist in networks. The Relationships tab maps household, professional, and organization connections. Understanding that Anderson\'s financial advisor is Robert Chen, or that his wife Sarah is also a Gold member, fundamentally changes the cultivation approach.',
+          'Donors exist in networks. The Relationships tab maps household, family (cross-household), professional, and organization connections. Understanding that Anderson\'s sister Eleanor runs the Whitfield Gallery, or that his financial advisor is Marcus Chen, fundamentally changes the cultivation approach.',
         competitive:
-          'Raiser\'s Edge has strong relationship mapping but requires a separate module. Tessitura embeds relationships but with dated UI. Bloomerang has basic household linking. Fever\'s approach groups relationships by type (household, professional, organization) with cross-profile navigation, plus smart edge case handling (conflict detection, cascade removal, two-option dissolution).',
+          'Raiser\'s Edge has strong relationship mapping but requires a separate module. Tessitura embeds relationships but with dated UI. Bloomerang has basic household linking but no cross-household family type. Fever\'s approach groups relationships by type (household, family, professional, organization) with cross-profile navigation, plus smart edge case handling (conflict detection, cascade removal, two-option dissolution).',
         wowMoment: 'Try adding a patron who already belongs to another household — the system detects the conflict and lets you choose whether to transfer them or pick someone else.',
         components: [
           {
@@ -314,6 +314,11 @@ const GUIDE_CONTENT = {
             name: 'Two-Option Household Dissolution',
             reasoning:
               'Delete household offers "dissolve everything" (ends all relationships) or "dissolve grouping only" (keeps relationship records). Supports both clean breaks and scenarios where family still exists but no longer needs CRM grouping.',
+          },
+          {
+            name: 'Family Relationships (Cross-Household)',
+            reasoning:
+              'Connects patrons related by blood or legal family bonds who live in different households — e.g., siblings married into separate families, adult children living independently. Uses pink/magenta labels to visually differentiate from professional (blue) connections. Industry standard in Tessitura and Raiser\'s Edge; essential for understanding donor networks beyond cohabitation.',
           },
           {
             name: 'Professional Relationships',

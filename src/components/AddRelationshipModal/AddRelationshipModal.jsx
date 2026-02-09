@@ -5,7 +5,8 @@ import './AddRelationshipModal.css'
 
 // Relationship type categories
 const relationshipTypes = [
-  { id: 'household', label: 'Household / Family', icon: 'fa-solid fa-house-chimney', description: 'Spouse, child, parent, sibling' },
+  { id: 'household', label: 'Household', icon: 'fa-solid fa-house-chimney', description: 'Spouse, child, parent living together' },
+  { id: 'family', label: 'Family (Cross-Household)', icon: 'fa-solid fa-heart', description: 'Sibling, parent, child in a different household' },
   { id: 'professional', label: 'Professional', icon: 'fa-solid fa-briefcase', description: 'Financial advisor, attorney, accountant' },
   { id: 'organization', label: 'Organization', icon: 'fa-solid fa-building', description: 'Employer, board, volunteer affiliation' },
 ]
@@ -24,6 +25,25 @@ const roleOptionsByType = {
     { id: 'Sibling', label: 'Sibling' },
     { id: 'Brother', label: 'Brother' },
     { id: 'Sister', label: 'Sister' },
+    { id: 'other', label: 'Other' },
+  ],
+  family: [
+    { id: 'Sibling', label: 'Sibling' },
+    { id: 'Brother', label: 'Brother' },
+    { id: 'Sister', label: 'Sister' },
+    { id: 'Parent', label: 'Parent' },
+    { id: 'Father', label: 'Father' },
+    { id: 'Mother', label: 'Mother' },
+    { id: 'Child', label: 'Child' },
+    { id: 'Son', label: 'Son' },
+    { id: 'Daughter', label: 'Daughter' },
+    { id: 'Grandparent', label: 'Grandparent' },
+    { id: 'Grandchild', label: 'Grandchild' },
+    { id: 'Uncle', label: 'Uncle' },
+    { id: 'Aunt', label: 'Aunt' },
+    { id: 'Nephew', label: 'Nephew' },
+    { id: 'Niece', label: 'Niece' },
+    { id: 'Cousin', label: 'Cousin' },
     { id: 'other', label: 'Other' },
   ],
   professional: [
@@ -408,21 +428,28 @@ function AddRelationshipModal({
                 Back
               </button>
 
-              {/* Toggle between search and external */}
-              <div className="add-rel-modal__contact-toggle">
-                <button
-                  className={`add-rel-modal__toggle-btn ${contactMode === 'search' ? 'add-rel-modal__toggle-btn--active' : ''}`}
-                  onClick={() => setContactMode('search')}
-                >
-                  Search patrons
-                </button>
-                <button
-                  className={`add-rel-modal__toggle-btn ${contactMode === 'external' ? 'add-rel-modal__toggle-btn--active' : ''}`}
-                  onClick={() => setContactMode('external')}
-                >
-                  External contact
-                </button>
-              </div>
+              {/* Toggle between search and external (family relationships are patron-to-patron only) */}
+              {relType !== 'family' && (
+                <div className="add-rel-modal__contact-toggle">
+                  <button
+                    className={`add-rel-modal__toggle-btn ${contactMode === 'search' ? 'add-rel-modal__toggle-btn--active' : ''}`}
+                    onClick={() => setContactMode('search')}
+                  >
+                    Search patrons
+                  </button>
+                  <button
+                    className={`add-rel-modal__toggle-btn ${contactMode === 'external' ? 'add-rel-modal__toggle-btn--active' : ''}`}
+                    onClick={() => setContactMode('external')}
+                  >
+                    External contact
+                  </button>
+                </div>
+              )}
+              {relType === 'family' && (
+                <p className="add-rel-modal__description" style={{ margin: 'var(--space-2) 0' }}>
+                  Search for an existing patron to link as a family member.
+                </p>
+              )}
 
               {contactMode === 'search' ? (
                 <>

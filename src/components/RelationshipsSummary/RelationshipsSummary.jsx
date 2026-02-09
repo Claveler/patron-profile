@@ -8,13 +8,15 @@ function RelationshipsSummary({ patronId, onNavigateToPatron, onViewRelationship
     ? getHouseholdMembers(household.id).filter(m => m.patronId !== patronId)
     : []
 
-  // Get non-household relationships (professional/organization)
+  // Get non-household relationships
   const relationships = getPatronRelationships(patronId)
+  const familyRelationships = relationships.filter(r => r.type === 'family')
   const professionalRelationships = relationships.filter(r => r.type === 'organization' || r.type === 'professional')
 
   const hasHousehold = household && householdMembers.length > 0
+  const hasFamily = familyRelationships.length > 0
   const hasProfessional = professionalRelationships.length > 0
-  const hasAny = hasHousehold || hasProfessional
+  const hasAny = hasHousehold || hasFamily || hasProfessional
 
   const handleMemberClick = (memberPatronId) => {
     if (memberPatronId && onNavigateToPatron) {
@@ -23,6 +25,12 @@ function RelationshipsSummary({ patronId, onNavigateToPatron, onViewRelationship
   }
 
   const handleProfessionalClick = (rel) => {
+    if (rel.linkedPatron && onNavigateToPatron) {
+      onNavigateToPatron(rel.linkedPatron.id)
+    }
+  }
+
+  const handleFamilyClick = (rel) => {
     if (rel.linkedPatron && onNavigateToPatron) {
       onNavigateToPatron(rel.linkedPatron.id)
     }
@@ -95,6 +103,53 @@ function RelationshipsSummary({ patronId, onNavigateToPatron, onViewRelationship
                   </div>
                 </div>
                 {index < householdMembers.length - 1 && (
+                  <div className="relationships-summary__divider"></div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Family Section (cross-household family connections) */}
+      {hasFamily && (
+        <div className="relationships-summary__group">
+          <div className="relationships-summary__group-header">
+            <i className="fa-solid fa-heart relationships-summary__group-icon"></i>
+            <span className="relationships-summary__group-label">Family</span>
+          </div>
+          <div className="relationships-summary__members">
+            {familyRelationships.map((rel, index) => (
+              <div key={rel.id} className="relationships-summary__member-item">
+                <div
+                  className={`relationships-summary__member-row ${rel.linkedPatron ? 'relationships-summary__member-row--clickable' : ''}`}
+                  onClick={() => handleFamilyClick(rel)}
+                  role={rel.linkedPatron ? 'button' : undefined}
+                  tabIndex={rel.linkedPatron ? 0 : undefined}
+                  onKeyDown={(e) => {
+                    if (rel.linkedPatron && (e.key === 'Enter' || e.key === ' ')) {
+                      e.preventDefault()
+                      handleFamilyClick(rel)
+                    }
+                  }}
+                >
+                  <div className="relationships-summary__avatar relationships-summary__avatar--round">
+                    {rel.linkedPatron?.photo ? (
+                      <img src={rel.linkedPatron.photo} alt={rel.displayName} />
+                    ) : (
+                      <span className="relationships-summary__avatar-initials">
+                        {rel.initials}
+                      </span>
+                    )}
+                  </div>
+                  <div className="relationships-summary__member-info">
+                    <span className="relationships-summary__member-name">{rel.displayName}</span>
+                    <span className="relationships-summary__tag relationships-summary__tag--family">
+                      {rel.role}
+                    </span>
+                  </div>
+                </div>
+                {index < familyRelationships.length - 1 && (
                   <div className="relationships-summary__divider"></div>
                 )}
               </div>

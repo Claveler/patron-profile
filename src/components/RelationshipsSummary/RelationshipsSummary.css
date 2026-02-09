@@ -81,6 +81,12 @@
   text-decoration: underline;
 }
 
+.relationships-summary__group-label {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
 .relationships-summary__external-icon {
   font-size: 10px;
   color: var(--color-primary);
@@ -198,6 +204,11 @@
 .relationships-summary__tag--professional {
   color: var(--color-accent);
   border-color: var(--color-accent);
+}
+
+.relationships-summary__tag--family {
+  color: #d946a8;
+  border-color: #d946a8;
 }
 
 /* Professional Card */

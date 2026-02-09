@@ -18,6 +18,23 @@ const connectionBadgeColors = {
   'Board Member': { color: '#0079ca' },
   'Financial Advisor': { color: '#0079ca' },
   'Volunteer': { color: '#0079ca' },
+  // Family roles — pink/magenta to differentiate from professional (blue)
+  'Sister': { color: '#d946a8' },
+  'Brother': { color: '#d946a8' },
+  'Sibling': { color: '#d946a8' },
+  'Parent': { color: '#d946a8' },
+  'Mother': { color: '#d946a8' },
+  'Father': { color: '#d946a8' },
+  'Child': { color: '#d946a8' },
+  'Son': { color: '#d946a8' },
+  'Daughter': { color: '#d946a8' },
+  'Grandparent': { color: '#d946a8' },
+  'Grandchild': { color: '#d946a8' },
+  'Uncle': { color: '#d946a8' },
+  'Aunt': { color: '#d946a8' },
+  'Nephew': { color: '#d946a8' },
+  'Niece': { color: '#d946a8' },
+  'Cousin': { color: '#d946a8' },
 }
 
 // Neutral connector labels derived from relationship type (no directionality)
@@ -26,6 +43,7 @@ const connectorLabels = {
   'professional': 'Advisory',
   'board': 'Board',
   'volunteer': 'Volunteer',
+  'family': 'Family',
 }
 
 // Org title badge colors — purple outlined per Figma
@@ -148,15 +166,57 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
     return orgTitleBadgeColors[title] || orgTitleBadgeColors['default']
   }
 
-  // Renders external connection cards (connector line + org card)
+  // Renders a single org/professional/family card (reused in tree branches, sub-branches, and standalone)
+  const renderOrgCard = (rel) => {
+    // For family relationships, show the role (e.g., "Sister") not the reciprocal ("Brother")
+    const orgTitle = rel.type === 'family'
+      ? (rel.role || '')
+      : (rel.externalContact?.title || rel.reciprocalRole || '')
+    const orgName = rel.externalContact?.company || rel.displayName || ''
+    const orgInitials = rel.externalContact?.initials || rel.initials || '??'
+    const titleBadge = getOrgTitleBadge(orgTitle)
+
+    return (
+      <div
+        className={`relationships-tab__org-card ${rel.linkedPatron ? 'relationships-tab__org-card--clickable' : ''}`}
+        onClick={() => handleExternalClick(rel)}
+      >
+        <div className={rel.type === 'organization' ? 'relationships-tab__org-avatar' : 'relationships-tab__member-avatar'}>
+          {rel.linkedPatron?.photo ? (
+            <img src={rel.linkedPatron.photo} alt={rel.displayName} />
+          ) : (
+            <span className="relationships-tab__org-initials">{orgInitials}</span>
+          )}
+        </div>
+        <div className="relationships-tab__org-info">
+          <span className="relationships-tab__org-name">{orgName}</span>
+          {orgTitle && (
+            <span
+              className="relationships-tab__org-title-badge"
+              style={{ color: titleBadge.color, borderColor: titleBadge.color }}
+            >
+              {orgTitle}
+            </span>
+          )}
+        </div>
+        {onEndRelationship && (
+          <button
+            className="relationships-tab__remove-btn relationships-tab__remove-btn--org"
+            title="End relationship"
+            onClick={(e) => handleRemoveExternal(e, rel)}
+          >
+            <i className="fa-solid fa-xmark"></i>
+          </button>
+        )}
+      </div>
+    )
+  }
+
+  // Renders external connection cards (connector line + org card) — used by standalone patron
   const renderConnections = (rels) => {
     return rels.map((rel) => {
       const connBadge = getConnectionBadge(rel.role)
       const neutralLabel = connectorLabels[rel.type] || rel.role
-      const orgTitle = rel.externalContact?.title || rel.reciprocalRole || ''
-      const orgName = rel.externalContact?.company || rel.displayName || ''
-      const orgInitials = rel.externalContact?.initials || rel.initials || '??'
-      const titleBadge = getOrgTitleBadge(orgTitle)
 
       return (
         <div key={rel.id} className="relationships-tab__connection-row">
@@ -170,39 +230,7 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
             </span>
             <div className="relationships-tab__connector-line"></div>
           </div>
-
-          <div
-            className={`relationships-tab__org-card ${rel.linkedPatron ? 'relationships-tab__org-card--clickable' : ''}`}
-            onClick={() => handleExternalClick(rel)}
-          >
-            <div className={rel.type === 'organization' ? 'relationships-tab__org-avatar' : 'relationships-tab__member-avatar'}>
-              {rel.linkedPatron?.photo ? (
-                <img src={rel.linkedPatron.photo} alt={rel.displayName} />
-              ) : (
-                <span className="relationships-tab__org-initials">{orgInitials}</span>
-              )}
-            </div>
-            <div className="relationships-tab__org-info">
-              <span className="relationships-tab__org-name">{orgName}</span>
-              {orgTitle && (
-                <span
-                  className="relationships-tab__org-title-badge"
-                  style={{ color: titleBadge.color, borderColor: titleBadge.color }}
-                >
-                  {orgTitle}
-                </span>
-              )}
-            </div>
-            {onEndRelationship && (
-              <button
-                className="relationships-tab__remove-btn relationships-tab__remove-btn--org"
-                title="End relationship"
-                onClick={(e) => handleRemoveExternal(e, rel)}
-              >
-                <i className="fa-solid fa-xmark"></i>
-              </button>
-            )}
-          </div>
+          {renderOrgCard(rel)}
         </div>
       )
     })
@@ -290,13 +318,24 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
               </div>
             </div>
 
-            {/* RIGHT: External connections — tree layout with trunk + spine + branches */}
+            {/* RIGHT: External connections — two-level tree grouped by type */}
             {hasAnyExternalInHousehold && (
               <div className="relationships-tab__ext-column">
                 {householdMembers.map((member, memberIndex) => {
                   const memberRels = memberExternalMap[member.patronId] || []
                   if (memberRels.length === 0) return null
-                  const isSingle = memberRels.length === 1
+
+                  // Group relationships by type → [['organization', [...]], ['professional', [...]], ...]
+                  const typeGroups = Object.entries(
+                    memberRels.reduce((acc, rel) => {
+                      const key = rel.type
+                      if (!acc[key]) acc[key] = []
+                      acc[key].push(rel)
+                      return acc
+                    }, {})
+                  )
+                  const isSingle = typeGroups.length === 1 && typeGroups[0][1].length === 1
+
                   return (
                     <div
                       key={member.id}
@@ -307,18 +346,14 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
                       <div className="relationships-tab__trunk">
                         <div className="relationships-tab__trunk-line" />
                       </div>
-                      {/* Vertical spine (via branch ::before) + horizontal branches */}
+                      {/* Level 1: one branch per relationship type */}
                       <div className="relationships-tab__branches">
-                        {memberRels.map((rel) => {
-                          const connBadge = getConnectionBadge(rel.role)
-                          const neutralLabel = connectorLabels[rel.type] || rel.role
-                          const orgTitle = rel.externalContact?.title || rel.reciprocalRole || ''
-                          const orgName = rel.externalContact?.company || rel.displayName || ''
-                          const orgInitials = rel.externalContact?.initials || rel.initials || '??'
-                          const titleBadge = getOrgTitleBadge(orgTitle)
+                        {typeGroups.map(([type, contacts]) => {
+                          const connBadge = getConnectionBadge(contacts[0].role)
+                          const neutralLabel = connectorLabels[type] || contacts[0].role
 
                           return (
-                            <div key={rel.id} className="relationships-tab__branch">
+                            <div key={type} className="relationships-tab__branch">
                               <div className="relationships-tab__branch-connector">
                                 <div className="relationships-tab__connector-line"></div>
                                 <span
@@ -329,38 +364,20 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
                                 </span>
                                 <div className="relationships-tab__connector-line"></div>
                               </div>
-                              <div
-                                className={`relationships-tab__org-card ${rel.linkedPatron ? 'relationships-tab__org-card--clickable' : ''}`}
-                                onClick={() => handleExternalClick(rel)}
-                              >
-                                <div className={rel.type === 'organization' ? 'relationships-tab__org-avatar' : 'relationships-tab__member-avatar'}>
-                                  {rel.linkedPatron?.photo ? (
-                                    <img src={rel.linkedPatron.photo} alt={rel.displayName} />
-                                  ) : (
-                                    <span className="relationships-tab__org-initials">{orgInitials}</span>
-                                  )}
+                              {contacts.length === 1 ? (
+                                /* Single contact in this type → direct card */
+                                renderOrgCard(contacts[0])
+                              ) : (
+                                /* Multiple contacts → level-2 sub-tree */
+                                <div className="relationships-tab__sub-branches">
+                                  {contacts.map((rel) => (
+                                    <div key={rel.id} className="relationships-tab__sub-branch">
+                                      <div className="relationships-tab__sub-connector"></div>
+                                      {renderOrgCard(rel)}
+                                    </div>
+                                  ))}
                                 </div>
-                                <div className="relationships-tab__org-info">
-                                  <span className="relationships-tab__org-name">{orgName}</span>
-                                  {orgTitle && (
-                                    <span
-                                      className="relationships-tab__org-title-badge"
-                                      style={{ color: titleBadge.color, borderColor: titleBadge.color }}
-                                    >
-                                      {orgTitle}
-                                    </span>
-                                  )}
-                                </div>
-                                {onEndRelationship && (
-                                  <button
-                                    className="relationships-tab__remove-btn relationships-tab__remove-btn--org"
-                                    title="End relationship"
-                                    onClick={(e) => handleRemoveExternal(e, rel)}
-                                  >
-                                    <i className="fa-solid fa-xmark"></i>
-                                  </button>
-                                )}
-                              </div>
+                              )}
                             </div>
                           )
                         })}
