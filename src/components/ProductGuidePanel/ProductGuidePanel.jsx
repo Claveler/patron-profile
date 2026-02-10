@@ -38,32 +38,29 @@ function WalkthroughView({ walkthrough }) {
   const [expandedSections, setExpandedSections] = useState(() =>
     Object.fromEntries(walkthrough.sections.map((s) => [s.id, true]))
   )
-  const [lightboxSrc, setLightboxSrc] = useState(null)
-  const [lightboxAlt, setLightboxAlt] = useState('')
+  const [lightbox, setLightbox] = useState(null)
 
   const toggleSection = useCallback((id) => {
     setExpandedSections((prev) => ({ ...prev, [id]: !prev[id] }))
   }, [])
 
-  const openLightbox = useCallback((src, alt) => {
-    setLightboxSrc(src)
-    setLightboxAlt(alt)
+  const openLightbox = useCallback((src, title, description) => {
+    setLightbox({ src, title, description })
   }, [])
 
   const closeLightbox = useCallback(() => {
-    setLightboxSrc(null)
-    setLightboxAlt('')
+    setLightbox(null)
   }, [])
 
   // Close lightbox on Escape
   useEffect(() => {
-    if (!lightboxSrc) return
+    if (!lightbox) return
     const handleKey = (e) => {
       if (e.key === 'Escape') closeLightbox()
     }
     document.addEventListener('keydown', handleKey)
     return () => document.removeEventListener('keydown', handleKey)
-  }, [lightboxSrc, closeLightbox])
+  }, [lightbox, closeLightbox])
 
   return (
     <div className="guide-walkthrough">
@@ -94,7 +91,7 @@ function WalkthroughView({ walkthrough }) {
                   {step.media && (
                     <div
                       className="guide-walkthrough__media"
-                      onClick={() => openLightbox(step.media, step.title)}
+                      onClick={() => openLightbox(step.media, step.title, step.description)}
                     >
                       <img
                         src={step.media}
@@ -116,7 +113,7 @@ function WalkthroughView({ walkthrough }) {
       ))}
 
       {/* Full-screen lightbox — portaled to body to escape panel stacking context */}
-      {lightboxSrc &&
+      {lightbox &&
         createPortal(
           <div className="guide-lightbox__overlay" onClick={closeLightbox}>
             <button
@@ -126,12 +123,17 @@ function WalkthroughView({ walkthrough }) {
             >
               <i className="fa-solid fa-xmark"></i>
             </button>
-            <img
-              src={lightboxSrc}
-              alt={lightboxAlt}
-              className="guide-lightbox__img"
-              onClick={(e) => e.stopPropagation()}
-            />
+            <div className="guide-lightbox__content" onClick={(e) => e.stopPropagation()}>
+              <img
+                src={lightbox.src}
+                alt={lightbox.title}
+                className="guide-lightbox__img"
+              />
+              <div className="guide-lightbox__caption">
+                <strong className="guide-lightbox__caption-title">{lightbox.title}</strong>
+                <p className="guide-lightbox__caption-desc">{lightbox.description}</p>
+              </div>
+            </div>
           </div>,
           document.body
         )}

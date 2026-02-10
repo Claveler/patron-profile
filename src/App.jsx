@@ -1,11 +1,10 @@
-import { useState, useEffect, createContext, useCallback, useMemo } from 'react'
+import { useState, useEffect, createContext, useCallback } from 'react'
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import Header from './components/Layout/Header'
 import Sidebar from './components/Layout/Sidebar'
 import Footer from './components/Layout/Footer'
 import ProductGuidePanel from './components/ProductGuidePanel/ProductGuidePanel'
 import LoginPage from './pages/LoginPage/LoginPage'
-import Dashboard from './pages/Dashboard/Dashboard'
 import PatronsList from './pages/PatronsList/PatronsList'
 import PatronProfile from './pages/PatronProfile'
 import CampaignManagement from './pages/CampaignManagement/CampaignManagement'
@@ -50,11 +49,8 @@ function App() {
     setIsAuthenticated(true)
   }, [])
 
-  // Determine the fallback route based on active epic
-  const fallbackRoute = useMemo(() => {
-    if (isInScope(EPIC_SCOPE.routes['/'], activeEpic)) return '/'
-    return '/patrons'
-  }, [activeEpic])
+  // Fallback route: always land on Anderson Collingwood's profile (internal demo focus)
+  const fallbackRoute = '/patrons/7962415'
 
   // ── Login gate ──
   if (!isAuthenticated) {
@@ -76,9 +72,8 @@ function App() {
           />
           <main className={`app__content ${sidebarCollapsed ? 'app__content--expanded' : ''}`}>
             <Routes>
-              {isInScope(EPIC_SCOPE.routes['/'], activeEpic) && (
-                <Route path="/" element={<Dashboard />} />
-              )}
+              {/* Redirect root to Anderson Collingwood's profile — our model patron for internal demos */}
+              <Route path="/" element={<Navigate to="/patrons/7962415" replace />} />
               <Route path="/patrons" element={<PatronsList />} />
               <Route path="/patrons/:patronId" element={<PatronProfile />} />
               {isInScope(EPIC_SCOPE.routes['/gifts'], activeEpic) && (

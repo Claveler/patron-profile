@@ -462,6 +462,13 @@ const GUIDE_CONTENT = {
                   mediaType: 'image',
                 },
                 {
+                  title: 'After Dissolve Everything',
+                  description:
+                    'Result: the household card is gone. Marianne and Josiah are removed entirely. Anderson becomes a standalone node. The legend no longer shows blue Household — only Personal (pink) and Professional (purple) remain. Undo/redo buttons appear.',
+                  media: '/screenshots/relationships/03b-after-dissolve-all.png',
+                  mediaType: 'image',
+                },
+                {
                   title: 'Dissolve Household — Option B: Keep Records',
                   description:
                     'Option B: "Dissolve household but keep relationship records" — removes only the household grouping. Individual family relationships are converted to Personal type and remain active. Members stay visible on the graph as personal connections.',
@@ -469,10 +476,24 @@ const GUIDE_CONTENT = {
                   mediaType: 'image',
                 },
                 {
+                  title: 'After Keep Records',
+                  description:
+                    'Result: the household card dissolves but all members remain visible as standalone Personal cards — Marianne (Spouse), Josiah (Son), Eleanor (Sister). Pink badges confirm relationships were preserved. Compare with Option A where members vanish.',
+                  media: '/screenshots/relationships/03c-after-keep-rels.png',
+                  mediaType: 'image',
+                },
+                {
                   title: 'Remove from Household (Move Out)',
                   description:
                     'The arrow icon on each household member row removes that member from the household without severing the family bond. Household relationships are soft-deleted and automatically recreated as Personal connections — modeling real-world scenarios like a child leaving for college.',
                   media: '/screenshots/relationships/07-move-out-modal.png',
+                  mediaType: 'image',
+                },
+                {
+                  title: 'After Move Out',
+                  description:
+                    'Result: Josiah leaves the household card and appears as a standalone Personal card with a "Son" badge. The household card now shows only Anderson and Marianne. The family bond is preserved — Josiah just lives independently.',
+                  media: '/screenshots/relationships/07-after-move-out.png',
                   mediaType: 'image',
                 },
               ],
@@ -496,10 +517,24 @@ const GUIDE_CONTENT = {
                   mediaType: 'image',
                 },
                 {
+                  title: 'After Ending — 3+ Member Cascade',
+                  description:
+                    'Result: Josiah is removed from the household. The household card shrinks to Anderson + Marianne only. All other connections (Eleanor, Marcus, Collingwood Capital Partners) are unaffected. The cascade only touches the departing member.',
+                  media: '/screenshots/relationships/06-after-end-rel-3member.png',
+                  mediaType: 'image',
+                },
+                {
                   title: 'End Relationship — 2-Member Household (Dissolution)',
                   description:
                     'In a 2-member household, ending the only relationship triggers a dissolution warning: both patrons will become standalone. The system clearly states this only removes the CRM relationship, not shared memberships — use the Memberships tab for beneficiary access.',
                   media: '/screenshots/relationships/08-end-rel-2member.png',
+                  mediaType: 'image',
+                },
+                {
+                  title: 'After 2-Member Dissolution',
+                  description:
+                    'Result: the graph shows the empty state — "No Relationships Mapped". The household and its sole remaining member\'s connection are both gone. The patron is now completely standalone with an "Add relationship" prompt.',
+                  media: '/screenshots/relationships/08-after-end-rel-2member.png',
                   mediaType: 'image',
                 },
                 {
