@@ -236,10 +236,9 @@ function AddRelationshipModal({
       return
     }
 
-    // Duplicate relationship prevention
-    if (selectedPatron && hasActiveRelationship(patronId, selectedPatron.id, relType)) {
-      const typeLabel = relationshipTypes.find(t => t.id === relType)?.label || relType
-      setError(`An active ${typeLabel} relationship already exists with ${selectedPatron.name}.`)
+    // Duplicate relationship prevention — blocks exact same role, allows different roles within same type
+    if (selectedPatron && hasActiveRelationship(patronId, selectedPatron.id, relType, selectedRole)) {
+      setError(`An active ${selectedRole} relationship already exists with ${selectedPatron.name}.`)
       return
     }
 

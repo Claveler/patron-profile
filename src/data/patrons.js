@@ -4013,6 +4013,31 @@ export const patronRelationships = [
     endDate: null,
     notes: 'Met through arts community events'
   },
+  // Anderson ↔ Marcus Chen personal relationship (mentee — demonstrates multi-role same-type)
+  {
+    id: 'rel-19',
+    fromPatronId: '7962415',
+    toPatronId: '7962433',
+    type: 'personal',
+    role: 'Mentor',
+    reciprocalRole: 'Mentee',
+    isPrimary: false,
+    startDate: '2022-01-15',
+    endDate: null,
+    notes: 'Arts philanthropy mentorship'
+  },
+  {
+    id: 'rel-20',
+    fromPatronId: '7962433',
+    toPatronId: '7962415',
+    type: 'personal',
+    role: 'Mentee',
+    reciprocalRole: 'Mentor',
+    isPrimary: false,
+    startDate: '2022-01-15',
+    endDate: null,
+    notes: 'Arts philanthropy mentorship'
+  },
   // Fairfax household relationships
   {
     id: 'rel-8',
@@ -5185,11 +5210,11 @@ export const getHouseholdConflict = (patronId, excludeHouseholdId = null) => {
   }
 }
 
-// Check if an active (non-ended) relationship of a given type already exists between two patrons
-export const hasActiveRelationship = (patronId1, patronId2, type) => {
+// Check if an active (non-ended) relationship of a given type AND role already exists between two patrons
+export const hasActiveRelationship = (patronId1, patronId2, type, role) => {
   return patronRelationships.some(
     r => r.fromPatronId === patronId1 && r.toPatronId === patronId2
-      && r.type === type && !r.endDate
+      && r.type === type && r.role === role && !r.endDate
   )
 }
 
