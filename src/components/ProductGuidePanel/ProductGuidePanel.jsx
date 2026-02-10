@@ -1,4 +1,5 @@
-import { useState, useEffect, useContext, useMemo } from 'react'
+import { useState, useEffect, useContext, useMemo, useCallback } from 'react'
+import { createPortal } from 'react-dom'
 import { useLocation } from 'react-router-dom'
 import { GuideContext } from '../../App'
 import GUIDE_CONTENT from '../../data/productGuide'
@@ -31,6 +32,115 @@ function resolveContent(pathname, guideTab) {
   return null
 }
 
+/* ── Walkthrough Section Renderer ─────────────────────────────────────── */
+
+function WalkthroughView({ walkthrough }) {
+  const [expandedSections, setExpandedSections] = useState(() =>
+    Object.fromEntries(walkthrough.sections.map((s) => [s.id, true]))
+  )
+  const [lightboxSrc, setLightboxSrc] = useState(null)
+  const [lightboxAlt, setLightboxAlt] = useState('')
+
+  const toggleSection = useCallback((id) => {
+    setExpandedSections((prev) => ({ ...prev, [id]: !prev[id] }))
+  }, [])
+
+  const openLightbox = useCallback((src, alt) => {
+    setLightboxSrc(src)
+    setLightboxAlt(alt)
+  }, [])
+
+  const closeLightbox = useCallback(() => {
+    setLightboxSrc(null)
+    setLightboxAlt('')
+  }, [])
+
+  // Close lightbox on Escape
+  useEffect(() => {
+    if (!lightboxSrc) return
+    const handleKey = (e) => {
+      if (e.key === 'Escape') closeLightbox()
+    }
+    document.addEventListener('keydown', handleKey)
+    return () => document.removeEventListener('keydown', handleKey)
+  }, [lightboxSrc, closeLightbox])
+
+  return (
+    <div className="guide-walkthrough">
+      {walkthrough.sections.map((section) => (
+        <div key={section.id} className="guide-walkthrough__section">
+          <button
+            className="guide-walkthrough__section-header"
+            onClick={() => toggleSection(section.id)}
+          >
+            <span className="guide-walkthrough__section-title">
+              {section.title}
+              <span className="guide-panel__component-count">{section.steps.length}</span>
+            </span>
+            <i
+              className={`fa-solid fa-chevron-${expandedSections[section.id] ? 'up' : 'down'} guide-panel__toggle-icon`}
+            ></i>
+          </button>
+
+          {expandedSections[section.id] && (
+            <div className="guide-walkthrough__steps">
+              {section.steps.map((step, idx) => (
+                <div key={idx} className="guide-walkthrough__step">
+                  <div className="guide-walkthrough__step-header">
+                    <span className="guide-walkthrough__step-number">{idx + 1}</span>
+                    <span className="guide-walkthrough__step-title">{step.title}</span>
+                  </div>
+                  <p className="guide-walkthrough__step-desc">{step.description}</p>
+                  {step.media && (
+                    <div
+                      className="guide-walkthrough__media"
+                      onClick={() => openLightbox(step.media, step.title)}
+                    >
+                      <img
+                        src={step.media}
+                        alt={step.title}
+                        className="guide-walkthrough__img"
+                        loading="lazy"
+                      />
+                      <span className="guide-walkthrough__media-hint">
+                        <i className="fa-solid fa-expand"></i>
+                        Click to expand
+                      </span>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      ))}
+
+      {/* Full-screen lightbox — portaled to body to escape panel stacking context */}
+      {lightboxSrc &&
+        createPortal(
+          <div className="guide-lightbox__overlay" onClick={closeLightbox}>
+            <button
+              className="guide-lightbox__close"
+              onClick={closeLightbox}
+              aria-label="Close"
+            >
+              <i className="fa-solid fa-xmark"></i>
+            </button>
+            <img
+              src={lightboxSrc}
+              alt={lightboxAlt}
+              className="guide-lightbox__img"
+              onClick={(e) => e.stopPropagation()}
+            />
+          </div>,
+          document.body
+        )}
+    </div>
+  )
+}
+
+/* ── Main Panel ───────────────────────────────────────────────────────── */
+
 function ProductGuidePanel() {
   const { guideOpen, toggleGuide, guideTab } = useContext(GuideContext)
   const location = useLocation()
@@ -38,11 +148,24 @@ function ProductGuidePanel() {
   // Track which component sections are expanded
   const [expandedComponents, setExpandedComponents] = useState(true)
 
+  // Active internal view: overview (existing content) or walkthrough
+  const [activeView, setActiveView] = useState('overview')
+
   // Resolve content based on route + tab
   const content = useMemo(
     () => resolveContent(location.pathname, guideTab),
     [location.pathname, guideTab]
   )
+
+  // Does the current content have a walkthrough?
+  const hasWalkthrough = content?.walkthrough?.sections?.length > 0
+
+  // Reset to overview when content changes if walkthrough not available
+  useEffect(() => {
+    if (!hasWalkthrough && activeView === 'walkthrough') {
+      setActiveView('overview')
+    }
+  }, [hasWalkthrough, activeView])
 
   // Close on Escape key
   useEffect(() => {
@@ -91,6 +214,26 @@ function ProductGuidePanel() {
                   </span>
                 )}
               </div>
+
+              {/* Tab bar (only when walkthrough is available) */}
+              {hasWalkthrough && (
+                <div className="guide-panel__tab-bar">
+                  <button
+                    className={`guide-panel__tab ${activeView === 'overview' ? 'guide-panel__tab--active' : ''}`}
+                    onClick={() => setActiveView('overview')}
+                  >
+                    <i className="fa-solid fa-lightbulb"></i>
+                    Overview
+                  </button>
+                  <button
+                    className={`guide-panel__tab ${activeView === 'walkthrough' ? 'guide-panel__tab--active' : ''}`}
+                    onClick={() => setActiveView('walkthrough')}
+                  >
+                    <i className="fa-solid fa-images"></i>
+                    Walkthrough
+                  </button>
+                </div>
+              )}
             </>
           ) : (
             <h2 className="guide-panel__title">No Guide Content</h2>
@@ -101,71 +244,77 @@ function ProductGuidePanel() {
         <div className="guide-panel__body">
           {content ? (
             <>
-              {/* Section: Why This Exists */}
-              <div className="guide-panel__section">
-                <h5 className="guide-panel__section-title">
-                  <i className="fa-solid fa-lightbulb"></i>
-                  Why This Exists
-                </h5>
-                <p className="guide-panel__text">{content.why}</p>
-              </div>
-
-              {/* Section: Competitive Edge */}
-              {content.competitive && (
-                <div className="guide-panel__section">
-                  <h5 className="guide-panel__section-title">
-                    <i className="fa-solid fa-chess"></i>
-                    Competitive Edge
-                  </h5>
-                  <p className="guide-panel__text">{content.competitive}</p>
-                </div>
-              )}
-
-              {/* Section: Demo Talking Point (wow moment) */}
-              {content.wowMoment && (
-                <div className="guide-panel__section">
-                  <h5 className="guide-panel__section-title">
-                    <i className="fa-solid fa-star"></i>
-                    Demo Talking Point
-                  </h5>
-                  <div className="guide-panel__callout">
-                    <p className="guide-panel__text">{content.wowMoment}</p>
+              {activeView === 'walkthrough' && hasWalkthrough ? (
+                <WalkthroughView walkthrough={content.walkthrough} />
+              ) : (
+                <>
+                  {/* Section: Why This Exists */}
+                  <div className="guide-panel__section">
+                    <h5 className="guide-panel__section-title">
+                      <i className="fa-solid fa-lightbulb"></i>
+                      Why This Exists
+                    </h5>
+                    <p className="guide-panel__text">{content.why}</p>
                   </div>
-                </div>
-              )}
 
-              {/* Section: Key Components */}
-              {content.components && content.components.length > 0 && (
-                <div className="guide-panel__section">
-                  <button
-                    className="guide-panel__section-title guide-panel__section-title--toggle"
-                    onClick={() => setExpandedComponents(!expandedComponents)}
-                  >
-                    <span className="guide-panel__section-title-left">
-                      <i className="fa-solid fa-cubes"></i>
-                      Key Components
-                      <span className="guide-panel__component-count">
-                        {content.components.length}
-                      </span>
-                    </span>
-                    <i className={`fa-solid fa-chevron-${expandedComponents ? 'up' : 'down'} guide-panel__toggle-icon`}></i>
-                  </button>
-
-                  {expandedComponents && (
-                    <div className="guide-panel__components">
-                      {content.components.map((comp, idx) => (
-                        <div key={idx} className="guide-panel__component-card">
-                          <div className="guide-panel__component-name">
-                            {comp.name}
-                          </div>
-                          <p className="guide-panel__component-reasoning">
-                            {comp.reasoning}
-                          </p>
-                        </div>
-                      ))}
+                  {/* Section: Competitive Edge */}
+                  {content.competitive && (
+                    <div className="guide-panel__section">
+                      <h5 className="guide-panel__section-title">
+                        <i className="fa-solid fa-chess"></i>
+                        Competitive Edge
+                      </h5>
+                      <p className="guide-panel__text">{content.competitive}</p>
                     </div>
                   )}
-                </div>
+
+                  {/* Section: Demo Talking Point (wow moment) */}
+                  {content.wowMoment && (
+                    <div className="guide-panel__section">
+                      <h5 className="guide-panel__section-title">
+                        <i className="fa-solid fa-star"></i>
+                        Demo Talking Point
+                      </h5>
+                      <div className="guide-panel__callout">
+                        <p className="guide-panel__text">{content.wowMoment}</p>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Section: Key Components */}
+                  {content.components && content.components.length > 0 && (
+                    <div className="guide-panel__section">
+                      <button
+                        className="guide-panel__section-title guide-panel__section-title--toggle"
+                        onClick={() => setExpandedComponents(!expandedComponents)}
+                      >
+                        <span className="guide-panel__section-title-left">
+                          <i className="fa-solid fa-cubes"></i>
+                          Key Components
+                          <span className="guide-panel__component-count">
+                            {content.components.length}
+                          </span>
+                        </span>
+                        <i className={`fa-solid fa-chevron-${expandedComponents ? 'up' : 'down'} guide-panel__toggle-icon`}></i>
+                      </button>
+
+                      {expandedComponents && (
+                        <div className="guide-panel__components">
+                          {content.components.map((comp, idx) => (
+                            <div key={idx} className="guide-panel__component-card">
+                              <div className="guide-panel__component-name">
+                                {comp.name}
+                              </div>
+                              <p className="guide-panel__component-reasoning">
+                                {comp.reasoning}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </>
               )}
             </>
           ) : (

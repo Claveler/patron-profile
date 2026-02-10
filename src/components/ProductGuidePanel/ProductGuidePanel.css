@@ -322,10 +322,252 @@
   font-size: 11px;
 }
 
+/* ── Tab Bar ───────────────────────────────────────────────────────────── */
+
+.guide-panel__tab-bar {
+  display: flex;
+  gap: 2px;
+  margin-top: var(--space-3);
+  background: var(--color-background);
+  border-radius: var(--radius-md);
+  padding: 3px;
+}
+
+.guide-panel__tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 7px var(--space-3);
+  border: none;
+  background: none;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.guide-panel__tab i {
+  font-size: 11px;
+}
+
+.guide-panel__tab:hover {
+  color: var(--color-text-secondary);
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.guide-panel__tab--active {
+  background: var(--color-surface);
+  color: var(--color-primary);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.guide-panel__tab--active:hover {
+  background: var(--color-surface);
+  color: var(--color-primary);
+}
+
+/* ── Walkthrough ───────────────────────────────────────────────────────── */
+
+.guide-walkthrough {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.guide-walkthrough__section {
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.guide-walkthrough__section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  border: none;
+  background: var(--color-background);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.guide-walkthrough__section-header:hover {
+  background: var(--color-primary-50);
+}
+
+.guide-walkthrough__section-title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.guide-walkthrough__steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.guide-walkthrough__step {
+  padding: var(--space-3) var(--space-4);
+  border-top: 1px solid var(--color-border-light);
+}
+
+.guide-walkthrough__step-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+
+.guide-walkthrough__step-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  border-radius: var(--radius-full);
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 11px;
+  font-weight: var(--font-weight-bold);
+}
+
+.guide-walkthrough__step-title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  line-height: 1.3;
+}
+
+.guide-walkthrough__step-desc {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin: 0 0 var(--space-2) 0;
+}
+
+/* Media thumbnail (always clamped — click opens full-screen lightbox) */
+.guide-walkthrough__media {
+  position: relative;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  cursor: zoom-in;
+  border: 1px solid var(--color-border-light);
+  transition: all 0.2s ease;
+  max-height: 160px;
+}
+
+.guide-walkthrough__media:hover {
+  border-color: var(--color-primary-200);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.guide-walkthrough__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  object-position: center top;
+}
+
+.guide-walkthrough__media-hint {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 4px var(--space-2);
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.6));
+  color: #fff;
+  font-size: 10px;
+  font-weight: var(--font-weight-medium);
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.guide-walkthrough__media:hover .guide-walkthrough__media-hint {
+  opacity: 1;
+}
+
+/* ── Lightbox (full-screen image overlay, portaled to body) ────────────── */
+
+.guide-lightbox__overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(0, 0, 0, 0.88);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: zoom-out;
+  animation: guideLightboxFadeIn 0.15s ease-out;
+}
+
+@keyframes guideLightboxFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.guide-lightbox__img {
+  max-width: 92vw;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
+  cursor: default;
+  animation: guideLightboxZoomIn 0.2s ease-out;
+}
+
+@keyframes guideLightboxZoomIn {
+  from { transform: scale(0.92); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+
+.guide-lightbox__close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  backdrop-filter: blur(4px);
+}
+
+.guide-lightbox__close:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
 /* ── Responsive ─────────────────────────────────────────────────────────── */
 
 @media (max-width: 480px) {
   .guide-panel {
     width: 100vw;
+  }
+
+  .guide-lightbox__img {
+    max-width: 98vw;
+    max-height: 85vh;
+    border-radius: 4px;
   }
 }

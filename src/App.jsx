@@ -36,7 +36,7 @@ function ScrollToTop() {
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(
-    () => sessionStorage.getItem('fz_auth') === 'true'
+    () => localStorage.getItem('fz_auth') === 'true'
   )
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [guideOpen, setGuideOpen] = useState(false)
@@ -46,7 +46,7 @@ function App() {
   const toggleGuide = useCallback(() => setGuideOpen(prev => !prev), [])
 
   const handleLogin = useCallback(() => {
-    sessionStorage.setItem('fz_auth', 'true')
+    localStorage.setItem('fz_auth', 'true')
     setIsAuthenticated(true)
   }, [])
 
