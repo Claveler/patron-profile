@@ -10,6 +10,7 @@ function EndRelationshipModal({
   onSuccess,
   householdName,
   householdMemberCount,
+  onBeforeMutate,
 }) {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
@@ -21,6 +22,7 @@ function EndRelationshipModal({
     setError('')
 
     try {
+      onBeforeMutate?.()
       if (relationship.toPatronId) {
         // Patron-to-patron: use the bidirectional end function, scoped to this relationship type + role
         endPatronRelationship(relationship.fromPatronId, relationship.toPatronId, relationship.type, relationship.role)

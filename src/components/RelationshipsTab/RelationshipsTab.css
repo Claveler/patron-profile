@@ -99,6 +99,46 @@
 }
 
 /* ============================================
+   UNDO/REDO BAR — top-left panel inside React Flow
+   ============================================ */
+
+.relationships-tab__undo-bar {
+  display: flex;
+  gap: 4px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 3px;
+  box-shadow: var(--shadow-sm);
+}
+
+.relationships-tab__undo-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: none;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  padding: 0;
+  font-size: 13px;
+  transition: all var(--transition-fast);
+}
+
+.relationships-tab__undo-btn:hover:not(:disabled) {
+  background: var(--color-neutral-100);
+  color: var(--color-text-primary);
+}
+
+.relationships-tab__undo-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* ============================================
    COLOR LEGEND — top-right panel inside React Flow
    ============================================ */
 
@@ -537,6 +577,42 @@
 }
 
 /* Card-level remove button removed — all dismiss is now per-badge inline. */
+
+/* ============================================
+   MOVE-OUT BUTTON (Remove from Household)
+   Small icon button next to household member badges,
+   distinct from dismiss (x). Removes from household
+   while preserving family connections.
+   ============================================ */
+
+.relationships-tab__move-out-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  border-radius: var(--radius-full);
+  padding: 0;
+  opacity: 0.5;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+  margin-left: 2px;
+}
+
+.relationships-tab__move-out-btn i {
+  font-size: 9px;
+}
+
+.relationships-tab__move-out-btn:hover {
+  opacity: 1;
+  background: var(--color-primary-50, #eff6ff);
+  border-color: var(--color-primary-200, #bfdbfe);
+  color: var(--color-primary);
+}
 
 /* ============================================
    EMPTY STATE

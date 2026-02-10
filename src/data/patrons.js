@@ -4113,6 +4113,31 @@ export const patronRelationships = [
     endDate: null,
     notes: null
   },
+  // Whitfield Family (Eleanor <-> Richard)
+  {
+    id: 'rel-14',
+    fromPatronId: '7962432',
+    toPatronId: '7962444',
+    type: 'household',
+    role: 'Spouse',
+    reciprocalRole: 'Spouse',
+    isPrimary: true,
+    startDate: null,
+    endDate: null,
+    notes: null
+  },
+  {
+    id: 'rel-15',
+    fromPatronId: '7962444',
+    toPatronId: '7962432',
+    type: 'household',
+    role: 'Spouse',
+    reciprocalRole: 'Spouse',
+    isPrimary: true,
+    startDate: null,
+    endDate: null,
+    notes: null
+  },
   // Cross-household family relationships: Anderson Collingwood <-> Eleanor Whitfield (siblings)
   {
     id: 'rel-family-1',
@@ -4947,8 +4972,24 @@ export const addPatronRelationship = (fromPatronId, toPatronId, type, role, reci
   }
   patronRelationships.push(rel2)
 
-  // If this is a household relationship, also add the target patron to HOUSEHOLD_MEMBERS
+  // If this is a household relationship, absorb any matching Personal relationships first,
+  // then add the target patron to HOUSEHOLD_MEMBERS
   if (type === 'household') {
+    // Absorb: soft-delete active Personal relationships with the same role between these two patrons.
+    // The household relationship supersedes the personal one. If the household is later dissolved,
+    // the fallback mechanism will auto-recreate the Personal relationship.
+    const today = new Date().toISOString().split('T')[0]
+    patronRelationships.forEach(rel => {
+      if (rel.type !== 'personal' || rel.endDate) return
+      const matchesForward = rel.fromPatronId === fromPatronId && rel.toPatronId === toPatronId
+        && (rel.role === role || rel.role === reciprocal)
+      const matchesReverse = rel.fromPatronId === toPatronId && rel.toPatronId === fromPatronId
+        && (rel.role === role || rel.role === reciprocal)
+      if (matchesForward || matchesReverse) {
+        rel.endDate = today
+      }
+    })
+
     const fromPatron = patrons.find(p => p.id === fromPatronId)
     const toPatron = patrons.find(p => p.id === toPatronId)
     const householdId = fromPatron?.householdId || toPatron?.householdId
@@ -5065,6 +5106,17 @@ export const deleteHousehold = (householdId) => {
   memberEntries.forEach(entry => {
     const patron = patrons.find(p => p.id === entry.patronId)
     if (patron) patron.householdId = null
+  })
+
+  // Convert active household-type rels between members to personal type so they
+  // remain visible on the graph after the household entity is removed.
+  const memberPatronIds = memberEntries.map(e => e.patronId)
+  patronRelationships.forEach(rel => {
+    if (rel.type === 'household' && !rel.endDate &&
+        memberPatronIds.includes(rel.fromPatronId) &&
+        memberPatronIds.includes(rel.toPatronId)) {
+      rel.type = 'personal'
+    }
   })
 
   // Remove all HOUSEHOLD_MEMBERS entries for this household
@@ -5204,10 +5256,24 @@ export const getHouseholdConflict = (patronId, excludeHouseholdId = null) => {
   if (excludeHouseholdId && household.id === excludeHouseholdId) return null
   const members = HOUSEHOLD_MEMBERS.filter(m => m.householdId === household.id)
   const thisMember = members.find(m => m.patronId === patronId)
+  // Build a list of remaining members (everyone except the patron being transferred)
+  // so the UI can offer a "pick new Head" selector when the departing patron is the Head
+  const remainingMembers = members
+    .filter(m => m.patronId !== patronId)
+    .map(m => {
+      const p = patrons.find(pt => pt.id === m.patronId)
+      return {
+        patronId: m.patronId,
+        name: p ? `${p.firstName} ${p.lastName}` : 'Unknown',
+        role: m.role,
+        photo: p?.photo || null,
+      }
+    })
   return {
     household,
     isHead: thisMember?.isPrimary === true,
     memberCount: members.length,
+    remainingMembers,
   }
 }
 
@@ -5226,6 +5292,32 @@ export const getActiveRelationships = (patronId1, patronId2) => {
   )
 }
 
+// Auto-create Personal-type fallback relationships for household relationships that were just ended.
+// Preserves family connections (Spouse, Child, Parent, etc.) so they're not silently lost when a
+// household dissolves or a patron is transferred. Skips duplicates if a matching Personal rel exists.
+const createPersonalFallbacksForEndedHouseholdRels = (endedRels) => {
+  if (!endedRels || endedRels.length === 0) return
+  const today = new Date().toISOString().split('T')[0]
+
+  endedRels.forEach(rel => {
+    // Skip if an active Personal relationship with the same direction and role already exists
+    if (hasActiveRelationship(rel.fromPatronId, rel.toPatronId, 'personal', rel.role)) return
+
+    patronRelationships.push({
+      id: `rel-fallback-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+      fromPatronId: rel.fromPatronId,
+      toPatronId: rel.toPatronId,
+      type: 'personal',
+      role: rel.role,
+      reciprocalRole: rel.reciprocalRole,
+      isPrimary: false,
+      startDate: today,
+      endDate: null,
+      notes: 'Auto-created when household was dissolved',
+    })
+  })
+}
+
 // Cascade-end ALL household relationships between a patron and every other member of a household
 export const endAllHouseholdRelationshipsForPatron = (patronId, householdId) => {
   if (!patronId || !householdId) return
@@ -5234,15 +5326,57 @@ export const endAllHouseholdRelationshipsForPatron = (patronId, householdId) => 
     .filter(m => m.householdId === householdId && m.patronId !== patronId)
     .map(m => m.patronId)
 
+  // Collect the relationships we're about to end (for Personal fallbacks)
+  const relsToEnd = []
+
   patronRelationships.forEach(rel => {
     if (rel.type !== 'household' || rel.endDate) return
     // End in both directions: patron→other and other→patron
     const isFromPatron = rel.fromPatronId === patronId && otherMemberIds.includes(rel.toPatronId)
     const isToPatron = rel.toPatronId === patronId && otherMemberIds.includes(rel.fromPatronId)
     if (isFromPatron || isToPatron) {
+      relsToEnd.push({ ...rel })
       rel.endDate = today
     }
   })
+
+  // Create Personal-type fallbacks so family connections aren't silently lost
+  createPersonalFallbacksForEndedHouseholdRels(relsToEnd)
+}
+
+// Remove a patron from their household while preserving family connections as Personal relationships.
+// Unlike endPatronRelationship (which severs the bond), this routes everything through
+// endAllHouseholdRelationshipsForPatron so every relationship gets a Personal fallback.
+// Use case: Josiah goes to college — he's no longer in the household unit, but still Anderson's son.
+export const removePatronFromHousehold = (patronId, newHeadPatronId = null) => {
+  if (!patronId) return
+  const patron = patrons.find(p => p.id === patronId)
+  const householdId = patron?.householdId
+  if (!householdId) return
+
+  // Check if the departing patron is the Head before removing them
+  const departingMember = HOUSEHOLD_MEMBERS.find(m => m.householdId === householdId && m.patronId === patronId)
+  const wasHead = departingMember?.isPrimary === true
+
+  // End all household relationships — this also creates Personal fallbacks for each one
+  endAllHouseholdRelationshipsForPatron(patronId, householdId)
+
+  // Remove from HOUSEHOLD_MEMBERS
+  const idx = HOUSEHOLD_MEMBERS.findIndex(m => m.householdId === householdId && m.patronId === patronId)
+  if (idx !== -1) HOUSEHOLD_MEMBERS.splice(idx, 1)
+
+  // Clear their householdId
+  if (patron) patron.householdId = null
+
+  // Auto-dissolve household if only 1 member remains
+  const remaining = HOUSEHOLD_MEMBERS.filter(m => m.householdId === householdId)
+  if (remaining.length <= 1) {
+    deleteHousehold(householdId)
+  } else if (wasHead) {
+    // Household survives but lost its Head — promote a new one
+    const successorId = newHeadPatronId || remaining[0].patronId
+    changeHeadOfHousehold(householdId, successorId)
+  }
 }
 
 // Dissolve a household AND end all household-type relationships between its members
@@ -5253,7 +5387,8 @@ export const dissolveHouseholdWithRelationships = (householdId) => {
     .filter(m => m.householdId === householdId)
     .map(m => m.patronId)
 
-  // End all household relationships between any two members of this household
+  // End all household relationships between members — no Personal fallbacks.
+  // This is the "dissolve everything" path: relationships are truly ended.
   patronRelationships.forEach(rel => {
     if (rel.type !== 'household' || rel.endDate) return
     if (memberIds.includes(rel.fromPatronId) && memberIds.includes(rel.toPatronId)) {
@@ -5261,18 +5396,25 @@ export const dissolveHouseholdWithRelationships = (householdId) => {
     }
   })
 
-  // Now delete the household entity itself (clears householdId, removes members & household record)
+  // Delete the household entity (clears householdId, removes members & record).
+  // The conversion loop in deleteHousehold skips these rels because endDate is already set.
   deleteHousehold(householdId)
 }
 
 // Transfer a patron from their old household into a new one (used when adding to a household that conflicts)
-export const transferPatronToHousehold = (patronId, newHouseholdId, role) => {
+// newHeadPatronId: optional — when the departing patron is the Head and 2+ members remain,
+// this specifies who should become the new Head. If omitted, auto-promotes the first remaining member as a safety net.
+export const transferPatronToHousehold = (patronId, newHouseholdId, role, newHeadPatronId = null) => {
   if (!patronId || !newHouseholdId) return
   const patron = patrons.find(p => p.id === patronId)
   const oldHouseholdId = patron?.householdId
 
   // Remove from old household if they have one
   if (oldHouseholdId) {
+    // Check if the departing patron is the Head before removing them
+    const departingMember = HOUSEHOLD_MEMBERS.find(m => m.householdId === oldHouseholdId && m.patronId === patronId)
+    const wasHead = departingMember?.isPrimary === true
+
     endAllHouseholdRelationshipsForPatron(patronId, oldHouseholdId)
 
     // Remove from HOUSEHOLD_MEMBERS
@@ -5283,6 +5425,10 @@ export const transferPatronToHousehold = (patronId, newHouseholdId, role) => {
     const remaining = HOUSEHOLD_MEMBERS.filter(m => m.householdId === oldHouseholdId)
     if (remaining.length <= 1) {
       deleteHousehold(oldHouseholdId)
+    } else if (wasHead) {
+      // Household survives with 2+ members but lost its Head — promote a new one
+      const successorId = newHeadPatronId || remaining[0].patronId
+      changeHeadOfHousehold(oldHouseholdId, successorId)
     }
   }
 

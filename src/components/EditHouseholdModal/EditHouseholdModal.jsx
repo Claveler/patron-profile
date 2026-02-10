@@ -3,7 +3,7 @@ import { updateHouseholdName, changeHeadOfHousehold, dissolveHouseholdWithRelati
 import { getInitials } from '../../utils/getInitials'
 import './EditHouseholdModal.css'
 
-function EditHouseholdModal({ isOpen, onClose, household, members, onSuccess, onDeleteHousehold }) {
+function EditHouseholdModal({ isOpen, onClose, household, members, onSuccess, onDeleteHousehold, onBeforeMutate }) {
   const [name, setName] = useState('')
   const [selectedHead, setSelectedHead] = useState('')
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
@@ -30,6 +30,8 @@ function EditHouseholdModal({ isOpen, onClose, household, members, onSuccess, on
   const handleSave = () => {
     const trimmedName = name.trim()
     if (!trimmedName) return
+
+    onBeforeMutate?.()
 
     // Update name if changed
     if (trimmedName !== household.name) {
@@ -174,6 +176,7 @@ function EditHouseholdModal({ isOpen, onClose, household, members, onSuccess, on
                     <button
                       className="edit-hh-modal__confirm-delete"
                       onClick={() => {
+                        onBeforeMutate?.()
                         if (deleteOption === 'dissolve-all') {
                           dissolveHouseholdWithRelationships(household.id)
                         } else {

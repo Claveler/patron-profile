@@ -292,28 +292,38 @@ const GUIDE_CONTENT = {
         why:
           'Donors exist in networks. The Relationships tab maps household, personal, professional, and organization connections. Understanding that Anderson\'s sister Eleanor runs the Whitfield Gallery, or that his financial advisor is Marcus Chen, fundamentally changes the cultivation approach.',
         competitive:
-          'Raiser\'s Edge has strong relationship mapping but requires a separate module. Tessitura embeds relationships but with dated UI. Bloomerang has basic household linking but no personal relationship type. Fever\'s approach groups relationships by type (household, personal, professional, organization) with cross-profile navigation, plus smart edge case handling (conflict detection, cascade removal, two-option dissolution).',
-        wowMoment: 'Try adding a patron who already belongs to another household — the system detects the conflict and lets you choose whether to transfer them or pick someone else.',
+          'Raiser\'s Edge has strong relationship mapping but requires a separate module. Tessitura embeds relationships but with dated UI. Bloomerang has basic household linking but no personal relationship type. Fever\'s approach groups relationships by type (household, personal, professional, organization) with cross-profile navigation, plus smart edge case handling (conflict detection, cascade removal, two-option dissolution, automatic Personal fallback so family bonds are never silently lost).',
+        wowMoment: 'Try adding a patron who already belongs to another household — the system detects the conflict and lets you choose whether to transfer them or pick someone else. If they\'re the Head of a 3+ member household, it asks you to pick a successor before completing the transfer.',
         components: [
           {
             name: 'Household Section',
             reasoning:
-              'Groups family members with head-of-household designation, verified badge, and cross-profile navigation. The household popover in PatronInfoBox is a compact version; this tab is the full management view with add/edit/end capabilities.',
+              'Groups family members with head-of-household designation, verified badge, and cross-profile navigation. The household popover in PatronInfoBox is a compact version; this tab is the full management view with add/edit/end/move-out capabilities. Adding a household relationship that matches an existing Personal relationship (same role) automatically absorbs the Personal one — and dissolving the household recreates it via fallback. Each non-current member row has two distinct actions: dismiss (x) to sever the bond entirely, and move-out (arrow) to remove from the household while preserving family ties as Personal connections.',
           },
           {
             name: 'Household Conflict Detection',
             reasoning:
-              'When adding a household relationship, detects if the selected patron already belongs to another household. Shows a warning with transfer or cancel options. Prevents silent data corruption — a patron cannot belong to two households.',
+              'When adding a household relationship, detects if the selected patron already belongs to another household. Shows a warning with transfer or cancel options. If the departing patron is the Head and the old household has 3+ members, prompts the user to select a new Head before completing the transfer. Prevents silent data corruption — a patron cannot belong to two households, and no household is left without a Head.',
           },
           {
             name: 'Context-Aware End Relationship',
             reasoning:
-              'End Relationship warnings adapt to household size: 2-member households show a dissolution warning, 3+ member households explain the cascade removal. Removing the Head of household triggers an additional warning.',
+              'End Relationship warnings adapt to household size: 2-member households show a dissolution warning, 3+ member households explain the cascade removal. Removing the Head of household triggers an additional warning. Cascade-ended relationships with other household members automatically get Personal-type fallbacks to preserve family connections.',
           },
           {
             name: 'Two-Option Household Dissolution',
             reasoning:
-              'Delete household offers "dissolve everything" (ends all relationships) or "dissolve grouping only" (keeps relationship records). Supports both clean breaks and scenarios where family still exists but no longer needs CRM grouping.',
+              'Delete household offers two distinct outcomes: "dissolve everything" ends all household relationships with no fallbacks — members vanish from the graph. "Dissolve grouping only" converts household relationships to personal type, preserving continuous history — members stay visible as Personal connections. The two options give gift officers explicit control over whether family bonds survive the dissolution.',
+          },
+          {
+            name: 'Remove from Household',
+            reasoning:
+              'The move-out button (arrow icon) lets gift officers remove a member from the household unit without severing the family bond. All household relationships are soft-deleted and automatically recreated as Personal connections. Models real-world scenarios like a child leaving for college — they leave the address, not the family.',
+          },
+          {
+            name: 'Undo / Redo',
+            reasoning:
+              'Snapshot-based undo/redo for all relationship actions — add, end, dissolve, transfer, move-out, and household edits. Appears as a compact toolbar in the top-left of the graph when history is available. Lets gift officers safely experiment with relationship changes and reverse mistakes without reloading.',
           },
           {
             name: 'Personal Relationships',

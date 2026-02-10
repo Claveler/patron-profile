@@ -75,6 +75,7 @@ function AddRelationshipModal({
   patronName,
   preselectedType,
   onSuccess,
+  onBeforeMutate,
 }) {
   const [step, setStep] = useState('type') // 'type' | 'contact' | 'conflict' | 'roles' | 'household'
   const [relType, setRelType] = useState('')
@@ -101,6 +102,8 @@ function AddRelationshipModal({
   // Household conflict state
   const [householdConflict, setHouseholdConflict] = useState(null)
   const [conflictApproved, setConflictApproved] = useState(false) // user approved transfer from old household
+  const [conflictNewHead, setConflictNewHead] = useState(null) // patron ID chosen as new Head when transferring the current Head
+  const [showHeadPicker, setShowHeadPicker] = useState(false) // controls inline Head picker visibility
 
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
@@ -131,6 +134,8 @@ function AddRelationshipModal({
       setSelectedHead('')
       setHouseholdConflict(null)
       setConflictApproved(false)
+      setConflictNewHead(null)
+      setShowHeadPicker(false)
       setError('')
       setIsLoading(false)
     }
@@ -190,7 +195,20 @@ function AddRelationshipModal({
       }
     }
 
+    prefillRoleFromExistingPersonal(patron)
     setStep('roles')
+  }
+
+  // When adding a household relationship, pre-fill the role dropdowns if the selected
+  // patron already has a Personal relationship with the current patron (e.g., Sister/Brother).
+  const prefillRoleFromExistingPersonal = (patron) => {
+    if (relType !== 'household' || !patron) return
+    const existingRels = getActiveRelationships(patronId, patron.id)
+    const personalMatch = existingRels.find(r => r.type === 'personal')
+    if (personalMatch) {
+      setSelectedRole(personalMatch.role)
+      setReciprocalRole(personalMatch.reciprocalRole)
+    }
   }
 
   const handleExternalContinue = () => {
@@ -257,6 +275,7 @@ function AddRelationshipModal({
   }
 
   const submitRelationship = () => {
+    onBeforeMutate?.()
     setIsLoading(true)
     setError('')
 
@@ -273,7 +292,8 @@ function AddRelationshipModal({
           const targetHouseholdId = currentPatron?.householdId
           if (targetHouseholdId) {
             // Transfer selected patron into current patron's household
-            transferPatronToHousehold(selectedPatron.id, targetHouseholdId, resolvedRole)
+            // Pass conflictNewHead so the old household gets a new Head (if applicable)
+            transferPatronToHousehold(selectedPatron.id, targetHouseholdId, resolvedRole, conflictNewHead)
           }
         }
 
@@ -319,8 +339,25 @@ function AddRelationshipModal({
   }
 
   const handleConflictTransfer = () => {
-    // User chose to transfer the patron from old household — proceed to roles step
+    // If the departing patron is the Head and the old household will survive (3+ members),
+    // show the Head picker before proceeding to roles
+    if (householdConflict?.isHead && householdConflict?.memberCount > 2) {
+      setShowHeadPicker(true)
+      setError('')
+      return
+    }
+    // Otherwise proceed directly to roles
     setConflictApproved(true)
+    prefillRoleFromExistingPersonal(selectedPatron)
+    setStep('roles')
+    setError('')
+  }
+
+  const handleHeadPickerContinue = () => {
+    // User has selected a new Head — proceed to roles step
+    setConflictApproved(true)
+    setShowHeadPicker(false)
+    prefillRoleFromExistingPersonal(selectedPatron)
     setStep('roles')
     setError('')
   }
@@ -329,6 +366,8 @@ function AddRelationshipModal({
     // User chose to pick a different contact
     setHouseholdConflict(null)
     setConflictApproved(false)
+    setConflictNewHead(null)
+    setShowHeadPicker(false)
     setSelectedPatron(null)
     setStep('contact')
     setError('')
@@ -580,19 +619,65 @@ function AddRelationshipModal({
                 </div>
               )}
 
-              <p className="add-rel-modal__description" style={{ marginTop: 'var(--space-4)' }}>
-                Would you like to transfer <strong>{selectedPatron?.name}</strong> to {patronName}'s household, or choose a different contact?
-              </p>
+              {/* Inline Head picker — shown after user clicks "Transfer" when departing patron is Head of a 3+ member household */}
+              {showHeadPicker ? (
+                <>
+                  <p className="add-rel-modal__description" style={{ marginTop: 'var(--space-4)' }}>
+                    Who should become the new Head of the <strong>{householdConflict.household.name}</strong> household?
+                  </p>
 
-              <div className="add-rel-modal__conflict-actions">
-                <button className="add-rel-modal__conflict-btn add-rel-modal__conflict-btn--secondary" onClick={handleConflictCancel}>
-                  Choose different contact
-                </button>
-                <button className="add-rel-modal__conflict-btn add-rel-modal__conflict-btn--primary" onClick={handleConflictTransfer}>
-                  <i className="fa-solid fa-arrow-right-arrow-left"></i>
-                  Transfer to this household
-                </button>
-              </div>
+                  <div className="add-rel-modal__head-picker">
+                    {householdConflict.remainingMembers.map(member => (
+                      <button
+                        key={member.patronId}
+                        type="button"
+                        className={`add-rel-modal__head-option${conflictNewHead === member.patronId ? ' add-rel-modal__head-option--selected' : ''}`}
+                        onClick={() => setConflictNewHead(member.patronId)}
+                      >
+                        <div className="add-rel-modal__head-option-avatar">
+                          {member.photo
+                            ? <img src={member.photo} alt={member.name} />
+                            : <span>{getInitials(member.name)}</span>
+                          }
+                        </div>
+                        <div className="add-rel-modal__head-option-info">
+                          <span className="add-rel-modal__head-option-name">{member.name}</span>
+                          <span className="add-rel-modal__head-option-role">{member.role}</span>
+                        </div>
+                        {conflictNewHead === member.patronId && (
+                          <i className="fa-solid fa-circle-check add-rel-modal__head-option-check"></i>
+                        )}
+                      </button>
+                    ))}
+                  </div>
+
+                  <div className="add-rel-modal__conflict-actions">
+                    <button
+                      className="add-rel-modal__conflict-btn add-rel-modal__conflict-btn--primary"
+                      onClick={handleHeadPickerContinue}
+                      disabled={!conflictNewHead}
+                    >
+                      Continue
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <p className="add-rel-modal__description" style={{ marginTop: 'var(--space-4)' }}>
+                    Would you like to transfer <strong>{selectedPatron?.name}</strong> to {patronName}'s household, or choose a different contact?
+                  </p>
+
+                  <div className="add-rel-modal__conflict-actions">
+                    <button className="add-rel-modal__conflict-btn add-rel-modal__conflict-btn--secondary" onClick={handleConflictCancel}>
+                      Choose different contact
+                    </button>
+                    <button className="add-rel-modal__conflict-btn add-rel-modal__conflict-btn--primary" onClick={handleConflictTransfer}>
+                      <i className="fa-solid fa-arrow-right-arrow-left"></i>
+                      Transfer to this household
+                    </button>
+                  </div>
+                </>
+              )}
             </>
           )}
 

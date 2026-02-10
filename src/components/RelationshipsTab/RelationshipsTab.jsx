@@ -172,7 +172,7 @@ const renderBridgingCard = (rels, { onNavigateToPatron, onEndRelationship } = {}
 
 // Household wrapper (blue container with title, member rows, action buttons)
 // Shared by HouseholdNode (inside React Flow) and mobile fallback (plain HTML).
-const renderHouseholdContent = ({ household, householdMembers, patronId, allRelationships, onNavigateToPatron, onEndRelationship, onAddRelationship, onEditHousehold }) => {
+const renderHouseholdContent = ({ household, householdMembers, patronId, allRelationships, onNavigateToPatron, onEndRelationship, onAddRelationship, onEditHousehold, onRemoveFromHousehold }) => {
   const handleMemberClick = (member) => {
     if (member.patronId !== patronId && onNavigateToPatron) {
       onNavigateToPatron(member.patronId)
@@ -199,6 +199,11 @@ const renderHouseholdContent = ({ household, householdMembers, patronId, allRela
     e.stopPropagation()
     const rel = getHouseholdRelationship(member)
     if (rel && onEndRelationship) onEndRelationship(rel)
+  }
+
+  const handleMoveOut = (e, member) => {
+    e.stopPropagation()
+    if (onRemoveFromHousehold) onRemoveFromHousehold(member)
   }
 
   return (
@@ -267,6 +272,15 @@ const renderHouseholdContent = ({ household, householdMembers, patronId, allRela
                       </button>
                     )}
                   </span>
+                  {isClickable && onRemoveFromHousehold && (
+                    <button
+                      className="relationships-tab__move-out-btn nodrag nopan nowheel"
+                      title={`Remove ${member.patron?.firstName || 'member'} from household`}
+                      onClick={(e) => handleMoveOut(e, member)}
+                    >
+                      <i className="fa-solid fa-arrow-right-from-bracket"></i>
+                    </button>
+                  )}
                   {extraRels.map(rel => {
                     const title = rel.type === 'personal' ? rel.role : (rel.reciprocalRole || rel.role)
                     const extraColor = getColorForType(rel.type)
@@ -489,7 +503,7 @@ const PATRON_WIDTH = 343     // household card / standalone card width
 // MAIN COMPONENT
 // ============================================
 
-function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onEndRelationship, onEditHousehold }) {
+function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onEndRelationship, onEditHousehold, onRemoveFromHousehold, onUndo, onRedo, canUndo, canRedo }) {
   // ---- Data hooks ----
   const household = useMemo(() => getHouseholdForPatron(patronId), [patronId])
   const householdMembers = useMemo(() => {
@@ -601,7 +615,7 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
         id: 'source',
         type: 'household',
         position: { x: patronX, y: 0 },
-        data: { household, householdMembers, patronId, allRelationships, onNavigateToPatron, onEndRelationship, onAddRelationship, onEditHousehold, rightHandleYs, leftHandleYs },
+        data: { household, householdMembers, patronId, allRelationships, onNavigateToPatron, onEndRelationship, onAddRelationship, onEditHousehold, onRemoveFromHousehold, rightHandleYs, leftHandleYs },
       })
     } else {
       n.push({
@@ -689,7 +703,7 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
     })
 
     return { nodes: n, edges: e }
-  }, [hasAnyRelationships, hasHousehold, household, householdMembers, patronId, allRelationships, currentPatron, externalRels, pureLeftRels, pureRightRels, bridgingGroups, onNavigateToPatron, onEndRelationship, onAddRelationship, onEditHousehold])
+  }, [hasAnyRelationships, hasHousehold, household, householdMembers, patronId, allRelationships, currentPatron, externalRels, pureLeftRels, pureRightRels, bridgingGroups, onNavigateToPatron, onEndRelationship, onAddRelationship, onEditHousehold, onRemoveFromHousehold])
 
   // ---- Empty state ----
   if (!hasAnyRelationships) {
@@ -779,6 +793,28 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
             proOptions={{ hideAttribution: true }}
           >
             <Controls showInteractive={false} />
+            {(canUndo || canRedo) && (
+              <Panel position="top-left">
+                <div className="relationships-tab__undo-bar">
+                  <button
+                    className="relationships-tab__undo-btn"
+                    disabled={!canUndo}
+                    onClick={onUndo}
+                    title="Undo last action"
+                  >
+                    <i className="fa-solid fa-rotate-left" />
+                  </button>
+                  <button
+                    className="relationships-tab__undo-btn"
+                    disabled={!canRedo}
+                    onClick={onRedo}
+                    title="Redo last action"
+                  >
+                    <i className="fa-solid fa-rotate-right" />
+                  </button>
+                </div>
+              </Panel>
+            )}
             <Panel position="top-right">
               <div className="relationships-tab__legend">
                 {[
@@ -800,7 +836,7 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
         <div className="relationships-tab__mobile-fallback">
           {hasHousehold && renderHouseholdContent({
             household, householdMembers, patronId, allRelationships,
-            onNavigateToPatron, onEndRelationship, onAddRelationship, onEditHousehold,
+            onNavigateToPatron, onEndRelationship, onAddRelationship, onEditHousehold, onRemoveFromHousehold,
           })}
           {!hasHousehold && (
             <div className="relationships-tab__standalone-column">

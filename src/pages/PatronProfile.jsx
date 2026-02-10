@@ -20,7 +20,9 @@ import RelationshipsTab from '../components/RelationshipsTab/RelationshipsTab'
 import AddRelationshipModal from '../components/AddRelationshipModal/AddRelationshipModal'
 import EndRelationshipModal from '../components/EndRelationshipModal/EndRelationshipModal'
 import EditHouseholdModal from '../components/EditHouseholdModal/EditHouseholdModal'
+import RemoveFromHouseholdModal from '../components/RemoveFromHouseholdModal/RemoveFromHouseholdModal'
 import ProfileTab from '../components/Tabs/ProfileTab'
+import { useRelationshipUndo } from '../hooks/useRelationshipUndo'
 import { getPatronById, isManagedProspect, archivePatron, restorePatron, updatePatronTags, getMembershipsByPatronId, getPrimaryPatronForMembership, getGiftsByPatronId, getInteractionsByPatronId, hasHouseholdRelationship, reorderBeneficiaries, getHouseholdForPatron, getHouseholdMembers, deleteHousehold } from '../data/patrons'
 import './PatronProfile.css'
 
@@ -256,7 +258,17 @@ function PatronProfile() {
   const [relationshipToEnd, setRelationshipToEnd] = useState(null)
   const [relationshipRefreshKey, setRelationshipRefreshKey] = useState(0)
   const [showEditHouseholdModal, setShowEditHouseholdModal] = useState(false)
+  const [showRemoveFromHouseholdModal, setShowRemoveFromHouseholdModal] = useState(false)
+  const [memberToRemoveFromHousehold, setMemberToRemoveFromHousehold] = useState(null)
   const [selectedTimelineGift, setSelectedTimelineGift] = useState(null)
+
+  // Undo/redo for relationship actions
+  const { snapshot: snapshotRelationships, undo: undoRelationship, redo: redoRelationship, canUndo, canRedo, clearHistory } = useRelationshipUndo()
+
+  // Clear undo/redo history when navigating to a different patron
+  useEffect(() => {
+    clearHistory()
+  }, [patronId, clearHistory])
 
   // Get patron data from store, fallback to default if not found
   const patronData = useMemo(() => {
@@ -389,6 +401,21 @@ function PatronProfile() {
     setRelationshipRefreshKey(k => k + 1) // Force RelationshipsTab remount with fresh data
   }
 
+  const handleUndo = () => {
+    undoRelationship()
+    setRelationshipRefreshKey(k => k + 1)
+  }
+
+  const handleRedo = () => {
+    redoRelationship()
+    setRelationshipRefreshKey(k => k + 1)
+  }
+
+  const handleRemoveFromHousehold = (member) => {
+    setMemberToRemoveFromHousehold(member)
+    setShowRemoveFromHouseholdModal(true)
+  }
+
   const handleNavigateToOpportunity = (opportunityId) => {
     navigate(`/opportunities/${opportunityId}`)
   }
@@ -458,6 +485,11 @@ function PatronProfile() {
             onAddRelationship={handleAddRelationship}
             onEndRelationship={handleEndRelationship}
             onEditHousehold={handleEditHousehold}
+            onRemoveFromHousehold={handleRemoveFromHousehold}
+            onUndo={handleUndo}
+            onRedo={handleRedo}
+            canUndo={canUndo}
+            canRedo={canRedo}
           />
         )
       case 'documents':
@@ -616,6 +648,7 @@ function PatronProfile() {
         patronName={patronFullName}
         preselectedType={addRelationshipType}
         onSuccess={handleRelationshipSuccess}
+        onBeforeMutate={snapshotRelationships}
       />
 
       <EndRelationshipModal
@@ -629,6 +662,7 @@ function PatronProfile() {
         onSuccess={handleRelationshipSuccess}
         householdName={householdData?.name || null}
         householdMemberCount={householdMembersData?.length || 0}
+        onBeforeMutate={snapshotRelationships}
       />
 
       <EditHouseholdModal
@@ -638,6 +672,21 @@ function PatronProfile() {
         members={householdMembersData}
         onSuccess={handleRelationshipSuccess}
         onDeleteHousehold={handleDeleteHousehold}
+        onBeforeMutate={snapshotRelationships}
+      />
+
+      <RemoveFromHouseholdModal
+        isOpen={showRemoveFromHouseholdModal}
+        onClose={() => {
+          setShowRemoveFromHouseholdModal(false)
+          setMemberToRemoveFromHousehold(null)
+        }}
+        member={memberToRemoveFromHousehold}
+        patronName={patronFullName}
+        householdName={householdData?.name || null}
+        householdMemberCount={householdMembersData?.length || 0}
+        onSuccess={handleRelationshipSuccess}
+        onBeforeMutate={snapshotRelationships}
       />
 
       {selectedTimelineGift && (
