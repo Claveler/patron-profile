@@ -4996,19 +4996,20 @@ export const addPatronRelationship = (fromPatronId, toPatronId, type, role, reci
 // Optional `type` parameter scopes the end to a specific relationship type
 // (e.g., 'professional', 'personal'). When null (default), ends ALL relationships
 // between the two patrons — backward-compatible with existing callers.
-export const endPatronRelationship = (fromPatronId, toPatronId, type = null) => {
+export const endPatronRelationship = (fromPatronId, toPatronId, type = null, role = null) => {
   const today = new Date().toISOString().split('T')[0]
   
   // Check if any of the matching relationships are household type
   let isHouseholdRel = false
   
-  // End both directions (scoped by type if provided)
+  // End both directions (scoped by type and role if provided)
   patronRelationships.forEach(rel => {
     if (
       ((rel.fromPatronId === fromPatronId && rel.toPatronId === toPatronId) ||
        (rel.fromPatronId === toPatronId && rel.toPatronId === fromPatronId)) &&
       !rel.endDate &&
-      (type === null || rel.type === type)
+      (type === null || rel.type === type) &&
+      (role === null || rel.role === role || rel.reciprocalRole === role)
     ) {
       rel.endDate = today
       if (rel.type === 'household') isHouseholdRel = true
