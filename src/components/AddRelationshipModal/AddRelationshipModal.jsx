@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { searchPatrons, addPatronRelationship, getReciprocalRole, patronRelationships, getPatronById, createHousehold, getHouseholdConflict, hasActiveRelationship, transferPatronToHousehold } from '../../data/patrons'
+import { searchPatrons, addPatronRelationship, getReciprocalRole, patronRelationships, getPatronById, createHousehold, getHouseholdConflict, hasActiveRelationship, getActiveRelationships, transferPatronToHousehold } from '../../data/patrons'
 import { getInitials } from '../../utils/getInitials'
 import './AddRelationshipModal.css'
 
@@ -626,6 +626,24 @@ function AddRelationshipModal({
                   )}
                 </div>
               </div>
+
+              {/* Cross-type relationship info callout */}
+              {selectedPatron && (() => {
+                const existingRels = getActiveRelationships(patronId, selectedPatron.id)
+                if (existingRels.length === 0) return null
+                const relDescriptions = existingRels.map(r => {
+                  const label = relationshipTypes.find(t => t.id === r.type)?.label || r.type
+                  return `${r.role} (${label})`
+                }).join(', ')
+                return (
+                  <div className="add-rel-modal__existing-rels-info">
+                    <i className="fa-solid fa-circle-info"></i>
+                    <span>
+                      {patronName} already has {existingRels.length === 1 ? 'a' : existingRels.length} relationship{existingRels.length > 1 ? 's' : ''} with {selectedPatron.name}: <strong>{relDescriptions}</strong>. Adding another will appear as an additional badge on the consolidated card.
+                    </span>
+                  </div>
+                )
+              })()}
 
               {/* Role selection */}
               <div className="add-rel-modal__role-section">

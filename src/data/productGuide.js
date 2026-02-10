@@ -127,7 +127,7 @@ const GUIDE_CONTENT = {
           {
             name: 'RelationshipsSummary',
             reasoning:
-              'Shows household, personal, and professional relationships at a glance. The Personal section covers family members outside the household as well as friends, mentors, and other individual connections — e.g., Anderson\'s sister Eleanor who married into the Whitfield family. Personal connections display the external patron\'s household name (e.g., "Whitfield Family") so gift officers instantly see which household unit a connected person belongs to. Cross-profile navigation lets gift officers understand the full relational context before a conversation.',
+              'Shows household, personal, and professional relationships at a glance with consolidated entries. Bridging patrons (appearing in both personal and professional groups) are shown once under Professional with stacked badges. Household members with extra non-household relationships display inline badges on the household row. Professional badges use purple (#6f41d7), personal use pink — matching the graph tab\'s type-based color system. Cross-profile navigation lets gift officers understand the full relational context before a conversation.',
           },
           {
             name: 'OpportunitiesPanel / AddToPortfolioBar',
@@ -318,17 +318,42 @@ const GUIDE_CONTENT = {
           {
             name: 'Personal Relationships',
             reasoning:
-              'Connects patrons through family bonds, friendships, mentorships, and other personal connections outside the household — e.g., siblings in separate families, friends, godparents, or neighbors. Uses pink/magenta labels to visually differentiate from professional (blue) connections. Cross-household cards show the external patron\'s household name as a muted subtitle, giving gift officers at-a-glance context about which household unit the connected patron belongs to. Broader than industry standard "family" type; captures the full personal network that influences giving behavior.',
+              'Connects patrons through family bonds, friendships, mentorships, and other personal connections outside the household — e.g., siblings in separate families, friends, godparents, or neighbors. Uses pink/magenta badges and edges to visually differentiate from professional (purple) and household (blue) connections. Cross-household cards show the external patron\'s household name as a muted subtitle, giving gift officers at-a-glance context about which household unit the connected patron belongs to.',
           },
           {
-            name: 'Professional Relationships',
+            name: 'Professional & Organization Relationships',
             reasoning:
-              'Financial advisors, attorneys, and other professional contacts are tracked because they influence giving decisions. A board member might introduce a prospect through their financial advisor.',
+              'Financial advisors, attorneys, employers, and board affiliations use a distinct purple color scheme. Edge connector labels show the actual role name (e.g., "Client", "Managing Partner") instead of abstract categories, so the label on the connector matches the badge on the card — no cognitive overhead.',
           },
           {
-            name: 'Organization Relationships',
+            name: 'Bridging Relationship Consolidation',
             reasoning:
-              'Links patrons to their employers with title and role. Professional information on the Profile tab is derived from these records — single source of truth.',
+              'When a patron appears in both personal and professional relationship categories (e.g., Marcus Chen is both Anderson\'s friend and his financial advisory client), the graph consolidates them into a single card with stacked role badges and typed connector edges. Supports 2+ simultaneous relationships. The Summary sidebar also consolidates: Marcus appears once under Professional with both badges stacked.',
+          },
+          {
+            name: 'Household Dual-Relationship Annotation',
+            reasoning:
+              'When a household member also has non-household relationships with the current patron (e.g., Marianne is both Spouse and Business Partner), the extra relationships appear as inline badges on the household member row in both the graph and the summary sidebar. No duplicate external card is created.',
+          },
+          {
+            name: 'Unified Per-Badge Dismiss',
+            reasoning:
+              'Every relationship badge — on org cards, bridging cards, and household member rows — has an inline dismiss button. No card-level X buttons; the per-badge pattern is consistent everywhere. Type-scoped deletion lets a user end one relationship without affecting others on the same patron.',
+          },
+          {
+            name: 'Type-Based Color System',
+            reasoning:
+              'A single getColorForType(type) function returns canonical colors: blue (#0079ca) for household, pink (#d946a8) for personal, purple (#6f41d7) for professional and organization. Colors are consistent across badges, connector edges, connector labels, and the summary sidebar. A color legend in the top-right corner of the graph dynamically shows only the types present on the current patron\'s map.',
+          },
+          {
+            name: 'Cross-Type Duplicate Guard',
+            reasoning:
+              'When adding a new relationship, the modal shows an informational callout if active relationships already exist between the two patrons (across all types). Non-blocking — the user can still proceed. Prevents accidental duplicates while supporting legitimate multi-type relationships.',
+          },
+          {
+            name: 'Keyboard Accessibility',
+            reasoning:
+              'All clickable graph cards (org, bridging, household member rows) have role="button", tabIndex, and Enter/Space keyboard handlers, matching the pattern already used in RelationshipsSummary. Ensures gift officers can navigate the relationship map without a mouse.',
           },
         ],
       },

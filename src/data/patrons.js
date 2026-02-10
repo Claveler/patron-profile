@@ -3988,6 +3988,31 @@ export const patronRelationships = [
     endDate: null,
     notes: null
   },
+  // Anderson ↔ Marcus Chen personal relationship (friend — demonstrates multi-type consolidation)
+  {
+    id: 'rel-17',
+    fromPatronId: '7962415',
+    toPatronId: '7962433',
+    type: 'personal',
+    role: 'Friend',
+    reciprocalRole: 'Friend',
+    isPrimary: false,
+    startDate: '2019-09-01',
+    endDate: null,
+    notes: 'Met through arts community events'
+  },
+  {
+    id: 'rel-18',
+    fromPatronId: '7962433',
+    toPatronId: '7962415',
+    type: 'personal',
+    role: 'Friend',
+    reciprocalRole: 'Friend',
+    isPrimary: false,
+    startDate: '2019-09-01',
+    endDate: null,
+    notes: 'Met through arts community events'
+  },
   // Fairfax household relationships
   {
     id: 'rel-8',
@@ -4943,17 +4968,22 @@ export const addPatronRelationship = (fromPatronId, toPatronId, type, role, reci
 }
 
 // End a relationship (soft delete)
-export const endPatronRelationship = (fromPatronId, toPatronId) => {
+// Optional `type` parameter scopes the end to a specific relationship type
+// (e.g., 'professional', 'personal'). When null (default), ends ALL relationships
+// between the two patrons — backward-compatible with existing callers.
+export const endPatronRelationship = (fromPatronId, toPatronId, type = null) => {
   const today = new Date().toISOString().split('T')[0]
   
   // Check if any of the matching relationships are household type
   let isHouseholdRel = false
   
-  // End both directions
+  // End both directions (scoped by type if provided)
   patronRelationships.forEach(rel => {
     if (
-      (rel.fromPatronId === fromPatronId && rel.toPatronId === toPatronId) ||
-      (rel.fromPatronId === toPatronId && rel.toPatronId === fromPatronId)
+      ((rel.fromPatronId === fromPatronId && rel.toPatronId === toPatronId) ||
+       (rel.fromPatronId === toPatronId && rel.toPatronId === fromPatronId)) &&
+      !rel.endDate &&
+      (type === null || rel.type === type)
     ) {
       rel.endDate = today
       if (rel.type === 'household') isHouseholdRel = true
@@ -5160,6 +5190,13 @@ export const hasActiveRelationship = (patronId1, patronId2, type) => {
   return patronRelationships.some(
     r => r.fromPatronId === patronId1 && r.toPatronId === patronId2
       && r.type === type && !r.endDate
+  )
+}
+
+// Get ALL active (non-ended) relationships from patron1 to patron2 across all types
+export const getActiveRelationships = (patronId1, patronId2) => {
+  return patronRelationships.filter(
+    r => r.fromPatronId === patronId1 && r.toPatronId === patronId2 && !r.endDate
   )
 }
 

@@ -1,21 +1,58 @@
 import { getPatronRelationships, getHouseholdForPatron, getHouseholdMembers } from '../../data/patrons'
 import './RelationshipsSummary.css'
 
+// Type-based colors — matches RelationshipsTab
+const typeColors = {
+  'household': '#0079ca',
+  'personal': '#d946a8',
+  'professional': '#6f41d7',
+  'organization': '#6f41d7',
+}
+
 function RelationshipsSummary({ patronId, onNavigateToPatron, onViewRelationships }) {
   // Get household data
   const household = getHouseholdForPatron(patronId)
   const householdMembers = household
     ? getHouseholdMembers(household.id).filter(m => m.patronId !== patronId)
     : []
+  const householdPatronIds = new Set(householdMembers.map(m => m.patronId))
 
-  // Get non-household relationships
+  // Get non-household relationships, excluding rels to household members (they're annotated in-row)
   const relationships = getPatronRelationships(patronId)
-  const familyRelationships = relationships.filter(r => r.type === 'personal')
-  const professionalRelationships = relationships.filter(r => r.type === 'organization' || r.type === 'professional')
+  const allPersonal = relationships.filter(r => r.type === 'personal' && !householdPatronIds.has(r.toPatronId))
+  const allProfessional = relationships.filter(r => (r.type === 'organization' || r.type === 'professional') && !householdPatronIds.has(r.toPatronId))
+
+  // Detect bridging patrons — same toPatronId in both personal and professional
+  const personalByPatron = new Map()
+  allPersonal.forEach(r => { if (r.toPatronId) { if (!personalByPatron.has(r.toPatronId)) personalByPatron.set(r.toPatronId, []); personalByPatron.get(r.toPatronId).push(r) } })
+  const profByPatron = new Map()
+  allProfessional.forEach(r => { if (r.toPatronId) { if (!profByPatron.has(r.toPatronId)) profByPatron.set(r.toPatronId, []); profByPatron.get(r.toPatronId).push(r) } })
+
+  const bridgingIds = new Set()
+  personalByPatron.forEach((_, pid) => { if (profByPatron.has(pid)) bridgingIds.add(pid) })
+
+  // Pure personal = not bridging; pure professional = not bridging
+  const familyRelationships = allPersonal.filter(r => !bridgingIds.has(r.toPatronId))
+  const professionalRelationships = allProfessional.filter(r => !bridgingIds.has(r.toPatronId))
+
+  // Bridging groups — shown in the Professional section with stacked badges
+  const bridgingGroups = [...bridgingIds].map(pid => ({
+    patronId: pid,
+    profRels: profByPatron.get(pid) || [],
+    personalRels: personalByPatron.get(pid) || [],
+    primaryRel: (profByPatron.get(pid) || [])[0] || (personalByPatron.get(pid) || [])[0],
+  }))
+
+  // Extra non-household rels on household members (for annotation)
+  const householdExtraRels = new Map()
+  householdMembers.forEach(m => {
+    const extras = relationships.filter(r => r.type !== 'household' && r.toPatronId === m.patronId)
+    if (extras.length > 0) householdExtraRels.set(m.patronId, extras)
+  })
 
   const hasHousehold = household && householdMembers.length > 0
   const hasFamily = familyRelationships.length > 0
-  const hasProfessional = professionalRelationships.length > 0
+  const hasProfessional = professionalRelationships.length > 0 || bridgingGroups.length > 0
   const hasAny = hasHousehold || hasFamily || hasProfessional
 
   const handleMemberClick = (memberPatronId) => {
@@ -97,9 +134,20 @@ function RelationshipsSummary({ patronId, onNavigateToPatron, onViewRelationship
                   </div>
                   <div className="relationships-summary__member-info">
                     <span className="relationships-summary__member-name">{member.patron?.name}</span>
-                    <span className="relationships-summary__tag relationships-summary__tag--household">
-                      {member.role}
-                    </span>
+                    <div className="relationships-summary__tags-row">
+                      <span className="relationships-summary__tag relationships-summary__tag--household">
+                        {member.role}
+                      </span>
+                      {(householdExtraRels.get(member.patronId) || []).map(rel => {
+                        const title = rel.type === 'personal' ? rel.role : (rel.reciprocalRole || rel.role)
+                        const color = typeColors[rel.type] || '#0079ca'
+                        return (
+                          <span key={rel.id} className="relationships-summary__tag" style={{ color, borderColor: color }}>
+                            {title}
+                          </span>
+                        )
+                      })}
+                    </div>
                   </div>
                 </div>
                 {index < householdMembers.length - 1 && (
@@ -163,7 +211,7 @@ function RelationshipsSummary({ patronId, onNavigateToPatron, onViewRelationship
         </div>
       )}
 
-      {/* Professional Section */}
+      {/* Professional Section (includes bridging patrons with stacked badges) */}
       {hasProfessional && (
         <div className="relationships-summary__group">
           <div className="relationships-summary__group-header">
@@ -208,6 +256,54 @@ function RelationshipsSummary({ patronId, onNavigateToPatron, onViewRelationship
               </div>
             </div>
           ))}
+          {/* Bridging patrons — stacked professional + personal badges */}
+          {bridgingGroups.map((group) => {
+            const { primaryRel, profRels, personalRels } = group
+            const allRels = [...profRels, ...personalRels]
+            return (
+              <div
+                key={`bridging-${group.patronId}`}
+                className={`relationships-summary__professional-card ${primaryRel.linkedPatron ? 'relationships-summary__professional-card--clickable' : ''}`}
+                onClick={() => handleProfessionalClick(primaryRel)}
+                role={primaryRel.linkedPatron ? 'button' : undefined}
+                tabIndex={primaryRel.linkedPatron ? 0 : undefined}
+                onKeyDown={(e) => {
+                  if (primaryRel.linkedPatron && (e.key === 'Enter' || e.key === ' ')) {
+                    e.preventDefault()
+                    handleProfessionalClick(primaryRel)
+                  }
+                }}
+              >
+                <div className="relationships-summary__member-row">
+                  <div className="relationships-summary__avatar relationships-summary__avatar--round">
+                    {primaryRel.linkedPatron?.photo ? (
+                      <img src={primaryRel.linkedPatron.photo} alt={primaryRel.displayName} />
+                    ) : (
+                      <span className="relationships-summary__avatar-initials">
+                        {primaryRel.initials}
+                      </span>
+                    )}
+                  </div>
+                  <div className="relationships-summary__member-info">
+                    <span className="relationships-summary__member-name relationships-summary__member-name--org">
+                      {primaryRel.displayName}
+                    </span>
+                    <div className="relationships-summary__tags-row">
+                      {allRels.map(rel => {
+                        const title = rel.type === 'personal' ? rel.role : (rel.externalContact?.title || rel.role)
+                        const color = typeColors[rel.type] || '#6f41d7'
+                        return (
+                          <span key={rel.id} className="relationships-summary__tag" style={{ color, borderColor: color }}>
+                            {title}
+                          </span>
+                        )
+                      })}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )
+          })}
         </div>
       )}
     </div>

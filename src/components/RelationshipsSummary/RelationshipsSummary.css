@@ -209,8 +209,16 @@
 }
 
 .relationships-summary__tag--professional {
-  color: var(--color-accent);
-  border-color: var(--color-accent);
+  color: #6f41d7;
+  border-color: #6f41d7;
+}
+
+/* Stacked badges row (for bridging patrons and household member extra rels) */
+.relationships-summary__tags-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
 }
 
 .relationships-summary__tag--personal {

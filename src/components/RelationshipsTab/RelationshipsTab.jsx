@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { ReactFlow, Handle, Position, BaseEdge, getSmoothStepPath, EdgeLabelRenderer, Controls } from '@xyflow/react'
+import { ReactFlow, Handle, Position, BaseEdge, Controls, Panel, getSmoothStepPath } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
 import { getHouseholdForPatron, getHouseholdMembers, getPatronRelationships, getPatronById } from '../../data/patrons'
 import { getInitials } from '../../utils/getInitials'
@@ -9,81 +9,62 @@ import './RelationshipsTab.css'
 // CONSTANTS
 // ============================================
 
-const roleBadgeColors = {
-  'Head': { color: '#0079ca', label: 'Spouse' },
-  'Spouse': { color: '#0079ca', label: 'Spouse' },
-  'Child': { color: '#0079ca', label: 'Child' },
-  'Daughter': { color: '#0079ca', label: 'Child' },
-  'Son': { color: '#0079ca', label: 'Child' },
+// Household role → badge label mapping (e.g., "Daughter" → "Child")
+const roleBadgeLabels = {
+  'Head': 'Spouse',
+  'Spouse': 'Spouse',
+  'Child': 'Child',
+  'Daughter': 'Child',
+  'Son': 'Child',
 }
 
-const connectionBadgeColors = {
-  'Employee': { color: '#0079ca' },
-  'Board Member': { color: '#0079ca' },
-  'Financial Advisor': { color: '#0079ca' },
-  'Volunteer': { color: '#0079ca' },
-  'Sister': { color: '#d946a8' },
-  'Brother': { color: '#d946a8' },
-  'Sibling': { color: '#d946a8' },
-  'Parent': { color: '#d946a8' },
-  'Mother': { color: '#d946a8' },
-  'Father': { color: '#d946a8' },
-  'Child': { color: '#d946a8' },
-  'Son': { color: '#d946a8' },
-  'Daughter': { color: '#d946a8' },
-  'Grandparent': { color: '#d946a8' },
-  'Grandchild': { color: '#d946a8' },
-  'Uncle': { color: '#d946a8' },
-  'Aunt': { color: '#d946a8' },
-  'Nephew': { color: '#d946a8' },
-  'Niece': { color: '#d946a8' },
-  'Cousin': { color: '#d946a8' },
-  'Friend': { color: '#d946a8' },
-  'Mentor': { color: '#d946a8' },
-  'Godparent': { color: '#d946a8' },
-  'Neighbor': { color: '#d946a8' },
-  'Guardian': { color: '#d946a8' },
-}
-
-const connectorLabels = {
-  'organization': 'Employment',
-  'professional': 'Advisory',
-  'board': 'Board',
-  'volunteer': 'Volunteer',
-  'personal': 'Personal',
-}
-
-const orgTitleBadgeColors = {
-  'CTO': { color: '#6f41d7' },
-  'Client': { color: '#0079ca' },
-  'default': { color: '#6f41d7' },
+// Canonical color per relationship type — single source of truth for badges, edges, and labels.
+// household = blue, personal = pink/magenta, professional/org = purple
+const typeColors = {
+  'household': '#0079ca',
+  'personal': '#d946a8',
+  'professional': '#6f41d7',
+  'organization': '#6f41d7',
 }
 
 // ============================================
 // LOOKUP HELPERS (pure, outside component)
 // ============================================
 
-const getRoleBadge = (role) => roleBadgeColors[role] || { color: '#0079ca', label: role }
-const getConnectionBadge = (role) => connectionBadgeColors[role] || { color: '#0079ca' }
-const getOrgTitleBadge = (title) => orgTitleBadgeColors[title] || orgTitleBadgeColors['default']
+const getRoleBadge = (role) => ({ color: typeColors['household'], label: roleBadgeLabels[role] || role })
+const getColorForType = (type) => typeColors[type] || '#0079ca'
+
+// Connector label = the specific role name (matches the badge on the card).
+// No more abstract category labels like "Advisory" or "Employment".
+const getConnectorLabel = (rel) => {
+  if (rel.type === 'personal') return rel.role || 'Personal'
+  return rel.externalContact?.title || rel.reciprocalRole || rel.role || ''
+}
 
 // ============================================
 // SHARED RENDERERS (used by React Flow nodes + mobile fallback)
 // ============================================
 
-// Org/Professional/Personal card
+// Org/Professional/Personal card — single relationship, per-badge dismiss
 const renderOrgCard = (rel, { onNavigateToPatron, onEndRelationship } = {}) => {
   const orgTitle = rel.type === 'personal'
     ? (rel.role || '')
     : (rel.externalContact?.title || rel.reciprocalRole || '')
   const orgName = rel.externalContact?.company || rel.displayName || ''
   const orgInitials = rel.externalContact?.initials || rel.initials || '??'
-  const titleBadge = getOrgTitleBadge(orgTitle)
+  const badgeColor = getColorForType(rel.type)
+  const isClickable = !!rel.linkedPatron
+  const handleNav = () => { if (isClickable && onNavigateToPatron) onNavigateToPatron(rel.linkedPatron.id) }
 
   return (
     <div
-      className={`relationships-tab__org-card ${rel.linkedPatron ? 'relationships-tab__org-card--clickable' : ''}`}
-      onClick={() => { if (rel.linkedPatron && onNavigateToPatron) onNavigateToPatron(rel.linkedPatron.id) }}
+      className={`relationships-tab__org-card ${isClickable ? 'relationships-tab__org-card--clickable' : ''}`}
+      onClick={handleNav}
+      {...(isClickable ? {
+        role: 'button',
+        tabIndex: 0,
+        onKeyDown: (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleNav() } },
+      } : {})}
     >
       <div className={rel.type === 'organization' ? 'relationships-tab__org-avatar' : 'relationships-tab__member-avatar'}>
         {rel.linkedPatron?.photo ? (
@@ -101,22 +82,90 @@ const renderOrgCard = (rel, { onNavigateToPatron, onEndRelationship } = {}) => {
         )}
         {orgTitle && (
           <span
-            className="relationships-tab__org-title-badge"
-            style={{ color: titleBadge.color, borderColor: titleBadge.color }}
+            className="relationships-tab__org-title-badge relationships-tab__org-title-badge--dismissible"
+            style={{ color: badgeColor, borderColor: badgeColor }}
           >
             {orgTitle}
+            {onEndRelationship && (
+              <button
+                className="relationships-tab__badge-dismiss nodrag nopan nowheel"
+                title={`End ${orgTitle} relationship`}
+                onClick={(e) => { e.stopPropagation(); onEndRelationship(rel) }}
+              >
+                <i className="fa-solid fa-xmark"></i>
+              </button>
+            )}
           </span>
         )}
       </div>
-      {onEndRelationship && (
-        <button
-          className="relationships-tab__remove-btn relationships-tab__remove-btn--org"
-          title="End relationship"
-          onClick={(e) => { e.stopPropagation(); onEndRelationship(rel) }}
-        >
-          <i className="fa-solid fa-xmark"></i>
-        </button>
-      )}
+    </div>
+  )
+}
+
+// Bridging card — single card for a patron with relationships on BOTH sides (e.g., Friend + Client).
+// Shows the person once with stacked role badges, each with its own dismiss button.
+const renderBridgingCard = (rels, { onNavigateToPatron, onEndRelationship } = {}) => {
+  // Use the professional/org rel for primary display (more actionable for gift officers)
+  const primaryRel = rels.find(r => r.type !== 'personal') || rels[0]
+  const orgName = primaryRel.displayName || ''
+  const orgInitials = primaryRel.initials || '??'
+  const linkedPatron = primaryRel.linkedPatron
+  const isClickable = !!linkedPatron
+  const handleNav = () => { if (isClickable && onNavigateToPatron) onNavigateToPatron(linkedPatron.id) }
+
+  // Build one badge per relationship — color by type, not by role
+  const badges = rels.map(rel => {
+    const title = rel.type === 'personal'
+      ? (rel.role || '')
+      : (rel.externalContact?.title || rel.reciprocalRole || '')
+    return { title, color: getColorForType(rel.type), rel }
+  }).filter(b => b.title)
+
+  return (
+    <div
+      className={`relationships-tab__org-card ${isClickable ? 'relationships-tab__org-card--clickable' : ''}`}
+      onClick={handleNav}
+      {...(isClickable ? {
+        role: 'button',
+        tabIndex: 0,
+        onKeyDown: (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleNav() } },
+      } : {})}
+    >
+      <div className="relationships-tab__member-avatar">
+        {linkedPatron?.photo ? (
+          <img src={linkedPatron.photo} alt={orgName} />
+        ) : (
+          <span className="relationships-tab__org-initials">{orgInitials}</span>
+        )}
+      </div>
+      <div className="relationships-tab__org-info">
+        <span className="relationships-tab__org-name">{orgName}</span>
+        {linkedPatron?.householdName && (
+          <span className="relationships-tab__org-household-label">
+            {linkedPatron.householdName}
+          </span>
+        )}
+        <div className="relationships-tab__org-badges">
+          {badges.map((b, i) => (
+            <span
+              key={i}
+              className="relationships-tab__org-title-badge relationships-tab__org-title-badge--dismissible"
+              style={{ color: b.color, borderColor: b.color }}
+            >
+              {b.title}
+              {onEndRelationship && (
+                <button
+                  className="relationships-tab__badge-dismiss nodrag nopan nowheel"
+                  title={`End ${b.title} relationship`}
+                  onClick={(e) => { e.stopPropagation(); onEndRelationship(b.rel) }}
+                >
+                  <i className="fa-solid fa-xmark"></i>
+                </button>
+              )}
+            </span>
+          ))}
+        </div>
+      </div>
     </div>
   )
 }
@@ -163,12 +212,25 @@ const renderHouseholdContent = ({ household, householdMembers, patronId, allRela
           const isCurrentPatron = member.patronId === patronId
           const isHead = member.role === 'Head'
           const badge = getRoleBadge(member.role)
+          const isClickable = !isCurrentPatron
+          const handleClick = () => handleMemberClick(member)
+
+          // Find any non-household relationships to this household member
+          // (e.g., Marianne could be both Spouse and Business Partner)
+          const extraRels = isClickable
+            ? allRelationships.filter(r => r.type !== 'household' && r.toPatronId === member.patronId)
+            : []
 
           return (
             <div
               key={member.id}
-              className={`relationships-tab__member${!isCurrentPatron ? ' relationships-tab__member--clickable nodrag nopan nowheel' : ''}`}
-              onClick={() => handleMemberClick(member)}
+              className={`relationships-tab__member${isClickable ? ' relationships-tab__member--clickable nodrag nopan nowheel' : ''}`}
+              onClick={handleClick}
+              {...(isClickable ? {
+                role: 'button',
+                tabIndex: 0,
+                onKeyDown: (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick() } },
+              } : {})}
             >
               <div className="relationships-tab__member-avatar">
                 {member.patron?.photo ? (
@@ -191,22 +253,44 @@ const renderHouseholdContent = ({ household, householdMembers, patronId, allRela
                     </span>
                   )}
                   <span
-                    className="relationships-tab__role-badge"
+                    className={`relationships-tab__role-badge${isClickable && onEndRelationship ? ' relationships-tab__role-badge--dismissible' : ''}`}
                     style={{ color: badge.color, borderColor: badge.color }}
                   >
                     {badge.label}
+                    {isClickable && onEndRelationship && (
+                      <button
+                        className="relationships-tab__badge-dismiss nodrag nopan nowheel"
+                        title={`End ${badge.label} relationship`}
+                        onClick={(e) => handleRemoveMember(e, member)}
+                      >
+                        <i className="fa-solid fa-xmark"></i>
+                      </button>
+                    )}
                   </span>
+                  {extraRels.map(rel => {
+                    const title = rel.type === 'personal' ? rel.role : (rel.reciprocalRole || rel.role)
+                    const extraColor = getColorForType(rel.type)
+                    return (
+                      <span
+                        key={rel.id}
+                        className="relationships-tab__role-badge relationships-tab__role-badge--dismissible"
+                        style={{ color: extraColor, borderColor: extraColor }}
+                      >
+                        {title}
+                        {onEndRelationship && (
+                          <button
+                            className="relationships-tab__badge-dismiss nodrag nopan nowheel"
+                            title={`End ${title} relationship`}
+                            onClick={(e) => { e.stopPropagation(); onEndRelationship(rel) }}
+                          >
+                            <i className="fa-solid fa-xmark"></i>
+                          </button>
+                        )}
+                      </span>
+                    )
+                  })}
                 </div>
               </div>
-              {!isCurrentPatron && onEndRelationship && (
-                <button
-                  className="relationships-tab__remove-btn nodrag nopan nowheel"
-                  title="End relationship"
-                  onClick={(e) => handleRemoveMember(e, member)}
-                >
-                  <i className="fa-solid fa-xmark"></i>
-                </button>
-              )}
             </div>
           )
         })}
@@ -239,16 +323,22 @@ const HH_HANDLE_TOP = 121
 // React Flow uses the real rendered size for fitView. Handles are positioned at the
 // patron's row level. Horizontal padding removed via CSS so card edge = wrapper edge.
 function HouseholdNode({ data }) {
+  const rightYs = data.rightHandleYs || []
+  const leftYs = data.leftHandleYs || []
   return (
     <div
       className="relationships-tab__hh-node-root nopan nodrag nowheel"
       style={{ position: 'relative', pointerEvents: 'all' }}
     >
       {renderHouseholdContent(data)}
-      <Handle id="right" type="source" position={Position.Right} isConnectable={false}
-        style={{ top: HH_HANDLE_TOP }} />
-      <Handle id="left" type="target" position={Position.Left} isConnectable={false}
-        style={{ top: HH_HANDLE_TOP }} />
+      {rightYs.map((y, i) => (
+        <Handle key={`right-${i}`} id={`right-${i}`} type="source" position={Position.Right} isConnectable={false}
+          style={{ top: y }} />
+      ))}
+      {leftYs.map((y, i) => (
+        <Handle key={`left-${i}`} id={`left-${i}`} type="target" position={Position.Left} isConnectable={false}
+          style={{ top: y }} />
+      ))}
     </div>
   )
 }
@@ -256,6 +346,8 @@ function HouseholdNode({ data }) {
 // Standalone patron node (no household) — patron card + add button
 function StandalonePatronNode({ data }) {
   const { patron, onAddRelationship } = data
+  const rightYs = data.rightHandleYs || []
+  const leftYs = data.leftHandleYs || []
   return (
     <div className="nopan nodrag nowheel" style={{ position: 'relative', pointerEvents: 'all' }}>
       <div className="relationships-tab__standalone-column">
@@ -280,10 +372,14 @@ function StandalonePatronNode({ data }) {
           </button>
         </div>
       </div>
-      <Handle id="right" type="source" position={Position.Right} isConnectable={false}
-        style={{ top: 36 }} />
-      <Handle id="left" type="target" position={Position.Left} isConnectable={false}
-        style={{ top: 36 }} />
+      {rightYs.map((y, i) => (
+        <Handle key={`right-${i}`} id={`right-${i}`} type="source" position={Position.Right} isConnectable={false}
+          style={{ top: y }} />
+      ))}
+      {leftYs.map((y, i) => (
+        <Handle key={`left-${i}`} id={`left-${i}`} type="target" position={Position.Left} isConnectable={false}
+          style={{ top: y }} />
+      ))}
     </div>
   )
 }
@@ -318,65 +414,69 @@ function ExternalCardNode({ data }) {
   )
 }
 
-// Labeled edge — smoothStep with sharp 90° corners and colored stroke + badge label.
-// Labels sit on the horizontal branch nearest the external card (not at the midpoint).
-function LabeledEdge({ id, sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition, data, style }) {
-  // When source and target are at (nearly) the same Y, draw a straight line
-  // instead of a smoothStep — avoids visible 1px jogs on single connections.
-  const isFlat = Math.abs(sourceY - targetY) < 2
-  let edgePath
-  if (isFlat) {
-    edgePath = `M ${sourceX} ${sourceY} L ${targetX} ${targetY}`
-  } else {
-    [edgePath] = getSmoothStepPath({
-      sourceX, sourceY, sourcePosition,
-      targetX, targetY, targetPosition,
-      borderRadius: 0,
-    })
-  }
-
-  const midX = (sourceX + targetX) / 2
-  let customLabelX, customLabelY
-  if (isFlat) {
-    // 1:1 straight line: center label at true midpoint
-    customLabelX = midX
-    customLabelY = (sourceY + targetY) / 2
-  } else if (data.side === 'left') {
-    // Forked left-side: center label on horizontal branch between trunk and external card
-    customLabelX = sourceX + (midX - sourceX) * 0.5
-    customLabelY = sourceY
-  } else {
-    // Forked right-side: center label on horizontal branch between trunk and external card
-    customLabelX = midX + (targetX - midX) * 0.5
-    customLabelY = targetY
-  }
-
+// Bridging card node — single node for a patron that appears on BOTH sides.
+// Placed on the right side with N left handles (one per relationship, evenly spaced)
+// so colored edges can arrive without overlapping. Supports 2+ relationships.
+function BridgingCardNode({ data }) {
+  const { rels, onNavigateToPatron, onEndRelationship } = data
+  const handleCount = rels.length
+  // Distribute handles evenly within the card height (72px), centered
+  const spacing = 48 / (handleCount + 1)
   return (
-    <>
-      <BaseEdge id={id} path={edgePath} style={style} />
-      <EdgeLabelRenderer>
-        <div
-          className="relationships-tab__edge-label-wrapper"
-          style={{
-            position: 'absolute',
-            transform: `translate(-50%, -50%) translate(${customLabelX}px,${customLabelY}px)`,
-            pointerEvents: 'all',
-          }}
-        >
-          <span
-            className="relationships-tab__connector-label"
-            style={{ color: data.color, borderColor: data.color }}
-          >
-            {data.label}
-          </span>
-        </div>
-      </EdgeLabelRenderer>
-    </>
+    <div
+      className="nodrag nopan nowheel"
+      style={{ position: 'relative', pointerEvents: 'all' }}
+    >
+      {rels.map((_, i) => (
+        <Handle
+          key={`left-${i}`}
+          id={`left-${i}`}
+          type="target"
+          position={Position.Left}
+          isConnectable={false}
+          style={{ top: 12 + spacing * (i + 1) }}
+        />
+      ))}
+      {renderBridgingCard(rels, { onNavigateToPatron, onEndRelationship })}
+    </div>
   )
 }
 
+// Edge — hybrid routing: straight horizontal line when source/target are at the same Y,
+// step path with hard 90-degree corners when they differ. Each edge has its own handle on both sides.
+// Bridging edges (staggerTotal > 1) use staggered bend points so vertical segments
+// don't overlap: top edge bends further right, bottom edge bends further left (diagonal pattern).
+// No inline labels — role info is shown on the target card badges + line colors indicate type.
+const STAGGER_SPACING = 35 // px between staggered vertical segments
+
+function LabeledEdge({ id, sourceX, sourceY, targetX, targetY, data, style }) {
+  const isFlat = Math.abs(sourceY - targetY) < 2
+  const { staggerIndex = 0, staggerTotal = 1 } = data
+
+  let edgePath
+  if (isFlat) {
+    edgePath = `M ${sourceX} ${sourceY} L ${targetX} ${targetY}`
+  } else if (staggerTotal > 1) {
+    // Custom staggered step path: top edge bends further right, bottom further left
+    const midX = (sourceX + targetX) / 2
+    const offset = ((staggerTotal - 1) / 2 - staggerIndex) * STAGGER_SPACING
+    const bendX = midX + offset
+    edgePath = `M ${sourceX} ${sourceY} H ${bendX} V ${targetY} H ${targetX}`
+  } else {
+    const [path] = getSmoothStepPath({
+      sourceX, sourceY, targetX, targetY,
+      sourcePosition: Position.Right,
+      targetPosition: Position.Left,
+      borderRadius: 0,
+    })
+    edgePath = path
+  }
+
+  return <BaseEdge id={id} path={edgePath} style={style} />
+}
+
 // MUST be outside the component to prevent re-renders
-const nodeTypes = { household: HouseholdNode, standalone: StandalonePatronNode, externalCard: ExternalCardNode }
+const nodeTypes = { household: HouseholdNode, standalone: StandalonePatronNode, externalCard: ExternalCardNode, bridgingCard: BridgingCardNode }
 const edgeTypes = { labeled: LabeledEdge }
 
 // Layout constants
@@ -405,13 +505,49 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
   const allRelationships = useMemo(() => getPatronRelationships(patronId), [patronId])
   const currentPatron = useMemo(() => getPatronById(patronId), [patronId])
 
+  // Filter external rels: exclude household type AND any rels pointing to household members
+  // (those get annotated as extra badges on the household member row instead of separate cards).
+  const householdPatronIds = useMemo(() => new Set(householdMembers.map(m => m.patronId)), [householdMembers])
   const externalRels = useMemo(() => {
-    return allRelationships.filter(r => r.type !== 'household')
-  }, [allRelationships])
+    return allRelationships.filter(r =>
+      r.type !== 'household' && !householdPatronIds.has(r.toPatronId)
+    )
+  }, [allRelationships, householdPatronIds])
 
   // Split external rels: personal on the left, professional/org on the right
   const leftRels = useMemo(() => externalRels.filter(r => r.type === 'personal'), [externalRels])
   const rightRels = useMemo(() => externalRels.filter(r => r.type !== 'personal'), [externalRels])
+
+  // Detect bridging patrons — same toPatronId in both personal (left) and professional (right).
+  // Uses arrays (not single values) to support 3+ relationships to the same person.
+  const { pureLeftRels, pureRightRels, bridgingGroups } = useMemo(() => {
+    const leftByPatron = new Map()
+    leftRels.forEach(r => {
+      if (!r.toPatronId) return
+      if (!leftByPatron.has(r.toPatronId)) leftByPatron.set(r.toPatronId, [])
+      leftByPatron.get(r.toPatronId).push(r)
+    })
+    const rightByPatron = new Map()
+    rightRels.forEach(r => {
+      if (!r.toPatronId) return
+      if (!rightByPatron.has(r.toPatronId)) rightByPatron.set(r.toPatronId, [])
+      rightByPatron.get(r.toPatronId).push(r)
+    })
+
+    const bridgingIds = new Set()
+    leftByPatron.forEach((_, pid) => {
+      if (rightByPatron.has(pid)) bridgingIds.add(pid)
+    })
+
+    return {
+      pureLeftRels: leftRels.filter(r => !bridgingIds.has(r.toPatronId)),
+      pureRightRels: rightRels.filter(r => !bridgingIds.has(r.toPatronId)),
+      bridgingGroups: [...bridgingIds].map(pid => ({
+        patronId: pid,
+        allRels: [...(rightByPatron.get(pid) || []), ...(leftByPatron.get(pid) || [])],
+      })),
+    }
+  }, [leftRels, rightRels])
 
   // ---- Flags ----
   const hasHousehold = household && householdMembers.length > 0
@@ -426,8 +562,8 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
     const e = []
 
     // Dynamic X positioning: if there are left cards, patron shifts right to make room
-    const hasLeft = leftRels.length > 0
-    const hasRight = rightRels.length > 0
+    const hasLeft = pureLeftRels.length > 0
+    const hasRight = pureRightRels.length > 0 || bridgingGroups.length > 0
     const patronX = hasLeft ? (EXT_CARD_WIDTH + CARD_GAP) : 0
     const leftX = 0
     const rightX = patronX + PATRON_WIDTH + CARD_GAP
@@ -437,28 +573,52 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
     // For standalone, Handle is at 36px from node top.
     const handleOffsetY = hasHousehold ? HH_HANDLE_TOP : 36
 
-    // Source node — household wrapper or standalone patron card
+    // --- Compute card positions + source handle positions ---
+
+    // Left external cards (personal, excluding bridging)
+    const leftEdgeCount = pureLeftRels.length
+    const leftTotalHeight = leftEdgeCount * ROW_HEIGHT
+    const leftStartY = handleOffsetY - (leftTotalHeight / 2) + (ROW_HEIGHT / 2) - 36
+
+    // Right external cards (professional/org, excluding bridging) + bridging nodes
+    const allRightCount = pureRightRels.length + bridgingGroups.length
+    const rightEdgeCount = pureRightRels.length + bridgingGroups.reduce((sum, g) => sum + g.allRels.length, 0)
+    const rightTotalHeight = allRightCount * ROW_HEIGHT
+    const rightStartY = handleOffsetY - (rightTotalHeight / 2) + (ROW_HEIGHT / 2) - 36
+
+    // Source-node handle Y arrays: N handles per side, evenly distributed around handleOffsetY
+    const HANDLE_SPACING = 16
+    const rightHandleYs = Array.from({ length: rightEdgeCount }, (_, i) =>
+      handleOffsetY + (i - (rightEdgeCount - 1) / 2) * HANDLE_SPACING
+    )
+    const leftHandleYs = Array.from({ length: leftEdgeCount }, (_, i) =>
+      handleOffsetY + (i - (leftEdgeCount - 1) / 2) * HANDLE_SPACING
+    )
+
+    // Source node — pass handle Y arrays (centered distribution around patron row)
     if (hasHousehold) {
       n.push({
         id: 'source',
         type: 'household',
         position: { x: patronX, y: 0 },
-        data: { household, householdMembers, patronId, allRelationships, onNavigateToPatron, onEndRelationship, onAddRelationship, onEditHousehold },
+        data: { household, householdMembers, patronId, allRelationships, onNavigateToPatron, onEndRelationship, onAddRelationship, onEditHousehold, rightHandleYs, leftHandleYs },
       })
     } else {
       n.push({
         id: 'source',
         type: 'standalone',
         position: { x: patronX, y: 0 },
-        data: { patron: currentPatron, onAddRelationship },
+        data: { patron: currentPatron, onAddRelationship, rightHandleYs, leftHandleYs },
       })
     }
 
-    // Left external cards (personal) — edges go from ext (source/Right) to patron (target/Left)
-    const leftTotalHeight = leftRels.length * ROW_HEIGHT
-    const leftStartY = handleOffsetY - (leftTotalHeight / 2) + (ROW_HEIGHT / 2) - 36 // -36 centers the 72px card on the row
-    leftRels.forEach((rel, i) => {
-      const color = getConnectionBadge(rel.role).color
+    // Running counters for indexed source/target handles on the source node
+    let leftEdgeIdx = 0
+    let rightEdgeIdx = 0
+
+    // Left external cards — edges go from ext (source/Right) to patron (target/Left)
+    pureLeftRels.forEach((rel, i) => {
+      const color = getColorForType(rel.type)
       const nodeId = `ext-${rel.id}`
       n.push({
         id: nodeId,
@@ -471,18 +631,16 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
         source: nodeId,
         sourceHandle: 'right',
         target: 'source',
-        targetHandle: 'left',
+        targetHandle: `left-${leftEdgeIdx++}`,
         type: 'labeled',
         style: { stroke: color, strokeWidth: 1.5 },
-        data: { label: connectorLabels[rel.type] || rel.role, color, side: 'left' },
+        data: { label: getConnectorLabel(rel), color, side: 'left' },
       })
     })
 
-    // Right external cards (professional/org) — edges go from patron (source/Right) to ext (target/Left)
-    const rightTotalHeight = rightRels.length * ROW_HEIGHT
-    const rightStartY = handleOffsetY - (rightTotalHeight / 2) + (ROW_HEIGHT / 2) - 36
-    rightRels.forEach((rel, i) => {
-      const color = getConnectionBadge(rel.role).color
+    // Right external cards (professional/org, excluding bridging)
+    pureRightRels.forEach((rel, i) => {
+      const color = getColorForType(rel.type)
       const nodeId = `ext-${rel.id}`
       n.push({
         id: nodeId,
@@ -493,17 +651,45 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
       e.push({
         id: `edge-${rel.id}`,
         source: 'source',
-        sourceHandle: 'right',
+        sourceHandle: `right-${rightEdgeIdx++}`,
         target: nodeId,
         targetHandle: 'left',
         type: 'labeled',
         style: { stroke: color, strokeWidth: 1.5 },
-        data: { label: connectorLabels[rel.type] || rel.role, color, side: 'right' },
+        data: { label: getConnectorLabel(rel), color, side: 'right' },
+      })
+    })
+
+    // Bridging nodes — consolidated cards with N edges each
+    bridgingGroups.forEach((group, i) => {
+      const idx = pureRightRels.length + i
+      const nodeId = `bridging-${group.patronId}`
+
+      n.push({
+        id: nodeId,
+        type: 'bridgingCard',
+        position: { x: rightX, y: rightStartY + idx * ROW_HEIGHT },
+        data: { rels: group.allRels, onNavigateToPatron, onEndRelationship },
+      })
+
+      const staggerTotal = group.allRels.length
+      group.allRels.forEach((rel, relIdx) => {
+        const color = getColorForType(rel.type)
+        e.push({
+          id: `edge-${rel.id}`,
+          source: 'source',
+          sourceHandle: `right-${rightEdgeIdx++}`,
+          target: nodeId,
+          targetHandle: `left-${relIdx}`,
+          type: 'labeled',
+          style: { stroke: color, strokeWidth: 1.5 },
+          data: { label: getConnectorLabel(rel), color, side: 'right', staggerIndex: relIdx, staggerTotal },
+        })
       })
     })
 
     return { nodes: n, edges: e }
-  }, [hasAnyRelationships, hasHousehold, household, householdMembers, patronId, allRelationships, currentPatron, externalRels, leftRels, rightRels, onNavigateToPatron, onEndRelationship, onAddRelationship, onEditHousehold])
+  }, [hasAnyRelationships, hasHousehold, household, householdMembers, patronId, allRelationships, currentPatron, externalRels, pureLeftRels, pureRightRels, bridgingGroups, onNavigateToPatron, onEndRelationship, onAddRelationship, onEditHousehold])
 
   // ---- Empty state ----
   if (!hasAnyRelationships) {
@@ -527,11 +713,15 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
   // ---- Mobile fallback (simple card list, no connectors) ----
   const renderMobileCards = () => {
     if (!hasExternal) return null
+
+    // Build a consolidated list: pure (non-bridging) rels as singles, bridging groups as merged cards
+    const pureRels = externalRels.filter(r => !bridgingGroups.some(g => g.patronId === r.toPatronId))
+
     return (
       <div className="relationships-tab__mobile-cards">
-        {externalRels.map((rel) => {
-          const color = getConnectionBadge(rel.role).color
-          const label = connectorLabels[rel.type] || rel.role
+        {pureRels.map((rel) => {
+          const color = getColorForType(rel.type)
+          const label = getConnectorLabel(rel)
           return (
             <div key={rel.id} className="relationships-tab__mobile-card-row">
               <span
@@ -544,6 +734,22 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
             </div>
           )
         })}
+        {bridgingGroups.map((group) => (
+          <div key={`bridging-${group.patronId}`} className="relationships-tab__mobile-card-row">
+            <div className="relationships-tab__mobile-labels">
+              {group.allRels.map(rel => {
+                const color = getColorForType(rel.type)
+                const label = getConnectorLabel(rel)
+                return (
+                  <span key={rel.id} className="relationships-tab__connector-label" style={{ color, borderColor: color }}>
+                    {label}
+                  </span>
+                )
+              })}
+            </div>
+            {renderBridgingCard(group.allRels, { onNavigateToPatron, onEndRelationship })}
+          </div>
+        ))}
       </div>
     )
   }
@@ -573,6 +779,20 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
             proOptions={{ hideAttribution: true }}
           >
             <Controls showInteractive={false} />
+            <Panel position="top-right">
+              <div className="relationships-tab__legend">
+                {[
+                  hasHousehold && { color: typeColors['household'], label: 'Household' },
+                  pureLeftRels.length > 0 || bridgingGroups.some(g => g.allRels.some(r => r.type === 'personal')) ? { color: typeColors['personal'], label: 'Personal' } : null,
+                  pureRightRels.length > 0 || bridgingGroups.some(g => g.allRels.some(r => r.type !== 'personal')) ? { color: typeColors['professional'], label: 'Professional' } : null,
+                ].filter(Boolean).map(item => (
+                  <div key={item.label} className="relationships-tab__legend-item">
+                    <span className="relationships-tab__legend-swatch" style={{ background: item.color }} />
+                    <span className="relationships-tab__legend-label">{item.label}</span>
+                  </div>
+                ))}
+              </div>
+            </Panel>
           </ReactFlow>
         </div>
 
