@@ -6,7 +6,7 @@ import './AddRelationshipModal.css'
 // Relationship type categories
 const relationshipTypes = [
   { id: 'household', label: 'Household', icon: 'fa-solid fa-house-chimney', description: 'Spouse, child, parent living together' },
-  { id: 'family', label: 'Family (Cross-Household)', icon: 'fa-solid fa-heart', description: 'Sibling, parent, child in a different household' },
+  { id: 'personal', label: 'Personal', icon: 'fa-solid fa-user-group', description: 'Family, friends, mentors, and other personal connections' },
   { id: 'professional', label: 'Professional', icon: 'fa-solid fa-briefcase', description: 'Financial advisor, attorney, accountant' },
   { id: 'organization', label: 'Organization', icon: 'fa-solid fa-building', description: 'Employer, board, volunteer affiliation' },
 ]
@@ -27,7 +27,7 @@ const roleOptionsByType = {
     { id: 'Sister', label: 'Sister' },
     { id: 'other', label: 'Other' },
   ],
-  family: [
+  personal: [
     { id: 'Sibling', label: 'Sibling' },
     { id: 'Brother', label: 'Brother' },
     { id: 'Sister', label: 'Sister' },
@@ -44,6 +44,11 @@ const roleOptionsByType = {
     { id: 'Nephew', label: 'Nephew' },
     { id: 'Niece', label: 'Niece' },
     { id: 'Cousin', label: 'Cousin' },
+    { id: 'Friend', label: 'Friend' },
+    { id: 'Mentor', label: 'Mentor' },
+    { id: 'Godparent', label: 'Godparent' },
+    { id: 'Neighbor', label: 'Neighbor' },
+    { id: 'Guardian', label: 'Guardian' },
     { id: 'other', label: 'Other' },
   ],
   professional: [
@@ -52,7 +57,6 @@ const roleOptionsByType = {
     { id: 'Attorney', label: 'Attorney' },
     { id: 'Accountant', label: 'Accountant' },
     { id: 'Colleague', label: 'Colleague' },
-    { id: 'Friend', label: 'Friend' },
     { id: 'other', label: 'Other' },
   ],
   organization: [
@@ -428,8 +432,8 @@ function AddRelationshipModal({
                 Back
               </button>
 
-              {/* Toggle between search and external (family relationships are patron-to-patron only) */}
-              {relType !== 'family' && (
+              {/* Toggle between search and external (personal relationships are patron-to-patron only) */}
+              {relType !== 'personal' && (
                 <div className="add-rel-modal__contact-toggle">
                   <button
                     className={`add-rel-modal__toggle-btn ${contactMode === 'search' ? 'add-rel-modal__toggle-btn--active' : ''}`}
@@ -445,9 +449,9 @@ function AddRelationshipModal({
                   </button>
                 </div>
               )}
-              {relType === 'family' && (
+              {relType === 'personal' && (
                 <p className="add-rel-modal__description" style={{ margin: 'var(--space-2) 0' }}>
-                  Search for an existing patron to link as a family member.
+                  Search for an existing patron to link as a personal connection.
                 </p>
               )}
 

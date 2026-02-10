@@ -1160,7 +1160,7 @@ export const patrons = [
     firstName: 'Eleanor',
     lastName: 'Whitfield',
     gender: 'female',
-    photo: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face',
+    photo: 'https://images.unsplash.com/photo-1548142813-c348350df52b?w=150&h=150&fit=crop&crop=face',
     email: 'eleanor.whitfield@gmail.com',
     phone: '(512) 555-3001',
     tags: [],
@@ -1198,13 +1198,57 @@ export const patrons = [
     createdDate: '2022-06-15'
   },
 
+  // Richard Whitfield - Eleanor's husband, modest annual fund donor
+  // Part of the Whitfield household (hh-whitfield), not a major donor prospect himself
+  {
+    id: '7962444',
+    firstName: 'Richard',
+    lastName: 'Whitfield',
+    gender: 'male',
+    photo: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&h=150&fit=crop&crop=face',
+    email: 'richard.whitfield@gmail.com',
+    phone: '(512) 555-3010',
+    tags: [],
+    householdId: 'hh-whitfield',
+    engagement: {
+      level: 'warm',
+      visits: 15,
+      lastVisit: '2026-01-22',
+      activityHistory: [
+        { month: '2025-02', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }] },
+        { month: '2025-03', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [{ type: 'purchase', count: 1, value: 200 }] }, { activities: [] }] },
+        { month: '2025-04', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-05', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 1 }, { type: 'purchase', count: 1, value: 150 }] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-06', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-07', weeks: [{ activities: [{ type: 'attendance', count: 1 }, { type: 'purchase', count: 1, value: 150 }] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-08', weeks: [{ activities: [] }, { activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-09', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [{ type: 'purchase', count: 1, value: 150 }] }, { activities: [] }] },
+        { month: '2025-10', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2025-11', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [{ type: 'purchase', count: 1, value: 100 }] }, { activities: [] }, { activities: [{ type: 'gift', count: 1, value: 1000 }] }] },
+        { month: '2025-12', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }, { activities: [] }] },
+        { month: '2026-01', weeks: [{ activities: [{ type: 'attendance', count: 1 }] }, { activities: [] }, { activities: [] }, { activities: [{ type: 'gift', count: 1, value: 1000 }] }] }
+      ]
+    },
+    giving: { lifetimeValue: 3750, totalGifts: 3000, revenue: 750, giftCount: 4, averageGift: 750, lastGift: '2026-01-22',
+      byFund: { 'annual-operating': { name: 'Annual Operating', total: 3000.00, count: 4 } },
+      byCampaign: { 'annual-2026': { name: '2026 Annual Fund', total: 2000.00, count: 2 }, 'annual-2025': { name: '2025 Annual Fund', total: 500.00, count: 1 } },
+      byYear: { 2023: { total: 500.00, count: 1 }, 2024: { total: 500.00, count: 1 }, 2025: { total: 1000.00, count: 1 }, 2026: { total: 1000.00, count: 1 } },
+      firstTransaction: { amount: 500.00, date: '2023-06-20' },
+      lastTransaction: { amount: 1000.00, date: '2026-01-22' },
+      largestTransaction: { amount: 1000.00, date: '2025-11-25' }
+    },
+    address: '2790 Broadway, San Francisco, CA 94115',
+    source: 'import',
+    createdDate: '2022-06-15'
+  },
+
   // Marcus Chen - corporate contact, exhibition sponsorship opp (assigned to RB)
   {
     id: '7962433',
     firstName: 'Marcus',
     lastName: 'Chen',
     gender: 'male',
-    photo: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&h=150&fit=crop&crop=face',
+    photo: 'https://images.unsplash.com/photo-1463453091185-61582044d556?w=150&h=150&fit=crop&crop=face',
     email: 'marcus.chen@chenenterprises.com',
     phone: '(512) 555-3002',
     tags: ['corporate'],
@@ -1290,7 +1334,7 @@ export const patrons = [
     firstName: 'James',
     lastName: 'Morrison',
     gender: 'male',
-    photo: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
+    photo: 'https://images.unsplash.com/photo-1552058544-f2b08422138a?w=150&h=150&fit=crop&crop=face',
     email: 'james.morrison@gmail.com',
     phone: '(512) 555-3004',
     tags: ['board-member'],
@@ -1412,7 +1456,7 @@ export const patrons = [
     firstName: 'Diana',
     lastName: 'Rothschild',
     gender: 'female',
-    photo: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face',
+    photo: 'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=150&h=150&fit=crop&crop=face',
     email: 'diana.rothschild@yahoo.com',
     phone: '(512) 555-3007',
     tags: ['volunteer'],
@@ -1498,7 +1542,7 @@ export const patrons = [
     firstName: 'Victoria',
     lastName: 'Sterling',
     gender: 'female',
-    photo: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&h=150&fit=crop&crop=face',
+    photo: 'https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=150&h=150&fit=crop&crop=face',
     email: 'victoria@sterlingfamilyoffice.com',
     phone: '(512) 555-3009',
     tags: ['prospect'],
@@ -1541,7 +1585,7 @@ export const patrons = [
     firstName: 'Margaret',
     lastName: 'Chen',
     gender: 'female',
-    photo: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=150&h=150&fit=crop&crop=face',
+    photo: 'https://images.unsplash.com/photo-1589571894960-20bbe2828d0a?w=150&h=150&fit=crop&crop=face',
     email: 'margaret.chen@utexas.edu',
     phone: '(512) 555-3010',
     tags: ['prospect'],
@@ -2841,6 +2885,12 @@ export const GIFTS = [
   { id: 'gift-067', patronId: '7962432', date: '2025-11-25', amount: 10000.00, type: 'one-time', description: 'Year-End Major Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'year-end-mailer', deductible: 10000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
   { id: 'gift-068', patronId: '7962432', date: '2026-01-22', amount: 2000.00, type: 'one-time', description: 'New Year Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'online-giving', deductible: 2000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
 
+  // ── Richard Whitfield (4 gifts: $3K, modest annual fund donor) ──────────
+  { id: 'gift-125', patronId: '7962444', date: '2023-06-20', amount: 500.00, type: 'one-time', description: 'Annual Fund Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-126', patronId: '7962444', date: '2024-06-15', amount: 500.00, type: 'one-time', description: 'Annual Fund Gift', fundId: 'annual-operating', campaignId: 'annual-2025', appealId: 'spring-2025', deductible: 500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-127', patronId: '7962444', date: '2025-11-25', amount: 1000.00, type: 'one-time', description: 'Year-End Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'year-end-mailer', deductible: 1000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-128', patronId: '7962444', date: '2026-01-22', amount: 1000.00, type: 'one-time', description: 'New Year Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'online-giving', deductible: 1000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+
   // ── William Hartford (9 gifts: $45K, planned giving prospect) ──────────
   { id: 'gift-069', patronId: '7962437', date: '2021-03-15', amount: 2000.00, type: 'one-time', description: 'First Annual Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 2000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
   { id: 'gift-070', patronId: '7962437', date: '2022-06-15', amount: 3000.00, type: 'one-time', description: 'Annual Fund Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 3000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
@@ -3560,6 +3610,13 @@ export const INTERACTIONS = [
 
   // --- James Wilson (Small) ---
   { id: 'int-205', patronId: '7962429', opportunityId: null, type: 'ticket', direction: null, date: '2026-01-10T18:00:00', description: 'Purchased Winter Exhibition Opening tickets', details: { event: 'Winter Exhibition: Light and Shadow', quantity: 1, ticketType: 'General Admission' }, amount: 50, staffId: null, createdDate: '2026-01-10' },
+
+  // --- Richard Whitfield (Spouse, modest attendee) ---
+  { id: 'int-206', patronId: '7962444', opportunityId: null, type: 'ticket', direction: null, date: '2025-03-22T14:00:00', description: 'Purchased Photography Exhibition tickets', details: { event: 'Photography Exhibition: Urban Landscapes', quantity: 2, ticketType: 'Patron Circle' }, amount: 200, staffId: null, createdDate: '2025-03-22' },
+  { id: 'int-207', patronId: '7962444', opportunityId: null, type: 'ticket', direction: null, date: '2025-05-10T19:00:00', description: 'Purchased Wine and Art Evening tickets', details: { event: 'Wine and Art Evening', quantity: 2, ticketType: 'Reserved' }, amount: 150, staffId: null, createdDate: '2025-05-10' },
+  { id: 'int-208', patronId: '7962444', opportunityId: null, type: 'ticket', direction: null, date: '2025-07-04T19:30:00', description: 'Purchased Summer Concert Series tickets', details: { event: 'Summer Concert Series', quantity: 2, ticketType: 'Reserved' }, amount: 150, staffId: null, createdDate: '2025-07-04' },
+  { id: 'int-209', patronId: '7962444', opportunityId: null, type: 'ticket', direction: null, date: '2025-09-20T14:00:00', description: 'Purchased Curator Talk tickets', details: { event: 'Curator Talk: Impressionist Masters', quantity: 2, ticketType: 'Reserved' }, amount: 150, staffId: null, createdDate: '2025-09-20' },
+  { id: 'int-210', patronId: '7962444', opportunityId: null, type: 'ticket', direction: null, date: '2025-11-08T18:30:00', description: 'Purchased Annual Benefit Dinner tickets', details: { event: 'Annual Benefit Dinner', quantity: 2, ticketType: 'Reserved' }, amount: 100, staffId: null, createdDate: '2025-11-08' },
 ]
 
 // ============================================
@@ -3739,8 +3796,8 @@ export const HOUSEHOLDS = [
   {
     id: 'hh-whitfield',
     name: 'Whitfield Family',
-    formalSalutation: 'Mrs. Eleanor Whitfield',
-    informalSalutation: 'Eleanor',
+    formalSalutation: 'Mr. Richard & Mrs. Eleanor Whitfield',
+    informalSalutation: 'Richard & Eleanor',
     primaryContactId: '7962432',
     verified: true,
     createdDate: '2025-06-01'
@@ -3762,7 +3819,8 @@ export const HOUSEHOLD_MEMBERS = [
   { id: 'hhm-8', householdId: 'hh-taylor-thomas', patronId: '7962419', role: 'Head', isPrimary: true, joinedDate: '2025-03-20' },
   { id: 'hhm-9', householdId: 'hh-taylor-thomas', patronId: '7962418', role: 'Spouse', isPrimary: false, joinedDate: '2025-03-20' },
   // Whitfield Family
-  { id: 'hhm-10', householdId: 'hh-whitfield', patronId: '7962432', role: 'Head', isPrimary: true, joinedDate: '2022-06-15' }
+  { id: 'hhm-10', householdId: 'hh-whitfield', patronId: '7962432', role: 'Head', isPrimary: true, joinedDate: '2022-06-15' },
+  { id: 'hhm-11', householdId: 'hh-whitfield', patronId: '7962444', role: 'Spouse', isPrimary: false, joinedDate: '2022-06-15' }
 ]
 
 // Household helper functions
@@ -4010,7 +4068,7 @@ export const patronRelationships = [
     id: 'rel-family-1',
     fromPatronId: '7962415',
     toPatronId: '7962432',
-    type: 'family',
+    type: 'personal',
     role: 'Sister',
     reciprocalRole: 'Brother',
     isPrimary: false,
@@ -4022,7 +4080,7 @@ export const patronRelationships = [
     id: 'rel-family-2',
     fromPatronId: '7962432',
     toPatronId: '7962415',
-    type: 'family',
+    type: 'personal',
     role: 'Brother',
     reciprocalRole: 'Sister',
     isPrimary: false,
@@ -4743,13 +4801,17 @@ export const getPatronRelationships = (patronId) => {
     if (rel.toPatronId) {
       const patron = patrons.find(p => p.id === rel.toPatronId)
       if (patron) {
+        const linkedHousehold = patron.householdId
+          ? HOUSEHOLDS.find(h => h.id === patron.householdId)
+          : null
         linkedPatron = {
           id: patron.id,
           firstName: patron.firstName,
           lastName: patron.lastName,
           name: `${patron.firstName} ${patron.lastName}`,
           email: patron.email,
-          photo: patron.photo
+          photo: patron.photo,
+          householdName: linkedHousehold?.name || null
         }
       }
     }
@@ -5057,6 +5119,13 @@ export const getReciprocalRole = (role, gender) => {
     'Aunt': 'Niece',
     'Nephew': 'Uncle',
     'Niece': 'Aunt',
+    'Mentor': 'Mentee',
+    'Mentee': 'Mentor',
+    'Godparent': 'Godchild',
+    'Godchild': 'Godparent',
+    'Neighbor': 'Neighbor',
+    'Guardian': 'Ward',
+    'Ward': 'Guardian',
   }
   return simpleReciprocals[role] || role
 }

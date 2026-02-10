@@ -179,6 +179,13 @@
   font-size: var(--font-size-base);
 }
 
+/* Household label (muted subtitle for cross-household family connections) */
+.relationships-summary__household-label {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  line-height: 16px;
+}
+
 /* Tags */
 .relationships-summary__tag {
   display: inline-flex;
@@ -206,7 +213,7 @@
   border-color: var(--color-accent);
 }
 
-.relationships-summary__tag--family {
+.relationships-summary__tag--personal {
   color: #d946a8;
   border-color: #d946a8;
 }

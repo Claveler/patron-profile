@@ -127,7 +127,7 @@ const GUIDE_CONTENT = {
           {
             name: 'RelationshipsSummary',
             reasoning:
-              'Shows household, family (cross-household), and professional relationships at a glance. The Family section bridges the gap between household cohabitation and broader family networks — e.g., Anderson\'s sister Eleanor who married into the Whitfield family. Cross-profile navigation lets gift officers understand the full family context before a conversation.',
+              'Shows household, personal, and professional relationships at a glance. The Personal section covers family members outside the household as well as friends, mentors, and other individual connections — e.g., Anderson\'s sister Eleanor who married into the Whitfield family. Personal connections display the external patron\'s household name (e.g., "Whitfield Family") so gift officers instantly see which household unit a connected person belongs to. Cross-profile navigation lets gift officers understand the full relational context before a conversation.',
           },
           {
             name: 'OpportunitiesPanel / AddToPortfolioBar',
@@ -290,9 +290,9 @@ const GUIDE_CONTENT = {
         persona: 'Gift Officer',
         epic: 'Epic 1 — Patron Data Platform',
         why:
-          'Donors exist in networks. The Relationships tab maps household, family (cross-household), professional, and organization connections. Understanding that Anderson\'s sister Eleanor runs the Whitfield Gallery, or that his financial advisor is Marcus Chen, fundamentally changes the cultivation approach.',
+          'Donors exist in networks. The Relationships tab maps household, personal, professional, and organization connections. Understanding that Anderson\'s sister Eleanor runs the Whitfield Gallery, or that his financial advisor is Marcus Chen, fundamentally changes the cultivation approach.',
         competitive:
-          'Raiser\'s Edge has strong relationship mapping but requires a separate module. Tessitura embeds relationships but with dated UI. Bloomerang has basic household linking but no cross-household family type. Fever\'s approach groups relationships by type (household, family, professional, organization) with cross-profile navigation, plus smart edge case handling (conflict detection, cascade removal, two-option dissolution).',
+          'Raiser\'s Edge has strong relationship mapping but requires a separate module. Tessitura embeds relationships but with dated UI. Bloomerang has basic household linking but no personal relationship type. Fever\'s approach groups relationships by type (household, personal, professional, organization) with cross-profile navigation, plus smart edge case handling (conflict detection, cascade removal, two-option dissolution).',
         wowMoment: 'Try adding a patron who already belongs to another household — the system detects the conflict and lets you choose whether to transfer them or pick someone else.',
         components: [
           {
@@ -316,9 +316,9 @@ const GUIDE_CONTENT = {
               'Delete household offers "dissolve everything" (ends all relationships) or "dissolve grouping only" (keeps relationship records). Supports both clean breaks and scenarios where family still exists but no longer needs CRM grouping.',
           },
           {
-            name: 'Family Relationships (Cross-Household)',
+            name: 'Personal Relationships',
             reasoning:
-              'Connects patrons related by blood or legal family bonds who live in different households — e.g., siblings married into separate families, adult children living independently. Uses pink/magenta labels to visually differentiate from professional (blue) connections. Industry standard in Tessitura and Raiser\'s Edge; essential for understanding donor networks beyond cohabitation.',
+              'Connects patrons through family bonds, friendships, mentorships, and other personal connections outside the household — e.g., siblings in separate families, friends, godparents, or neighbors. Uses pink/magenta labels to visually differentiate from professional (blue) connections. Cross-household cards show the external patron\'s household name as a muted subtitle, giving gift officers at-a-glance context about which household unit the connected patron belongs to. Broader than industry standard "family" type; captures the full personal network that influences giving behavior.',
           },
           {
             name: 'Professional Relationships',

@@ -10,7 +10,7 @@ function RelationshipsSummary({ patronId, onNavigateToPatron, onViewRelationship
 
   // Get non-household relationships
   const relationships = getPatronRelationships(patronId)
-  const familyRelationships = relationships.filter(r => r.type === 'family')
+  const familyRelationships = relationships.filter(r => r.type === 'personal')
   const professionalRelationships = relationships.filter(r => r.type === 'organization' || r.type === 'professional')
 
   const hasHousehold = household && householdMembers.length > 0
@@ -111,12 +111,12 @@ function RelationshipsSummary({ patronId, onNavigateToPatron, onViewRelationship
         </div>
       )}
 
-      {/* Family Section (cross-household family connections) */}
+      {/* Personal Section (family, friends, mentors, and other personal connections) */}
       {hasFamily && (
         <div className="relationships-summary__group">
           <div className="relationships-summary__group-header">
             <i className="fa-solid fa-heart relationships-summary__group-icon"></i>
-            <span className="relationships-summary__group-label">Family</span>
+            <span className="relationships-summary__group-label">Personal</span>
           </div>
           <div className="relationships-summary__members">
             {familyRelationships.map((rel, index) => (
@@ -144,7 +144,12 @@ function RelationshipsSummary({ patronId, onNavigateToPatron, onViewRelationship
                   </div>
                   <div className="relationships-summary__member-info">
                     <span className="relationships-summary__member-name">{rel.displayName}</span>
-                    <span className="relationships-summary__tag relationships-summary__tag--family">
+                    {rel.linkedPatron?.householdName && (
+                      <span className="relationships-summary__household-label">
+                        {rel.linkedPatron.householdName}
+                      </span>
+                    )}
+                    <span className="relationships-summary__tag relationships-summary__tag--personal">
                       {rel.role}
                     </span>
                   </div>

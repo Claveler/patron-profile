@@ -5,32 +5,104 @@
 }
 
 /* ============================================
-   GRAPH CONTAINER — gray background
+   GRAPH CONTAINER
+   The entire area is now a React Flow canvas.
    ============================================ */
 
 .relationships-tab__graph {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
   min-height: 200px;
-  padding: 32px 0;
+  padding: 0;
 }
 
 /* ============================================
-   GRAPH INNER — horizontal two-section layout
-   Left: household wrapper  |  Right: ext-column
+   REACT FLOW CANVAS CONTAINER
+   Single canvas containing household + external nodes.
    ============================================ */
 
-.relationships-tab__graph-inner {
-  display: flex;
-  align-items: flex-start;
-  gap: 0;
+.relationships-tab__flow-container {
+  width: 100%;
+  height: 600px;
+}
+
+/* Transparent canvas background — inherits parent's gray */
+.relationships-tab__flow-container .react-flow {
+  background: transparent !important;
+}
+
+/* Hide React Flow handles (invisible anchors for edge routing) */
+.relationships-tab__flow-container .react-flow__handle {
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  min-width: 0;
+  min-height: 0;
+  border: none;
+  pointer-events: none;
+}
+
+/* Render edges above nodes so the blue wrapper ::before doesn't cover them */
+.relationships-tab__flow-container .react-flow__edges {
+  z-index: 1 !important;
+}
+
+/* Render edge labels above edge lines */
+.relationships-tab__flow-container .react-flow__edgelabel-renderer {
+  z-index: 2 !important;
+}
+
+/* Ensure edge stroke styles apply over React Flow defaults */
+.relationships-tab__flow-container .react-flow__edge-path {
+  stroke-width: 1.5;
+}
+
+/* Household node root in React Flow — let wrapper auto-size */
+.relationships-tab__hh-node-root {
+  overflow: visible !important;
+}
+
+/* Remove horizontal padding in flow context — blue background
+   created via ::before so node boundary = card boundary */
+.relationships-tab__hh-node-root .relationships-tab__household-wrapper {
+  padding-left: 0;
+  padding-right: 0;
+  background: transparent;
+  position: relative;
+}
+
+/* Blue background extends 40px beyond the card on each side */
+.relationships-tab__hh-node-root .relationships-tab__household-wrapper::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -40px;
+  right: -40px;
+  background: #e6f4ff;
+  border-radius: 24px;
+  z-index: -1;
+}
+
+/* Ensure React Flow node wrappers don't clip content */
+.relationships-tab__flow-container .react-flow__node {
+  overflow: visible !important;
+}
+
+/* Left-side external cards: prevent flex-shrink so cards keep natural width
+   and overflow the fixed-width wrapper to the left when content is wider */
+.relationships-tab__flow-container .react-flow__node-externalCard .relationships-tab__org-card {
+  flex-shrink: 0;
+}
+
+/* Edge label wrapper (rendered via EdgeLabelRenderer) */
+.relationships-tab__edge-label-wrapper {
+  pointer-events: none;
 }
 
 /* ============================================
    LEFT SECTION: HOUSEHOLD WRAPPER
-   Light blue rounded container from Figma
-   Contains: title + white card + add-family link
+   Light blue rounded container from Figma.
+   Rendered inside HouseholdNode (React Flow)
+   and in the mobile fallback (plain HTML).
    ============================================ */
 
 .relationships-tab__household-wrapper {
@@ -44,10 +116,6 @@
   gap: 24px;
 }
 
-/* ============================================
-   HOUSEHOLD TITLE — inside the blue wrapper
-   ============================================ */
-
 .relationships-tab__household-name {
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-semibold);
@@ -60,10 +128,8 @@
   gap: 8px;
 }
 
-
 /* ============================================
    HOUSEHOLD CARD — single white card
-   One piece with border and radius.
    ============================================ */
 
 .relationships-tab__household-card {
@@ -76,7 +142,7 @@
 
 /* ============================================
    MEMBER ROW — inside the household card
-   Fixed 72px height for slot alignment.
+   Fixed 72px height.
    ============================================ */
 
 .relationships-tab__member {
@@ -100,170 +166,6 @@
 
 .relationships-tab__member--clickable:hover {
   background-color: var(--color-primary-50);
-}
-
-/* ============================================
-   RIGHT SECTION: EXTERNAL CONNECTIONS — TREE LAYOUT
-   Trunk from card edge → vertical spine → horizontal branches
-   Padding-top offsets for title + spacing above card.
-   ============================================ */
-
-.relationships-tab__ext-column {
-  display: flex;
-  flex-direction: column;
-  /* Offset to card row TOP = wrapper-padding(40) + title(24) + gap(24) + card-border(1) = 89px */
-  padding-top: 89px;
-  /* Pull into wrapper's right padding (40px) so trunk starts at card edge */
-  margin-left: -40px;
-  position: relative;
-}
-
-/* No offset needed for standalone patron — reset household overrides */
-.relationships-tab__ext-column--standalone {
-  padding-top: 0;
-  margin-left: 0;
-  justify-content: center;
-}
-
-/* Standalone ext-slot (kept for standalone patron case) */
-.relationships-tab__ext-slot {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 4px;
-}
-
-/* ---- Tree group: one patron's external connections ---- */
-
-.relationships-tab__ext-group {
-  display: flex;
-  align-items: flex-start;
-  /* Push down to member row TOP + 36px to target row CENTER; tree flows downward */
-  margin-top: calc(var(--member-index, 0) * 72px + 36px);
-}
-
-/* Single connection — use center-align + small transform so trunk meets
-   the branch connector AND aligns with the member row center.
-   Transform is negligible (~8px) so container overflow is not an issue. */
-.relationships-tab__ext-group--single {
-  align-items: center;
-  margin-top: calc(var(--member-index, 0) * 72px);
-  transform: translateY(calc(-50% + 36px));
-}
-
-/* ---- Trunk: horizontal line from household card edge to spine ---- */
-
-.relationships-tab__trunk {
-  width: 72px;
-  display: flex;
-  align-items: center;
-  flex-shrink: 0;
-}
-
-.relationships-tab__trunk-line {
-  width: 100%;
-  height: 0;
-  border-top: 1px solid var(--color-primary-300);
-}
-
-/* ---- Branches column ---- */
-
-.relationships-tab__branches {
-  display: flex;
-  flex-direction: column;
-}
-
-/* ---- Individual branch ---- */
-
-.relationships-tab__branch {
-  display: flex;
-  align-items: center;
-  position: relative;
-  padding: 8px 0;
-}
-
-/* Vertical spine segment on each branch's left edge.
-   Downward-flowing tree: spine starts at the top of the first branch
-   (where the trunk connects) and ends at the center of the last branch.
-   Only child: no spine. */
-.relationships-tab__branch::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 0;
-  border-left: 1px solid var(--color-primary-300);
-}
-
-.relationships-tab__branch:first-child::before {
-  top: 0;
-}
-
-.relationships-tab__branch:last-child::before {
-  bottom: 50%;
-}
-
-.relationships-tab__branch:only-child::before {
-  display: none;
-}
-
-/* ---- Branch connector: horizontal line + label + line ---- */
-
-.relationships-tab__branch-connector {
-  display: flex;
-  align-items: center;
-  gap: 0;
-  width: 140px;
-  flex-shrink: 0;
-}
-
-/* ============================================
-   LEVEL-2 SUB-BRANCHES (multiple contacts per type)
-   Same spine pattern as level-1 branches.
-   ============================================ */
-
-.relationships-tab__sub-branches {
-  display: flex;
-  flex-direction: column;
-}
-
-.relationships-tab__sub-branch {
-  display: flex;
-  align-items: center;
-  position: relative;
-  padding: 6px 0;
-}
-
-/* Sub-branch spine segments — mirrors the branch spine pattern */
-.relationships-tab__sub-branch::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 0;
-  border-left: 1px solid var(--color-primary-300);
-}
-
-.relationships-tab__sub-branch:first-child::before {
-  top: 50%;
-}
-
-.relationships-tab__sub-branch:last-child::before {
-  bottom: 50%;
-}
-
-.relationships-tab__sub-branch:only-child::before {
-  display: none;
-}
-
-/* Sub-connector: short horizontal line (no label) from spine to card */
-.relationships-tab__sub-connector {
-  width: 24px;
-  height: 0;
-  border-top: 1px solid var(--color-primary-300);
-  flex-shrink: 0;
 }
 
 /* ============================================
@@ -304,7 +206,6 @@
   flex: 1;
 }
 
-/* Name — regular weight by default */
 .relationships-tab__member-name {
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-normal);
@@ -318,18 +219,14 @@
   text-overflow: ellipsis;
 }
 
-/* Head of Household gets bold name */
 .relationships-tab__member-name--head {
   font-weight: var(--font-weight-semibold);
 }
 
 /* ============================================
    ROLE BADGES — outlined variant
-   White bg, colored border, 4px radius,
-   10px font, 20px height.
    ============================================ */
 
-/* Badges row — flex wrap for multiple badges side by side */
 .relationships-tab__badges {
   display: flex;
   align-items: center;
@@ -353,7 +250,6 @@
   border: 1px solid currentColor;
 }
 
-/* Head of household badge — blue with badge-check icon */
 .relationships-tab__role-badge--head {
   color: #0079ca;
   border-color: #0089e3;
@@ -365,8 +261,7 @@
 }
 
 /* ============================================
-   ACTION BUTTONS — tertiary pills below the card
-   Inside the blue wrapper, centered.
+   ACTION BUTTONS — tertiary pills
    ============================================ */
 
 .relationships-tab__actions {
@@ -422,7 +317,7 @@
 
 .relationships-tab__patron-card-name {
   font-size: var(--font-size-base);
-  font-weight: var(--font-weight-normal);
+  font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary);
 }
 
@@ -433,31 +328,11 @@
 }
 
 /* ============================================
-   CONNECTOR LINES
-   1px line with outlined tag label
+   CONNECTOR LABEL — outlined badge tag
+   Used on edges (via EdgeLabelRenderer) and in
+   the mobile fallback card rows.
    ============================================ */
 
-.relationships-tab__connection-row {
-  display: flex;
-  align-items: center;
-  gap: 0;
-}
-
-.relationships-tab__connector {
-  display: flex;
-  align-items: center;
-  gap: 0;
-  width: 180px;
-  flex-shrink: 0;
-}
-
-.relationships-tab__connector-line {
-  flex: 1;
-  height: 0;
-  border-top: 1px solid var(--color-primary-300);
-}
-
-/* Connector label — same outlined tag style */
 .relationships-tab__connector-label {
   display: inline-flex;
   align-items: center;
@@ -476,7 +351,6 @@
 
 /* ============================================
    ORGANIZATION / PROFESSIONAL CARD
-   Light gray bg per Figma (#fafbfb)
    ============================================ */
 
 .relationships-tab__org-card {
@@ -500,7 +374,6 @@
   box-shadow: var(--shadow-sm);
 }
 
-/* Org avatar — 48px, square (no border-radius) */
 .relationships-tab__org-avatar {
   width: 48px;
   height: 48px;
@@ -539,7 +412,12 @@
   line-height: 24px;
 }
 
-/* Org title badge — same outlined tag style */
+.relationships-tab__org-household-label {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  line-height: 16px;
+}
+
 .relationships-tab__org-title-badge {
   display: inline-flex;
   align-items: center;
@@ -585,7 +463,6 @@
   color: var(--color-error, #dc3545);
 }
 
-/* Show on row hover */
 .relationships-tab__member:hover .relationships-tab__remove-btn,
 .relationships-tab__org-card:hover .relationships-tab__remove-btn {
   opacity: 1;
@@ -647,6 +524,28 @@
 }
 
 /* ============================================
+   MOBILE FALLBACK
+   On small screens: hide canvas, show plain HTML.
+   ============================================ */
+
+.relationships-tab__mobile-fallback {
+  display: none;
+}
+
+.relationships-tab__mobile-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.relationships-tab__mobile-card-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ============================================
    RESPONSIVE
    ============================================ */
 
@@ -655,7 +554,14 @@
     padding: var(--space-4);
   }
 
-  .relationships-tab__graph-inner {
+  /* Hide the React Flow canvas */
+  .relationships-tab__flow-container {
+    display: none;
+  }
+
+  /* Show the mobile fallback */
+  .relationships-tab__mobile-fallback {
+    display: flex;
     flex-direction: column;
     align-items: stretch;
     gap: var(--space-4);
@@ -669,40 +575,13 @@
     width: 100%;
   }
 
-  /* Reset tree positioning on mobile — stack vertically */
-  .relationships-tab__ext-column {
-    padding-top: 0;
-    margin-left: 0;
+  .relationships-tab__mobile-card-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
   }
 
-  .relationships-tab__ext-group {
-    margin-top: 0;
-    transform: none;
-  }
-
-  .relationships-tab__trunk {
-    width: 24px;
-  }
-
-  .relationships-tab__branch-connector {
-    width: 80px;
-  }
-
-  .relationships-tab__sub-connector {
-    width: 16px;
-  }
-
-  /* Standalone slot */
-  .relationships-tab__ext-slot {
-    min-height: 72px;
-  }
-
-  .relationships-tab__connection-row {
-    flex-wrap: wrap;
-    gap: var(--space-2);
-  }
-
-  .relationships-tab__connector {
-    width: 80px;
+  .relationships-tab__mobile-card-row .relationships-tab__org-card {
+    width: 100%;
   }
 }
