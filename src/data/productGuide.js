@@ -298,12 +298,12 @@ const GUIDE_CONTENT = {
           {
             name: 'Household Section',
             reasoning:
-              'Groups family members with head-of-household designation, verified badge, and cross-profile navigation. The household popover in PatronInfoBox is a compact version; this tab is the full management view with add/edit/end/move-out capabilities. Adding a household relationship that matches an existing Personal relationship (same role) automatically absorbs the Personal one — and dissolving the household recreates it via fallback. Each non-current member row has two distinct actions: dismiss (x) to sever the bond entirely, and move-out (arrow) to remove from the household while preserving family ties as Personal connections.',
+              'Groups family members with head-of-household designation, verified badge, and cross-profile navigation. The household popover in PatronInfoBox is a compact version; this tab is the full management view with add/edit/end/move-out capabilities. The household card has its own "+ Add household member" CTA that opens a single-page form (skipping type selection) with three sections: Related individual, Relationship, and Household creation — separate from the toolbar\'s general "+ Add relationship" button which excludes the Household type when a household already exists. Adding a household relationship that matches an existing Personal relationship (same role) automatically absorbs the Personal one — and dissolving the household recreates it via fallback. Each non-current member row has two distinct actions: dismiss (x) to sever the bond entirely, and move-out (arrow) to remove from the household while preserving family ties as Personal connections.',
           },
           {
             name: 'Household Conflict Detection',
             reasoning:
-              'When adding a household relationship, detects if the selected patron already belongs to another household. Shows a warning with transfer or cancel options. If the departing patron is the Head and the old household has 3+ members, prompts the user to select a new Head before completing the transfer. Prevents silent data corruption — a patron cannot belong to two households, and no household is left without a Head.',
+              'When adding a household relationship via the single-page form, detects if the selected patron already belongs to another household. Shows an inline warning within the form (between the patron and role sections) with transfer or cancel options. If the departing patron is the Head and the old household has 3+ members, prompts the user to select a new Head before completing the transfer. Prevents silent data corruption — a patron cannot belong to two households, and no household is left without a Head.',
           },
           {
             name: 'Context-Aware End Relationship',
@@ -353,7 +353,7 @@ const GUIDE_CONTENT = {
           {
             name: 'Type-Based Color System',
             reasoning:
-              'A single getColorForType(type) function returns canonical colors: blue (#0079ca) for household, pink (#d946a8) for personal, purple (#6f41d7) for professional and organization. Colors are consistent across badges, connector edges, connector labels, and the summary sidebar. A color legend in the top-right corner of the graph dynamically shows only the types present on the current patron\'s map.',
+              'A single getColorForType(type) function returns canonical colors from the Fever Ignite DS palette, chosen for colorblind safety: primary blue (#0089E3) for household, warning orange (#FF8C00) for personal, accent purple (#6f41d7) for professional and organization. The blue/orange/purple triad avoids the pink-vs-purple confusion problematic for deuteranopia/protanopia. Colors are consistent across badges, connector edges, connector labels, and the summary sidebar. A color legend in the bottom-right corner of the graph dynamically shows only the types present on the current patron\'s map.',
           },
           {
             name: 'Cross-Type Duplicate Guard',
@@ -364,6 +364,11 @@ const GUIDE_CONTENT = {
             name: 'Keyboard Accessibility',
             reasoning:
               'All clickable graph cards (org, bridging, household member rows) have role="button", tabIndex, and Enter/Space keyboard handlers, matching the pattern already used in RelationshipsSummary. Ensures gift officers can navigate the relationship map without a mouse.',
+          },
+          {
+            name: 'Relationship Notes',
+            reasoning:
+              'Optional notes field on every relationship. Input via the Add Relationship modal (textarea in both household and non-household form paths). Displayed as native title-attribute tooltips on relationship badges/tags — hover any badge to see notes like "Married 2015, divorced 2022" without cluttering the layout. Industry-standard feature found in Raiser\'s Edge and Tessitura.',
           },
         ],
         walkthrough: {
@@ -396,7 +401,7 @@ const GUIDE_CONTENT = {
                 {
                   title: 'Empty State',
                   description:
-                    'Patrons with no relationships see a centered "No Relationships Mapped" message with a prominent "+ Add relationship" CTA. The empty state helps onboard new patrons into the relationship graph.',
+                    'Patrons with no relationships see a centered "No Relationships Mapped" message with a prominent "+ Add relationship" CTA (showing all four types since no household exists yet). The empty state helps onboard new patrons into the relationship graph.',
                   media: '/screenshots/relationships/12-empty-state.png',
                   mediaType: 'image',
                 },
@@ -409,14 +414,21 @@ const GUIDE_CONTENT = {
                 {
                   title: '1. Choose Relationship Type',
                   description:
-                    'Click "+ Add relationship" to open the type selector. Four types are available: Household (spouse, child, parent living together), Personal (family, friends, mentors), Professional (financial advisor, attorney), and Organization (employer, board, volunteer affiliation).',
+                    'Two CTAs exist once a household is created: the household card\'s "+ Add household member" button (opens a single-page household form), and the toolbar\'s "+ Add relationship" button (shows Personal, Professional, and Organization types — Household is excluded since one already exists). Before any household exists, the toolbar CTA shows all four types. Selecting Household opens a dedicated single-page form; other types use a multi-step wizard.',
                   media: '/screenshots/relationships/02a-add-type-selection.png',
                   mediaType: 'image',
                 },
                 {
-                  title: '2. Search for Patron',
+                  title: '2a. Household: Single-Page Form',
                   description:
-                    'Type a name or email to search existing patrons. Results show avatar, name, email, and whether they belong to a household. Select the patron to proceed to role assignment.',
+                    'Household relationships use a single-page form with four sections: (1) Related individual — floating-label search field to find a patron, (2) Relationship — two floating-label role selects with auto-suggest reciprocal, (3) Household — create household toggle, household name, and head-of-household toggle (only shown when neither patron has an existing household), (4) Notes — optional textarea for context (e.g., "Divorced 2022, introduced by board chair"). Conflict detection is shown inline between sections 1 and 2.',
+                  media: null,
+                  mediaType: 'image',
+                },
+                {
+                  title: '2b. Other Types: Search for Patron',
+                  description:
+                    'For Personal, Professional, and Organization types, the multi-step wizard continues: type a name or email to search existing patrons. Results show avatar, name, email. Select the patron to proceed to role assignment.',
                   media: '/screenshots/relationships/02b-add-search-results.png',
                   mediaType: 'image',
                 },

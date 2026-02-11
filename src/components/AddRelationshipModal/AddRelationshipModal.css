@@ -1,4 +1,4 @@
-/* Add Relationship Modal — follows AddBeneficiaryModal patterns */
+/* Add Relationship Modal — follows Fever Ignite DS patterns */
 
 .add-rel-modal__overlay {
   position: fixed;
@@ -15,53 +15,115 @@
 }
 
 .add-rel-modal {
-  background: var(--color-surface);
-  border-radius: var(--radius-lg);
+  background: #fff;
+  border-radius: 16px;
   width: 100%;
-  max-width: 500px;
+  max-width: 720px;
   max-height: 90vh;
-  overflow-y: auto;
-  box-shadow: var(--shadow-xl);
-}
-
-/* Header */
-.add-rel-modal__header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: var(--space-4);
-  border-bottom: 1px solid var(--color-border);
+  flex-direction: column;
+  box-shadow: 0 24px 24px rgba(0, 70, 121, 0.2);
 }
 
-.add-rel-modal__title {
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text-primary);
-  margin: 0;
-}
+/* ============================================
+   HEADER
+   ============================================ */
 
-.add-rel-modal__close {
+.add-rel-modal__header {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  position: relative;
+  min-height: 40px;
+  padding: 16px 32px;
+  border-bottom: 1px solid #ccd2d8;
+  flex-shrink: 0;
+}
+
+.add-rel-modal__header-back {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border: none;
   background: none;
-  color: var(--color-text-muted);
+  color: #031419;
   cursor: pointer;
-  border-radius: var(--radius-md);
-  transition: all var(--transition-fast);
+  border-radius: 64px;
+  transition: background 0.15s;
+  padding: 0;
+}
+
+.add-rel-modal__header-back:hover {
+  background: var(--color-neutral-100, #f2f3f3);
+}
+
+.add-rel-modal__header-back i {
+  font-size: 14px;
+}
+
+.add-rel-modal__title {
+  font-family: var(--font-family-body, 'Montserrat', sans-serif);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 20px;
+  color: #031419;
+  margin: 0;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.add-rel-modal__close {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: none;
+  background: none;
+  color: #031419;
+  cursor: pointer;
+  border-radius: 64px;
+  transition: background 0.15s;
+  padding: 0;
 }
 
 .add-rel-modal__close:hover {
-  background: var(--color-neutral-100);
-  color: var(--color-text-primary);
+  background: var(--color-neutral-100, #f2f3f3);
 }
 
-/* Content */
+/* ============================================
+   SCROLLABLE CONTENT (household form)
+   ============================================ */
+
+.add-rel-modal__scroll-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 16px 24px 8px;
+  min-height: 0;
+}
+
+/* ============================================
+   LEGACY CONTENT (non-household wizard steps)
+   ============================================ */
+
 .add-rel-modal__content {
-  padding: var(--space-4);
+  padding: 16px 32px 24px;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
 }
 
 .add-rel-modal__description {
@@ -71,7 +133,7 @@
   line-height: 1.5;
 }
 
-/* Back Button */
+/* Back Button (legacy wizard steps) */
 .add-rel-modal__back {
   display: flex;
   align-items: center;
@@ -90,40 +152,486 @@
 }
 
 /* ============================================
+   SECTIONS & FIELDSETS (household form)
+   ============================================ */
+
+.add-rel-modal__section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.add-rel-modal__section-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+  color: #536b75;
+  padding-left: 16px;
+}
+
+.add-rel-modal__fieldset {
+  background: #fff;
+  border: 1px solid #ccd2d8;
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.add-rel-modal__fieldset--warning {
+  border-color: var(--color-warning-200, #fde68a);
+  background: #fff;
+}
+
+/* ============================================
+   FLOATING-LABEL FIELDS
+   ============================================ */
+
+.add-rel-modal__float-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 56px;
+  background: #fff;
+  border: 1px solid #ccd2d8;
+  border-radius: 8px;
+  padding: 0 44px 0 12px;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.add-rel-modal__float-field--active {
+  border-color: #0079ca;
+}
+
+.add-rel-modal__float-field--filled {
+  cursor: pointer;
+}
+
+.add-rel-modal__float-field--disabled {
+  opacity: 0.5;
+  pointer-events: none;
+  background: var(--color-neutral-50, #f5f7fa);
+}
+
+.add-rel-modal__float-label {
+  position: absolute;
+  top: 4px;
+  left: 12px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+  color: #536b75;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.add-rel-modal__float-placeholder {
+  font-family: var(--font-family-body, 'Montserrat', sans-serif);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  color: #a7b2ba;
+  padding-top: 16px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.add-rel-modal__float-value {
+  font-family: var(--font-family-body, 'Montserrat', sans-serif);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  color: #031419;
+  padding-top: 16px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+  min-width: 0;
+}
+
+.add-rel-modal__float-input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  font-family: var(--font-family-body, 'Montserrat', sans-serif);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  color: #031419;
+  padding-top: 16px;
+  outline: none;
+}
+
+.add-rel-modal__float-input::placeholder {
+  color: #a7b2ba;
+}
+
+.add-rel-modal__float-chevron {
+  position: absolute;
+  right: 12px;
+  top: 18px;
+  font-size: 12px;
+  color: #536b75;
+  pointer-events: none;
+}
+
+/* Select inside floating field */
+.add-rel-modal__float-field--select {
+  padding-right: 44px;
+}
+
+.add-rel-modal__float-select {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  border: none;
+  font-size: 16px;
+}
+
+/* Custom role inline input below the floating field */
+.add-rel-modal__float-field-custom {
+  width: 100%;
+  height: 48px;
+  padding: 12px;
+  border: 1px solid #ccd2d8;
+  border-radius: 8px;
+  font-family: var(--font-family-body, 'Montserrat', sans-serif);
+  font-size: 14px;
+  color: #031419;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.add-rel-modal__float-field-custom:focus {
+  border-color: #0079ca;
+}
+
+/* ============================================
+   PATRON FIELD WRAPPER (anchors the dropdown)
+   ============================================ */
+
+.add-rel-modal__patron-field-wrap {
+  position: relative;
+}
+
+/* ============================================
+   SEARCH DROPDOWN (floating overlay)
+   ============================================ */
+
+.add-rel-modal__search-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: -17px;
+  right: -17px;
+  z-index: 10;
+  background: #fff;
+  border: 1px solid #ccd2d8;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 70, 121, 0.12);
+  max-height: 280px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.add-rel-modal__search-dropdown--empty {
+  padding: 16px;
+  text-align: center;
+  font-size: 14px;
+  color: #536b75;
+}
+
+.add-rel-modal__search-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: background 0.15s;
+  border-bottom: 1px solid #f2f3f3;
+}
+
+.add-rel-modal__search-dropdown-item:last-child {
+  border-bottom: none;
+}
+
+.add-rel-modal__search-dropdown-item:hover {
+  background: #eff6ff;
+}
+
+.add-rel-modal__search-dropdown-item--disabled {
+  opacity: 0.5;
+  cursor: default;
+  pointer-events: none;
+}
+
+.add-rel-modal__search-dropdown-item--disabled:hover {
+  background: transparent;
+}
+
+/* ============================================
+   INFO BOX
+   ============================================ */
+
+.add-rel-modal__info-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: #f2f3f3;
+  border-radius: 8px;
+}
+
+.add-rel-modal__info-box i {
+  font-size: 16px;
+  color: #536b75;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-rel-modal__info-box span {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+  color: #536b75;
+}
+
+/* ============================================
+   TOGGLE / SWITCH
+   ============================================ */
+
+.add-rel-modal__toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.add-rel-modal__toggle-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.add-rel-modal__toggle-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+  color: #031419;
+}
+
+.add-rel-modal__toggle-desc {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #536b75;
+}
+
+.add-rel-modal__switch {
+  position: relative;
+  width: 56px;
+  height: 32px;
+  background: #fff;
+  border: 1px solid #ccd2d8;
+  border-radius: 64px;
+  cursor: pointer;
+  flex-shrink: 0;
+  padding: 4px;
+  transition: background 0.2s, border-color 0.2s;
+  display: flex;
+  align-items: center;
+}
+
+.add-rel-modal__switch--on {
+  background: #24a865;
+  border-color: #24a865;
+  justify-content: flex-end;
+}
+
+.add-rel-modal__switch-thumb {
+  display: block;
+  width: 24px;
+  height: 24px;
+  background: #fff;
+  border-radius: 64px;
+  box-shadow: 0 2px 2px rgba(6, 35, 44, 0.16);
+  transition: transform 0.2s;
+}
+
+/* ============================================
+   FOOTER (shared by all steps)
+   ============================================ */
+
+.add-rel-modal__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px;
+  flex-shrink: 0;
+}
+
+.add-rel-modal__footer-cancel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 48px;
+  min-width: 112px;
+  padding: 0 24px;
+  font-family: var(--font-family-body, 'Montserrat', sans-serif);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+  color: #0079ca;
+  background: transparent;
+  border: none;
+  border-radius: 64px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.add-rel-modal__footer-cancel:hover {
+  background: rgba(0, 121, 202, 0.06);
+}
+
+.add-rel-modal__footer-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 48px;
+  min-width: 112px;
+  padding: 0 24px;
+  font-family: var(--font-family-body, 'Montserrat', sans-serif);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+  color: #fff;
+  background: #0079ca;
+  border: none;
+  border-radius: 64px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.add-rel-modal__footer-submit:hover:not(:disabled) {
+  background: #006bb3;
+}
+
+.add-rel-modal__footer-submit:disabled,
+.add-rel-modal__footer-submit--disabled {
+  background: #f2f3f3;
+  color: #a7b2ba;
+  cursor: not-allowed;
+}
+
+/* ============================================
+   INTRO SECTION (Step 1 header area)
+   ============================================ */
+
+.add-rel-modal__intro {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.add-rel-modal__intro-title {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 26px;
+  color: #031419;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.add-rel-modal__intro-emoji {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.add-rel-modal__intro-desc {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  color: #031419;
+  margin: 0;
+}
+
+/* ============================================
    TYPE SELECTION (Step 1)
    ============================================ */
 
 .add-rel-modal__type-list {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  border: 1px solid #ccd2d8;
+  border-radius: var(--radius-md);
+  overflow: hidden;
 }
 
 .add-rel-modal__type-card {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-3) var(--space-4);
-  background: var(--color-background);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
+  gap: 16px;
+  padding: 16px;
+  background: #fff;
+  border: none;
+  border-bottom: 1px solid #ccd2d8;
   cursor: pointer;
-  transition: all var(--transition-fast);
+  transition: background var(--transition-fast);
   text-align: left;
   width: 100%;
 }
 
+.add-rel-modal__type-card:last-child {
+  border-bottom: none;
+}
+
 .add-rel-modal__type-card:hover {
-  border-color: var(--color-primary);
-  background: var(--color-primary-50);
+  background: var(--color-primary-50, #eff6ff);
+}
+
+.add-rel-modal__type-icon-wrap {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
 .add-rel-modal__type-icon {
-  font-size: var(--font-size-lg);
-  color: var(--color-primary);
-  width: 24px;
-  text-align: center;
-  flex-shrink: 0;
+  font-size: 20px;
+  color: #06232c;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .add-rel-modal__type-info {
@@ -135,24 +643,27 @@
 }
 
 .add-rel-modal__type-label {
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text-primary);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  color: #031419;
 }
 
 .add-rel-modal__type-desc {
-  font-size: var(--font-size-xs);
-  color: var(--color-text-muted);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  color: #536b75;
 }
 
 .add-rel-modal__type-arrow {
-  font-size: var(--font-size-xs);
-  color: var(--color-text-muted);
+  font-size: 12px;
+  color: #536b75;
   flex-shrink: 0;
 }
 
 /* ============================================
-   CONTACT SEARCH (Step 2)
+   CONTACT SEARCH (Step 2 — non-household)
    ============================================ */
 
 .add-rel-modal__contact-toggle {
@@ -367,7 +878,7 @@
 }
 
 /* ============================================
-   ROLE SELECTION (Step 3)
+   ROLE SELECTION (Step 3 — non-household)
    ============================================ */
 
 .add-rel-modal__selected {
@@ -494,7 +1005,7 @@
 }
 
 /* ============================================
-   HOUSEHOLD CONFLICT (Step 2b)
+   HOUSEHOLD CONFLICT
    ============================================ */
 
 .add-rel-modal__conflict-warning {
@@ -504,8 +1015,7 @@
   padding: var(--space-3);
   background: var(--color-warning-50, #fffbeb);
   border: 1px solid var(--color-warning-200, #fde68a);
-  border-radius: var(--radius-md);
-  margin-bottom: var(--space-3);
+  border-radius: var(--radius-md, 8px);
   font-size: var(--font-size-sm);
   color: var(--color-text-primary);
   line-height: 1.5;
@@ -524,8 +1034,7 @@
   padding: var(--space-3);
   background: var(--color-primary-50, #eff6ff);
   border: 1px solid var(--color-primary-200, #bfdbfe);
-  border-radius: var(--radius-md);
-  margin-bottom: var(--space-3);
+  border-radius: var(--radius-md, 8px);
   font-size: var(--font-size-sm);
   color: var(--color-text-primary);
   line-height: 1.5;
@@ -541,7 +1050,11 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
-  margin-top: var(--space-4);
+}
+
+.add-rel-modal__conflict-actions--row {
+  flex-direction: row;
+  gap: 8px;
 }
 
 .add-rel-modal__conflict-btn {
@@ -550,12 +1063,12 @@
   justify-content: center;
   gap: var(--space-2);
   padding: var(--space-3);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-md, 8px);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   cursor: pointer;
   transition: all var(--transition-fast);
-  width: 100%;
+  flex: 1;
 }
 
 .add-rel-modal__conflict-btn--primary {
@@ -584,7 +1097,7 @@
 }
 
 /* ============================================
-   HEAD PICKER (inline within conflict step)
+   HEAD PICKER (inline within conflict)
    ============================================ */
 
 .add-rel-modal__head-picker {
@@ -669,7 +1182,7 @@
 }
 
 /* ============================================
-   ERROR & ACTIONS
+   ERROR
    ============================================ */
 
 .add-rel-modal__error {
@@ -679,15 +1192,38 @@
   padding: var(--space-3);
   background: var(--color-error-50, #fef2f2);
   border: 1px solid var(--color-error-200, #fecaca);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-md, 8px);
   color: var(--color-error, #dc3545);
   font-size: var(--font-size-sm);
   margin-bottom: var(--space-4);
 }
 
+/* Cross-type existing relationship info callout */
+.add-rel-modal__existing-rels-info {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  background: var(--color-primary-50, #eff6ff);
+  border: 1px solid var(--color-primary-200, #bfdbfe);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  color: var(--color-primary-700, #1d4ed8);
+  line-height: 1.4;
+}
+
+.add-rel-modal__existing-rels-info i {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* ============================================
+   LEGACY: old actions bar (kept for compat)
+   ============================================ */
+
 .add-rel-modal__actions {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   gap: var(--space-3);
   padding-top: var(--space-4);
   border-top: 1px solid var(--color-border);
@@ -730,135 +1266,26 @@
   cursor: not-allowed;
 }
 
-/* ============================================
-   Step 4: Household creation
-   ============================================ */
-
-.add-rel-modal__hh-field {
-  margin-bottom: var(--space-4);
-}
-
-.add-rel-modal__hh-field:last-of-type {
-  margin-bottom: 0;
-}
-
-.add-rel-modal__hh-label {
-  display: block;
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text-primary);
-  margin-bottom: var(--space-2);
-}
-
-.add-rel-modal__hh-hint {
-  font-size: var(--font-size-xs);
-  color: var(--color-text-muted);
-  margin: 0 0 var(--space-2) 0;
-  line-height: 1.4;
-}
-
-.add-rel-modal__hh-input {
+/* Notes textarea */
+.add-rel-modal__notes-input {
   width: 100%;
-  padding: var(--space-2) var(--space-3);
-  font-size: var(--font-size-base);
-  color: var(--color-text-primary);
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  outline: none;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 13px;
+  resize: vertical;
+  font-family: inherit;
   box-sizing: border-box;
-  transition: border-color var(--transition-fast);
 }
 
-.add-rel-modal__hh-input:focus {
+.add-rel-modal__notes-input:focus {
+  outline: none;
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 2px rgba(0, 121, 202, 0.15);
+  box-shadow: 0 0 0 2px rgba(0, 137, 227, 0.15);
 }
 
-.add-rel-modal__hh-member-list {
-  display: flex;
-  flex-direction: column;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  overflow: hidden;
-}
-
-.add-rel-modal__hh-member {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-3);
-  cursor: pointer;
-  transition: background-color var(--transition-fast);
-  border-bottom: 1px solid var(--color-border);
-}
-
-.add-rel-modal__hh-member:last-child {
-  border-bottom: none;
-}
-
-.add-rel-modal__hh-member:hover {
-  background: var(--color-neutral-50, #f5f7fa);
-}
-
-.add-rel-modal__hh-member--selected {
-  background: var(--color-primary-50, #eff6ff);
-}
-
-.add-rel-modal__hh-member--selected:hover {
-  background: var(--color-primary-50, #eff6ff);
-}
-
-.add-rel-modal__hh-radio {
-  width: 18px;
-  height: 18px;
-  accent-color: var(--color-primary, #0079ca);
-  cursor: pointer;
-  flex-shrink: 0;
-}
-
-.add-rel-modal__hh-avatar {
-  width: 36px;
-  height: 36px;
-  border-radius: var(--radius-full);
-  overflow: hidden;
-  flex-shrink: 0;
-  background: var(--color-primary-100);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-primary-600);
-}
-
-.add-rel-modal__hh-avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.add-rel-modal__hh-name {
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text-primary);
-}
-
-/* Cross-type existing relationship info callout */
-.add-rel-modal__existing-rels-info {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--space-2);
-  padding: var(--space-3);
-  background: var(--color-primary-50, #eff6ff);
-  border: 1px solid var(--color-primary-200, #bfdbfe);
-  border-radius: var(--radius-md);
-  font-size: var(--font-size-sm);
-  color: var(--color-primary-700, #1d4ed8);
-  line-height: 1.4;
-}
-
-.add-rel-modal__existing-rels-info i {
-  flex-shrink: 0;
-  margin-top: 2px;
+.add-rel-modal__section-optional {
+  font-weight: 400;
+  color: #999;
+  font-size: 12px;
 }

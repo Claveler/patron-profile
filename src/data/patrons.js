@@ -3880,12 +3880,12 @@ export const patronRelationships = [
     fromPatronId: '7962415',
     toPatronId: '7962430',
     type: 'household',
-    role: 'Spouse',
-    reciprocalRole: 'Spouse',
+    role: 'Wife',
+    reciprocalRole: 'Husband',
     isPrimary: true,
     startDate: null,
     endDate: null,
-    notes: null
+    notes: 'Primary contact for household donations. Co-chairs the annual Spring Gala committee.'
   },
   {
     id: 'rel-2',
@@ -3905,12 +3905,12 @@ export const patronRelationships = [
     fromPatronId: '7962430',
     toPatronId: '7962415',
     type: 'household',
-    role: 'Spouse',
-    reciprocalRole: 'Spouse',
+    role: 'Husband',
+    reciprocalRole: 'Wife',
     isPrimary: true,
     startDate: null,
     endDate: null,
-    notes: null
+    notes: 'Primary contact for household donations. Co-chairs the annual Spring Gala committee.'
   },
   {
     id: 'rel-4',
@@ -3974,7 +3974,7 @@ export const patronRelationships = [
     isPrimary: false,
     startDate: '2020-03-01',
     endDate: null,
-    notes: null
+    notes: 'Marcus manages Anderson\'s personal investment portfolio. Referred two other board members.'
   },
   {
     id: 'rel-16',
@@ -3986,7 +3986,7 @@ export const patronRelationships = [
     isPrimary: false,
     startDate: '2020-03-01',
     endDate: null,
-    notes: null
+    notes: 'Marcus manages Anderson\'s personal investment portfolio. Referred two other board members.'
   },
   // Anderson ↔ Marcus Chen personal relationship (friend — demonstrates multi-type consolidation)
   {
@@ -4044,24 +4044,24 @@ export const patronRelationships = [
     fromPatronId: '7962416',
     toPatronId: '7962442',
     type: 'household',
-    role: 'Spouse',
-    reciprocalRole: 'Spouse',
+    role: 'Wife',
+    reciprocalRole: 'Husband',
     isPrimary: true,
     startDate: null,
     endDate: null,
-    notes: null
+    notes: 'Both serve on the Board of Directors. Victoria handles all gala-related correspondence.'
   },
   {
     id: 'rel-9',
     fromPatronId: '7962442',
     toPatronId: '7962416',
     type: 'household',
-    role: 'Spouse',
-    reciprocalRole: 'Spouse',
+    role: 'Husband',
+    reciprocalRole: 'Wife',
     isPrimary: true,
     startDate: null,
     endDate: null,
-    notes: null
+    notes: 'Both serve on the Board of Directors. Victoria handles all gala-related correspondence.'
   },
   // Martinez-Carter household relationships
   {
@@ -4069,8 +4069,8 @@ export const patronRelationships = [
     fromPatronId: '7962422',
     toPatronId: '7962421',
     type: 'household',
-    role: 'Spouse',
-    reciprocalRole: 'Spouse',
+    role: 'Wife',
+    reciprocalRole: 'Husband',
     isPrimary: true,
     startDate: null,
     endDate: null,
@@ -4081,8 +4081,8 @@ export const patronRelationships = [
     fromPatronId: '7962421',
     toPatronId: '7962422',
     type: 'household',
-    role: 'Spouse',
-    reciprocalRole: 'Spouse',
+    role: 'Husband',
+    reciprocalRole: 'Wife',
     isPrimary: true,
     startDate: null,
     endDate: null,
@@ -4094,8 +4094,8 @@ export const patronRelationships = [
     fromPatronId: '7962419',
     toPatronId: '7962418',
     type: 'household',
-    role: 'Spouse',
-    reciprocalRole: 'Spouse',
+    role: 'Wife',
+    reciprocalRole: 'Husband',
     isPrimary: true,
     startDate: null,
     endDate: null,
@@ -4106,8 +4106,8 @@ export const patronRelationships = [
     fromPatronId: '7962418',
     toPatronId: '7962419',
     type: 'household',
-    role: 'Spouse',
-    reciprocalRole: 'Spouse',
+    role: 'Husband',
+    reciprocalRole: 'Wife',
     isPrimary: true,
     startDate: null,
     endDate: null,
@@ -4119,8 +4119,8 @@ export const patronRelationships = [
     fromPatronId: '7962432',
     toPatronId: '7962444',
     type: 'household',
-    role: 'Spouse',
-    reciprocalRole: 'Spouse',
+    role: 'Husband',
+    reciprocalRole: 'Wife',
     isPrimary: true,
     startDate: null,
     endDate: null,
@@ -4131,8 +4131,8 @@ export const patronRelationships = [
     fromPatronId: '7962444',
     toPatronId: '7962432',
     type: 'household',
-    role: 'Spouse',
-    reciprocalRole: 'Spouse',
+    role: 'Wife',
+    reciprocalRole: 'Husband',
     isPrimary: true,
     startDate: null,
     endDate: null,
@@ -4162,6 +4162,56 @@ export const patronRelationships = [
     startDate: null,
     endDate: null,
     notes: 'Eleanor\'s brother, head of the Collingwood household'
+  },
+  // Ex-spouse relationships: Lucas Taylor <-> Diana Rothschild
+  {
+    id: 'rel-exspouse-1',
+    fromPatronId: '7962419',
+    toPatronId: '7962438',
+    type: 'personal',
+    role: 'Ex-Wife',
+    reciprocalRole: 'Ex-Husband',
+    isPrimary: false,
+    startDate: '2015-06-20',
+    endDate: null,
+    notes: 'Married 2015, divorced 2022. Both remain active museum supporters.'
+  },
+  {
+    id: 'rel-exspouse-2',
+    fromPatronId: '7962438',
+    toPatronId: '7962419',
+    type: 'personal',
+    role: 'Ex-Husband',
+    reciprocalRole: 'Ex-Wife',
+    isPrimary: false,
+    startDate: '2015-06-20',
+    endDate: null,
+    notes: 'Married 2015, divorced 2022. Both remain active museum supporters.'
+  },
+  // Ex-spouse relationships: Samantha Carter <-> David Chen
+  {
+    id: 'rel-exspouse-3',
+    fromPatronId: '7962421',
+    toPatronId: '7962427',
+    type: 'personal',
+    role: 'Ex-Husband',
+    reciprocalRole: 'Ex-Wife',
+    isPrimary: false,
+    startDate: '2014-09-10',
+    endDate: null,
+    notes: 'Married 2014, divorced 2021. David introduced Samantha to the museum originally.'
+  },
+  {
+    id: 'rel-exspouse-4',
+    fromPatronId: '7962427',
+    toPatronId: '7962421',
+    type: 'personal',
+    role: 'Ex-Wife',
+    reciprocalRole: 'Ex-Husband',
+    isPrimary: false,
+    startDate: '2014-09-10',
+    endDate: null,
+    notes: 'Married 2014, divorced 2021. David introduced Samantha to the museum originally.'
   }
 ]
 
@@ -4938,7 +4988,7 @@ export const getPrimaryEmployer = (patronId) => {
 }
 
 // Add a relationship between patrons
-export const addPatronRelationship = (fromPatronId, toPatronId, type, role, reciprocalRole = null) => {
+export const addPatronRelationship = (fromPatronId, toPatronId, type, role, reciprocalRole = null, notes = null) => {
   // Determine reciprocal role based on role if not provided
   const reciprocal = reciprocalRole || getReciprocalRole(role)
   
@@ -4953,7 +5003,7 @@ export const addPatronRelationship = (fromPatronId, toPatronId, type, role, reci
     isPrimary: false,
     startDate: new Date().toISOString().split('T')[0],
     endDate: null,
-    notes: null
+    notes
   }
   patronRelationships.push(rel1)
   
@@ -4968,7 +5018,7 @@ export const addPatronRelationship = (fromPatronId, toPatronId, type, role, reci
     isPrimary: false,
     startDate: new Date().toISOString().split('T')[0],
     endDate: null,
-    notes: null
+    notes
   }
   patronRelationships.push(rel2)
 
@@ -5199,6 +5249,9 @@ export const getReciprocalRole = (role, gender) => {
     'Brother':  { male: 'Brother', female: 'Sister',   neutral: 'Sibling' },
     'Sister':   { male: 'Brother', female: 'Sister',   neutral: 'Sibling' },
     'Sibling':  { male: 'Brother', female: 'Sister',   neutral: 'Sibling' },
+    'Spouse':   { male: 'Husband', female: 'Wife',     neutral: 'Spouse' },
+    'Wife':     { male: 'Husband', female: 'Wife',     neutral: 'Spouse' },
+    'Husband':  { male: 'Husband', female: 'Wife',     neutral: 'Spouse' },
   }
 
   const gendered = genderedReciprocals[role]
@@ -5210,7 +5263,6 @@ export const getReciprocalRole = (role, gender) => {
 
   // Non-gendered reciprocals (unchanged)
   const simpleReciprocals = {
-    'Spouse': 'Spouse',
     'Partner': 'Partner',
     'Friend': 'Friend',
     'Colleague': 'Colleague',
@@ -5234,6 +5286,8 @@ export const getReciprocalRole = (role, gender) => {
     'Neighbor': 'Neighbor',
     'Guardian': 'Ward',
     'Ward': 'Guardian',
+    'Ex-Wife': 'Ex-Husband',
+    'Ex-Husband': 'Ex-Wife',
   }
   return simpleReciprocals[role] || role
 }

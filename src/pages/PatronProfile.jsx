@@ -647,6 +647,7 @@ function PatronProfile() {
         patronId={patronData.id}
         patronName={patronFullName}
         preselectedType={addRelationshipType}
+        excludeTypes={householdData && !addRelationshipType ? ['household'] : []}
         onSuccess={handleRelationshipSuccess}
         onBeforeMutate={snapshotRelationships}
       />

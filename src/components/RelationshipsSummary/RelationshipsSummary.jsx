@@ -2,9 +2,10 @@ import { getPatronRelationships, getHouseholdForPatron, getHouseholdMembers } fr
 import './RelationshipsSummary.css'
 
 // Type-based colors — matches RelationshipsTab
+// Fever Ignite DS brand colors chosen for colorblind safety (blue/orange/purple)
 const typeColors = {
-  'household': '#0079ca',
-  'personal': '#d946a8',
+  'household': '#0089E3',
+  'personal': '#FF8C00',
   'professional': '#6f41d7',
   'organization': '#6f41d7',
 }
@@ -42,6 +43,13 @@ function RelationshipsSummary({ patronId, onNavigateToPatron, onViewRelationship
     personalRels: personalByPatron.get(pid) || [],
     primaryRel: (profByPatron.get(pid) || [])[0] || (personalByPatron.get(pid) || [])[0],
   }))
+
+  // Build a map from household member patronId → { role, notes } (what they are to the viewed patron)
+  const householdRelInfo = new Map()
+  householdMembers.forEach(m => {
+    const hhRel = relationships.find(r => r.type === 'household' && r.toPatronId === m.patronId)
+    if (hhRel) householdRelInfo.set(m.patronId, { role: hhRel.role, notes: hhRel.notes })
+  })
 
   // Extra non-household rels on household members (for annotation)
   const householdExtraRels = new Map()
@@ -135,14 +143,17 @@ function RelationshipsSummary({ patronId, onNavigateToPatron, onViewRelationship
                   <div className="relationships-summary__member-info">
                     <span className="relationships-summary__member-name">{member.patron?.name}</span>
                     <div className="relationships-summary__tags-row">
-                      <span className="relationships-summary__tag relationships-summary__tag--household">
-                        {member.role}
+                      <span
+                        className="relationships-summary__tag relationships-summary__tag--household"
+                        title={householdRelInfo.get(member.patronId)?.notes || ''}
+                      >
+                        {householdRelInfo.get(member.patronId)?.role || member.role}
                       </span>
                       {(householdExtraRels.get(member.patronId) || []).map(rel => {
                         const title = rel.type === 'personal' ? rel.role : (rel.reciprocalRole || rel.role)
-                        const color = typeColors[rel.type] || '#0079ca'
+                        const color = typeColors[rel.type] || '#0089E3'
                         return (
-                          <span key={rel.id} className="relationships-summary__tag" style={{ color, borderColor: color }}>
+                          <span key={rel.id} className="relationships-summary__tag" style={{ color, borderColor: color }} title={rel.notes || ''}>
                             {title}
                           </span>
                         )
@@ -197,7 +208,7 @@ function RelationshipsSummary({ patronId, onNavigateToPatron, onViewRelationship
                         {rel.linkedPatron.householdName}
                       </span>
                     )}
-                    <span className="relationships-summary__tag relationships-summary__tag--personal">
+                    <span className="relationships-summary__tag relationships-summary__tag--personal" title={rel.notes || ''}>
                       {rel.role}
                     </span>
                   </div>
@@ -249,7 +260,7 @@ function RelationshipsSummary({ patronId, onNavigateToPatron, onViewRelationship
                   <span className="relationships-summary__member-name relationships-summary__member-name--org">
                     {rel.displayName}
                   </span>
-                  <span className="relationships-summary__tag relationships-summary__tag--professional">
+                  <span className="relationships-summary__tag relationships-summary__tag--professional" title={rel.notes || ''}>
                     {rel.externalContact?.title || rel.role}
                   </span>
                 </div>
@@ -293,7 +304,7 @@ function RelationshipsSummary({ patronId, onNavigateToPatron, onViewRelationship
                         const title = rel.type === 'personal' ? rel.role : (rel.externalContact?.title || rel.role)
                         const color = typeColors[rel.type] || '#6f41d7'
                         return (
-                          <span key={rel.id} className="relationships-summary__tag" style={{ color, borderColor: color }}>
+                          <span key={rel.id} className="relationships-summary__tag" style={{ color, borderColor: color }} title={rel.notes || ''}>
                             {title}
                           </span>
                         )

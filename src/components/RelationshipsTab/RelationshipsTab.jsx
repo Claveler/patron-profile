@@ -9,20 +9,12 @@ import './RelationshipsTab.css'
 // CONSTANTS
 // ============================================
 
-// Household role → badge label mapping (e.g., "Daughter" → "Child")
-const roleBadgeLabels = {
-  'Head': 'Spouse',
-  'Spouse': 'Spouse',
-  'Child': 'Child',
-  'Daughter': 'Child',
-  'Son': 'Child',
-}
-
 // Canonical color per relationship type — single source of truth for badges, edges, and labels.
-// household = blue, personal = pink/magenta, professional/org = purple
+// Uses Fever Ignite DS brand colors chosen for colorblind safety (blue/orange/purple).
+// household = primary blue, personal = warning orange, professional/org = accent purple
 const typeColors = {
-  'household': '#0079ca',
-  'personal': '#d946a8',
+  'household': '#0089E3',
+  'personal': '#FF8C00',
   'professional': '#6f41d7',
   'organization': '#6f41d7',
 }
@@ -31,8 +23,7 @@ const typeColors = {
 // LOOKUP HELPERS (pure, outside component)
 // ============================================
 
-const getRoleBadge = (role) => ({ color: typeColors['household'], label: roleBadgeLabels[role] || role })
-const getColorForType = (type) => typeColors[type] || '#0079ca'
+const getColorForType = (type) => typeColors[type] || '#0089E3'
 
 // Connector label = the specific role name (matches the badge on the card).
 // No more abstract category labels like "Advisory" or "Employment".
@@ -84,6 +75,7 @@ const renderOrgCard = (rel, { onNavigateToPatron, onEndRelationship } = {}) => {
           <span
             className="relationships-tab__org-title-badge relationships-tab__org-title-badge--dismissible"
             style={{ color: badgeColor, borderColor: badgeColor }}
+            title={rel.notes || ''}
           >
             {orgTitle}
             {onEndRelationship && (
@@ -151,6 +143,7 @@ const renderBridgingCard = (rels, { onNavigateToPatron, onEndRelationship } = {}
               key={i}
               className="relationships-tab__org-title-badge relationships-tab__org-title-badge--dismissible"
               style={{ color: b.color, borderColor: b.color }}
+              title={b.rel.notes || ''}
             >
               {b.title}
               {onEndRelationship && (
@@ -209,15 +202,20 @@ const renderHouseholdContent = ({ household, householdMembers, patronId, allRela
   return (
     <div className="relationships-tab__household-wrapper">
       <h4 className="relationships-tab__household-name">
-        {household.name}
+        {household.name} ({householdMembers.length})
       </h4>
 
       <div className="relationships-tab__household-card">
         {householdMembers.map((member) => {
           const isCurrentPatron = member.patronId === patronId
           const isHead = member.role === 'Head'
-          const badge = getRoleBadge(member.role)
           const isClickable = !isCurrentPatron
+
+          // Use the relational role (what this member is TO the viewed patron)
+          // from the relationship record, falling back to the structural role.
+          const hhRel = !isCurrentPatron ? getHouseholdRelationship(member) : null
+          const relationalRole = hhRel?.role || member.role
+          const badgeColor = typeColors['household']
           const handleClick = () => handleMemberClick(member)
 
           // Find any non-household relationships to this household member
@@ -257,21 +255,24 @@ const renderHouseholdContent = ({ household, householdMembers, patronId, allRela
                       Head of household
                     </span>
                   )}
-                  <span
-                    className={`relationships-tab__role-badge${isClickable && onEndRelationship ? ' relationships-tab__role-badge--dismissible' : ''}`}
-                    style={{ color: badge.color, borderColor: badge.color }}
-                  >
-                    {badge.label}
-                    {isClickable && onEndRelationship && (
-                      <button
-                        className="relationships-tab__badge-dismiss nodrag nopan nowheel"
-                        title={`End ${badge.label} relationship`}
-                        onClick={(e) => handleRemoveMember(e, member)}
-                      >
-                        <i className="fa-solid fa-xmark"></i>
-                      </button>
-                    )}
-                  </span>
+                  {!isCurrentPatron && (
+                    <span
+                      className={`relationships-tab__role-badge${onEndRelationship ? ' relationships-tab__role-badge--dismissible' : ''}`}
+                      style={{ color: badgeColor, borderColor: badgeColor }}
+                      title={hhRel?.notes || ''}
+                    >
+                      {relationalRole}
+                      {onEndRelationship && (
+                        <button
+                          className="relationships-tab__badge-dismiss nodrag nopan nowheel"
+                          title={`End ${relationalRole} relationship`}
+                          onClick={(e) => handleRemoveMember(e, member)}
+                        >
+                          <i className="fa-solid fa-xmark"></i>
+                        </button>
+                      )}
+                    </span>
+                  )}
                   {isClickable && onRemoveFromHousehold && (
                     <button
                       className="relationships-tab__move-out-btn nodrag nopan nowheel"
@@ -289,6 +290,7 @@ const renderHouseholdContent = ({ household, householdMembers, patronId, allRela
                         key={rel.id}
                         className="relationships-tab__role-badge relationships-tab__role-badge--dismissible"
                         style={{ color: extraColor, borderColor: extraColor }}
+                        title={rel.notes || ''}
                       >
                         {title}
                         {onEndRelationship && (
@@ -311,9 +313,9 @@ const renderHouseholdContent = ({ household, householdMembers, patronId, allRela
       </div>
 
       <div className="relationships-tab__actions">
-        <button className="relationships-tab__action-btn nodrag nopan nowheel" onClick={() => onAddRelationship && onAddRelationship()}>
+        <button className="relationships-tab__action-btn nodrag nopan nowheel" onClick={() => onAddRelationship && onAddRelationship('household')}>
           <i className="fa-solid fa-plus"></i>
-          Add relationship
+          Add household member
         </button>
         <button className="relationships-tab__action-btn nodrag nopan nowheel" onClick={() => onEditHousehold && onEditHousehold()}>
           <i className="fa-solid fa-pen-to-square"></i>
@@ -330,8 +332,8 @@ const renderHouseholdContent = ({ household, householdMembers, patronId, allRela
 // ============================================
 
 // Distance from wrapper top to Anderson's row vertical center:
-// top-padding(40) + title(~20) + gap(24) + card-border(1) + half-row(36) = 121px
-const HH_HANDLE_TOP = 121
+// top-padding(48) + title(~20) + gap(24) + card-border(1) + half-row(36) = 129px
+const HH_HANDLE_TOP = 129
 
 // Household node — root wraps the full blue wrapper directly (no absolute positioning).
 // React Flow uses the real rendered size for fitView. Handles are positioned at the
@@ -378,12 +380,6 @@ function StandalonePatronNode({ data }) {
           <span className="relationships-tab__patron-card-name">
             {patron?.firstName} {patron?.lastName}
           </span>
-        </div>
-        <div className="relationships-tab__actions">
-          <button className="relationships-tab__action-btn nodrag nopan nowheel" onClick={() => onAddRelationship && onAddRelationship()}>
-            <i className="fa-solid fa-plus"></i>
-            Add relationship
-          </button>
         </div>
       </div>
       {rightYs.map((y, i) => (
@@ -710,14 +706,17 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
     return (
       <div className="relationships-tab">
         <div className="relationships-tab__empty">
-          <i className="fa-solid fa-people-arrows relationships-tab__empty-icon"></i>
-          <h3 className="relationships-tab__empty-title">No Relationships Mapped</h3>
-          <p className="relationships-tab__empty-text">
-            Household members, organizational affiliations, and other patron relationships will appear here.
-          </p>
+          <div className="relationships-tab__empty-text-group">
+            <h3 className="relationships-tab__empty-title">
+              Explore the connections between users, such as Households, professional ties, and more. Discover how everyone is linked!
+            </h3>
+            <p className="relationships-tab__empty-text">
+              Start by adding the first relationship of this Patron
+            </p>
+          </div>
           <button className="relationships-tab__empty-action" onClick={() => onAddRelationship && onAddRelationship()}>
             <i className="fa-solid fa-plus"></i>
-            Add relationship
+            Add new relationship
           </button>
         </div>
       </div>
@@ -771,6 +770,12 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
   // ---- Main render ----
   return (
     <div className="relationships-tab">
+      <div className="relationships-tab__toolbar">
+        <button className="relationships-tab__add-btn" onClick={() => onAddRelationship && onAddRelationship()}>
+          <i className="fa-solid fa-plus"></i>
+          Add relationship
+        </button>
+      </div>
       <div className="relationships-tab__graph">
         {/* Desktop: Single React Flow canvas with everything inside */}
         <div className="relationships-tab__flow-container">
@@ -815,7 +820,7 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
                 </div>
               </Panel>
             )}
-            <Panel position="top-right">
+            <Panel position="bottom-right">
               <div className="relationships-tab__legend">
                 {[
                   hasHousehold && { color: typeColors['household'], label: 'Household' },
@@ -853,12 +858,6 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
                 <span className="relationships-tab__patron-card-name">
                   {currentPatron?.firstName} {currentPatron?.lastName}
                 </span>
-              </div>
-              <div className="relationships-tab__actions">
-                <button className="relationships-tab__action-btn" onClick={() => onAddRelationship && onAddRelationship()}>
-                  <i className="fa-solid fa-plus"></i>
-                  Add relationship
-                </button>
               </div>
             </div>
           )}
