@@ -424,25 +424,36 @@ function ExternalCardNode({ data }) {
   )
 }
 
-// Bridging card node — single node for a patron that appears on BOTH sides.
-// Placed on the right side with N left handles (one per relationship, evenly spaced)
-// so colored edges can arrive without overlapping. Supports 2+ relationships.
+// Grouped card node — single node for a patron with 2+ relationships.
+// Used for bridging patrons (both sides) AND same-side groups (e.g., Friend + Mentor).
+// Side-aware: right side uses left target handles, left side uses right source handles.
+// For left-side placement, right-aligns the card so edges connect at the card's right edge.
 function BridgingCardNode({ data }) {
-  const { rels, onNavigateToPatron, onEndRelationship } = data
+  const { rels, onNavigateToPatron, onEndRelationship, side } = data
   const handleCount = rels.length
   // Distribute handles evenly within the card height (72px), centered
   const spacing = 48 / (handleCount + 1)
+  const isLeft = side === 'left'
   return (
     <div
       className="nodrag nopan nowheel"
-      style={{ position: 'relative', pointerEvents: 'all' }}
+      style={{
+        position: 'relative',
+        pointerEvents: 'all',
+        ...(isLeft ? {
+          width: EXT_CARD_WIDTH,
+          display: 'flex',
+          justifyContent: 'flex-end',
+          overflow: 'visible',
+        } : {}),
+      }}
     >
       {rels.map((_, i) => (
         <Handle
-          key={`left-${i}`}
-          id={`left-${i}`}
-          type="target"
-          position={Position.Left}
+          key={`${isLeft ? 'right' : 'left'}-${i}`}
+          id={`${isLeft ? 'right' : 'left'}-${i}`}
+          type={isLeft ? 'source' : 'target'}
+          position={isLeft ? Position.Right : Position.Left}
           isConnectable={false}
           style={{ top: 12 + spacing * (i + 1) }}
         />
@@ -470,7 +481,7 @@ function LabeledEdge({ id, sourceX, sourceY, targetX, targetY, data, style }) {
     // Custom staggered step path: top edge bends further right, bottom further left
     const midX = (sourceX + targetX) / 2
     const offset = ((staggerTotal - 1) / 2 - staggerIndex) * STAGGER_SPACING
-    const bendX = midX + offset
+    const bendX = midX + offset * (data.side === 'left' ? -1 : 1)
     edgePath = `M ${sourceX} ${sourceY} H ${bendX} V ${targetY} H ${targetX}`
   } else {
     const [path] = getSmoothStepPath({
@@ -528,9 +539,11 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
   const leftRels = useMemo(() => externalRels.filter(r => r.type === 'personal'), [externalRels])
   const rightRels = useMemo(() => externalRels.filter(r => r.type !== 'personal'), [externalRels])
 
-  // Detect bridging patrons — same toPatronId in both personal (left) and professional (right).
-  // Uses arrays (not single values) to support 3+ relationships to the same person.
-  const { pureLeftRels, pureRightRels, bridgingGroups } = useMemo(() => {
+  // Group relationships by toPatronId, detecting:
+  //   1. Bridging patrons — same toPatronId in both personal (left) and professional (right)
+  //   2. Same-side groups — 2+ rels of the same type to the same patron (e.g., Friend + Mentor)
+  //   3. Singles — exactly 1 rel to a patron on one side
+  const { leftSingles, leftGroups, rightSingles, rightGroups, bridgingGroups } = useMemo(() => {
     const leftByPatron = new Map()
     leftRels.forEach(r => {
       if (!r.toPatronId) return
@@ -544,14 +557,36 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
       rightByPatron.get(r.toPatronId).push(r)
     })
 
+    // Bridging: patron appears on both sides
     const bridgingIds = new Set()
     leftByPatron.forEach((_, pid) => {
       if (rightByPatron.has(pid)) bridgingIds.add(pid)
     })
 
+    // Helper: split non-bridging rels into singles (1 rel) and groups (2+ rels).
+    // Also includes rels with no toPatronId (e.g., organization rels) as singles,
+    // since they were skipped when building the byPatron Map.
+    const splitByPatron = (byPatronMap, allSideRels) => {
+      const singles = []
+      const groups = []
+      byPatronMap.forEach((relArr, pid) => {
+        if (bridgingIds.has(pid)) return
+        if (relArr.length === 1) singles.push(relArr[0])
+        else groups.push({ patronId: pid, allRels: relArr })
+      })
+      // Include rels with no toPatronId (e.g., organization rels) — always singles
+      allSideRels.forEach(r => { if (!r.toPatronId) singles.push(r) })
+      return { singles, groups }
+    }
+
+    const left = splitByPatron(leftByPatron, leftRels)
+    const right = splitByPatron(rightByPatron, rightRels)
+
     return {
-      pureLeftRels: leftRels.filter(r => !bridgingIds.has(r.toPatronId)),
-      pureRightRels: rightRels.filter(r => !bridgingIds.has(r.toPatronId)),
+      leftSingles: left.singles,
+      leftGroups: left.groups,
+      rightSingles: right.singles,
+      rightGroups: right.groups,
       bridgingGroups: [...bridgingIds].map(pid => ({
         patronId: pid,
         allRels: [...(rightByPatron.get(pid) || []), ...(leftByPatron.get(pid) || [])],
@@ -572,8 +607,8 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
     const e = []
 
     // Dynamic X positioning: if there are left cards, patron shifts right to make room
-    const hasLeft = pureLeftRels.length > 0
-    const hasRight = pureRightRels.length > 0 || bridgingGroups.length > 0
+    const hasLeft = leftSingles.length > 0 || leftGroups.length > 0
+    const hasRight = rightSingles.length > 0 || rightGroups.length > 0 || bridgingGroups.length > 0
     const patronX = hasLeft ? (EXT_CARD_WIDTH + CARD_GAP) : 0
     const leftX = 0
     const rightX = patronX + PATRON_WIDTH + CARD_GAP
@@ -585,14 +620,15 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
 
     // --- Compute card positions + source handle positions ---
 
-    // Left external cards (personal, excluding bridging)
-    const leftEdgeCount = pureLeftRels.length
-    const leftTotalHeight = leftEdgeCount * ROW_HEIGHT
+    // Left external cards (personal singles + same-side groups, excluding bridging)
+    const allLeftCount = leftSingles.length + leftGroups.length
+    const leftEdgeCount = leftSingles.length + leftGroups.reduce((sum, g) => sum + g.allRels.length, 0)
+    const leftTotalHeight = allLeftCount * ROW_HEIGHT
     const leftStartY = handleOffsetY - (leftTotalHeight / 2) + (ROW_HEIGHT / 2) - 36
 
-    // Right external cards (professional/org, excluding bridging) + bridging nodes
-    const allRightCount = pureRightRels.length + bridgingGroups.length
-    const rightEdgeCount = pureRightRels.length + bridgingGroups.reduce((sum, g) => sum + g.allRels.length, 0)
+    // Right external cards (professional/org singles + same-side groups + bridging nodes)
+    const allRightCount = rightSingles.length + rightGroups.length + bridgingGroups.length
+    const rightEdgeCount = rightSingles.length + rightGroups.reduce((sum, g) => sum + g.allRels.length, 0) + bridgingGroups.reduce((sum, g) => sum + g.allRels.length, 0)
     const rightTotalHeight = allRightCount * ROW_HEIGHT
     const rightStartY = handleOffsetY - (rightTotalHeight / 2) + (ROW_HEIGHT / 2) - 36
 
@@ -626,14 +662,17 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
     let leftEdgeIdx = 0
     let rightEdgeIdx = 0
 
-    // Left external cards — edges go from ext (source/Right) to patron (target/Left)
-    pureLeftRels.forEach((rel, i) => {
+    // ---- Left side: singles + same-side groups ----
+    let leftCardIdx = 0
+
+    // Left single cards — one card per relationship
+    leftSingles.forEach((rel) => {
       const color = getColorForType(rel.type)
       const nodeId = `ext-${rel.id}`
       n.push({
         id: nodeId,
         type: 'externalCard',
-        position: { x: leftX, y: leftStartY + i * ROW_HEIGHT },
+        position: { x: leftX, y: leftStartY + leftCardIdx * ROW_HEIGHT },
         data: { rel, onNavigateToPatron, onEndRelationship, side: 'left' },
       })
       e.push({
@@ -646,16 +685,46 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
         style: { stroke: color, strokeWidth: 1.5 },
         data: { label: getConnectorLabel(rel), color, side: 'left' },
       })
+      leftCardIdx++
     })
 
-    // Right external cards (professional/org, excluding bridging)
-    pureRightRels.forEach((rel, i) => {
+    // Left grouped cards — 2+ rels to the same patron, one card with stacked badges
+    leftGroups.forEach((group) => {
+      const nodeId = `grouped-left-${group.patronId}`
+      n.push({
+        id: nodeId,
+        type: 'bridgingCard',
+        position: { x: leftX, y: leftStartY + leftCardIdx * ROW_HEIGHT },
+        data: { rels: group.allRels, onNavigateToPatron, onEndRelationship, side: 'left' },
+      })
+      const staggerTotal = group.allRels.length
+      group.allRels.forEach((rel, relIdx) => {
+        const color = getColorForType(rel.type)
+        e.push({
+          id: `edge-${rel.id}`,
+          source: nodeId,
+          sourceHandle: `right-${relIdx}`,
+          target: 'source',
+          targetHandle: `left-${leftEdgeIdx++}`,
+          type: 'labeled',
+          style: { stroke: color, strokeWidth: 1.5 },
+          data: { label: getConnectorLabel(rel), color, side: 'left', staggerIndex: relIdx, staggerTotal },
+        })
+      })
+      leftCardIdx++
+    })
+
+    // ---- Right side: singles + same-side groups + bridging ----
+    let rightCardIdx = 0
+
+    // Right single cards — one card per relationship
+    rightSingles.forEach((rel) => {
       const color = getColorForType(rel.type)
       const nodeId = `ext-${rel.id}`
       n.push({
         id: nodeId,
         type: 'externalCard',
-        position: { x: rightX, y: rightStartY + i * ROW_HEIGHT },
+        position: { x: rightX, y: rightStartY + rightCardIdx * ROW_HEIGHT },
         data: { rel, onNavigateToPatron, onEndRelationship, side: 'right' },
       })
       e.push({
@@ -668,20 +737,18 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
         style: { stroke: color, strokeWidth: 1.5 },
         data: { label: getConnectorLabel(rel), color, side: 'right' },
       })
+      rightCardIdx++
     })
 
-    // Bridging nodes — consolidated cards with N edges each
-    bridgingGroups.forEach((group, i) => {
-      const idx = pureRightRels.length + i
-      const nodeId = `bridging-${group.patronId}`
-
+    // Right grouped cards — 2+ rels of the same type to the same patron
+    rightGroups.forEach((group) => {
+      const nodeId = `grouped-right-${group.patronId}`
       n.push({
         id: nodeId,
         type: 'bridgingCard',
-        position: { x: rightX, y: rightStartY + idx * ROW_HEIGHT },
+        position: { x: rightX, y: rightStartY + rightCardIdx * ROW_HEIGHT },
         data: { rels: group.allRels, onNavigateToPatron, onEndRelationship },
       })
-
       const staggerTotal = group.allRels.length
       group.allRels.forEach((rel, relIdx) => {
         const color = getColorForType(rel.type)
@@ -696,10 +763,37 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
           data: { label: getConnectorLabel(rel), color, side: 'right', staggerIndex: relIdx, staggerTotal },
         })
       })
+      rightCardIdx++
+    })
+
+    // Bridging nodes — consolidated cards with N edges each (patron on both sides)
+    bridgingGroups.forEach((group) => {
+      const nodeId = `bridging-${group.patronId}`
+      n.push({
+        id: nodeId,
+        type: 'bridgingCard',
+        position: { x: rightX, y: rightStartY + rightCardIdx * ROW_HEIGHT },
+        data: { rels: group.allRels, onNavigateToPatron, onEndRelationship },
+      })
+      const staggerTotal = group.allRels.length
+      group.allRels.forEach((rel, relIdx) => {
+        const color = getColorForType(rel.type)
+        e.push({
+          id: `edge-${rel.id}`,
+          source: 'source',
+          sourceHandle: `right-${rightEdgeIdx++}`,
+          target: nodeId,
+          targetHandle: `left-${relIdx}`,
+          type: 'labeled',
+          style: { stroke: color, strokeWidth: 1.5 },
+          data: { label: getConnectorLabel(rel), color, side: 'right', staggerIndex: relIdx, staggerTotal },
+        })
+      })
+      rightCardIdx++
     })
 
     return { nodes: n, edges: e }
-  }, [hasAnyRelationships, hasHousehold, household, householdMembers, patronId, allRelationships, currentPatron, externalRels, pureLeftRels, pureRightRels, bridgingGroups, onNavigateToPatron, onEndRelationship, onAddRelationship, onEditHousehold, onRemoveFromHousehold])
+  }, [hasAnyRelationships, hasHousehold, household, householdMembers, patronId, allRelationships, currentPatron, externalRels, leftSingles, leftGroups, rightSingles, rightGroups, bridgingGroups, onNavigateToPatron, onEndRelationship, onAddRelationship, onEditHousehold, onRemoveFromHousehold])
 
   // ---- Empty state ----
   if (!hasAnyRelationships) {
@@ -824,8 +918,8 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
               <div className="relationships-tab__legend">
                 {[
                   hasHousehold && { color: typeColors['household'], label: 'Household' },
-                  pureLeftRels.length > 0 || bridgingGroups.some(g => g.allRels.some(r => r.type === 'personal')) ? { color: typeColors['personal'], label: 'Personal' } : null,
-                  pureRightRels.length > 0 || bridgingGroups.some(g => g.allRels.some(r => r.type !== 'personal')) ? { color: typeColors['professional'], label: 'Professional' } : null,
+                  leftSingles.length > 0 || leftGroups.length > 0 || bridgingGroups.some(g => g.allRels.some(r => r.type === 'personal')) ? { color: typeColors['personal'], label: 'Personal' } : null,
+                  rightSingles.length > 0 || rightGroups.length > 0 || bridgingGroups.some(g => g.allRels.some(r => r.type !== 'personal')) ? { color: typeColors['professional'], label: 'Professional' } : null,
                 ].filter(Boolean).map(item => (
                   <div key={item.label} className="relationships-tab__legend-item">
                     <span className="relationships-tab__legend-swatch" style={{ background: item.color }} />
