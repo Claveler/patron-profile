@@ -380,28 +380,28 @@ const GUIDE_CONTENT = {
                 {
                   title: 'Relationship Graph',
                   description:
-                    'The graph displays all relationship types color-coded: blue for Household, pink for Personal, purple for Professional/Organization. A legend in the top-right shows which types are present. The central patron sits inside the household card (if they belong to one), with external connections branching outward.',
+                    'The graph displays all relationship types color-coded: blue for Household, orange for Personal, purple for Professional/Organization. A legend in the bottom-right shows which types are present. The central patron sits inside the household card (showing member count, e.g., "Collingwood Family (3)"), with external connections branching outward. Two CTAs appear inside the household card: "+ Add household member" and "Edit household".',
                   media: '/screenshots/relationships/09-graph-fitview.png',
                   mediaType: 'image',
                 },
                 {
                   title: 'Bridging Cards & Staggered Routing',
                   description:
-                    'When a patron has both personal and professional relationships (e.g., Marcus Chen as Friend + Client + Mentor), the graph consolidates them into a single bridging card with stacked role badges. Each connector edge arrives at a different vertical offset to prevent overlap.',
+                    'When a patron has both personal and professional relationships (e.g., Marcus Chen as Client + Friend + Mentor), the graph consolidates them into a single bridging card with stacked role badges. Each connector edge arrives at a different vertical offset to prevent overlap.',
                   media: '/screenshots/relationships/01-graph-overview.png',
                   mediaType: 'image',
                 },
                 {
                   title: 'Edge Labels & Color Coding',
                   description:
-                    'Connector edges display the role name (e.g., "Spouse", "Sister", "Client") as an inline label, color-matched to the relationship type. This keeps the graph self-documenting — no need to hover or click to understand each connection.',
+                    'Connector edges display the role name (e.g., "Wife", "Sister", "Client") as an inline label, color-matched to the relationship type. This keeps the graph self-documenting — no need to hover or click to understand each connection.',
                   media: '/screenshots/relationships/14-edge-labels.png',
                   mediaType: 'image',
                 },
                 {
                   title: 'Empty State',
                   description:
-                    'Patrons with no relationships see a centered "No Relationships Mapped" message with a prominent "+ Add relationship" CTA (showing all four types since no household exists yet). The empty state helps onboard new patrons into the relationship graph.',
+                    'Patrons with no relationships see a centered message — "Explore the connections between users, such as Households, professional ties, and more" — with a prominent blue "+ Add new relationship" button. The empty state guides onboarding for new patrons.',
                   media: '/screenshots/relationships/12-empty-state.png',
                   mediaType: 'image',
                 },
@@ -414,42 +414,42 @@ const GUIDE_CONTENT = {
                 {
                   title: '1. Choose Relationship Type',
                   description:
-                    'Two CTAs exist once a household is created: the household card\'s "+ Add household member" button (opens a single-page household form), and the toolbar\'s "+ Add relationship" button (shows Personal, Professional, and Organization types — Household is excluded since one already exists). Before any household exists, the toolbar CTA shows all four types. Selecting Household opens a dedicated single-page form; other types use a multi-step wizard.',
+                    'Two CTAs exist once a household is created: the household card\'s "+ Add household member" button (opens a single-page form), and the toolbar\'s "+ Add relationship" button (shows Personal, Professional, and Organization types — Household is excluded since one already exists). Before any household exists, the toolbar CTA shows all four types including Household.',
                   media: '/screenshots/relationships/02a-add-type-selection.png',
                   mediaType: 'image',
                 },
                 {
-                  title: '2a. Household: Single-Page Form',
+                  title: '2a. Household & Organization: Single-Page Form',
                   description:
-                    'Household relationships use a single-page form with four sections: (1) Related individual — floating-label search field to find a patron, (2) Relationship — two floating-label role selects with auto-suggest reciprocal, (3) Household — create household toggle, household name, and head-of-household toggle (only shown when neither patron has an existing household), (4) Notes — optional textarea for context (e.g., "Divorced 2022, introduced by board chair"). Conflict detection is shown inline between sections 1 and 2.',
-                  media: null,
+                    'Household and Organization relationships use a single-page form with three sections: (1) Related individual — a searchable patron dropdown with floating label, (2) Relationship — two floating-label role selects ("Anderson Collingwood is the..." / "Related individual is the...") with auto-suggest reciprocal, and (3) Notes — optional textarea for context. If a conflict is detected (e.g., the patron already belongs to another household), warnings and transfer options appear inline between sections.',
+                  media: '/screenshots/relationships/02e-household-form.png',
                   mediaType: 'image',
                 },
                 {
-                  title: '2b. Other Types: Search for Patron',
+                  title: '2b. Personal & Professional: Find Contact',
                   description:
-                    'For Personal, Professional, and Organization types, the multi-step wizard continues: type a name or email to search existing patrons. Results show avatar, name, email. Select the patron to proceed to role assignment.',
+                    'For Personal and Professional types, a multi-step wizard starts with "Find contact": type a name or email to search existing patrons. Results show avatar, name, and email. Select the patron to proceed to role assignment.',
                   media: '/screenshots/relationships/02b-add-search-results.png',
                   mediaType: 'image',
                 },
                 {
-                  title: '3. Assign Roles',
+                  title: '3. Define Relationship',
                   description:
-                    'Choose the role that describes how the selected patron relates to the current patron. The system auto-fills the reciprocal role based on gender (e.g., Father → Son, Mother → Daughter). Both dropdowns are editable.',
+                    'The "Define relationship" step shows the linked patron with avatar and email, an info badge listing any existing relationships (e.g., "Financial Advisor (Professional), Friend (Personal), Mentor (Personal)"), two role selects with "Select role..." placeholders, an optional Notes textarea, and Cancel/Add relationship buttons.',
                   media: '/screenshots/relationships/02c-add-roles-step.png',
                   mediaType: 'image',
                 },
                 {
                   title: '4. Gender-Aware Reciprocal Roles',
                   description:
-                    'When selecting a gendered role like "Father", the system auto-suggests the correct reciprocal ("Son" for male, "Daughter" for female) based on the target patron\'s gender field. Gender-neutral roles like "Sibling" or "Friend" map to the same role on both sides.',
+                    'When selecting a gendered role like "Father", the system auto-suggests the correct reciprocal ("Son" for male, "Daughter" for female) based on the target patron\'s gender field. An "auto-suggested" badge appears next to the reciprocal select. Gender-neutral roles like "Sibling" or "Friend" map to the same role on both sides.',
                   media: '/screenshots/relationships/02d-gender-reciprocal.png',
                   mediaType: 'image',
                 },
                 {
                   title: 'Adding an Organization',
                   description:
-                    'Organization relationships link patrons to their employers, boards, or volunteer affiliations. The search shows organization records, and the role field uses titles like "Managing Partner" or "Board Member".',
+                    'Organization relationships use the same single-page form as Household: searchable patron/organization dropdown, role selects (e.g., "Managing Partner", "Board Member"), and optional notes. This links patrons to employers, boards, or volunteer affiliations.',
                   media: '/screenshots/relationships/11-add-org-search.png',
                   mediaType: 'image',
                 },
@@ -462,49 +462,49 @@ const GUIDE_CONTENT = {
                 {
                   title: 'Edit Household',
                   description:
-                    'Click "Edit household" to rename the household, change the Head of household (radio selection), or delete the household. The current Head is marked with a "Current" badge. All members are listed with their roles.',
+                    'Click "Edit household" to rename the household, change the Head of household (radio selection), or delete the household. The current Head is marked with a "Current" badge. All members are listed with their roles (Head, Spouse, Child).',
                   media: '/screenshots/relationships/03a-edit-household.png',
                   mediaType: 'image',
                 },
                 {
                   title: 'Dissolve Household — Option A: End Everything',
                   description:
-                    'Click "Delete household" to reveal dissolution options. Option A (default): "Dissolve household and end all family relationships" — removes the household and marks all relationships between members as ended. Members disappear from the graph.',
+                    'Click "Delete household" to reveal dissolution options within the same Edit household modal. Option A (default): "Dissolve household and end all family relationships" — removes the household and marks all relationships between members as ended. The red "Dissolve everything" button confirms.',
                   media: '/screenshots/relationships/03b-dissolve-options.png',
                   mediaType: 'image',
                 },
                 {
                   title: 'After Dissolve Everything',
                   description:
-                    'Result: the household card is gone. Marianne and Josiah are removed entirely. Anderson becomes a standalone node. The legend no longer shows blue Household — only Personal (pink) and Professional (purple) remain. Undo/redo buttons appear.',
+                    'Result: the household card is gone. Marianne and Josiah are removed entirely. Anderson becomes a standalone node connected only to Eleanor, Marcus, and Collingwood Capital Partners. The legend no longer shows blue Household — only Personal (orange) and Professional (purple) remain. Undo/redo buttons appear.',
                   media: '/screenshots/relationships/03b-after-dissolve-all.png',
                   mediaType: 'image',
                 },
                 {
                   title: 'Dissolve Household — Option B: Keep Records',
                   description:
-                    'Option B: "Dissolve household but keep relationship records" — removes only the household grouping. Individual family relationships are converted to Personal type and remain active. Members stay visible on the graph as personal connections.',
+                    'Option B: "Dissolve household but keep relationship records" — removes only the household grouping. Individual family relationships are converted to Personal type and remain active. The red "Dissolve household only" button confirms.',
                   media: '/screenshots/relationships/03c-dissolve-keep-rels.png',
                   mediaType: 'image',
                 },
                 {
                   title: 'After Keep Records',
                   description:
-                    'Result: the household card dissolves but all members remain visible as standalone Personal cards — Marianne (Spouse), Josiah (Son), Eleanor (Sister). Pink badges confirm relationships were preserved. Compare with Option A where members vanish.',
+                    'Result: the household card dissolves but all members remain visible as standalone Personal cards — Marianne (Wife), Josiah (Son), Eleanor (Sister). Orange badges confirm relationships were preserved. Compare with Option A where members vanish entirely.',
                   media: '/screenshots/relationships/03c-after-keep-rels.png',
                   mediaType: 'image',
                 },
                 {
                   title: 'Remove from Household (Move Out)',
                   description:
-                    'The arrow icon on each household member row removes that member from the household without severing the family bond. Household relationships are soft-deleted and automatically recreated as Personal connections — modeling real-world scenarios like a child leaving for college.',
+                    'The arrow icon on each household member row opens a "Remove from household" modal. It confirms the member and household name, and explains: "Family relationships will be preserved as personal connections." The member will appear as a personal contact on the graph instead of within the household card.',
                   media: '/screenshots/relationships/07-move-out-modal.png',
                   mediaType: 'image',
                 },
                 {
                   title: 'After Move Out',
                   description:
-                    'Result: Josiah leaves the household card and appears as a standalone Personal card with a "Son" badge. The household card now shows only Anderson and Marianne. The family bond is preserved — Josiah just lives independently.',
+                    'Result: Josiah leaves the household card and appears as a standalone Personal card with an orange "Son" badge. The household card shrinks to "Collingwood Family (2)" showing only Anderson and Marianne. The family bond is preserved — Josiah just lives independently.',
                   media: '/screenshots/relationships/07-after-move-out.png',
                   mediaType: 'image',
                 },
@@ -517,42 +517,42 @@ const GUIDE_CONTENT = {
                 {
                   title: 'Cross-Household Conflict',
                   description:
-                    'Adding a patron who already belongs to another household triggers a conflict modal. The system warns about the existing household, explains if transfer would dissolve it (when only one member would remain), and offers "Transfer to this household" or "Choose different contact".',
+                    'Adding a patron who already belongs to another household triggers inline conflict detection within the form. A yellow warning identifies the existing household and role (e.g., "Paul Fairfax is already a member of the Fairfax Family household. They are the Head."). A blue info note explains dissolution impact if transfer would leave only one member. Two actions: "Choose different contact" or the orange "Transfer" button.',
                   media: '/screenshots/relationships/05-cross-household-conflict.png',
                   mediaType: 'image',
                 },
                 {
                   title: 'End Relationship — 3+ Member Household',
                   description:
-                    'Ending a household relationship in a 3+ member household warns about cascade removal: the departing member\'s relationships with ALL household members will be ended (not just with the current patron). The system also explains that removed relationships get Personal-type fallbacks.',
+                    'Ending a household relationship in a 3+ member household shows an "End relationship" modal with a cascade warning: the departing member will be removed from the household and their relationships with all other household members will also be ended. A blue info note clarifies this only removes the CRM relationship, not shared memberships.',
                   media: '/screenshots/relationships/06-end-rel-3member.png',
                   mediaType: 'image',
                 },
                 {
                   title: 'After Ending — 3+ Member Cascade',
                   description:
-                    'Result: Josiah is removed from the household. The household card shrinks to Anderson + Marianne only. All other connections (Eleanor, Marcus, Collingwood Capital Partners) are unaffected. The cascade only touches the departing member.',
+                    'Result: Josiah is removed from the household. The household card shrinks to "Collingwood Family (2)" with Anderson + Marianne only. All other connections (Eleanor, Marcus, Collingwood Capital Partners) are unaffected. Undo/redo buttons appear.',
                   media: '/screenshots/relationships/06-after-end-rel-3member.png',
                   mediaType: 'image',
                 },
                 {
                   title: 'End Relationship — 2-Member Household (Dissolution)',
                   description:
-                    'In a 2-member household, ending the only relationship triggers a dissolution warning: both patrons will become standalone. The system clearly states this only removes the CRM relationship, not shared memberships — use the Memberships tab for beneficiary access.',
+                    'In a 2-member household (Paul & Elizabeth Fairfax), ending the only relationship triggers a dissolution warning: "Ending this relationship will dissolve the Fairfax Family. Both patrons will become standalone." A blue info note clarifies this only removes the CRM relationship, not shared memberships — use the Memberships tab for beneficiary access.',
                   media: '/screenshots/relationships/08-end-rel-2member.png',
                   mediaType: 'image',
                 },
                 {
                   title: 'After 2-Member Dissolution',
                   description:
-                    'Result: the graph shows the empty state — "No Relationships Mapped". The household and its sole remaining member\'s connection are both gone. The patron is now completely standalone with an "Add relationship" prompt.',
+                    'Result: the graph shows the empty state — "Explore the connections between users..." with a blue "+ Add new relationship" button. The household and all connections are gone. The patron is now completely standalone.',
                   media: '/screenshots/relationships/08-after-end-rel-2member.png',
                   mediaType: 'image',
                 },
                 {
                   title: 'Undo / Redo',
                   description:
-                    'All relationship actions (add, end, dissolve, transfer, move-out, household edits) support undo/redo. A compact toolbar appears in the top-left of the graph when action history exists. Gift officers can safely experiment with changes and reverse mistakes.',
+                    'All relationship actions (add, end, dissolve, transfer, move-out, household edits) support undo/redo. A compact toolbar with undo/redo arrow buttons appears in the top-left of the graph when action history exists. Gift officers can safely experiment with changes and reverse mistakes.',
                   media: '/screenshots/relationships/13-undo-toast.png',
                   mediaType: 'image',
                 },
