@@ -5052,7 +5052,7 @@ export const addPatronRelationship = (fromPatronId, toPatronId, type, role, reci
           id: `hhm-${Date.now()}`,
           householdId,
           patronId: toPatronId,
-          role: role, // e.g. 'Son', 'Child', etc.
+          role: role, // role = what toPatron is (seed data convention), e.g. 'Son', 'Child'
           isPrimary: false,
           joinedDate: new Date().toISOString().split('T')[0]
         })
@@ -5069,7 +5069,7 @@ export const addPatronRelationship = (fromPatronId, toPatronId, type, role, reci
           id: `hhm-${Date.now()}-from`,
           householdId,
           patronId: fromPatronId,
-          role: reciprocal,
+          role: reciprocal, // reciprocal = what fromPatron is (seed data convention)
           isPrimary: false,
           joinedDate: new Date().toISOString().split('T')[0]
         })

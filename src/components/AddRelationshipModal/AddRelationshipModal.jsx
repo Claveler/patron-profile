@@ -530,7 +530,8 @@ function AddRelationshipModal({
         const currentPatron = getPatronById(patronId)
         const targetHouseholdId = currentPatron?.householdId
         if (targetHouseholdId) {
-          transferPatronToHousehold(selectedPatron.id, targetHouseholdId, resolvedRole, conflictNewHead)
+          // selectedPatron is the one being transferred — use their role (resolvedReciprocal)
+          transferPatronToHousehold(selectedPatron.id, targetHouseholdId, resolvedReciprocal || resolvedRole, conflictNewHead)
         }
       }
 
@@ -538,12 +539,15 @@ function AddRelationshipModal({
       if (needsHouseholdCreation() && createHouseholdToggle) {
         const headId = isHeadOfHousehold ? patronId : selectedPatron.id
         const otherId = headId === patronId ? selectedPatron.id : patronId
-        const otherMemberRole = headId === patronId ? resolvedRole : (resolvedReciprocal || resolvedRole)
+        // otherMemberRole is the role of otherId — when current patron is head,
+        // otherId is selectedPatron so use their role (resolvedReciprocal); otherwise use resolvedRole
+        const otherMemberRole = headId === patronId ? (resolvedReciprocal || resolvedRole) : resolvedRole
         createHousehold(headId, otherId, householdName.trim(), otherMemberRole)
       }
 
       // Create the relationship
-      addPatronRelationship(patronId, selectedPatron.id, 'household', resolvedRole, resolvedReciprocal || resolvedRole, notes || null)
+      // Convention: role = what toPatron is (selectedPatron), reciprocalRole = what fromPatron is (current patron)
+      addPatronRelationship(patronId, selectedPatron.id, 'household', resolvedReciprocal || resolvedRole, resolvedRole, notes || null)
 
       setIsLoading(false)
       onSuccess && onSuccess()
