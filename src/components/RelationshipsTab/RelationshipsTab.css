@@ -815,6 +815,16 @@
   border-style: dashed;
 }
 
+/* Non-active patron avatar — faded photo only (not the whole card) */
+.relationships-tab__member-avatar--faded img,
+.relationships-tab__org-avatar--faded img,
+.relationships-tab__member-avatar--faded .relationships-tab__org-initials,
+.relationships-tab__org-avatar--faded .relationships-tab__org-initials,
+.relationships-tab__member-avatar--faded .relationships-tab__member-initials {
+  opacity: 0.35;
+  filter: grayscale(60%);
+}
+
 /* Non-active household member row — dashed separator */
 .relationships-tab__member--inactive {
   border-bottom-style: dashed;

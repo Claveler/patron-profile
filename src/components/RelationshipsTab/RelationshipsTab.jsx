@@ -114,7 +114,7 @@ const renderOrgCard = (rel, { onNavigateToPatron, onEndRelationship } = {}) => {
       {ltvTier && (
         <span className="relationships-tab__ltv-badge" title={ltvTier.tooltip}>{ltvTier.label}</span>
       )}
-      <div className={rel.type === 'organization' ? 'relationships-tab__org-avatar' : 'relationships-tab__member-avatar'}>
+      <div className={`${rel.type === 'organization' ? 'relationships-tab__org-avatar' : 'relationships-tab__member-avatar'}${dimmed ? ` ${rel.type === 'organization' ? 'relationships-tab__org-avatar--faded' : 'relationships-tab__member-avatar--faded'}` : ''}`}>
         {rel.linkedPatron?.photo ? (
           <img src={rel.linkedPatron.photo} alt={rel.displayName} />
         ) : (
@@ -189,7 +189,7 @@ const renderBridgingCard = (rels, { onNavigateToPatron, onEndRelationship } = {}
       {ltvTier && (
         <span className="relationships-tab__ltv-badge" title={ltvTier.tooltip}>{ltvTier.label}</span>
       )}
-      <div className="relationships-tab__member-avatar">
+      <div className={`relationships-tab__member-avatar${dimmed ? ' relationships-tab__member-avatar--faded' : ''}`}>
         {linkedPatron?.photo ? (
           <img src={linkedPatron.photo} alt={orgName} />
         ) : (
@@ -311,7 +311,7 @@ const renderHouseholdContent = ({ household, householdMembers, patronId, allRela
               {memberLtvTier && (
                 <span className="relationships-tab__ltv-badge" title={memberLtvTier.tooltip}>{memberLtvTier.label}</span>
               )}
-              <div className="relationships-tab__member-avatar">
+              <div className={`relationships-tab__member-avatar${memberDimmed ? ' relationships-tab__member-avatar--faded' : ''}`}>
                 {member.patron?.photo ? (
                   <img src={member.patron.photo} alt={member.patron.name} />
                 ) : (

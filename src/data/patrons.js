@@ -1218,7 +1218,7 @@ export const patrons = [
     preferredName: 'Viv',
     gender: 'female',
     dateOfBirth: '1942-03-28',
-    photo: null,
+    photo: 'https://images.unsplash.com/photo-1566616213894-2d4e1baee5d8?w=150&h=150&fit=crop&crop=face',
     email: 'vivienne.collingwood@gmail.com',
     phone: null,
     addressStreet: '3200 Pacific Ave',
