@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from 'react'
-import { searchPatrons, addBeneficiaryToMembership, addPatron, getReciprocalRole, getHouseholdForPatron, getHouseholdMembers, getBeneficiariesByMembershipId, patronRelationships, getPatronById, createHousehold } from '../../data/patrons'
+import { searchPatrons, addBeneficiaryToMembership, addPatron, getHouseholdForPatron, getHouseholdMembers, getBeneficiariesByMembershipId, patronRelationships, getPatronById, createHousehold, getDisplayRole, getReciprocalRole, ROLE_TO_CATEGORY, getActiveRelationships } from '../../data/patrons'
 import { getInitials } from '../../utils/getInitials'
 import './AddBeneficiaryModal.css'
 
@@ -9,20 +9,26 @@ const membershipRoleOptions = [
   { id: 'dependent', label: 'Dependent' }
 ]
 
-// CRM relationship types (personal connections) -- with gendered variants
-const relationshipOptions = [
-  { id: 'spouse',   label: 'Spouse' },
-  { id: 'partner',  label: 'Partner' },
-  { id: 'child',    label: 'Child' },
-  { id: 'son',      label: 'Son' },
-  { id: 'daughter', label: 'Daughter' },
-  { id: 'parent',   label: 'Parent' },
-  { id: 'father',   label: 'Father' },
-  { id: 'mother',   label: 'Mother' },
-  { id: 'sibling',  label: 'Sibling' },
-  { id: 'brother',  label: 'Brother' },
-  { id: 'sister',   label: 'Sister' },
-  { id: 'other',    label: 'Other' }
+// CRM relationship role labels for household connections
+const relationshipRoleOptions = [
+  { id: 'Spouse', label: 'Spouse' },
+  { id: 'Wife', label: 'Wife' },
+  { id: 'Husband', label: 'Husband' },
+  { id: 'Partner', label: 'Partner' },
+  { id: 'Child', label: 'Child' },
+  { id: 'Son', label: 'Son' },
+  { id: 'Daughter', label: 'Daughter' },
+  { id: 'Parent', label: 'Parent' },
+  { id: 'Father', label: 'Father' },
+  { id: 'Mother', label: 'Mother' },
+  { id: 'Sibling', label: 'Sibling' },
+  { id: 'Brother', label: 'Brother' },
+  { id: 'Sister', label: 'Sister' },
+  { id: 'Grandparent', label: 'Grandparent' },
+  { id: 'Grandchild', label: 'Grandchild' },
+  { id: 'Guardian', label: 'Guardian' },
+  { id: 'Ward', label: 'Ward' },
+  { id: 'other', label: 'Other' },
 ]
 
 function AddBeneficiaryModal({ 
@@ -81,15 +87,11 @@ function AddBeneficiaryModal({
       }))
   }, [primaryPatronId, membershipId, isOpen])
 
-  // Look up existing relationship between primary patron and a given patron
+  // Look up existing relationship between primary patron and a given patron (order-agnostic)
   const findExistingRelationship = (targetPatronId) => {
     if (!primaryPatronId || !targetPatronId) return null
-    return patronRelationships.find(
-      r => r.fromPatronId === primaryPatronId
-        && r.toPatronId === targetPatronId
-        && r.type === 'household'
-        && !r.endDate
-    ) || null
+    const rels = getActiveRelationships(primaryPatronId, targetPatronId)
+    return rels.find(r => r.type === 'household') || null
   }
 
   // Reset state when modal opens
@@ -129,14 +131,13 @@ function AddBeneficiaryModal({
     }
   }, [searchQuery])
 
-  // Auto-suggest reciprocal when relationship changes (gender-aware)
+  // Auto-suggest reciprocal when selectedRelationship changes
   useEffect(() => {
     if (selectedRelationship && selectedRelationship !== 'other') {
-      const label = relationshipOptions.find(r => r.id === selectedRelationship)?.label || selectedRelationship
-      const primaryGender = currentPatronData?.gender || null
-      const suggested = getReciprocalRole(label, primaryGender)
-      // Find matching option ID for the suggested reciprocal
-      const matchingOption = relationshipOptions.find(r => r.label === suggested)
+      // Reciprocal gender is the selected patron's gender (for the primary patron's label)
+      const reciprocalGender = currentPatronData?.gender || null
+      const suggested = getReciprocalRole(selectedRelationship, reciprocalGender)
+      const matchingOption = relationshipRoleOptions.find(r => r.id === suggested)
       setReciprocalRelationship(matchingOption ? matchingOption.id : 'other')
       if (!matchingOption) {
         setCustomReciprocalRelationship(suggested)
@@ -163,19 +164,21 @@ function AddBeneficiaryModal({
     const existingRel = findExistingRelationship(patron.id)
     if (existingRel) {
       // Relationship already exists — hide the create checkbox, show info instead
+      const otherGender = patron.gender || getPatronById(patron.id)?.gender || null
+      const label = getDisplayRole(existingRel.category, patron.id, existingRel, otherGender)
       setHasExistingRelationship(true)
-      setExistingRelLabel(existingRel.role)
+      setExistingRelLabel(label)
       setCreateRelationship(false)
 
-      // Still pre-fill for display purposes
-      const matchForward = relationshipOptions.find(r => r.label === existingRel.role)
-      const matchReverse = relationshipOptions.find(r => r.label === existingRel.reciprocalRole)
-
-      setSelectedRelationship(matchForward ? matchForward.id : 'other')
-      if (!matchForward) setCustomRelationship(existingRel.role)
-
-      setReciprocalRelationship(matchReverse ? matchReverse.id : 'other')
-      if (!matchReverse) setCustomReciprocalRelationship(existingRel.reciprocalRole)
+      // Pre-fill role labels from existing relationship
+      const primaryGender = currentPatronData?.gender || null
+      const primaryLabel = getDisplayRole(existingRel.category, primaryPatronId, existingRel, primaryGender)
+      const primaryMatch = relationshipRoleOptions.find(r => r.id === primaryLabel)
+      setSelectedRelationship(primaryMatch ? primaryMatch.id : 'other')
+      if (!primaryMatch) setCustomRelationship(primaryLabel)
+      const otherMatch = relationshipRoleOptions.find(r => r.id === label)
+      setReciprocalRelationship(otherMatch ? otherMatch.id : 'other')
+      if (!otherMatch) setCustomReciprocalRelationship(label)
     } else {
       setHasExistingRelationship(false)
       setExistingRelLabel('')
@@ -234,7 +237,7 @@ function AddBeneficiaryModal({
     }
 
     if (createRelationship && !selectedRelationship) {
-      setError('Please select a relationship type or uncheck the household relationship option')
+      setError('Please select a relationship role or uncheck the household relationship option')
       return
     }
 
@@ -262,20 +265,32 @@ function AddBeneficiaryModal({
     setIsLoading(true)
     setError('')
 
-    // Build relationship object with both directions (separate from membership role)
+    // Build relationship object: map role label → category + patron ordering
     if (relationship === undefined) {
-      const resolvedRelationship = selectedRelationship === 'other' 
-        ? customRelationship 
-        : relationshipOptions.find(r => r.id === selectedRelationship)?.label || selectedRelationship
-      const resolvedReciprocal = reciprocalRelationship === 'other'
-        ? customReciprocalRelationship
-        : relationshipOptions.find(r => r.id === reciprocalRelationship)?.label || reciprocalRelationship
+      if (createRelationship && selectedRelationship) {
+        const resolvedRole = selectedRelationship === 'other' ? customRelationship.trim() : selectedRelationship
+        const mapping = ROLE_TO_CATEGORY[resolvedRole]
+        const category = mapping?.category || 'custom'
+        const customLabels = selectedRelationship === 'other'
+          ? { patron1: customRelationship.trim(), patron2: customReciprocalRelationship.trim() }
+          : null
 
-      relationship = createRelationship ? {
-        create: true,
-        type: resolvedRelationship,
-        reciprocalType: resolvedReciprocal
-      } : null
+        // Determine patron ordering: selectedRelationship describes the PRIMARY patron.
+        // If mapping.side === 1, primary is patron1. If side === 2, primary is patron2.
+        const primaryIsSide1 = !mapping?.side || mapping.side === 1
+        const p1 = primaryIsSide1 ? primaryPatronId : selectedPatron.id
+        const p2 = primaryIsSide1 ? selectedPatron.id : primaryPatronId
+
+        relationship = {
+          create: true,
+          category,
+          customLabels,
+          patron1Id: p1,
+          patron2Id: p2,
+        }
+      } else {
+        relationship = null
+      }
     }
 
     const result = addBeneficiaryToMembership(
@@ -305,29 +320,36 @@ function AddBeneficiaryModal({
     setIsLoading(true)
     setError('')
 
-    const resolvedRelationship = selectedRelationship === 'other' 
-      ? customRelationship 
-      : relationshipOptions.find(r => r.id === selectedRelationship)?.label || selectedRelationship
-    const resolvedReciprocal = reciprocalRelationship === 'other'
-      ? customReciprocalRelationship
-      : relationshipOptions.find(r => r.id === reciprocalRelationship)?.label || reciprocalRelationship
+    const resolvedRole = selectedRelationship === 'other' ? customRelationship.trim() : selectedRelationship
+    const mapping = ROLE_TO_CATEGORY[resolvedRole]
+    const category = mapping?.category || 'custom'
+    const customLabels = selectedRelationship === 'other'
+      ? { patron1: customRelationship.trim(), patron2: customReciprocalRelationship.trim() }
+      : null
 
     try {
       // Determine head vs other patron
       const headId = selectedHead
       const otherId = headId === primaryPatronId ? selectedPatron.id : primaryPatronId
-      // The "other" member's role: if the head is the primary patron, the other gets the relationship label;
-      // if the head is the selected patron, the other gets the reciprocal label
-      const otherMemberRole = headId === primaryPatronId ? resolvedRelationship : (resolvedReciprocal || resolvedRelationship)
+      // Derive a structural member role for the "other" member
+      const resolvedReciprocal = reciprocalRelationship === 'other' ? customReciprocalRelationship.trim() : reciprocalRelationship
+      const otherMemberRole = headId === primaryPatronId ? resolvedReciprocal : resolvedRole
 
       // Create the household first — this sets householdId on both patrons
       createHousehold(headId, otherId, householdName.trim(), otherMemberRole)
 
-      // Now add the beneficiary with the relationship — addPatronRelationship will find the household
+      // Determine patron ordering
+      const primaryIsSide1 = !mapping?.side || mapping.side === 1
+      const p1 = primaryIsSide1 ? primaryPatronId : selectedPatron.id
+      const p2 = primaryIsSide1 ? selectedPatron.id : primaryPatronId
+
+      // Now add the beneficiary with the relationship
       const relationship = {
         create: true,
-        type: resolvedRelationship,
-        reciprocalType: resolvedReciprocal
+        category,
+        customLabels,
+        patron1Id: p1,
+        patron2Id: p2,
       }
 
       setIsLoading(false)
@@ -608,61 +630,65 @@ function AddBeneficiaryModal({
 
               {!hasExistingRelationship && createRelationship && (
                 <div className="add-beneficiary-modal__relationship-pair">
-                  {/* Direction A → B */}
+                  {/* Primary patron's role */}
                   <div className="add-beneficiary-modal__relationship-field">
                     <label className="add-beneficiary-modal__relationship-label">
-                      {selectedPatron.name || 'New patron'} is {primaryPatronName || 'primary member'}'s:
+                      {primaryPatronName || 'Primary member'} is {selectedPatron?.name || 'new patron'}'s:
                     </label>
                     <select
                       className="add-beneficiary-modal__relationship-select"
                       value={selectedRelationship}
                       onChange={e => setSelectedRelationship(e.target.value)}
                     >
-                      <option value="">Select relationship...</option>
-                      {relationshipOptions.map(rel => (
-                        <option key={rel.id} value={rel.id}>{rel.label}</option>
+                      <option value="">Select role...</option>
+                      {relationshipRoleOptions.map(r => (
+                        <option key={r.id} value={r.id}>{r.label}</option>
                       ))}
                     </select>
+
+                    {/* Custom role input */}
                     {selectedRelationship === 'other' && (
                       <input
                         type="text"
                         className="add-beneficiary-modal__custom-role"
-                        placeholder="Enter relationship type"
+                        placeholder={`${primaryPatronName || 'Primary member'}'s role`}
                         value={customRelationship}
                         onChange={e => setCustomRelationship(e.target.value)}
+                        style={{ marginTop: '4px' }}
                       />
                     )}
                   </div>
 
-                  {/* Direction B → A (auto-suggested, editable) */}
-                  <div className="add-beneficiary-modal__relationship-field">
-                    <label className="add-beneficiary-modal__relationship-label">
-                      {primaryPatronName || 'Primary member'} is {selectedPatron.name || 'new patron'}'s:
-                      {selectedRelationship && (
-                        <small className="add-beneficiary-modal__auto-label">auto-suggested</small>
+                  {/* Reciprocal role (auto-suggested) */}
+                  {selectedRelationship && (
+                    <div className="add-beneficiary-modal__relationship-field">
+                      <label className="add-beneficiary-modal__relationship-label">
+                        {selectedPatron?.name || 'New patron'} is {primaryPatronName || 'primary member'}'s:
+                      </label>
+                      <select
+                        className="add-beneficiary-modal__relationship-select"
+                        value={reciprocalRelationship}
+                        onChange={e => setReciprocalRelationship(e.target.value)}
+                      >
+                        <option value="">Select role...</option>
+                        {relationshipRoleOptions.map(r => (
+                          <option key={r.id} value={r.id}>{r.label}</option>
+                        ))}
+                      </select>
+
+                      {/* Custom reciprocal input */}
+                      {reciprocalRelationship === 'other' && (
+                        <input
+                          type="text"
+                          className="add-beneficiary-modal__custom-role"
+                          placeholder={`${selectedPatron?.name || 'New patron'}'s role`}
+                          value={customReciprocalRelationship}
+                          onChange={e => setCustomReciprocalRelationship(e.target.value)}
+                          style={{ marginTop: '4px' }}
+                        />
                       )}
-                    </label>
-                    <select
-                      className="add-beneficiary-modal__relationship-select"
-                      value={reciprocalRelationship}
-                      onChange={e => setReciprocalRelationship(e.target.value)}
-                      disabled={!selectedRelationship}
-                    >
-                      <option value="">Select relationship...</option>
-                      {relationshipOptions.map(rel => (
-                        <option key={`recip-${rel.id}`} value={rel.id}>{rel.label}</option>
-                      ))}
-                    </select>
-                    {reciprocalRelationship === 'other' && (
-                      <input
-                        type="text"
-                        className="add-beneficiary-modal__custom-role"
-                        placeholder="Enter reciprocal relationship type"
-                        value={customReciprocalRelationship}
-                        onChange={e => setCustomReciprocalRelationship(e.target.value)}
-                      />
-                    )}
-                  </div>
+                    </div>
+                  )}
                 </div>
               )}
 

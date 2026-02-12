@@ -178,7 +178,7 @@ const GUIDE_CONTENT = {
             name: 'RelationshipsSummary',
             minEpic: S.summaryComponents.RelationshipsSummary,
             reasoning:
-              'Shows household, personal, and professional relationships at a glance with consolidated entries. Bridging patrons (appearing in both personal and professional groups) are shown once under Professional with stacked badges. Household members with extra non-household relationships display inline badges on the household row. Professional badges use purple (#6f41d7), personal use pink — matching the graph tab\'s type-based color system. Cross-profile navigation lets gift officers understand the full relational context before a conversation.',
+              'Shows household, personal, and professional relationships at a glance with consolidated entries. Relationship labels (e.g., "Wife", "Son", "Client") are derived from category + patron gender at render time — the data model stores categories (e.g., "spouse", "parent-child", "friend"), not role strings. Bridging patrons (appearing in both personal and professional groups) are shown once under Professional with stacked badges. Household members with extra non-household relationships display inline badges on the household row. Professional badges use purple (#6f41d7), personal use pink — matching the graph tab\'s type-based color system. Cross-profile navigation lets gift officers understand the full relational context before a conversation.',
           },
           {
             name: 'AddToPortfolioBar',
@@ -375,22 +375,22 @@ const GUIDE_CONTENT = {
         persona: 'Gift Officer',
         epic: 'Epic 1 — Patron Data Platform',
         why:
-          'Donors exist in networks. The Relationships tab maps household, personal, professional, and organization connections. Understanding that Anderson\'s sister Eleanor runs the Whitfield Gallery, or that his financial advisor is Marcus Chen, fundamentally changes the cultivation approach.',
+          'Donors exist in networks. The Relationships tab maps household, personal, professional, and organization connections using a parsimonious category-based data model — each relationship is stored as a single record with a category key (e.g., "spouse", "parent-child", "friend"), and display labels are derived at render time from category + patron gender. The UI presents familiar gendered role labels (Wife, Father, Mentor) with auto-suggested reciprocals. Understanding that Anderson\'s sister Eleanor runs the Whitfield Gallery, or that his financial advisor is Marcus Chen, fundamentally changes the cultivation approach.',
         competitive:
-          'Raiser\'s Edge has strong relationship mapping but requires a separate module. Tessitura embeds relationships but with dated UI. Bloomerang has basic household linking but no personal relationship type. Fever\'s approach groups relationships by type (household, personal, professional, organization) with cross-profile navigation, plus smart edge case handling (conflict detection, cascade removal, two-option dissolution, automatic Personal fallback so family bonds are never silently lost).',
+          'Raiser\'s Edge has strong relationship mapping but requires a separate module. Tessitura embeds relationships but with dated UI. Bloomerang has basic household linking but no personal relationship type. Fever\'s approach groups relationships by type (household, personal, professional, organization) with cross-profile navigation, plus smart edge case handling (conflict detection, cascade removal, two-option dissolution, automatic Personal fallback so family bonds are never silently lost). The UI uses familiar gendered role labels (Wife, Father, Mentor) with auto-suggested reciprocals, while the data model stores a single record per relationship using category keys — combining UX comfort with data parsimony.',
         wowMoment: 'Try adding a patron who already belongs to another household — the system detects the conflict and lets you choose whether to transfer them or pick someone else. If they\'re the Head of a 3+ member household, it asks you to pick a successor before completing the transfer.',
         components: [
           {
             name: 'Household Section',
             minEpic: S.patronTabs.relationships,
             reasoning:
-              'Groups family members with head-of-household designation, verified badge, and cross-profile navigation. The household popover in PatronInfoBox is a compact version; this tab is the full management view with add/edit/end/move-out capabilities. The household card has its own "+ Add household member" CTA that opens a single-page form (skipping type selection) with three sections: Related individual, Relationship, and Household creation — separate from the toolbar\'s general "+ Add relationship" button which excludes the Household type when a household already exists. Adding a household relationship that matches an existing Personal relationship (same role) automatically absorbs the Personal one — and dissolving the household recreates it via fallback. Each non-current member row has two distinct actions: dismiss (x) to sever the bond entirely, and move-out (arrow) to remove from the household while preserving family ties as Personal connections.',
+              'Groups family members with head-of-household designation, verified badge, and cross-profile navigation. The household popover in PatronInfoBox is a compact version; this tab is the full management view with add/edit/end/move-out capabilities. The household card has its own "+ Add household member" CTA that opens a single-page form (skipping type selection) with role-label dropdowns and auto-suggested reciprocal — separate from the toolbar\'s general "+ Add relationship" button which excludes the Household type when a household already exists. Adding a household relationship that matches an existing Personal relationship (same category) automatically absorbs the Personal one — and dissolving the household recreates it via fallback. Each non-current member row has two distinct actions: dismiss (x) to sever the bond entirely, and move-out (arrow) to remove from the household while preserving family ties as Personal connections.',
           },
           {
             name: 'Household Conflict Detection',
             minEpic: S.patronTabs.relationships,
             reasoning:
-              'When adding a household relationship via the single-page form, detects if the selected patron already belongs to another household. Shows an inline warning within the form (between the patron and role sections) with transfer or cancel options. If the departing patron is the Head and the old household has 3+ members, prompts the user to select a new Head before completing the transfer. Prevents silent data corruption — a patron cannot belong to two households, and no household is left without a Head.',
+              'When adding a household relationship via the single-page form, detects if the selected patron already belongs to another household. Shows an inline warning within the form (between the patron and category sections) with transfer or cancel options. If the departing patron is the Head and the old household has 3+ members, prompts the user to select a new Head before completing the transfer. Prevents silent data corruption — a patron cannot belong to two households, and no household is left without a Head.',
           },
           {
             name: 'Context-Aware End Relationship',
@@ -426,13 +426,13 @@ const GUIDE_CONTENT = {
             name: 'Professional & Organization Relationships',
             minEpic: S.patronTabs.relationships,
             reasoning:
-              'Financial advisors, attorneys, employers, and board affiliations use a distinct purple color scheme. Edge connector labels show the actual role name (e.g., "Client", "Managing Partner") instead of abstract categories, so the label on the connector matches the badge on the card — no cognitive overhead.',
+              'Financial advisors, attorneys, employers, and board affiliations use a distinct purple color scheme. Edge connector labels show the display label (e.g., "Client", "Managing Partner") derived from the relationship category and patron gender at render time, so the label on the connector matches the badge on the card — no cognitive overhead.',
           },
           {
             name: 'Bridging Relationship Consolidation',
             minEpic: S.patronTabs.relationships,
             reasoning:
-              'When a patron appears in both personal and professional relationship categories (e.g., Marcus Chen is both Anderson\'s friend and his financial advisory client), the graph consolidates them into a single card with stacked role badges and typed connector edges. Supports 2+ simultaneous relationships. The Summary sidebar also consolidates: Marcus appears once under Professional with both badges stacked.',
+              'When a patron appears in both personal and professional relationship categories (e.g., Marcus Chen is both Anderson\'s friend and his financial advisory client), the graph consolidates them into a single card with stacked category badges (display labels derived from category + gender) and typed connector edges. Supports 2+ simultaneous relationships. The Summary sidebar also consolidates: Marcus appears once under Professional with both badges stacked.',
           },
           {
             name: 'Household Dual-Relationship Annotation',
@@ -493,14 +493,14 @@ const GUIDE_CONTENT = {
                 {
                   title: 'Bridging Cards & Staggered Routing',
                   description:
-                    'When a patron has both personal and professional relationships (e.g., Marcus Chen as Client + Friend + Mentor), the graph consolidates them into a single bridging card with stacked role badges. Each connector edge arrives at a different vertical offset to prevent overlap.',
+                    'When a patron has both personal and professional relationships (e.g., Marcus Chen as Client + Friend + Mentor), the graph consolidates them into a single bridging card with stacked category badges (display labels derived from category + gender). Each connector edge arrives at a different vertical offset to prevent overlap.',
                   media: '/screenshots/relationships/01-graph-overview.png',
                   mediaType: 'image',
                 },
                 {
                   title: 'Edge Labels & Color Coding',
                   description:
-                    'Connector edges display the role name (e.g., "Wife", "Sister", "Client") as an inline label, color-matched to the relationship type. This keeps the graph self-documenting — no need to hover or click to understand each connection.',
+                    'Connector edges display the relationship label (e.g., "Wife", "Sister", "Client") derived from category + patron gender at render time, color-matched to the relationship type. This keeps the graph self-documenting — no need to hover or click to understand each connection.',
                   media: '/screenshots/relationships/14-edge-labels.png',
                   mediaType: 'image',
                 },
@@ -541,35 +541,35 @@ const GUIDE_CONTENT = {
                 {
                   title: '2a. Household & Organization: Single-Page Form',
                   description:
-                    'Household and Organization relationships use a single-page form with three sections: (1) Related individual — a searchable patron dropdown with floating label, (2) Relationship — two floating-label role selects ("Anderson Collingwood is the..." / "Related individual is the...") with auto-suggest reciprocal, and (3) Notes — optional textarea for context. If a conflict is detected (e.g., the patron already belongs to another household), warnings and transfer options appear inline between sections.',
+                    'Household and Organization relationships use a single-page form with three sections: (1) Related individual — a searchable patron dropdown with floating label, (2) Relationship — two role-label dropdowns ("{patron} is the [role]" and "{other} is the [role]") with auto-suggested reciprocal and gender-aware labels, and (3) Notes — optional textarea for context. Under the hood, selected role labels are mapped to a single-record category model (ROLE_TO_CATEGORY → addPatronRelationship). If a conflict is detected (e.g., the patron already belongs to another household), warnings and transfer options appear inline between sections.',
                   media: '/screenshots/relationships/02e-household-form.png',
                   mediaType: 'image',
                 },
                 {
                   title: '2b. Personal & Professional: Find Contact',
                   description:
-                    'For Personal and Professional types, a multi-step wizard starts with "Find contact": type a name or email to search existing patrons. Results show avatar, name, and email. Select the patron to proceed to role assignment.',
+                    'For Personal and Professional types, a multi-step wizard starts with "Find contact": type a name or email to search existing patrons. Results show avatar, name, and email. Select the patron to proceed to category selection.',
                   media: '/screenshots/relationships/02b-add-search-results.png',
                   mediaType: 'image',
                 },
                 {
                   title: '3. Define Relationship',
                   description:
-                    'The "Define relationship" step shows the linked patron with avatar and email, an info badge listing any existing relationships (e.g., "Financial Advisor (Professional), Friend (Personal), Mentor (Personal)"), two role selects with "Select role..." placeholders, an optional Notes textarea, and Cancel/Add relationship buttons.',
+                    'The "Define relationship" step shows the linked patron with avatar and email, an info badge listing any existing relationships (e.g., "Financial Advisor (Professional), Friend (Personal), Mentor (Personal)"), two role-label dropdowns ("{other} is {patron}\'s [role]" and "{patron} is {other}\'s [role]") with auto-suggested reciprocal based on gender, an optional Notes textarea, and Cancel/Add relationship buttons. Role labels are mapped to categories on submit.',
                   media: '/screenshots/relationships/02c-add-roles-step.png',
                   mediaType: 'image',
                 },
                 {
-                  title: '4. Gender-Aware Reciprocal Roles',
+                  title: '4. Role Labels Backed by Category Model',
                   description:
-                    'When selecting a gendered role like "Father", the system auto-suggests the correct reciprocal ("Son" for male, "Daughter" for female) based on the target patron\'s gender field. An "auto-suggested" badge appears next to the reciprocal select. Gender-neutral roles like "Sibling" or "Friend" map to the same role on both sides.',
+                    'The UI presents familiar gendered role labels (Wife, Father, Mentor, etc.) in dropdown selectors, with auto-suggested reciprocals via getReciprocalRole(). Under the hood, a ROLE_TO_CATEGORY mapping translates each label to a category + patron ordering for storage as a single record. The data model uses categories (e.g., "parent-child", "spouse", "friend") and derives display labels at render time via getDisplayRole(category, patronId, relationship, gender). This gives users the comfort of specific labels while keeping the data model parsimonious.',
                   media: '/screenshots/relationships/02d-gender-reciprocal.png',
                   mediaType: 'image',
                 },
                 {
                   title: 'Adding an Organization',
                   description:
-                    'Organization relationships use the same single-page form as Household: searchable patron/organization dropdown, role selects (e.g., "Managing Partner", "Board Member"), and optional notes. This links patrons to employers, boards, or volunteer affiliations.',
+                    'Organization relationships use the same single-page form as Household: searchable patron/organization dropdown, two role-label dropdowns with auto-suggested reciprocal, and optional notes. Role labels are mapped to categories on submit. This links patrons to employers, boards, or volunteer affiliations.',
                   media: '/screenshots/relationships/11-add-org-search.png',
                   mediaType: 'image',
                 },
@@ -582,7 +582,7 @@ const GUIDE_CONTENT = {
                 {
                   title: 'Edit Household',
                   description:
-                    'Click "Edit household" to rename the household, change the Head of household (radio selection), or delete the household. The current Head is marked with a "Current" badge. All members are listed with their roles (Head, Spouse, Child).',
+                    'Click "Edit household" to rename the household, change the Head of household (radio selection), or delete the household. The current Head is marked with a "Current" badge. All members are listed with their relationship labels (e.g., "Head", "Spouse", "Son") derived from category + gender at render time.',
                   media: '/screenshots/relationships/03a-edit-household.png',
                   mediaType: 'image',
                 },
@@ -637,7 +637,7 @@ const GUIDE_CONTENT = {
                 {
                   title: 'Cross-Household Conflict',
                   description:
-                    'Adding a patron who already belongs to another household triggers inline conflict detection within the form. A yellow warning identifies the existing household and role (e.g., "Paul Fairfax is already a member of the Fairfax Family household. They are the Head."). A blue info note explains dissolution impact if transfer would leave only one member. Two actions: "Choose different contact" or the orange "Transfer" button.',
+                    'Adding a patron who already belongs to another household triggers inline conflict detection within the form. A yellow warning identifies the existing household and relationship label (e.g., "Paul Fairfax is already a member of the Fairfax Family household. They are the Head."). A blue info note explains dissolution impact if transfer would leave only one member. Two actions: "Choose different contact" or the orange "Transfer" button.',
                   media: '/screenshots/relationships/05-cross-household-conflict.png',
                   mediaType: 'image',
                 },

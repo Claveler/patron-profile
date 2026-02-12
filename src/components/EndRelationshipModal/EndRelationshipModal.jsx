@@ -24,8 +24,8 @@ function EndRelationshipModal({
     try {
       onBeforeMutate?.()
       if (relationship.toPatronId) {
-        // Patron-to-patron: use the bidirectional end function, scoped to this relationship type + role
-        endPatronRelationship(relationship.fromPatronId, relationship.toPatronId, relationship.type, relationship.role)
+        // Patron-to-patron: end scoped to this relationship type + category
+        endPatronRelationship(relationship.fromPatronId, relationship.toPatronId, relationship.type, relationship.category)
       } else {
         // External contact: set endDate directly on the record
         const record = patronRelationships.find(r => r.id === relationship.id)

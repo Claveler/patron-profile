@@ -4219,477 +4219,416 @@ export const getHouseholdAddress = (household) => {
   return patron?.address || null
 }
 
-// Relationships (CRM connections between patrons)
+// ============================================
+// RELATIONSHIP CATEGORIES & DERIVATION
+// ============================================
+
+// Category catalog — the single source of truth for all relationship labels.
+// Symmetric categories: both patrons share the same abstract role (e.g., spouse, sibling).
+// Asymmetric categories: patron1Id = "senior" side (parent, mentor, employer, etc.).
+// For external org relationships (patron2Id = null): patron1Id = the patron.
+export const RELATIONSHIP_CATEGORIES = {
+  // Symmetric gendered (label derived from each patron's own gender)
+  spouse:       { symmetric: true, labels: { male: 'Husband', female: 'Wife', neutral: 'Spouse' } },
+  sibling:      { symmetric: true, labels: { male: 'Brother', female: 'Sister', neutral: 'Sibling' } },
+  'ex-spouse':  { symmetric: true, labels: { male: 'Ex-Husband', female: 'Ex-Wife', neutral: 'Ex-Spouse' } },
+
+  // Asymmetric gendered (patron1 = senior side)
+  'parent-child': {
+    symmetric: false,
+    side1: { male: 'Father', female: 'Mother', neutral: 'Parent' },
+    side2: { male: 'Son', female: 'Daughter', neutral: 'Child' },
+  },
+  'grandparent-grandchild': {
+    symmetric: false,
+    side1: { neutral: 'Grandparent' },
+    side2: { neutral: 'Grandchild' },
+  },
+  'uncle-nephew': {
+    symmetric: false,
+    side1: { male: 'Uncle', female: 'Aunt', neutral: 'Uncle/Aunt' },
+    side2: { male: 'Nephew', female: 'Niece', neutral: 'Nephew/Niece' },
+  },
+
+  // Symmetric non-gendered
+  partner:    { symmetric: true, label: 'Partner' },
+  friend:     { symmetric: true, label: 'Friend' },
+  colleague:  { symmetric: true, label: 'Colleague' },
+  cousin:     { symmetric: true, label: 'Cousin' },
+  neighbor:   { symmetric: true, label: 'Neighbor' },
+
+  // Asymmetric non-gendered (patron1 = senior side)
+  'mentor-mentee':      { symmetric: false, side1: { neutral: 'Mentor' }, side2: { neutral: 'Mentee' } },
+  'godparent-godchild': { symmetric: false, side1: { neutral: 'Godparent' }, side2: { neutral: 'Godchild' } },
+  'guardian-ward':      { symmetric: false, side1: { neutral: 'Guardian' }, side2: { neutral: 'Ward' } },
+  'advisor-client':     { symmetric: false, side1: { neutral: 'Financial Advisor' }, side2: { neutral: 'Client' } },
+  'attorney-client':    { symmetric: false, side1: { neutral: 'Attorney' }, side2: { neutral: 'Client' } },
+  'accountant-client':  { symmetric: false, side1: { neutral: 'Accountant' }, side2: { neutral: 'Client' } },
+
+  // External org categories (patron1Id = the patron, patron2Id = null)
+  employee:       { symmetric: false, side1: { neutral: 'Employee' }, side2: { neutral: 'Employer' } },
+  'board-member': { symmetric: false, side1: { neutral: 'Board Member' }, side2: { neutral: 'Organization' } },
+  volunteer:      { symmetric: false, side1: { neutral: 'Volunteer' }, side2: { neutral: 'Organization' } },
+  donor:          { symmetric: false, side1: { neutral: 'Donor' }, side2: { neutral: 'Organization' } },
+
+  // Escape hatch — user-defined labels
+  custom: { symmetric: false, side1: null, side2: null },
+}
+
+// Pure derivation function: (category, patronId, relationship, gender) → display label.
+// Returns the human-readable role label for the given patron in the given relationship.
+export const getDisplayRole = (category, patronId, relationship, patronGender) => {
+  const cat = RELATIONSHIP_CATEGORIES[category]
+  if (!cat) return category // fallback for unknown categories
+
+  // Custom: use stored labels
+  if (category === 'custom') {
+    if (relationship.patron1Id === patronId) return relationship.customLabels?.patron1 || category
+    return relationship.customLabels?.patron2 || category
+  }
+
+  if (cat.symmetric) {
+    // Non-gendered symmetric (e.g., friend, partner)
+    if (cat.label) return cat.label
+    // Gendered symmetric (e.g., spouse, sibling)
+    const g = patronGender || 'neutral'
+    return cat.labels[g] || cat.labels.neutral
+  }
+
+  // Asymmetric: determine which side this patron is on
+  const side = relationship.patron1Id === patronId ? cat.side1 : cat.side2
+  if (!side) return category
+  const g = patronGender || 'neutral'
+  return side[g] || side.neutral || category
+}
+
+// ============================================
+// ROLE ↔ CATEGORY BRIDGE (maps UI labels to data model)
+// ============================================
+
+// Maps familiar role labels (Wife, Father, Mentor, etc.) to the parsimonious category system.
+// For asymmetric categories, `side: 1` = patron1 (senior), `side: 2` = patron2 (junior).
+// For symmetric categories, `side` is omitted.
+export const ROLE_TO_CATEGORY = {
+  // Symmetric gendered
+  'Spouse': { category: 'spouse' }, 'Wife': { category: 'spouse' }, 'Husband': { category: 'spouse' },
+  'Sibling': { category: 'sibling' }, 'Brother': { category: 'sibling' }, 'Sister': { category: 'sibling' },
+  'Ex-Spouse': { category: 'ex-spouse' }, 'Ex-Wife': { category: 'ex-spouse' }, 'Ex-Husband': { category: 'ex-spouse' },
+  // Asymmetric gendered
+  'Parent': { category: 'parent-child', side: 1 }, 'Father': { category: 'parent-child', side: 1 }, 'Mother': { category: 'parent-child', side: 1 },
+  'Child': { category: 'parent-child', side: 2 }, 'Son': { category: 'parent-child', side: 2 }, 'Daughter': { category: 'parent-child', side: 2 },
+  'Grandparent': { category: 'grandparent-grandchild', side: 1 }, 'Grandchild': { category: 'grandparent-grandchild', side: 2 },
+  'Uncle': { category: 'uncle-nephew', side: 1 }, 'Aunt': { category: 'uncle-nephew', side: 1 },
+  'Nephew': { category: 'uncle-nephew', side: 2 }, 'Niece': { category: 'uncle-nephew', side: 2 },
+  // Symmetric non-gendered
+  'Partner': { category: 'partner' }, 'Friend': { category: 'friend' }, 'Colleague': { category: 'colleague' },
+  'Cousin': { category: 'cousin' }, 'Neighbor': { category: 'neighbor' },
+  // Asymmetric non-gendered
+  'Mentor': { category: 'mentor-mentee', side: 1 }, 'Mentee': { category: 'mentor-mentee', side: 2 },
+  'Godparent': { category: 'godparent-godchild', side: 1 }, 'Godchild': { category: 'godparent-godchild', side: 2 },
+  'Guardian': { category: 'guardian-ward', side: 1 }, 'Ward': { category: 'guardian-ward', side: 2 },
+  // Professional
+  'Financial Advisor': { category: 'advisor-client', side: 1 },
+  'Attorney': { category: 'attorney-client', side: 1 },
+  'Accountant': { category: 'accountant-client', side: 1 },
+  'Client': { category: 'advisor-client', side: 2 },
+  // Organization (external) — patron is side 1
+  'Employee': { category: 'employee' }, 'Board Member': { category: 'board-member' },
+  'Volunteer': { category: 'volunteer' }, 'Donor': { category: 'donor' },
+}
+
+// Get reciprocal role label — thin wrapper over RELATIONSHIP_CATEGORIES.
+// role: the role label to find the reciprocal for (e.g., 'Father')
+// otherGender: the gender of the person whose label we want ('male' | 'female' | null)
+// Returns the reciprocal label (e.g., 'Daughter' if otherGender is 'female')
+export const getReciprocalRole = (role, otherGender) => {
+  const mapping = ROLE_TO_CATEGORY[role]
+  if (!mapping) return role
+  const { category, side } = mapping
+  const cat = RELATIONSHIP_CATEGORIES[category]
+  if (!cat) return role
+  const g = otherGender || 'neutral'
+  if (cat.symmetric) {
+    if (cat.label) return cat.label
+    return cat.labels?.[g] || cat.labels?.neutral || role
+  }
+  // Asymmetric: return the opposite side's label
+  const otherSide = side === 1 ? cat.side2 : cat.side1
+  if (!otherSide) return role
+  return otherSide[g] || otherSide.neutral || role
+}
+
+// Relationships (CRM connections between patrons — one record per relationship)
 export const patronRelationships = [
-  // Anderson's relationships
+  // ── Collingwood household ──
+  // Anderson ↔ Marianne (spouse)
   {
     id: 'rel-1',
-    fromPatronId: '7962415',
-    toPatronId: '7962430',
+    patron1Id: '7962415',  // Anderson
+    patron2Id: '7962430',  // Marianne
     type: 'household',
-    role: 'Wife',
-    reciprocalRole: 'Husband',
+    category: 'spouse',
+    customLabels: null,
     isPrimary: true,
     startDate: null,
     endDate: null,
     notes: 'Primary contact for household donations. Co-chairs the annual Spring Gala committee.'
   },
+  // Anderson ↔ Josiah (parent-child: Anderson = parent)
   {
     id: 'rel-2',
-    fromPatronId: '7962415',
-    toPatronId: '7962431',
+    patron1Id: '7962415',  // Anderson (parent)
+    patron2Id: '7962431',  // Josiah (child)
     type: 'household',
-    role: 'Son',
-    reciprocalRole: 'Father',
+    category: 'parent-child',
+    customLabels: null,
     isPrimary: false,
     startDate: null,
     endDate: null,
     notes: null
   },
-  // Marianne's reverse relationships (auto-created)
+  // Marianne ↔ Josiah (parent-child: Marianne = parent)
   {
     id: 'rel-3',
-    fromPatronId: '7962430',
-    toPatronId: '7962415',
+    patron1Id: '7962430',  // Marianne (parent)
+    patron2Id: '7962431',  // Josiah (child)
     type: 'household',
-    role: 'Husband',
-    reciprocalRole: 'Wife',
-    isPrimary: true,
-    startDate: null,
-    endDate: null,
-    notes: 'Primary contact for household donations. Co-chairs the annual Spring Gala committee.'
-  },
-  {
-    id: 'rel-4',
-    fromPatronId: '7962430',
-    toPatronId: '7962431',
-    type: 'household',
-    role: 'Son',
-    reciprocalRole: 'Mother',
+    category: 'parent-child',
+    customLabels: null,
     isPrimary: false,
     startDate: null,
     endDate: null,
     notes: null
   },
-  // Josiah's reverse relationships
+
+  // ── Anderson's organization relationship (external) ──
   {
-    id: 'rel-5',
-    fromPatronId: '7962431',
-    toPatronId: '7962415',
-    type: 'household',
-    role: 'Father',
-    reciprocalRole: 'Son',
-    isPrimary: true,
-    startDate: null,
-    endDate: null,
-    notes: null
-  },
-  {
-    id: 'rel-6',
-    fromPatronId: '7962431',
-    toPatronId: '7962430',
-    type: 'household',
-    role: 'Mother',
-    reciprocalRole: 'Son',
-    isPrimary: false,
-    startDate: null,
-    endDate: null,
-    notes: null
-  },
-  // Anderson's organization relationships
-  {
-    id: 'rel-14',
-    fromPatronId: '7962415',
-    toPatronId: null,
+    id: 'rel-org-1',
+    patron1Id: '7962415',  // Anderson (employee)
+    patron2Id: null,
     type: 'organization',
-    role: 'Employee',
-    reciprocalRole: 'Employer',
+    category: 'employee',
+    customLabels: null,
     isPrimary: true,
     startDate: '2015-06-01',
     endDate: null,
     notes: 'Managing Partner',
     externalContact: { name: 'Collingwood Capital Partners', company: 'Collingwood Capital Partners', initials: 'CP', title: 'Managing Partner' }
   },
-  // Anderson ↔ Marcus Chen professional relationship (patron-to-patron)
+
+  // ── Anderson ↔ Marcus Chen (multi-type: professional + 2 personal) ──
+  // Professional: advisor-client (Marcus = advisor/patron1)
   {
-    id: 'rel-15',
-    fromPatronId: '7962415',
-    toPatronId: '7962433',
+    id: 'rel-4',
+    patron1Id: '7962433',  // Marcus Chen (advisor)
+    patron2Id: '7962415',  // Anderson (client)
     type: 'professional',
-    role: 'Financial Advisor',
-    reciprocalRole: 'Client',
+    category: 'advisor-client',
+    customLabels: null,
     isPrimary: false,
     startDate: '2020-03-01',
     endDate: null,
     notes: 'Marcus manages Anderson\'s personal investment portfolio. Referred two other board members.'
   },
+  // Personal: friend
   {
-    id: 'rel-16',
-    fromPatronId: '7962433',
-    toPatronId: '7962415',
-    type: 'professional',
-    role: 'Client',
-    reciprocalRole: 'Financial Advisor',
-    isPrimary: false,
-    startDate: '2020-03-01',
-    endDate: null,
-    notes: 'Marcus manages Anderson\'s personal investment portfolio. Referred two other board members.'
-  },
-  // Anderson ↔ Marcus Chen personal relationship (friend — demonstrates multi-type consolidation)
-  {
-    id: 'rel-17',
-    fromPatronId: '7962415',
-    toPatronId: '7962433',
+    id: 'rel-5',
+    patron1Id: '7962415',  // Anderson
+    patron2Id: '7962433',  // Marcus Chen
     type: 'personal',
-    role: 'Friend',
-    reciprocalRole: 'Friend',
+    category: 'friend',
+    customLabels: null,
     isPrimary: false,
     startDate: '2019-09-01',
     endDate: null,
     notes: 'Met through arts community events'
   },
+  // Personal: mentor-mentee (Marcus = mentor/patron1)
   {
-    id: 'rel-18',
-    fromPatronId: '7962433',
-    toPatronId: '7962415',
+    id: 'rel-6',
+    patron1Id: '7962433',  // Marcus Chen (mentor)
+    patron2Id: '7962415',  // Anderson (mentee)
     type: 'personal',
-    role: 'Friend',
-    reciprocalRole: 'Friend',
-    isPrimary: false,
-    startDate: '2019-09-01',
-    endDate: null,
-    notes: 'Met through arts community events'
-  },
-  // Anderson ↔ Marcus Chen personal relationship (mentee — demonstrates multi-role same-type)
-  {
-    id: 'rel-19',
-    fromPatronId: '7962415',
-    toPatronId: '7962433',
-    type: 'personal',
-    role: 'Mentor',
-    reciprocalRole: 'Mentee',
+    category: 'mentor-mentee',
+    customLabels: null,
     isPrimary: false,
     startDate: '2022-01-15',
     endDate: null,
     notes: 'Arts philanthropy mentorship'
   },
+
+  // ── Fairfax household ──
+  // Paul ↔ Victoria (spouse)
   {
-    id: 'rel-20',
-    fromPatronId: '7962433',
-    toPatronId: '7962415',
-    type: 'personal',
-    role: 'Mentee',
-    reciprocalRole: 'Mentor',
-    isPrimary: false,
-    startDate: '2022-01-15',
+    id: 'rel-7',
+    patron1Id: '7962416',  // Paul Fairfax
+    patron2Id: '7962442',  // Victoria Fairfax
+    type: 'household',
+    category: 'spouse',
+    customLabels: null,
+    isPrimary: true,
+    startDate: null,
     endDate: null,
-    notes: 'Arts philanthropy mentorship'
+    notes: 'Both serve on the Board of Directors. Victoria handles all gala-related correspondence.'
   },
-  // Fairfax household relationships
+
+  // ── Martinez-Carter household ──
+  // Samantha ↔ Robert (spouse)
   {
     id: 'rel-8',
-    fromPatronId: '7962416',
-    toPatronId: '7962442',
+    patron1Id: '7962421',  // Samantha Carter
+    patron2Id: '7962422',  // Robert Martinez
     type: 'household',
-    role: 'Wife',
-    reciprocalRole: 'Husband',
+    category: 'spouse',
+    customLabels: null,
     isPrimary: true,
     startDate: null,
     endDate: null,
-    notes: 'Both serve on the Board of Directors. Victoria handles all gala-related correspondence.'
+    notes: null
   },
+
+  // ── Taylor-Thomas household ──
+  // Julia ↔ Lucas (spouse)
   {
     id: 'rel-9',
-    fromPatronId: '7962442',
-    toPatronId: '7962416',
+    patron1Id: '7962419',  // Julia Thomas
+    patron2Id: '7962418',  // Lucas Taylor
     type: 'household',
-    role: 'Husband',
-    reciprocalRole: 'Wife',
+    category: 'spouse',
+    customLabels: null,
     isPrimary: true,
     startDate: null,
     endDate: null,
-    notes: 'Both serve on the Board of Directors. Victoria handles all gala-related correspondence.'
+    notes: null
   },
-  // Martinez-Carter household relationships
+
+  // ── Whitfield household ──
+  // Eleanor ↔ Richard (spouse)
   {
     id: 'rel-10',
-    fromPatronId: '7962422',
-    toPatronId: '7962421',
+    patron1Id: '7962432',  // Eleanor Whitfield
+    patron2Id: '7962444',  // Richard Whitfield
     type: 'household',
-    role: 'Wife',
-    reciprocalRole: 'Husband',
+    category: 'spouse',
+    customLabels: null,
     isPrimary: true,
     startDate: null,
     endDate: null,
     notes: null
   },
-  {
-    id: 'rel-11',
-    fromPatronId: '7962421',
-    toPatronId: '7962422',
-    type: 'household',
-    role: 'Husband',
-    reciprocalRole: 'Wife',
-    isPrimary: true,
-    startDate: null,
-    endDate: null,
-    notes: null
-  },
-  // Taylor-Thomas household relationships
-  {
-    id: 'rel-12',
-    fromPatronId: '7962419',
-    toPatronId: '7962418',
-    type: 'household',
-    role: 'Wife',
-    reciprocalRole: 'Husband',
-    isPrimary: true,
-    startDate: null,
-    endDate: null,
-    notes: null
-  },
-  {
-    id: 'rel-13',
-    fromPatronId: '7962418',
-    toPatronId: '7962419',
-    type: 'household',
-    role: 'Husband',
-    reciprocalRole: 'Wife',
-    isPrimary: true,
-    startDate: null,
-    endDate: null,
-    notes: null
-  },
-  // Whitfield Family (Eleanor <-> Richard)
-  {
-    id: 'rel-14',
-    fromPatronId: '7962432',
-    toPatronId: '7962444',
-    type: 'household',
-    role: 'Husband',
-    reciprocalRole: 'Wife',
-    isPrimary: true,
-    startDate: null,
-    endDate: null,
-    notes: null
-  },
-  {
-    id: 'rel-15',
-    fromPatronId: '7962444',
-    toPatronId: '7962432',
-    type: 'household',
-    role: 'Wife',
-    reciprocalRole: 'Husband',
-    isPrimary: true,
-    startDate: null,
-    endDate: null,
-    notes: null
-  },
-  // Cross-household family relationships: Anderson Collingwood <-> Eleanor Whitfield (siblings)
+
+  // ── Cross-household family: Anderson ↔ Eleanor (siblings) ──
   {
     id: 'rel-family-1',
-    fromPatronId: '7962415',
-    toPatronId: '7962432',
+    patron1Id: '7962415',  // Anderson Collingwood
+    patron2Id: '7962432',  // Eleanor Whitfield
     type: 'personal',
-    role: 'Sister',
-    reciprocalRole: 'Brother',
+    category: 'sibling',
+    customLabels: null,
     isPrimary: false,
     startDate: null,
     endDate: null,
     notes: 'Anderson\'s sister, married into the Whitfield family'
   },
-  {
-    id: 'rel-family-2',
-    fromPatronId: '7962432',
-    toPatronId: '7962415',
-    type: 'personal',
-    role: 'Brother',
-    reciprocalRole: 'Sister',
-    isPrimary: false,
-    startDate: null,
-    endDate: null,
-    notes: 'Eleanor\'s brother, head of the Collingwood household'
-  },
-  // Ex-spouse relationships: Lucas Taylor <-> Diana Rothschild
+
+  // ── Ex-spouse: Lucas Taylor ↔ Diana Rothschild ──
   {
     id: 'rel-exspouse-1',
-    fromPatronId: '7962419',
-    toPatronId: '7962438',
+    patron1Id: '7962419',  // Julia Thomas (née Taylor) — wait, 7962419 is Julia Thomas
+    patron2Id: '7962438',  // Diana Rothschild
     type: 'personal',
-    role: 'Ex-Wife',
-    reciprocalRole: 'Ex-Husband',
+    category: 'ex-spouse',
+    customLabels: null,
     isPrimary: false,
     startDate: '2015-06-20',
     endDate: null,
     notes: 'Married 2015, divorced 2022. Both remain active museum supporters.'
   },
+
+  // ── Ex-spouse: Samantha Carter ↔ David Chen ──
   {
     id: 'rel-exspouse-2',
-    fromPatronId: '7962438',
-    toPatronId: '7962419',
+    patron1Id: '7962421',  // Samantha Carter
+    patron2Id: '7962427',  // David Chen
     type: 'personal',
-    role: 'Ex-Husband',
-    reciprocalRole: 'Ex-Wife',
-    isPrimary: false,
-    startDate: '2015-06-20',
-    endDate: null,
-    notes: 'Married 2015, divorced 2022. Both remain active museum supporters.'
-  },
-  // Ex-spouse relationships: Samantha Carter <-> David Chen
-  {
-    id: 'rel-exspouse-3',
-    fromPatronId: '7962421',
-    toPatronId: '7962427',
-    type: 'personal',
-    role: 'Ex-Husband',
-    reciprocalRole: 'Ex-Wife',
-    isPrimary: false,
-    startDate: '2014-09-10',
-    endDate: null,
-    notes: 'Married 2014, divorced 2021. David introduced Samantha to the museum originally.'
-  },
-  {
-    id: 'rel-exspouse-4',
-    fromPatronId: '7962427',
-    toPatronId: '7962421',
-    type: 'personal',
-    role: 'Ex-Wife',
-    reciprocalRole: 'Ex-Husband',
+    category: 'ex-spouse',
+    customLabels: null,
     isPrimary: false,
     startDate: '2014-09-10',
     endDate: null,
     notes: 'Married 2014, divorced 2021. David introduced Samantha to the museum originally.'
   },
 
-  // Paul Fairfax <-> Harold Fairfax (grandfather, deceased)
+  // ── Paul Fairfax ↔ Harold Fairfax (grandparent-grandchild) ──
   {
     id: 'rel-grandfather-1',
-    fromPatronId: '7962416',
-    toPatronId: '7962445',
+    patron1Id: '7962445',  // Harold Fairfax (grandparent)
+    patron2Id: '7962416',  // Paul Fairfax (grandchild)
     type: 'personal',
-    role: 'Grandfather',
-    reciprocalRole: 'Grandson',
-    isPrimary: false,
-    startDate: null,
-    endDate: null,
-    notes: 'Harold founded Fairfax & Associates and was a founding patron of the museum. Paul carries on his philanthropic legacy.'
-  },
-  {
-    id: 'rel-grandfather-2',
-    fromPatronId: '7962445',
-    toPatronId: '7962416',
-    type: 'personal',
-    role: 'Grandson',
-    reciprocalRole: 'Grandfather',
+    category: 'grandparent-grandchild',
+    customLabels: null,
     isPrimary: false,
     startDate: null,
     endDate: null,
     notes: 'Harold founded Fairfax & Associates and was a founding patron of the museum. Paul carries on his philanthropic legacy.'
   },
 
-  // Mia Wilson <-> David Wilson (husband, inactive)
+  // ── Wilson household ──
+  // Mia ↔ David Wilson (spouse)
   {
     id: 'rel-wilson-1',
-    fromPatronId: '7962423',
-    toPatronId: '7962446',
+    patron1Id: '7962423',  // Mia Wilson
+    patron2Id: '7962446',  // David Wilson
     type: 'household',
-    role: 'Husband',
-    reciprocalRole: 'Wife',
-    isPrimary: false,
-    startDate: null,
-    endDate: null,
-    notes: 'David prefers all museum correspondence to go through Mia. Marked inactive at his request.'
-  },
-  {
-    id: 'rel-wilson-2',
-    fromPatronId: '7962446',
-    toPatronId: '7962423',
-    type: 'household',
-    role: 'Wife',
-    reciprocalRole: 'Husband',
+    category: 'spouse',
+    customLabels: null,
     isPrimary: true,
     startDate: null,
     endDate: null,
     notes: 'David prefers all museum correspondence to go through Mia. Marked inactive at his request.'
   },
 
-  // Ethan Davis <-> Marcus Davis (brother, archived)
+  // ── Ethan Davis ↔ Marcus Davis (siblings) ──
   {
     id: 'rel-brothers-1',
-    fromPatronId: '7962425',
-    toPatronId: '7962447',
+    patron1Id: '7962425',  // Ethan Davis
+    patron2Id: '7962447',  // Marcus Davis
     type: 'personal',
-    role: 'Brother',
-    reciprocalRole: 'Brother',
-    isPrimary: false,
-    startDate: null,
-    endDate: null,
-    notes: 'Marcus relocated to Atlanta in 2025. Ethan introduced him to the museum originally.'
-  },
-  {
-    id: 'rel-brothers-2',
-    fromPatronId: '7962447',
-    toPatronId: '7962425',
-    type: 'personal',
-    role: 'Brother',
-    reciprocalRole: 'Brother',
+    category: 'sibling',
+    customLabels: null,
     isPrimary: false,
     startDate: null,
     endDate: null,
     notes: 'Marcus relocated to Atlanta in 2025. Ethan introduced him to the museum originally.'
   },
 
-  // Anderson Collingwood <-> Vivienne Collingwood (paternal aunt, deceased)
+  // ── Anderson ↔ Vivienne Collingwood (uncle-nephew: Vivienne = aunt) ──
   {
     id: 'rel-aunt-1',
-    fromPatronId: '7962415',
-    toPatronId: '7962448',
+    patron1Id: '7962448',  // Vivienne Collingwood (aunt)
+    patron2Id: '7962415',  // Anderson Collingwood (nephew)
     type: 'personal',
-    role: 'Aunt',
-    reciprocalRole: 'Nephew',
-    isPrimary: false,
-    startDate: null,
-    endDate: null,
-    notes: 'Vivienne was Anderson\'s paternal aunt. A founding museum donor, she left her entire estate to the Collingwood family upon her passing in 2023.'
-  },
-  {
-    id: 'rel-aunt-2',
-    fromPatronId: '7962448',
-    toPatronId: '7962415',
-    type: 'personal',
-    role: 'Nephew',
-    reciprocalRole: 'Aunt',
+    category: 'uncle-nephew',
+    customLabels: null,
     isPrimary: false,
     startDate: null,
     endDate: null,
     notes: 'Vivienne was Anderson\'s paternal aunt. A founding museum donor, she left her entire estate to the Collingwood family upon her passing in 2023.'
   },
 
-  // Eleanor Whitfield <-> Vivienne Collingwood (paternal aunt, deceased)
+  // ── Eleanor ↔ Vivienne Collingwood (uncle-nephew: Vivienne = aunt) ──
   {
-    id: 'rel-aunt-3',
-    fromPatronId: '7962432',
-    toPatronId: '7962448',
+    id: 'rel-aunt-2',
+    patron1Id: '7962448',  // Vivienne Collingwood (aunt)
+    patron2Id: '7962432',  // Eleanor Whitfield (niece)
     type: 'personal',
-    role: 'Aunt',
-    reciprocalRole: 'Niece',
+    category: 'uncle-nephew',
+    customLabels: null,
     isPrimary: false,
     startDate: null,
     endDate: null,
     notes: 'Vivienne was Eleanor\'s paternal aunt. Eleanor inherited a portion of Vivienne\'s art collection.'
   },
-  {
-    id: 'rel-aunt-4',
-    fromPatronId: '7962448',
-    toPatronId: '7962432',
-    type: 'personal',
-    role: 'Niece',
-    reciprocalRole: 'Aunt',
-    isPrimary: false,
-    startDate: null,
-    endDate: null,
-    notes: 'Vivienne was Eleanor\'s paternal aunt. Eleanor inherited a portion of Vivienne\'s art collection.'
-  }
 ]
 
 // ============================================
@@ -4887,11 +4826,14 @@ export const addBeneficiaryToMembership = (membershipId, patronId, membershipRol
     if (primary && primary.id !== patronId) {
       // Dedup: skip if an active household relationship already exists
       const existingRelationship = patronRelationships.find(
-        r => r.fromPatronId === primary.id && r.toPatronId === patronId
+        r => relInvolvesBoth(r, primary.id, patronId)
           && r.type === 'household' && !r.endDate
       )
       if (!existingRelationship) {
-        addPatronRelationship(primary.id, patronId, 'household', relationship.type, relationship.reciprocalType || null)
+        // Use patron ordering from relationship object if provided, else default
+        const p1 = relationship.patron1Id || primary.id
+        const p2 = relationship.patron2Id || patronId
+        addPatronRelationship(p1, p2, 'household', relationship.category || 'spouse', relationship.customLabels || null)
       }
     }
   }
@@ -5391,17 +5333,36 @@ export const addMembershipNote = (membershipId, note) => {
 // RELATIONSHIP HELPER FUNCTIONS
 // ============================================
 
-// Get relationships for a patron
+// ============================================
+// RELATIONSHIP QUERY FUNCTIONS (category-based, single-record)
+// ============================================
+
+// Helper: check if a relationship involves a patron (order-agnostic)
+const relInvolvesPatron = (rel, patronId) =>
+  rel.patron1Id === patronId || rel.patron2Id === patronId
+
+// Helper: check if a relationship involves two specific patrons (order-agnostic)
+const relInvolvesBoth = (rel, idA, idB) =>
+  (rel.patron1Id === idA && rel.patron2Id === idB) ||
+  (rel.patron1Id === idB && rel.patron2Id === idA)
+
+// Get relationships for a patron — returns enriched objects with backward-compat fields
+// (role, reciprocalRole, fromPatronId, toPatronId) derived at query time.
 export const getPatronRelationships = (patronId) => {
   if (!patronId) return []
-  
+  const currentPatron = patrons.find(p => p.id === patronId)
+  const currentGender = currentPatron?.gender || null
+
   return patronRelationships.filter(
-    r => r.fromPatronId === patronId && !r.endDate
+    r => relInvolvesPatron(r, patronId) && !r.endDate
   ).map(rel => {
+    // Identify the linked patron (the "other" person)
+    const linkedPatronId = rel.patron1Id === patronId ? rel.patron2Id : rel.patron1Id
+
     // Get linked patron data if it exists
     let linkedPatron = null
-    if (rel.toPatronId) {
-      const patron = patrons.find(p => p.id === rel.toPatronId)
+    if (linkedPatronId) {
+      const patron = patrons.find(p => p.id === linkedPatronId)
       if (patron) {
         const linkedHousehold = patron.householdId
           ? HOUSEHOLDS.find(h => h.id === patron.householdId)
@@ -5413,6 +5374,7 @@ export const getPatronRelationships = (patronId) => {
           name: `${patron.firstName} ${patron.lastName}`,
           email: patron.email,
           photo: patron.photo,
+          gender: patron.gender || null,
           householdName: linkedHousehold?.name || null,
           giving: patron.giving || null,
           status: patron.status || 'active',
@@ -5424,12 +5386,23 @@ export const getPatronRelationships = (patronId) => {
         }
       }
     }
-    
+
+    // Derive display labels from category + gender
+    const linkedGender = linkedPatron?.gender || null
+    const role = getDisplayRole(rel.category, linkedPatronId, rel, linkedGender)
+    const reciprocalRole = getDisplayRole(rel.category, patronId, rel, currentGender)
+
     return {
       ...rel,
+      // Backward-compat aliases — consumers can read these without changes
+      fromPatronId: patronId,
+      toPatronId: linkedPatronId,
+      role,
+      reciprocalRole,
+      // Enriched data
       linkedPatron,
       displayName: linkedPatron ? linkedPatron.name : rel.externalContact?.name || 'Unknown',
-      initials: linkedPatron 
+      initials: linkedPatron
         ? `${linkedPatron.firstName[0]}${linkedPatron.lastName[0]}`
         : rel.externalContact?.initials || '??'
     }
@@ -5446,10 +5419,10 @@ export const getOrgRelationships = (patronId) => {
 // Returns { company, title, relationship } or null
 export const getPrimaryEmployer = (patronId) => {
   const orgRels = getOrgRelationships(patronId)
-  // Look for an Employee relationship first (primary employer)
-  const employeeRel = orgRels.find(r => r.role === 'Employee' && r.isPrimary) 
-    || orgRels.find(r => r.role === 'Employee')
-  
+  // Look for an employee category relationship first (primary employer)
+  const employeeRel = orgRels.find(r => r.category === 'employee' && r.isPrimary)
+    || orgRels.find(r => r.category === 'employee')
+
   if (employeeRel) {
     return {
       company: employeeRel.externalContact?.company || employeeRel.displayName,
@@ -5471,162 +5444,128 @@ export const getPrimaryEmployer = (patronId) => {
   return null
 }
 
-// Add a relationship between patrons
-export const addPatronRelationship = (fromPatronId, toPatronId, type, role, reciprocalRole = null, notes = null) => {
-  // Determine reciprocal role based on role if not provided
-  const reciprocal = reciprocalRole || getReciprocalRole(role)
-  
-  // Create relationship from -> to
-  const rel1 = {
-    id: `rel-${Date.now()}-1`,
-    fromPatronId,
-    toPatronId,
-    type,
-    role,
-    reciprocalRole: reciprocal,
-    isPrimary: false,
-    startDate: new Date().toISOString().split('T')[0],
-    endDate: null,
-    notes
-  }
-  patronRelationships.push(rel1)
-  
-  // Create reciprocal relationship to -> from
-  const rel2 = {
-    id: `rel-${Date.now()}-2`,
-    fromPatronId: toPatronId,
-    toPatronId: fromPatronId,
-    type,
-    role: reciprocal,
-    reciprocalRole: role,
-    isPrimary: false,
-    startDate: new Date().toISOString().split('T')[0],
-    endDate: null,
-    notes
-  }
-  patronRelationships.push(rel2)
+// Add a relationship between patrons (single record, category-based).
+// patron1Id: for asymmetric categories, the "senior" side (parent, mentor, advisor, etc.)
+// patron2Id: the other patron (or null for external org relationships)
+// memberRole: optional structural role label for HOUSEHOLD_MEMBERS (e.g. 'Spouse', 'Child')
+export const addPatronRelationship = (patron1Id, patron2Id, type, category, customLabels = null, notes = null, memberRole = null) => {
+  const today = new Date().toISOString().split('T')[0]
 
-  // If this is a household relationship, absorb any matching Personal relationships first,
-  // then add the target patron to HOUSEHOLD_MEMBERS
-  if (type === 'household') {
-    // Absorb: soft-delete active Personal relationships with the same role between these two patrons.
-    // The household relationship supersedes the personal one. If the household is later dissolved,
-    // the fallback mechanism will auto-recreate the Personal relationship.
-    const today = new Date().toISOString().split('T')[0]
-    patronRelationships.forEach(rel => {
-      if (rel.type !== 'personal' || rel.endDate) return
-      const matchesForward = rel.fromPatronId === fromPatronId && rel.toPatronId === toPatronId
-        && (rel.role === role || rel.role === reciprocal)
-      const matchesReverse = rel.fromPatronId === toPatronId && rel.toPatronId === fromPatronId
-        && (rel.role === role || rel.role === reciprocal)
-      if (matchesForward || matchesReverse) {
-        rel.endDate = today
+  const rel = {
+    id: `rel-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+    patron1Id,
+    patron2Id,
+    type,
+    category,
+    customLabels: customLabels || null,
+    isPrimary: false,
+    startDate: today,
+    endDate: null,
+    notes: notes || null,
+  }
+  patronRelationships.push(rel)
+
+  // If this is a household relationship, absorb matching Personal relationships,
+  // then ensure both patrons are in HOUSEHOLD_MEMBERS
+  if (type === 'household' && patron2Id) {
+    // Absorb: soft-delete active Personal relationships with the same category between these two patrons
+    patronRelationships.forEach(r => {
+      if (r === rel) return // skip the one we just created
+      if (r.type !== 'personal' || r.endDate) return
+      if (relInvolvesBoth(r, patron1Id, patron2Id) && r.category === category) {
+        r.endDate = today
       }
     })
 
-    const fromPatron = patrons.find(p => p.id === fromPatronId)
-    const toPatron = patrons.find(p => p.id === toPatronId)
-    const householdId = fromPatron?.householdId || toPatron?.householdId
+    const p1 = patrons.find(p => p.id === patron1Id)
+    const p2 = patrons.find(p => p.id === patron2Id)
+    const householdId = p1?.householdId || p2?.householdId
 
     if (householdId) {
-      // Add target patron to household if not already a member
-      const alreadyMember = HOUSEHOLD_MEMBERS.some(m => m.householdId === householdId && m.patronId === toPatronId)
-      if (!alreadyMember) {
+      // Derive a structural member role from the category for HOUSEHOLD_MEMBERS
+      const structuralRole = memberRole || _structuralMemberRole(category, patron2Id, rel, p2?.gender)
+
+      // Add patron2 to household if not already a member
+      if (!HOUSEHOLD_MEMBERS.some(m => m.householdId === householdId && m.patronId === patron2Id)) {
         HOUSEHOLD_MEMBERS.push({
           id: `hhm-${Date.now()}`,
           householdId,
-          patronId: toPatronId,
-          role: role, // role = what toPatron is (seed data convention), e.g. 'Son', 'Child'
+          patronId: patron2Id,
+          role: structuralRole,
           isPrimary: false,
-          joinedDate: new Date().toISOString().split('T')[0]
+          joinedDate: today,
         })
-        // Update the patron's householdId
-        if (toPatron && !toPatron.householdId) {
-          toPatron.householdId = householdId
-        }
+        if (p2 && !p2.householdId) p2.householdId = householdId
       }
 
-      // Also ensure the from patron is a member (in case of reverse add)
-      const fromAlreadyMember = HOUSEHOLD_MEMBERS.some(m => m.householdId === householdId && m.patronId === fromPatronId)
-      if (!fromAlreadyMember && fromPatron) {
+      // Ensure patron1 is also a member
+      if (!HOUSEHOLD_MEMBERS.some(m => m.householdId === householdId && m.patronId === patron1Id)) {
+        const p1StructRole = memberRole
+          ? _structuralMemberRole(category, patron1Id, rel, p1?.gender)
+          : _structuralMemberRole(category, patron1Id, rel, p1?.gender)
         HOUSEHOLD_MEMBERS.push({
-          id: `hhm-${Date.now()}-from`,
+          id: `hhm-${Date.now()}-p1`,
           householdId,
-          patronId: fromPatronId,
-          role: reciprocal, // reciprocal = what fromPatron is (seed data convention)
+          patronId: patron1Id,
+          role: p1StructRole,
           isPrimary: false,
-          joinedDate: new Date().toISOString().split('T')[0]
+          joinedDate: today,
         })
-        if (!fromPatron.householdId) {
-          fromPatron.householdId = householdId
-        }
+        if (p1 && !p1.householdId) p1.householdId = householdId
       }
     }
   }
-  
-  return { rel1, rel2 }
+
+  return rel
 }
 
-// End a relationship (soft delete)
-// Optional `type` parameter scopes the end to a specific relationship type
-// (e.g., 'professional', 'personal'). When null (default), ends ALL relationships
-// between the two patrons — backward-compatible with existing callers.
-export const endPatronRelationship = (fromPatronId, toPatronId, type = null, role = null) => {
+// Internal: derive a HOUSEHOLD_MEMBERS structural role from a category
+// (e.g., 'spouse' → 'Spouse', 'parent-child' for child → 'Child')
+const _structuralMemberRole = (category, patronId, rel, gender) => {
+  return getDisplayRole(category, patronId, rel, gender)
+}
+
+// End a relationship (soft delete) — single-record, order-agnostic.
+// patronIdA / patronIdB: the two patrons (order doesn't matter)
+// type: optional scope (e.g., 'professional'). null = end ALL matching.
+// category: optional scope (e.g., 'advisor-client'). null = end ALL matching.
+export const endPatronRelationship = (patronIdA, patronIdB, type = null, category = null) => {
   const today = new Date().toISOString().split('T')[0]
-  
-  // Check if any of the matching relationships are household type
+
   let isHouseholdRel = false
-  
-  // End both directions (scoped by type and role if provided)
+
   patronRelationships.forEach(rel => {
-    if (
-      ((rel.fromPatronId === fromPatronId && rel.toPatronId === toPatronId) ||
-       (rel.fromPatronId === toPatronId && rel.toPatronId === fromPatronId)) &&
-      !rel.endDate &&
-      (type === null || rel.type === type) &&
-      (role === null || rel.role === role || rel.reciprocalRole === role)
-    ) {
-      rel.endDate = today
-      if (rel.type === 'household') isHouseholdRel = true
-    }
+    if (!relInvolvesBoth(rel, patronIdA, patronIdB) || rel.endDate) return
+    if (type !== null && rel.type !== type) return
+    if (category !== null && rel.category !== category) return
+    rel.endDate = today
+    if (rel.type === 'household') isHouseholdRel = true
   })
-  
+
   // If it was a household relationship, also remove from HOUSEHOLD_MEMBERS
   if (isHouseholdRel) {
-    // Determine which patron is NOT the primary/head — remove them from the household
-    const fromMember = HOUSEHOLD_MEMBERS.find(m => m.patronId === fromPatronId)
-    const toMember = HOUSEHOLD_MEMBERS.find(m => m.patronId === toPatronId)
-    
-    // Capture the householdId before any removals
-    const affectedHouseholdId = (fromMember || toMember)?.householdId
-    
-    // Remove the non-primary member (the one being disconnected)
-    // If toPatron is not primary, remove them; otherwise remove fromPatron
-    const memberToRemove = toMember && !toMember.isPrimary ? toMember : (fromMember && !fromMember.isPrimary ? fromMember : null)
-    
+    const memberA = HOUSEHOLD_MEMBERS.find(m => m.patronId === patronIdA)
+    const memberB = HOUSEHOLD_MEMBERS.find(m => m.patronId === patronIdB)
+    const affectedHouseholdId = (memberA || memberB)?.householdId
+
+    // Remove the non-primary member
+    const memberToRemove = memberB && !memberB.isPrimary ? memberB
+      : (memberA && !memberA.isPrimary ? memberA : null)
+
     if (memberToRemove && affectedHouseholdId) {
-      // Cascade-end ALL household relationships between the removed patron and remaining members
       endAllHouseholdRelationshipsForPatron(memberToRemove.patronId, affectedHouseholdId)
 
       const idx = HOUSEHOLD_MEMBERS.indexOf(memberToRemove)
-      if (idx !== -1) {
-        HOUSEHOLD_MEMBERS.splice(idx, 1)
-      }
-      // Clear their householdId
+      if (idx !== -1) HOUSEHOLD_MEMBERS.splice(idx, 1)
+
       const patron = patrons.find(p => p.id === memberToRemove.patronId)
-      if (patron) {
-        patron.householdId = null
-      }
+      if (patron) patron.householdId = null
     }
-    
+
     // Auto-dissolve household if only one member remains
     if (affectedHouseholdId) {
-      const remainingMembers = HOUSEHOLD_MEMBERS.filter(
-        m => m.householdId === affectedHouseholdId
-      )
-      if (remainingMembers.length <= 1) {
-        deleteHousehold(affectedHouseholdId)
-      }
+      const remaining = HOUSEHOLD_MEMBERS.filter(m => m.householdId === affectedHouseholdId)
+      if (remaining.length <= 1) deleteHousehold(affectedHouseholdId)
     }
   }
 }
@@ -5647,8 +5586,8 @@ export const deleteHousehold = (householdId) => {
   const memberPatronIds = memberEntries.map(e => e.patronId)
   patronRelationships.forEach(rel => {
     if (rel.type === 'household' && !rel.endDate &&
-        memberPatronIds.includes(rel.fromPatronId) &&
-        memberPatronIds.includes(rel.toPatronId)) {
+        memberPatronIds.includes(rel.patron1Id) &&
+        memberPatronIds.includes(rel.patron2Id)) {
       rel.type = 'personal'
     }
   })
@@ -5717,70 +5656,10 @@ export const changeHeadOfHousehold = (householdId, newHeadPatronId) => {
   if (household) household.primaryContactId = newHeadPatronId
 }
 
-// Get reciprocal role (exported for UI auto-suggest)
-// gender: optional — 'male' | 'female' | null/undefined
-// When provided, gendered roles are returned (e.g. Father→Daughter for female).
-// When absent, gender-neutral defaults are used (e.g. Father→Child).
-export const getReciprocalRole = (role, gender) => {
-  // Gendered reciprocal table: role → { male, female, neutral }
-  const genderedReciprocals = {
-    'Father':   { male: 'Son',     female: 'Daughter', neutral: 'Child' },
-    'Mother':   { male: 'Son',     female: 'Daughter', neutral: 'Child' },
-    'Parent':   { male: 'Son',     female: 'Daughter', neutral: 'Child' },
-    'Son':      { male: 'Father',  female: 'Mother',   neutral: 'Parent' },
-    'Daughter': { male: 'Father',  female: 'Mother',   neutral: 'Parent' },
-    'Child':    { male: 'Father',  female: 'Mother',   neutral: 'Parent' },
-    'Brother':  { male: 'Brother', female: 'Sister',   neutral: 'Sibling' },
-    'Sister':   { male: 'Brother', female: 'Sister',   neutral: 'Sibling' },
-    'Sibling':  { male: 'Brother', female: 'Sister',   neutral: 'Sibling' },
-    'Spouse':   { male: 'Husband', female: 'Wife',     neutral: 'Spouse' },
-    'Wife':     { male: 'Husband', female: 'Wife',     neutral: 'Spouse' },
-    'Husband':  { male: 'Husband', female: 'Wife',     neutral: 'Spouse' },
-  }
-
-  const gendered = genderedReciprocals[role]
-  if (gendered) {
-    if (gender === 'male') return gendered.male
-    if (gender === 'female') return gendered.female
-    return gendered.neutral
-  }
-
-  // Non-gendered reciprocals (unchanged)
-  const simpleReciprocals = {
-    'Partner': 'Partner',
-    'Friend': 'Friend',
-    'Colleague': 'Colleague',
-    'Cousin': 'Cousin',
-    'Financial Advisor': 'Client',
-    'Client': 'Financial Advisor',
-    'Employee': 'Employer',
-    'Employer': 'Employee',
-    'Board Member': 'Organization',
-    'Volunteer': 'Organization',
-    'Grandparent': 'Grandchild',
-    'Grandchild': 'Grandparent',
-    'Uncle': 'Nephew',
-    'Aunt': 'Niece',
-    'Nephew': 'Uncle',
-    'Niece': 'Aunt',
-    'Mentor': 'Mentee',
-    'Mentee': 'Mentor',
-    'Godparent': 'Godchild',
-    'Godchild': 'Godparent',
-    'Neighbor': 'Neighbor',
-    'Guardian': 'Ward',
-    'Ward': 'Guardian',
-    'Ex-Wife': 'Ex-Husband',
-    'Ex-Husband': 'Ex-Wife',
-  }
-  return simpleReciprocals[role] || role
-}
-
-// Check if an active household relationship exists between two patrons
+// Check if an active household relationship exists between two patrons (order-agnostic)
 export const hasHouseholdRelationship = (patronId1, patronId2) => {
   return patronRelationships.some(
-    r => r.fromPatronId === patronId1 && r.toPatronId === patronId2
-      && r.type === 'household' && !r.endDate
+    r => relInvolvesBoth(r, patronId1, patronId2) && r.type === 'household' && !r.endDate
   )
 }
 
@@ -5790,12 +5669,9 @@ export const getHouseholdConflict = (patronId, excludeHouseholdId = null) => {
   if (!patronId) return null
   const household = getHouseholdForPatron(patronId)
   if (!household) return null
-  // If the patron is in the same household as the caller, no conflict
   if (excludeHouseholdId && household.id === excludeHouseholdId) return null
   const members = HOUSEHOLD_MEMBERS.filter(m => m.householdId === household.id)
   const thisMember = members.find(m => m.patronId === patronId)
-  // Build a list of remaining members (everyone except the patron being transferred)
-  // so the UI can offer a "pick new Head" selector when the departing patron is the Head
   const remainingMembers = members
     .filter(m => m.patronId !== patronId)
     .map(m => {
@@ -5815,39 +5691,38 @@ export const getHouseholdConflict = (patronId, excludeHouseholdId = null) => {
   }
 }
 
-// Check if an active (non-ended) relationship of a given type AND role already exists between two patrons
-export const hasActiveRelationship = (patronId1, patronId2, type, role) => {
+// Check if an active (non-ended) relationship of a given type AND category exists (order-agnostic)
+export const hasActiveRelationship = (patronId1, patronId2, type, category) => {
   return patronRelationships.some(
-    r => r.fromPatronId === patronId1 && r.toPatronId === patronId2
-      && r.type === type && r.role === role && !r.endDate
+    r => relInvolvesBoth(r, patronId1, patronId2)
+      && r.type === type && r.category === category && !r.endDate
   )
 }
 
-// Get ALL active (non-ended) relationships from patron1 to patron2 across all types
+// Get ALL active (non-ended) relationships between two patrons across all types (order-agnostic)
 export const getActiveRelationships = (patronId1, patronId2) => {
   return patronRelationships.filter(
-    r => r.fromPatronId === patronId1 && r.toPatronId === patronId2 && !r.endDate
+    r => relInvolvesBoth(r, patronId1, patronId2) && !r.endDate
   )
 }
 
 // Auto-create Personal-type fallback relationships for household relationships that were just ended.
-// Preserves family connections (Spouse, Child, Parent, etc.) so they're not silently lost when a
-// household dissolves or a patron is transferred. Skips duplicates if a matching Personal rel exists.
+// Preserves family connections so they're not silently lost when a household dissolves or a patron transfers.
 const createPersonalFallbacksForEndedHouseholdRels = (endedRels) => {
   if (!endedRels || endedRels.length === 0) return
   const today = new Date().toISOString().split('T')[0]
 
   endedRels.forEach(rel => {
-    // Skip if an active Personal relationship with the same direction and role already exists
-    if (hasActiveRelationship(rel.fromPatronId, rel.toPatronId, 'personal', rel.role)) return
+    // Skip if an active Personal relationship with the same category already exists
+    if (hasActiveRelationship(rel.patron1Id, rel.patron2Id, 'personal', rel.category)) return
 
     patronRelationships.push({
       id: `rel-fallback-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
-      fromPatronId: rel.fromPatronId,
-      toPatronId: rel.toPatronId,
+      patron1Id: rel.patron1Id,
+      patron2Id: rel.patron2Id,
       type: 'personal',
-      role: rel.role,
-      reciprocalRole: rel.reciprocalRole,
+      category: rel.category,
+      customLabels: rel.customLabels || null,
       isPrimary: false,
       startDate: today,
       endDate: null,
@@ -5864,54 +5739,43 @@ export const endAllHouseholdRelationshipsForPatron = (patronId, householdId) => 
     .filter(m => m.householdId === householdId && m.patronId !== patronId)
     .map(m => m.patronId)
 
-  // Collect the relationships we're about to end (for Personal fallbacks)
   const relsToEnd = []
 
   patronRelationships.forEach(rel => {
     if (rel.type !== 'household' || rel.endDate) return
-    // End in both directions: patron→other and other→patron
-    const isFromPatron = rel.fromPatronId === patronId && otherMemberIds.includes(rel.toPatronId)
-    const isToPatron = rel.toPatronId === patronId && otherMemberIds.includes(rel.fromPatronId)
-    if (isFromPatron || isToPatron) {
+    // Check if this relationship involves the departing patron and any other member
+    const involvesPatron = rel.patron1Id === patronId || rel.patron2Id === patronId
+    const otherId = rel.patron1Id === patronId ? rel.patron2Id : rel.patron1Id
+    if (involvesPatron && otherMemberIds.includes(otherId)) {
       relsToEnd.push({ ...rel })
       rel.endDate = today
     }
   })
 
-  // Create Personal-type fallbacks so family connections aren't silently lost
   createPersonalFallbacksForEndedHouseholdRels(relsToEnd)
 }
 
 // Remove a patron from their household while preserving family connections as Personal relationships.
-// Unlike endPatronRelationship (which severs the bond), this routes everything through
-// endAllHouseholdRelationshipsForPatron so every relationship gets a Personal fallback.
-// Use case: Josiah goes to college — he's no longer in the household unit, but still Anderson's son.
 export const removePatronFromHousehold = (patronId, newHeadPatronId = null) => {
   if (!patronId) return
   const patron = patrons.find(p => p.id === patronId)
   const householdId = patron?.householdId
   if (!householdId) return
 
-  // Check if the departing patron is the Head before removing them
   const departingMember = HOUSEHOLD_MEMBERS.find(m => m.householdId === householdId && m.patronId === patronId)
   const wasHead = departingMember?.isPrimary === true
 
-  // End all household relationships — this also creates Personal fallbacks for each one
   endAllHouseholdRelationshipsForPatron(patronId, householdId)
 
-  // Remove from HOUSEHOLD_MEMBERS
   const idx = HOUSEHOLD_MEMBERS.findIndex(m => m.householdId === householdId && m.patronId === patronId)
   if (idx !== -1) HOUSEHOLD_MEMBERS.splice(idx, 1)
 
-  // Clear their householdId
   if (patron) patron.householdId = null
 
-  // Auto-dissolve household if only 1 member remains
   const remaining = HOUSEHOLD_MEMBERS.filter(m => m.householdId === householdId)
   if (remaining.length <= 1) {
     deleteHousehold(householdId)
   } else if (wasHead) {
-    // Household survives but lost its Head — promote a new one
     const successorId = newHeadPatronId || remaining[0].patronId
     changeHeadOfHousehold(householdId, successorId)
   }
@@ -5926,58 +5790,46 @@ export const dissolveHouseholdWithRelationships = (householdId) => {
     .map(m => m.patronId)
 
   // End all household relationships between members — no Personal fallbacks.
-  // This is the "dissolve everything" path: relationships are truly ended.
   patronRelationships.forEach(rel => {
     if (rel.type !== 'household' || rel.endDate) return
-    if (memberIds.includes(rel.fromPatronId) && memberIds.includes(rel.toPatronId)) {
-      rel.endDate = today
-    }
+    const p1InHH = memberIds.includes(rel.patron1Id)
+    const p2InHH = memberIds.includes(rel.patron2Id)
+    if (p1InHH && p2InHH) rel.endDate = today
   })
 
-  // Delete the household entity (clears householdId, removes members & record).
-  // The conversion loop in deleteHousehold skips these rels because endDate is already set.
   deleteHousehold(householdId)
 }
 
-// Transfer a patron from their old household into a new one (used when adding to a household that conflicts)
-// newHeadPatronId: optional — when the departing patron is the Head and 2+ members remain,
-// this specifies who should become the new Head. If omitted, auto-promotes the first remaining member as a safety net.
-export const transferPatronToHousehold = (patronId, newHouseholdId, role, newHeadPatronId = null) => {
+// Transfer a patron from their old household into a new one
+export const transferPatronToHousehold = (patronId, newHouseholdId, memberRole, newHeadPatronId = null) => {
   if (!patronId || !newHouseholdId) return
   const patron = patrons.find(p => p.id === patronId)
   const oldHouseholdId = patron?.householdId
 
-  // Remove from old household if they have one
   if (oldHouseholdId) {
-    // Check if the departing patron is the Head before removing them
     const departingMember = HOUSEHOLD_MEMBERS.find(m => m.householdId === oldHouseholdId && m.patronId === patronId)
     const wasHead = departingMember?.isPrimary === true
 
     endAllHouseholdRelationshipsForPatron(patronId, oldHouseholdId)
 
-    // Remove from HOUSEHOLD_MEMBERS
     const idx = HOUSEHOLD_MEMBERS.findIndex(m => m.householdId === oldHouseholdId && m.patronId === patronId)
     if (idx !== -1) HOUSEHOLD_MEMBERS.splice(idx, 1)
 
-    // Auto-dissolve old household if only 1 member remains
     const remaining = HOUSEHOLD_MEMBERS.filter(m => m.householdId === oldHouseholdId)
     if (remaining.length <= 1) {
       deleteHousehold(oldHouseholdId)
     } else if (wasHead) {
-      // Household survives with 2+ members but lost its Head — promote a new one
       const successorId = newHeadPatronId || remaining[0].patronId
       changeHeadOfHousehold(oldHouseholdId, successorId)
     }
   }
 
-  // Add to new household
-  const alreadyMember = HOUSEHOLD_MEMBERS.some(m => m.householdId === newHouseholdId && m.patronId === patronId)
-  if (!alreadyMember) {
+  if (!HOUSEHOLD_MEMBERS.some(m => m.householdId === newHouseholdId && m.patronId === patronId)) {
     HOUSEHOLD_MEMBERS.push({
       id: `hhm-${Date.now()}-transfer`,
       householdId: newHouseholdId,
       patronId,
-      role: role || 'Spouse',
+      role: memberRole || 'Spouse',
       isPrimary: false,
       joinedDate: new Date().toISOString().split('T')[0],
     })
