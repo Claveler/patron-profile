@@ -542,22 +542,23 @@ function BridgingCardNode({ data }) {
 
 // Edge — hybrid routing: straight horizontal line when source/target are at the same Y,
 // step path with hard 90-degree corners when they differ. Each edge has its own handle on both sides.
-// Bridging edges (staggerTotal > 1) use staggered bend points so vertical segments
-// don't overlap: top edge bends further right, bottom edge bends further left (diagonal pattern).
-// No inline labels — role info is shown on the target card badges + line colors indicate type.
+// Half-stagger: edges on each side are split into upper/lower halves relative to the patron centre.
+// Within each half, the card furthest from centre gets its bend-X closest to the centre node,
+// creating nested paths that never cross while preserving top-bottom symmetry.
+// No inline labels — role info is shown on the target card badges.
 const STAGGER_SPACING = 35 // px between staggered vertical segments
 
 function LabeledEdge({ id, sourceX, sourceY, targetX, targetY, data, style }) {
   const isFlat = Math.abs(sourceY - targetY) < 2
-  const { staggerIndex = 0, staggerTotal = 1 } = data
+  const { halfStaggerIndex = 0, halfStaggerTotal = 1 } = data
 
   let edgePath
   if (isFlat) {
     edgePath = `M ${sourceX} ${sourceY} L ${targetX} ${targetY}`
-  } else if (staggerTotal > 1) {
-    // Custom staggered step path: top edge bends further right, bottom further left
+  } else if (halfStaggerTotal > 1) {
+    // Staggered step path: spread vertical segments within each upper/lower half
     const midX = (sourceX + targetX) / 2
-    const offset = ((staggerTotal - 1) / 2 - staggerIndex) * STAGGER_SPACING
+    const offset = ((halfStaggerTotal - 1) / 2 - halfStaggerIndex) * STAGGER_SPACING
     const bendX = midX + offset * (data.side === 'left' ? -1 : 1)
     edgePath = `M ${sourceX} ${sourceY} H ${bendX} V ${targetY} H ${targetX}`
   } else {
@@ -753,6 +754,71 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
       handleOffsetY + (i - (leftEdgeCount - 1) / 2) * HANDLE_SPACING
     )
 
+    // ---- Half-stagger pre-computation ----
+    // Split edges on each side into upper/lower halves relative to handleOffsetY.
+    // Stagger bend-X only within each half so upper and lower fans are symmetric.
+    // Key rule: the card FURTHEST from centre gets its bend-X CLOSEST to the centre
+    // node, creating nested paths that never cross. Upper-half indices are therefore
+    // assigned in reverse (top-to-bottom → highest index first) while lower-half
+    // indices keep natural order (top-to-bottom → lowest index first).
+    const HALF_FLAT_THRESHOLD = 2
+
+    // Left side
+    const leftEdgeHalves = []
+    leftSingles.forEach((_rel, i) => {
+      const cardHandleY = leftYs[i] + leftShift + 36
+      leftEdgeHalves.push({ cardHandleY })
+    })
+    leftGroups.forEach((group, gi) => {
+      const cardHandleY = leftYs[leftSingles.length + gi] + leftShift + 36
+      group.allRels.forEach(() => leftEdgeHalves.push({ cardHandleY }))
+    })
+    {
+      let upperCount = 0, lowerCount = 0
+      leftEdgeHalves.forEach(entry => {
+        entry.isUpper = entry.cardHandleY < handleOffsetY - HALF_FLAT_THRESHOLD
+        entry.isLower = entry.cardHandleY > handleOffsetY + HALF_FLAT_THRESHOLD
+        if (entry.isUpper) upperCount++
+        else if (entry.isLower) lowerCount++
+      })
+      let ui = 0, li = 0
+      leftEdgeHalves.forEach(entry => {
+        if (entry.isUpper) { entry.halfStaggerIndex = upperCount - 1 - ui++; entry.halfStaggerTotal = upperCount }
+        else if (entry.isLower) { entry.halfStaggerIndex = li++; entry.halfStaggerTotal = lowerCount }
+        else { entry.halfStaggerIndex = 0; entry.halfStaggerTotal = 1 }
+      })
+    }
+
+    // Right side
+    const rightEdgeHalves = []
+    rightSingles.forEach((_rel, i) => {
+      const cardHandleY = rightYs[i] + rightShift + 36
+      rightEdgeHalves.push({ cardHandleY })
+    })
+    rightGroups.forEach((group, gi) => {
+      const cardHandleY = rightYs[rightSingles.length + gi] + rightShift + 36
+      group.allRels.forEach(() => rightEdgeHalves.push({ cardHandleY }))
+    })
+    bridgingGroups.forEach((group, bi) => {
+      const cardHandleY = rightYs[rightSingles.length + rightGroups.length + bi] + rightShift + 36
+      group.allRels.forEach(() => rightEdgeHalves.push({ cardHandleY }))
+    })
+    {
+      let upperCount = 0, lowerCount = 0
+      rightEdgeHalves.forEach(entry => {
+        entry.isUpper = entry.cardHandleY < handleOffsetY - HALF_FLAT_THRESHOLD
+        entry.isLower = entry.cardHandleY > handleOffsetY + HALF_FLAT_THRESHOLD
+        if (entry.isUpper) upperCount++
+        else if (entry.isLower) lowerCount++
+      })
+      let ui = 0, li = 0
+      rightEdgeHalves.forEach(entry => {
+        if (entry.isUpper) { entry.halfStaggerIndex = upperCount - 1 - ui++; entry.halfStaggerTotal = upperCount }
+        else if (entry.isLower) { entry.halfStaggerIndex = li++; entry.halfStaggerTotal = lowerCount }
+        else { entry.halfStaggerIndex = 0; entry.halfStaggerTotal = 1 }
+      })
+    }
+
     // Source node — pass handle Y arrays (centered distribution around patron row)
     if (hasHousehold) {
       n.push({
@@ -773,6 +839,9 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
     // Running counters for indexed source/target handles on the source node
     let leftEdgeIdx = 0
     let rightEdgeIdx = 0
+    // Running counters for half-stagger lookup
+    let leftHalfIdx = 0
+    let rightHalfIdx = 0
 
     // ---- Left side: singles + same-side groups ----
     let leftCardIdx = 0
@@ -781,6 +850,7 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
     leftSingles.forEach((rel) => {
       const color = getColorForType(rel.type)
       const nodeId = `ext-${rel.id}`
+      const hs = leftEdgeHalves[leftHalfIdx++]
       n.push({
         id: nodeId,
         type: 'externalCard',
@@ -795,7 +865,7 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
         targetHandle: `left-${leftEdgeIdx++}`,
         type: 'labeled',
         style: getEdgeStyle(color, rel),
-        data: { label: getConnectorLabel(rel), color, side: 'left' },
+        data: { label: getConnectorLabel(rel), color, side: 'left', halfStaggerIndex: hs.halfStaggerIndex, halfStaggerTotal: hs.halfStaggerTotal },
       })
       leftCardIdx++
     })
@@ -809,9 +879,9 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
         position: { x: leftX, y: leftYs[leftCardIdx] + leftShift },
         data: { rels: group.allRels, onNavigateToPatron, onEndRelationship, side: 'left' },
       })
-      const staggerTotal = group.allRels.length
       group.allRels.forEach((rel, relIdx) => {
         const color = getColorForType(rel.type)
+        const hs = leftEdgeHalves[leftHalfIdx++]
         e.push({
           id: `edge-${rel.id}`,
           source: nodeId,
@@ -820,7 +890,7 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
           targetHandle: `left-${leftEdgeIdx++}`,
           type: 'labeled',
           style: getEdgeStyle(color, rel),
-          data: { label: getConnectorLabel(rel), color, side: 'left', staggerIndex: relIdx, staggerTotal },
+          data: { label: getConnectorLabel(rel), color, side: 'left', halfStaggerIndex: hs.halfStaggerIndex, halfStaggerTotal: hs.halfStaggerTotal },
         })
       })
       leftCardIdx++
@@ -833,6 +903,7 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
     rightSingles.forEach((rel) => {
       const color = getColorForType(rel.type)
       const nodeId = `ext-${rel.id}`
+      const hs = rightEdgeHalves[rightHalfIdx++]
       n.push({
         id: nodeId,
         type: 'externalCard',
@@ -847,7 +918,7 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
         targetHandle: 'left',
         type: 'labeled',
         style: getEdgeStyle(color, rel),
-        data: { label: getConnectorLabel(rel), color, side: 'right' },
+        data: { label: getConnectorLabel(rel), color, side: 'right', halfStaggerIndex: hs.halfStaggerIndex, halfStaggerTotal: hs.halfStaggerTotal },
       })
       rightCardIdx++
     })
@@ -861,9 +932,9 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
         position: { x: rightX, y: rightYs[rightCardIdx] + rightShift },
         data: { rels: group.allRels, onNavigateToPatron, onEndRelationship },
       })
-      const staggerTotal = group.allRels.length
       group.allRels.forEach((rel, relIdx) => {
         const color = getColorForType(rel.type)
+        const hs = rightEdgeHalves[rightHalfIdx++]
         e.push({
           id: `edge-${rel.id}`,
           source: 'source',
@@ -872,7 +943,7 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
           targetHandle: `left-${relIdx}`,
           type: 'labeled',
           style: getEdgeStyle(color, rel),
-          data: { label: getConnectorLabel(rel), color, side: 'right', staggerIndex: relIdx, staggerTotal },
+          data: { label: getConnectorLabel(rel), color, side: 'right', halfStaggerIndex: hs.halfStaggerIndex, halfStaggerTotal: hs.halfStaggerTotal },
         })
       })
       rightCardIdx++
@@ -887,9 +958,9 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
         position: { x: rightX, y: rightYs[rightCardIdx] + rightShift },
         data: { rels: group.allRels, onNavigateToPatron, onEndRelationship },
       })
-      const staggerTotal = group.allRels.length
       group.allRels.forEach((rel, relIdx) => {
         const color = getColorForType(rel.type)
+        const hs = rightEdgeHalves[rightHalfIdx++]
         e.push({
           id: `edge-${rel.id}`,
           source: 'source',
@@ -898,7 +969,7 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
           targetHandle: `left-${relIdx}`,
           type: 'labeled',
           style: getEdgeStyle(color, rel),
-          data: { label: getConnectorLabel(rel), color, side: 'right', staggerIndex: relIdx, staggerTotal },
+          data: { label: getConnectorLabel(rel), color, side: 'right', halfStaggerIndex: hs.halfStaggerIndex, halfStaggerTotal: hs.halfStaggerTotal },
         })
       })
       rightCardIdx++
