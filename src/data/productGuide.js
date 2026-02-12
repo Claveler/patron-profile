@@ -658,7 +658,7 @@ const GUIDE_CONTENT = {
                 {
                   title: 'End Relationship — 2-Member Household (Dissolution)',
                   description:
-                    'In a 2-member household (Paul & Elizabeth Fairfax), ending the only relationship triggers a dissolution warning: "Ending this relationship will dissolve the Fairfax Family. Both patrons will become standalone." A blue info note clarifies this only removes the CRM relationship, not shared memberships — use the Memberships tab for beneficiary access.',
+                    'Viewed from Elizabeth Fairfax\'s profile in the 2-member Fairfax Family household, ending her Husband relationship with Paul triggers a dissolution warning: "Ending this relationship will dissolve the Fairfax Family. Both patrons will become standalone." A blue info note clarifies this only removes the CRM relationship, not shared memberships — use the Memberships tab for beneficiary access.',
                   media: '/screenshots/relationships/08-end-rel-2member.png',
                   mediaType: 'image',
                 },
