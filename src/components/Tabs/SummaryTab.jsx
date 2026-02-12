@@ -1,6 +1,7 @@
 import { useState, useContext } from 'react'
 import { GuideContext } from '../../App'
 import { EPIC_SCOPE, isInScope } from '../../data/epicScope'
+import { useEpicScope } from '../../hooks/useEpicScope'
 import OpportunitiesPanel from '../OpportunitiesPanel/OpportunitiesPanel'
 import GivingSummary from '../GivingSummary/GivingSummary'
 import ActivityTimeline from '../ActivityTimeline/ActivityTimeline'
@@ -24,6 +25,10 @@ function SummaryTab({
   const isManaged = isManagedProspect(patron)
   const [selectedGift, setSelectedGift] = useState(null)
   const { activeEpic } = useContext(GuideContext)
+  const { filterGifts } = useEpicScope()
+
+  const allGifts = getGiftsByPatronId(patron.id)
+  const gifts = filterGifts(allGifts)
 
   const sc = EPIC_SCOPE.summaryComponents
   const showGiving = isInScope(sc.GivingSummary, activeEpic)
@@ -42,13 +47,13 @@ function SummaryTab({
           {showGiving && (
             <GivingSummary 
               giving={patron.giving} 
-              gifts={getGiftsByPatronId(patron.id)}
+              gifts={gifts}
               activityHistory={patron.engagement?.activityHistory}
             />
           )}
           {showTimeline && (
             <ActivityTimeline 
-              gifts={getGiftsByPatronId(patron.id)} 
+              gifts={gifts} 
               activities={getInteractionsByPatronId(patron.id)}
               onAddActivity={onLogActivity}
               onRecordGift={onRecordGift}

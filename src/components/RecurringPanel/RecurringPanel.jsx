@@ -1,5 +1,6 @@
 import { getRecurringProfilesByPatronId } from '../../data/patrons'
 import { getFundNameById, getCampaignNameById } from '../../data/campaigns'
+import { useEpicScope } from '../../hooks/useEpicScope'
 import './RecurringPanel.css'
 
 const formatCurrency = (amount) => {
@@ -34,6 +35,9 @@ const paymentIcons = {
 }
 
 function RecurringPanel({ patronId }) {
+  const { show } = useEpicScope()
+  const showFund = show('recurringPanel.fundName')
+  const showCampaign = show('recurringPanel.campaignName')
   const profiles = getRecurringProfilesByPatronId(patronId)
 
   if (profiles.length === 0) {
@@ -80,8 +84,8 @@ function RecurringPanel({ patronId }) {
       <div className="recurring-panel__list">
         {profiles.map(profile => {
           const status = statusConfig[profile.status] || statusConfig.active
-          const fundName = getFundNameById(profile.fundId)
-          const campaignName = getCampaignNameById(profile.campaignId)
+          const fundName = showFund ? getFundNameById(profile.fundId) : null
+          const campaignName = showCampaign ? getCampaignNameById(profile.campaignId) : null
           const paymentType = profile.paymentMethod?.type || 'default'
           const cardIcon = paymentIcons[paymentType] || paymentIcons.default
 

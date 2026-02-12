@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { getOpportunityById, PIPELINE_STAGES, updateOpportunityStage, closeOpportunityAsLost } from '../../data/opportunities'
 import { formatDate, getPatronById, getPatronDisplayName, getInteractionsByOpportunityId } from '../../data/patrons'
 import { getStaffNameById, getFundNameById, getCampaignNameById } from '../../data/campaigns'
+import { useEpicScope } from '../../hooks/useEpicScope'
 import ActivityModal from '../../components/ActivityModal/ActivityModal'
 import ActivityTimeline from '../../components/ActivityTimeline/ActivityTimeline'
 import CloseWonModal from '../../components/CloseWonModal/CloseWonModal'
@@ -30,6 +31,7 @@ const getDaysSince = (dateStr) => {
 function OpportunityDetail() {
   const { oppId: opportunityId } = useParams()
   const navigate = useNavigate()
+  const { show } = useEpicScope()
   const [opportunity, setOpportunity] = useState(() => getOpportunityById(opportunityId))
 
   // Editable state
@@ -214,14 +216,16 @@ function OpportunityDetail() {
             </div>
 
             {/* Row 2: Campaign + Assigned To */}
-            <div className="opportunity-detail__infobox-item">
-              <span className="opportunity-detail__infobox-label">
-                <i className="fa-solid fa-flag"></i> Campaign
-              </span>
-              <span className="opportunity-detail__infobox-value">
-                {opportunity.campaignId ? getCampaignNameById(opportunity.campaignId) : '—'}
-              </span>
-            </div>
+            {show('opportunityDetail.campaignName') && (
+              <div className="opportunity-detail__infobox-item">
+                <span className="opportunity-detail__infobox-label">
+                  <i className="fa-solid fa-flag"></i> Campaign
+                </span>
+                <span className="opportunity-detail__infobox-value">
+                  {opportunity.campaignId ? getCampaignNameById(opportunity.campaignId) : '—'}
+                </span>
+              </div>
+            )}
             <div className="opportunity-detail__infobox-item">
               <span className="opportunity-detail__infobox-label">
                 <i className="fa-solid fa-user-tie"></i> Assigned To
@@ -231,7 +235,8 @@ function OpportunityDetail() {
               </span>
             </div>
 
-            {/* Row 3: Fund + Created */}
+            {/* Row 3: Fund (DCAP-gated) + Created */}
+            {show('opportunityDetail.fundName') && (
             <div className="opportunity-detail__infobox-item">
               <span className="opportunity-detail__infobox-label">
                 <i className="fa-solid fa-landmark"></i> Fund
@@ -240,6 +245,7 @@ function OpportunityDetail() {
                 {opportunity.fundId ? getFundNameById(opportunity.fundId) : '—'}
               </span>
             </div>
+            )}
             <div className="opportunity-detail__infobox-item">
               <span className="opportunity-detail__infobox-label">
                 <i className="fa-solid fa-calendar"></i> Created

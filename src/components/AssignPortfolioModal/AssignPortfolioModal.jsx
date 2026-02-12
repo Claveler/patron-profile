@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { assignPatronToOfficer } from '../../data/patrons'
 import { addOpportunity } from '../../data/opportunities'
 import { getAllStaff, getActiveCampaigns } from '../../data/campaigns'
+import { useEpicScope } from '../../hooks/useEpicScope'
 import './AssignPortfolioModal.css'
 
 function AssignPortfolioModal({ 
@@ -22,10 +23,13 @@ function AssignPortfolioModal({
   
   const [errors, setErrors] = useState({})
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const { show } = useEpicScope()
+  const showCreateOpp = show('assignPortfolio.createOpportunity')
+  const showCampaignField = show('opportunityModal.campaignField')
   
   // Data for dropdowns
   const staff = getAllStaff()
-  const campaigns = getActiveCampaigns()
+  const campaigns = showCampaignField ? getActiveCampaigns() : []
   
   // Reset form when modal opens
   useEffect(() => {
@@ -97,7 +101,7 @@ function AssignPortfolioModal({
       if (!formData.askAmount || parseFloat(formData.askAmount) <= 0) {
         newErrors.askAmount = 'Ask amount must be greater than 0'
       }
-      if (!formData.campaignId) {
+      if (showCampaignField && !formData.campaignId) {
         newErrors.campaignId = 'Please select a campaign'
       }
     }
@@ -216,27 +220,29 @@ function AssignPortfolioModal({
             {errors.assignedToId && <span className="assign-modal__error">{errors.assignedToId}</span>}
           </div>
           
-          {/* Create Opportunity Checkbox */}
-          <div className="assign-modal__checkbox-field">
-            <label className="assign-modal__checkbox-label">
-              <input
-                type="checkbox"
-                name="createOpportunity"
-                checked={formData.createOpportunity}
-                onChange={handleInputChange}
-                className="assign-modal__checkbox"
-              />
-              <span className="assign-modal__checkbox-text">
-                Create first opportunity
-              </span>
-            </label>
-            <p className="assign-modal__checkbox-hint">
-              Start tracking a potential gift right away
-            </p>
-          </div>
+          {/* Create Opportunity Checkbox — hidden before pipeline epic */}
+          {showCreateOpp && (
+            <div className="assign-modal__checkbox-field">
+              <label className="assign-modal__checkbox-label">
+                <input
+                  type="checkbox"
+                  name="createOpportunity"
+                  checked={formData.createOpportunity}
+                  onChange={handleInputChange}
+                  className="assign-modal__checkbox"
+                />
+                <span className="assign-modal__checkbox-text">
+                  Create first opportunity
+                </span>
+              </label>
+              <p className="assign-modal__checkbox-hint">
+                Start tracking a potential gift right away
+              </p>
+            </div>
+          )}
           
           {/* Mini Opportunity Form (conditional) */}
-          {formData.createOpportunity && (
+          {showCreateOpp && formData.createOpportunity && (
             <div className="assign-modal__opportunity-section">
               <div className="assign-modal__field">
                 <label className="assign-modal__label" htmlFor="opp-name">
@@ -276,26 +282,28 @@ function AssignPortfolioModal({
                   {errors.askAmount && <span className="assign-modal__error">{errors.askAmount}</span>}
                 </div>
                 
-                <div className="assign-modal__field assign-modal__field--half">
-                  <label className="assign-modal__label" htmlFor="opp-campaign">
-                    Campaign <span className="assign-modal__required">*</span>
-                  </label>
-                  <select
-                    id="opp-campaign"
-                    name="campaignId"
-                    className={`assign-modal__select ${errors.campaignId ? 'assign-modal__select--error' : ''}`}
-                    value={formData.campaignId}
-                    onChange={handleInputChange}
-                  >
-                    <option value="">Select...</option>
-                    {campaigns.map(campaign => (
-                      <option key={campaign.id} value={campaign.id}>
-                        {campaign.name}
-                      </option>
-                    ))}
-                  </select>
-                  {errors.campaignId && <span className="assign-modal__error">{errors.campaignId}</span>}
-                </div>
+                {showCampaignField && (
+                  <div className="assign-modal__field assign-modal__field--half">
+                    <label className="assign-modal__label" htmlFor="opp-campaign">
+                      Campaign <span className="assign-modal__required">*</span>
+                    </label>
+                    <select
+                      id="opp-campaign"
+                      name="campaignId"
+                      className={`assign-modal__select ${errors.campaignId ? 'assign-modal__select--error' : ''}`}
+                      value={formData.campaignId}
+                      onChange={handleInputChange}
+                    >
+                      <option value="">Select...</option>
+                      {campaigns.map(campaign => (
+                        <option key={campaign.id} value={campaign.id}>
+                          {campaign.name}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.campaignId && <span className="assign-modal__error">{errors.campaignId}</span>}
+                  </div>
+                )}
               </div>
             </div>
           )}

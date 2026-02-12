@@ -371,14 +371,20 @@ function PatronsList() {
             />
           </div>
           <div className="patrons-list__actions">
-            <label className="patrons-list__toggle">
-              <input
-                type="checkbox"
-                checked={showArchived}
-                onChange={(e) => setShowArchived(e.target.checked)}
-              />
-              <span>Show all statuses</span>
-            </label>
+            <div className="patrons-list__scope-toggle">
+              <button
+                className={`patrons-list__scope-btn ${!showArchived ? 'patrons-list__scope-btn--active' : ''}`}
+                onClick={() => setShowArchived(false)}
+              >
+                Active
+              </button>
+              <button
+                className={`patrons-list__scope-btn ${showArchived ? 'patrons-list__scope-btn--active' : ''}`}
+                onClick={() => setShowArchived(true)}
+              >
+                All
+              </button>
+            </div>
             <button
               className="patrons-list__export-btn"
               onClick={handleExportCSV}

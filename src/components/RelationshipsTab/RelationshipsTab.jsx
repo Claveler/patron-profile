@@ -32,6 +32,58 @@ const getConnectorLabel = (rel) => {
   return rel.externalContact?.title || rel.reciprocalRole || rel.role || ''
 }
 
+// LTV tier indicator — restaurant-style $/$$/$$$/$$$$ badges
+const getLtvTier = (giving) => {
+  if (!giving || giving.lifetimeValue == null) return null
+  const v = giving.lifetimeValue
+  if (v < 1000) return { label: '$', tooltip: `Lifetime Value: $${v.toLocaleString()}` }
+  if (v < 10000) return { label: '$$', tooltip: `Lifetime Value: $${v.toLocaleString()}` }
+  if (v < 50000) return { label: '$$$', tooltip: `Lifetime Value: $${v.toLocaleString()}` }
+  return { label: '$$$$', tooltip: `Lifetime Value: $${v.toLocaleString()}` }
+}
+
+// Status icon + tooltip for non-active patrons
+const statusConfig = {
+  deceased: { icon: 'fa-solid fa-cross', label: 'Deceased', className: 'relationships-tab__status-icon--deceased' },
+  inactive: { icon: 'fa-solid fa-pause', label: 'Inactive', className: 'relationships-tab__status-icon--inactive' },
+  archived: { icon: 'fa-solid fa-box-archive', label: 'Archived', className: 'relationships-tab__status-icon--archived' },
+}
+
+const getStatusTooltip = (patronData) => {
+  if (!patronData) return ''
+  const { status, deceasedDate, inactiveDate, inactiveReason, archivedDate, archivedReason } = patronData
+  if (status === 'deceased') return `Deceased${deceasedDate ? ` — ${deceasedDate}` : ''}`
+  if (status === 'inactive') return `Inactive${inactiveDate ? ` — ${inactiveDate}` : ''}${inactiveReason ? ` — ${inactiveReason}` : ''}`
+  if (status === 'archived') return `Archived${archivedDate ? ` — ${archivedDate}` : ''}${archivedReason ? ` — ${archivedReason}` : ''}`
+  return ''
+}
+
+const renderStatusIcon = (patronData) => {
+  if (!patronData) return null
+  const status = patronData.status || 'active'
+  const cfg = statusConfig[status]
+  if (!cfg) return null
+  return (
+    <i
+      className={`${cfg.icon} relationships-tab__status-icon ${cfg.className}`}
+      title={getStatusTooltip(patronData)}
+    ></i>
+  )
+}
+
+const isNonActive = (patronData) => {
+  if (!patronData) return false
+  const status = patronData.status || 'active'
+  return status === 'deceased' || status === 'inactive' || status === 'archived'
+}
+
+// Build edge style — dashed for non-active linked patrons
+const getEdgeStyle = (color, rel) => {
+  const base = { stroke: color, strokeWidth: 1.5 }
+  if (isNonActive(rel.linkedPatron)) base.strokeDasharray = '6 4'
+  return base
+}
+
 // ============================================
 // SHARED RENDERERS (used by React Flow nodes + mobile fallback)
 // ============================================
@@ -46,10 +98,12 @@ const renderOrgCard = (rel, { onNavigateToPatron, onEndRelationship } = {}) => {
   const badgeColor = getColorForType(rel.type)
   const isClickable = !!rel.linkedPatron
   const handleNav = () => { if (isClickable && onNavigateToPatron) onNavigateToPatron(rel.linkedPatron.id) }
+  const dimmed = isNonActive(rel.linkedPatron)
+  const ltvTier = getLtvTier(rel.linkedPatron?.giving)
 
   return (
     <div
-      className={`relationships-tab__org-card ${isClickable ? 'relationships-tab__org-card--clickable' : ''}`}
+      className={`relationships-tab__org-card ${isClickable ? 'relationships-tab__org-card--clickable' : ''} ${dimmed ? 'relationships-tab__org-card--inactive' : ''}`}
       onClick={handleNav}
       {...(isClickable ? {
         role: 'button',
@@ -57,6 +111,9 @@ const renderOrgCard = (rel, { onNavigateToPatron, onEndRelationship } = {}) => {
         onKeyDown: (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleNav() } },
       } : {})}
     >
+      {ltvTier && (
+        <span className="relationships-tab__ltv-badge" title={ltvTier.tooltip}>{ltvTier.label}</span>
+      )}
       <div className={rel.type === 'organization' ? 'relationships-tab__org-avatar' : 'relationships-tab__member-avatar'}>
         {rel.linkedPatron?.photo ? (
           <img src={rel.linkedPatron.photo} alt={rel.displayName} />
@@ -65,9 +122,13 @@ const renderOrgCard = (rel, { onNavigateToPatron, onEndRelationship } = {}) => {
         )}
       </div>
       <div className="relationships-tab__org-info">
-        <span className="relationships-tab__org-name">{orgName}</span>
+        <span className="relationships-tab__org-name">
+          {orgName}
+          {renderStatusIcon(rel.linkedPatron)}
+        </span>
         {rel.type === 'personal' && rel.linkedPatron?.householdName && (
           <span className="relationships-tab__org-household-label">
+            <i className="fa-solid fa-house-chimney relationships-tab__household-icon"></i>
             {rel.linkedPatron.householdName}
           </span>
         )}
@@ -104,6 +165,8 @@ const renderBridgingCard = (rels, { onNavigateToPatron, onEndRelationship } = {}
   const linkedPatron = primaryRel.linkedPatron
   const isClickable = !!linkedPatron
   const handleNav = () => { if (isClickable && onNavigateToPatron) onNavigateToPatron(linkedPatron.id) }
+  const dimmed = isNonActive(linkedPatron)
+  const ltvTier = getLtvTier(linkedPatron?.giving)
 
   // Build one badge per relationship — color by type, not by role
   const badges = rels.map(rel => {
@@ -115,7 +178,7 @@ const renderBridgingCard = (rels, { onNavigateToPatron, onEndRelationship } = {}
 
   return (
     <div
-      className={`relationships-tab__org-card ${isClickable ? 'relationships-tab__org-card--clickable' : ''}`}
+      className={`relationships-tab__org-card ${isClickable ? 'relationships-tab__org-card--clickable' : ''} ${dimmed ? 'relationships-tab__org-card--inactive' : ''}`}
       onClick={handleNav}
       {...(isClickable ? {
         role: 'button',
@@ -123,6 +186,9 @@ const renderBridgingCard = (rels, { onNavigateToPatron, onEndRelationship } = {}
         onKeyDown: (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleNav() } },
       } : {})}
     >
+      {ltvTier && (
+        <span className="relationships-tab__ltv-badge" title={ltvTier.tooltip}>{ltvTier.label}</span>
+      )}
       <div className="relationships-tab__member-avatar">
         {linkedPatron?.photo ? (
           <img src={linkedPatron.photo} alt={orgName} />
@@ -131,9 +197,13 @@ const renderBridgingCard = (rels, { onNavigateToPatron, onEndRelationship } = {}
         )}
       </div>
       <div className="relationships-tab__org-info">
-        <span className="relationships-tab__org-name">{orgName}</span>
+        <span className="relationships-tab__org-name">
+          {orgName}
+          {renderStatusIcon(linkedPatron)}
+        </span>
         {linkedPatron?.householdName && (
           <span className="relationships-tab__org-household-label">
+            <i className="fa-solid fa-house-chimney relationships-tab__household-icon"></i>
             {linkedPatron.householdName}
           </span>
         )}
@@ -224,10 +294,13 @@ const renderHouseholdContent = ({ household, householdMembers, patronId, allRela
             ? allRelationships.filter(r => r.type !== 'household' && r.toPatronId === member.patronId)
             : []
 
+          const memberDimmed = !isCurrentPatron && isNonActive(member.patron)
+          const memberLtvTier = !isCurrentPatron ? getLtvTier(member.patron?.giving) : null
+
           return (
             <div
               key={member.id}
-              className={`relationships-tab__member${isClickable ? ' relationships-tab__member--clickable nodrag nopan nowheel' : ''}`}
+              className={`relationships-tab__member${isClickable ? ' relationships-tab__member--clickable nodrag nopan nowheel' : ''}${memberDimmed ? ' relationships-tab__member--inactive' : ''}`}
               onClick={handleClick}
               {...(isClickable ? {
                 role: 'button',
@@ -235,6 +308,9 @@ const renderHouseholdContent = ({ household, householdMembers, patronId, allRela
                 onKeyDown: (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick() } },
               } : {})}
             >
+              {memberLtvTier && (
+                <span className="relationships-tab__ltv-badge" title={memberLtvTier.tooltip}>{memberLtvTier.label}</span>
+              )}
               <div className="relationships-tab__member-avatar">
                 {member.patron?.photo ? (
                   <img src={member.patron.photo} alt={member.patron.name} />
@@ -247,6 +323,7 @@ const renderHouseholdContent = ({ household, householdMembers, patronId, allRela
               <div className="relationships-tab__member-info">
                 <span className={`relationships-tab__member-name ${isCurrentPatron ? 'relationships-tab__member-name--head' : ''}`}>
                   {member.patron?.name}
+                  {!isCurrentPatron && renderStatusIcon(member.patron)}
                 </span>
                 <div className="relationships-tab__badges">
                   {isHead && (
@@ -501,10 +578,28 @@ const nodeTypes = { household: HouseholdNode, standalone: StandalonePatronNode, 
 const edgeTypes = { labeled: LabeledEdge }
 
 // Layout constants
-const ROW_HEIGHT = 100       // vertical spacing between external card nodes
+const BASE_CARD_HEIGHT = 72       // 12px pad-top + 48px avatar + 12px pad-bottom
+const CARD_GAP_PX = 28            // desired uniform whitespace gap between cards
+const HOUSEHOLD_LABEL_EXTRA = 20  // extra height when household label line is present
+const BADGE_WRAP_EXTRA = 26       // extra height per additional badge row (wrap)
 const EXT_CARD_WIDTH = 260   // approximate external card width
 const CARD_GAP = 250         // horizontal gap between patron node and external cards
 const PATRON_WIDTH = 343     // household card / standalone card width
+
+// Estimate rendered height of an external card from its data (no DOM measurement needed).
+// Keeps layout single-pass so fitView centres correctly on first render.
+function estimateCardHeight(rel, isBridging = false, rels = []) {
+  let h = BASE_CARD_HEIGHT
+  // Personal cards with a household label add a sub-line
+  if (rel.type === 'personal' && rel.linkedPatron?.householdName) {
+    h += HOUSEHOLD_LABEL_EXTRA
+  }
+  // Bridging / grouped cards: if badges likely wrap (3+ badges at ~60px each in ~180px space)
+  if (isBridging && rels.length >= 3) {
+    h += BADGE_WRAP_EXTRA
+  }
+  return h
+}
 
 // ============================================
 // MAIN COMPONENT
@@ -618,19 +713,36 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
     // For standalone, Handle is at 36px from node top.
     const handleOffsetY = hasHousehold ? HH_HANDLE_TOP : 36
 
-    // --- Compute card positions + source handle positions ---
+    // --- Pre-compute card heights and accumulated Y positions ---
+    // Each side builds a heights array in iteration order (singles → groups → bridging),
+    // accumulates Y positions with uniform CARD_GAP_PX between cards, then centres
+    // the column so the midpoint of the first/last card handles aligns with handleOffsetY.
 
-    // Left external cards (personal singles + same-side groups, excluding bridging)
-    const allLeftCount = leftSingles.length + leftGroups.length
+    // Left side: personal singles, then same-side groups
     const leftEdgeCount = leftSingles.length + leftGroups.reduce((sum, g) => sum + g.allRels.length, 0)
-    const leftTotalHeight = allLeftCount * ROW_HEIGHT
-    const leftStartY = handleOffsetY - (leftTotalHeight / 2) + (ROW_HEIGHT / 2) - 36
+    const leftHeights = [
+      ...leftSingles.map(rel => estimateCardHeight(rel)),
+      ...leftGroups.map(group => estimateCardHeight(group.allRels[0], true, group.allRels)),
+    ]
+    const leftYs = []
+    { let acc = 0; leftHeights.forEach(h => { leftYs.push(acc); acc += h + CARD_GAP_PX }) }
+    // Centre: handle sits at y=36 inside each card
+    const leftFirstHandle = leftYs.length > 0 ? leftYs[0] + 36 : 0
+    const leftLastHandle = leftYs.length > 0 ? leftYs[leftYs.length - 1] + 36 : 0
+    const leftShift = handleOffsetY - (leftFirstHandle + leftLastHandle) / 2
 
-    // Right external cards (professional/org singles + same-side groups + bridging nodes)
-    const allRightCount = rightSingles.length + rightGroups.length + bridgingGroups.length
+    // Right side: professional/org singles, then same-side groups, then bridging groups
     const rightEdgeCount = rightSingles.length + rightGroups.reduce((sum, g) => sum + g.allRels.length, 0) + bridgingGroups.reduce((sum, g) => sum + g.allRels.length, 0)
-    const rightTotalHeight = allRightCount * ROW_HEIGHT
-    const rightStartY = handleOffsetY - (rightTotalHeight / 2) + (ROW_HEIGHT / 2) - 36
+    const rightHeights = [
+      ...rightSingles.map(rel => estimateCardHeight(rel)),
+      ...rightGroups.map(group => estimateCardHeight(group.allRels[0], true, group.allRels)),
+      ...bridgingGroups.map(group => estimateCardHeight(group.allRels[0], true, group.allRels)),
+    ]
+    const rightYs = []
+    { let acc = 0; rightHeights.forEach(h => { rightYs.push(acc); acc += h + CARD_GAP_PX }) }
+    const rightFirstHandle = rightYs.length > 0 ? rightYs[0] + 36 : 0
+    const rightLastHandle = rightYs.length > 0 ? rightYs[rightYs.length - 1] + 36 : 0
+    const rightShift = handleOffsetY - (rightFirstHandle + rightLastHandle) / 2
 
     // Source-node handle Y arrays: N handles per side, evenly distributed around handleOffsetY
     const HANDLE_SPACING = 16
@@ -672,7 +784,7 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
       n.push({
         id: nodeId,
         type: 'externalCard',
-        position: { x: leftX, y: leftStartY + leftCardIdx * ROW_HEIGHT },
+        position: { x: leftX, y: leftYs[leftCardIdx] + leftShift },
         data: { rel, onNavigateToPatron, onEndRelationship, side: 'left' },
       })
       e.push({
@@ -682,7 +794,7 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
         target: 'source',
         targetHandle: `left-${leftEdgeIdx++}`,
         type: 'labeled',
-        style: { stroke: color, strokeWidth: 1.5 },
+        style: getEdgeStyle(color, rel),
         data: { label: getConnectorLabel(rel), color, side: 'left' },
       })
       leftCardIdx++
@@ -694,7 +806,7 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
       n.push({
         id: nodeId,
         type: 'bridgingCard',
-        position: { x: leftX, y: leftStartY + leftCardIdx * ROW_HEIGHT },
+        position: { x: leftX, y: leftYs[leftCardIdx] + leftShift },
         data: { rels: group.allRels, onNavigateToPatron, onEndRelationship, side: 'left' },
       })
       const staggerTotal = group.allRels.length
@@ -707,7 +819,7 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
           target: 'source',
           targetHandle: `left-${leftEdgeIdx++}`,
           type: 'labeled',
-          style: { stroke: color, strokeWidth: 1.5 },
+          style: getEdgeStyle(color, rel),
           data: { label: getConnectorLabel(rel), color, side: 'left', staggerIndex: relIdx, staggerTotal },
         })
       })
@@ -724,7 +836,7 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
       n.push({
         id: nodeId,
         type: 'externalCard',
-        position: { x: rightX, y: rightStartY + rightCardIdx * ROW_HEIGHT },
+        position: { x: rightX, y: rightYs[rightCardIdx] + rightShift },
         data: { rel, onNavigateToPatron, onEndRelationship, side: 'right' },
       })
       e.push({
@@ -734,7 +846,7 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
         target: nodeId,
         targetHandle: 'left',
         type: 'labeled',
-        style: { stroke: color, strokeWidth: 1.5 },
+        style: getEdgeStyle(color, rel),
         data: { label: getConnectorLabel(rel), color, side: 'right' },
       })
       rightCardIdx++
@@ -746,7 +858,7 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
       n.push({
         id: nodeId,
         type: 'bridgingCard',
-        position: { x: rightX, y: rightStartY + rightCardIdx * ROW_HEIGHT },
+        position: { x: rightX, y: rightYs[rightCardIdx] + rightShift },
         data: { rels: group.allRels, onNavigateToPatron, onEndRelationship },
       })
       const staggerTotal = group.allRels.length
@@ -759,7 +871,7 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
           target: nodeId,
           targetHandle: `left-${relIdx}`,
           type: 'labeled',
-          style: { stroke: color, strokeWidth: 1.5 },
+          style: getEdgeStyle(color, rel),
           data: { label: getConnectorLabel(rel), color, side: 'right', staggerIndex: relIdx, staggerTotal },
         })
       })
@@ -772,7 +884,7 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
       n.push({
         id: nodeId,
         type: 'bridgingCard',
-        position: { x: rightX, y: rightStartY + rightCardIdx * ROW_HEIGHT },
+        position: { x: rightX, y: rightYs[rightCardIdx] + rightShift },
         data: { rels: group.allRels, onNavigateToPatron, onEndRelationship },
       })
       const staggerTotal = group.allRels.length
@@ -785,7 +897,7 @@ function RelationshipsTab({ patronId, onNavigateToPatron, onAddRelationship, onE
           target: nodeId,
           targetHandle: `left-${relIdx}`,
           type: 'labeled',
-          style: { stroke: color, strokeWidth: 1.5 },
+          style: getEdgeStyle(color, rel),
           data: { label: getConnectorLabel(rel), color, side: 'right', staggerIndex: relIdx, staggerTotal },
         })
       })

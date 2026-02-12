@@ -523,21 +523,39 @@
   width: 16px;
 }
 
-/* Archive Toggle */
-.patrons-list__toggle {
+/* Scope Toggle (Active / All) */
+.patrons-list__scope-toggle {
   display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  font-size: var(--font-size-sm);
-  color: var(--color-text-secondary);
-  cursor: pointer;
-  user-select: none;
+  gap: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
 }
 
-.patrons-list__toggle input {
-  width: 16px;
-  height: 16px;
+.patrons-list__scope-btn {
+  padding: var(--space-1) var(--space-3);
+  background: var(--color-background);
+  border: none;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
   cursor: pointer;
+  transition: all var(--transition-fast);
+  line-height: 1.4;
+}
+
+.patrons-list__scope-btn:not(:last-child) {
+  border-right: 1px solid var(--color-border);
+}
+
+.patrons-list__scope-btn:hover:not(.patrons-list__scope-btn--active) {
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+}
+
+.patrons-list__scope-btn--active {
+  background: var(--color-primary);
+  color: white;
 }
 
 /* Name Row with New Badge */

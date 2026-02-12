@@ -2,8 +2,27 @@ import { useState, useEffect, useContext, useMemo, useCallback } from 'react'
 import { createPortal } from 'react-dom'
 import { useLocation } from 'react-router-dom'
 import { GuideContext } from '../../App'
+import { isInScope } from '../../data/epicScope'
 import GUIDE_CONTENT from '../../data/productGuide'
 import './ProductGuidePanel.css'
+
+/**
+ * Resolve an epic-variant text value.
+ * Supports simple strings and epic-variant objects: { default, 2: '...', 3: '...' }.
+ * Used for component reasoning, page-level why/competitive/wowMoment, and any
+ * other field that needs to adapt its content based on the active epic.
+ */
+function resolveText(value, activeEpic) {
+  if (typeof value === 'string') return value
+  if (!value || typeof value !== 'object') return ''
+  // Find highest epic variant that activeEpic satisfies
+  const epics = Object.keys(value)
+    .filter(k => k !== 'default')
+    .map(Number)
+    .sort((a, b) => b - a)
+  const match = epics.find(e => activeEpic >= e)
+  return value[match] || value.default || ''
+}
 
 /**
  * Match the current pathname + guideTab to a content entry in GUIDE_CONTENT.
@@ -144,7 +163,7 @@ function WalkthroughView({ walkthrough }) {
 /* ── Main Panel ───────────────────────────────────────────────────────── */
 
 function ProductGuidePanel() {
-  const { guideOpen, toggleGuide, guideTab } = useContext(GuideContext)
+  const { guideOpen, toggleGuide, guideTab, activeEpic } = useContext(GuideContext)
   const location = useLocation()
 
   // Track which component sections are expanded
@@ -158,6 +177,14 @@ function ProductGuidePanel() {
     () => resolveContent(location.pathname, guideTab),
     [location.pathname, guideTab]
   )
+
+  // Filter components by activeEpic (hide entries whose minEpic exceeds current epic)
+  const visibleComponents = useMemo(() => {
+    if (!content?.components) return []
+    return content.components.filter(
+      c => !c.minEpic || isInScope(c.minEpic, activeEpic)
+    )
+  }, [content, activeEpic])
 
   // Does the current content have a walkthrough?
   const hasWalkthrough = content?.walkthrough?.sections?.length > 0
@@ -256,7 +283,7 @@ function ProductGuidePanel() {
                       <i className="fa-solid fa-lightbulb"></i>
                       Why This Exists
                     </h5>
-                    <p className="guide-panel__text">{content.why}</p>
+                    <p className="guide-panel__text">{resolveText(content.why, activeEpic)}</p>
                   </div>
 
                   {/* Section: Competitive Edge */}
@@ -266,7 +293,7 @@ function ProductGuidePanel() {
                         <i className="fa-solid fa-chess"></i>
                         Competitive Edge
                       </h5>
-                      <p className="guide-panel__text">{content.competitive}</p>
+                      <p className="guide-panel__text">{resolveText(content.competitive, activeEpic)}</p>
                     </div>
                   )}
 
@@ -278,13 +305,13 @@ function ProductGuidePanel() {
                         Demo Talking Point
                       </h5>
                       <div className="guide-panel__callout">
-                        <p className="guide-panel__text">{content.wowMoment}</p>
+                        <p className="guide-panel__text">{resolveText(content.wowMoment, activeEpic)}</p>
                       </div>
                     </div>
                   )}
 
-                  {/* Section: Key Components */}
-                  {content.components && content.components.length > 0 && (
+                  {/* Section: Key Components (filtered by active epic) */}
+                  {visibleComponents.length > 0 && (
                     <div className="guide-panel__section">
                       <button
                         className="guide-panel__section-title guide-panel__section-title--toggle"
@@ -294,7 +321,7 @@ function ProductGuidePanel() {
                           <i className="fa-solid fa-cubes"></i>
                           Key Components
                           <span className="guide-panel__component-count">
-                            {content.components.length}
+                            {visibleComponents.length}
                           </span>
                         </span>
                         <i className={`fa-solid fa-chevron-${expandedComponents ? 'up' : 'down'} guide-panel__toggle-icon`}></i>
@@ -302,13 +329,18 @@ function ProductGuidePanel() {
 
                       {expandedComponents && (
                         <div className="guide-panel__components">
-                          {content.components.map((comp, idx) => (
+                          {visibleComponents.map((comp, idx) => (
                             <div key={idx} className="guide-panel__component-card">
                               <div className="guide-panel__component-name">
                                 {comp.name}
+                                {comp.minEpic && (
+                                  <span className={`guide-panel__component-epic guide-panel__component-epic--${comp.minEpic >= 5 ? 'post' : `e${comp.minEpic}`}`}>
+                                    {comp.minEpic >= 5 ? 'Post-MVP' : `Epic ${comp.minEpic}`}
+                                  </span>
+                                )}
                               </div>
                               <p className="guide-panel__component-reasoning">
-                                {comp.reasoning}
+                                {resolveText(comp.reasoning, activeEpic)}
                               </p>
                             </div>
                           ))}

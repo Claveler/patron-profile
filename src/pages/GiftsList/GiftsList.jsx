@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { GIFTS, getPatronById, getAcknowledgmentsByGiftId, formatDate } from '../../data/patrons'
 import { FUNDS, CAMPAIGNS, getFundNameById, getCampaignNameById } from '../../data/campaigns'
+import { useEpicScope } from '../../hooks/useEpicScope'
 import GiftDetailPanel from '../../components/GiftDetailPanel/GiftDetailPanel'
 import './GiftsList.css'
 
@@ -57,6 +58,9 @@ const ackIcons = {
 
 function GiftsList() {
   const navigate = useNavigate()
+  const { show } = useEpicScope()
+  const showFund = show('giftsList.fundColumn')
+  const showFundFilter = show('giftsList.fundFilter')
   const [searchTerm, setSearchTerm] = useState('')
   const [sortField, setSortField] = useState('date')
   const [sortDirection, setSortDirection] = useState('desc')
@@ -124,8 +128,8 @@ function GiftsList() {
       result = result.filter(g => filterTypes.includes(g.type))
     }
 
-    // Filter by fund
-    if (filterFund !== 'all') {
+    // Filter by fund (only when DCAP is in scope)
+    if (showFundFilter && filterFund !== 'all') {
       result = result.filter(g => g.fundId === filterFund)
     }
 
@@ -206,7 +210,7 @@ function GiftsList() {
 
   // Export CSV
   const handleExportCSV = () => {
-    const headers = ['Date', 'Patron', 'Description', 'Type', 'Fund', 'Campaign', 'Amount', 'Deductible', 'Benefits Value', 'Acknowledgment']
+    const headers = ['Date', 'Patron', 'Description', 'Type', ...(showFund ? ['Fund'] : []), ...(showFund ? ['Campaign'] : []), 'Amount', 'Deductible', 'Benefits Value', 'Acknowledgment']
     const rows = filteredGifts.map(g => {
       const patron = getPatronById(g.patronId)
       return [
@@ -214,8 +218,8 @@ function GiftsList() {
         patron ? `${patron.firstName} ${patron.lastName}` : g.patronId,
         g.description || '',
         g.type,
-        getFundNameById(g.fundId),
-        g.campaignId ? getCampaignNameById(g.campaignId) : '',
+        ...(showFund ? [getFundNameById(g.fundId)] : []),
+        ...(showFund ? [g.campaignId ? getCampaignNameById(g.campaignId) : ''] : []),
         g.amount,
         g.deductible || 0,
         g.benefitsValue || 0,
@@ -326,7 +330,8 @@ function GiftsList() {
                 </div>
               </div>
 
-              {/* Fund */}
+              {/* Fund — hidden before DCAP epic */}
+              {showFundFilter && (
               <div className="gifts-list__filter-group">
                 <label className="gifts-list__filter-label">Fund</label>
                 <select
@@ -340,6 +345,7 @@ function GiftsList() {
                   ))}
                 </select>
               </div>
+              )}
 
               {/* Campaign */}
               <div className="gifts-list__filter-group">
@@ -418,7 +424,7 @@ function GiftsList() {
                 </button>
               </span>
             )}
-            {filterFund !== 'all' && (
+            {showFundFilter && filterFund !== 'all' && (
               <span className="gifts-list__chip">
                 Fund: {getFundNameById(filterFund)}
                 <button className="gifts-list__chip-remove" onClick={() => setFilterFund('all')}>
@@ -503,8 +509,8 @@ function GiftsList() {
                 </th>
                 <th className="gifts-list__th">Description</th>
                 <th className="gifts-list__th">Type</th>
-                <th className="gifts-list__th">Fund</th>
-                <th className="gifts-list__th">Campaign</th>
+                {showFund && <th className="gifts-list__th">Fund</th>}
+                {showFund && <th className="gifts-list__th">Campaign</th>}
                 <th
                   className="gifts-list__th gifts-list__th--sortable gifts-list__th--right"
                   onClick={() => handleSort('amount')}
@@ -519,8 +525,8 @@ function GiftsList() {
               {filteredGifts.map(gift => {
                 const patron = getPatronById(gift.patronId)
                 const type = typeConfig[gift.type] || typeConfig['one-time']
-                const fundName = getFundNameById(gift.fundId)
-                const campaignName = gift.campaignId ? getCampaignNameById(gift.campaignId) : null
+                const fundName = showFund ? getFundNameById(gift.fundId) : null
+                const campaignName = showFund && gift.campaignId ? getCampaignNameById(gift.campaignId) : null
                 const ackStatus = getAckStatus(gift.id)
                 const ack = ackIcons[ackStatus]
 
@@ -549,8 +555,8 @@ function GiftsList() {
                         {type.label}
                       </span>
                     </td>
-                    <td className="gifts-list__td gifts-list__td--fund">{fundName || '—'}</td>
-                    <td className="gifts-list__td gifts-list__td--campaign">{campaignName || '—'}</td>
+                    {showFund && <td className="gifts-list__td gifts-list__td--fund">{fundName || '—'}</td>}
+                    {showFund && <td className="gifts-list__td gifts-list__td--campaign">{campaignName || '—'}</td>}
                     <td className="gifts-list__td gifts-list__td--amount">{formatCurrency(gift.amount)}</td>
                     <td className="gifts-list__td gifts-list__td--ack">
                       <i

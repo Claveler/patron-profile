@@ -1,11 +1,15 @@
+import { useEpicScope } from '../../hooks/useEpicScope'
 import './AddToPortfolioBar.css'
 
 function AddToPortfolioBar({ patron, onAddToPortfolio }) {
+  const { show } = useEpicScope()
+  const showOppText = show('addToPortfolio.opportunityText')
+
   const handleClick = () => {
     if (onAddToPortfolio) {
       onAddToPortfolio(patron)
     } else {
-      alert(`This would open a modal to assign ${patron.firstName} ${patron.lastName} to a gift officer and optionally create their first opportunity.`)
+      alert(`This would open a modal to assign ${patron.firstName} ${patron.lastName} to a gift officer${showOppText ? ' and optionally create their first opportunity' : ''}.`)
     }
   }
 
@@ -13,10 +17,12 @@ function AddToPortfolioBar({ patron, onAddToPortfolio }) {
     <div className="add-to-portfolio-bar">
       <div className="add-to-portfolio-bar__content">
         <div className="add-to-portfolio-bar__info">
-          <i className="fa-solid fa-bullseye add-to-portfolio-bar__icon"></i>
+          <i className={`fa-solid ${showOppText ? 'fa-bullseye' : 'fa-user-shield'} add-to-portfolio-bar__icon`}></i>
           <div className="add-to-portfolio-bar__text-group">
             <span className="add-to-portfolio-bar__text">
-              This constituent has no active opportunities
+              {showOppText
+                ? 'This constituent has no active opportunities'
+                : 'This constituent is not assigned to a gift officer'}
             </span>
             <span className="add-to-portfolio-bar__subtext">
               Assign to a gift officer to begin cultivation

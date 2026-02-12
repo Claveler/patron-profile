@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { patronTags, addCustomTag, getPrimaryMembershipForPatron, formatDate, getHouseholdForPatron, getHouseholdMembers, getHouseholdAddress, getEffectiveTags, isComputedTag, getTagConfig } from '../../data/patrons'
 import { getInitials } from '../../utils/getInitials'
+import { useEpicScope } from '../../hooks/useEpicScope'
 import './PatronInfoBox.css'
 
 function PatronInfoBox({ patron, isManaged, onCreateOpportunity, onAddActivity, onRecordGift, onAssignToPortfolio, onArchive, onRestore, onUpdateTags, onNavigateToPatron }) {
@@ -95,6 +96,8 @@ function PatronInfoBox({ patron, isManaged, onCreateOpportunity, onAddActivity, 
       handleAddTag(newTag.id)
     }
   }
+
+  const { show } = useEpicScope()
 
   // Check patron status
   const isArchived = patron.status === 'archived'
@@ -457,7 +460,7 @@ function PatronInfoBox({ patron, isManaged, onCreateOpportunity, onAddActivity, 
                 <i className="fa-solid fa-calendar-plus"></i>
                 Log activity
               </button>
-              {isManaged && (
+              {isManaged && show('patronInfoBox.createOpportunity') && (
                 <button className="patron-info-box__dropdown-item" onClick={handleCreateOpportunity}>
                   <i className="fa-solid fa-bullseye"></i>
                   Create opportunity

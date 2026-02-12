@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { getGiftsByPatronId, isGiftAcknowledged, getAcknowledgmentsByGiftId, formatDate } from '../../data/patrons'
 import { getFundNameById } from '../../data/campaigns'
+import { useEpicScope } from '../../hooks/useEpicScope'
 import './GiftHistoryTable.css'
 
 const formatCurrency = (amount) => {
@@ -21,6 +22,8 @@ const typeConfig = {
 }
 
 function GiftHistoryTable({ patronId, onRecordGift, onGiftSelect, selectedGiftId }) {
+  const { show } = useEpicScope()
+  const showFund = show('giftHistory.fundColumn')
   const [visibleCount, setVisibleCount] = useState(10)
   
   const gifts = getGiftsByPatronId(patronId)
@@ -81,7 +84,7 @@ function GiftHistoryTable({ patronId, onRecordGift, onGiftSelect, selectedGiftId
                   <th>Date</th>
                   <th>Description</th>
                   <th>Type</th>
-                  <th>Fund</th>
+                  {showFund && <th>Fund</th>}
                   <th className="gift-history__th-right">Amount</th>
                   <th className="gift-history__th-center">Ack</th>
                 </tr>
@@ -89,7 +92,7 @@ function GiftHistoryTable({ patronId, onRecordGift, onGiftSelect, selectedGiftId
               <tbody>
                 {displayedGifts.map(gift => {
                   const type = typeConfig[gift.type] || typeConfig['one-time']
-                  const fundName = getFundNameById(gift.fundId)
+                  const fundName = showFund ? getFundNameById(gift.fundId) : null
                   const ackStatus = getAckStatus(gift.id)
                   const ack = ackIcons[ackStatus]
 
@@ -106,7 +109,7 @@ function GiftHistoryTable({ patronId, onRecordGift, onGiftSelect, selectedGiftId
                           {type.label}
                         </span>
                       </td>
-                      <td className="gift-history__fund">{fundName || '—'}</td>
+                      {showFund && <td className="gift-history__fund">{fundName || '—'}</td>}
                       <td className="gift-history__amount">{formatCurrency(gift.amount)}</td>
                       <td className="gift-history__ack-cell">
                         <i 

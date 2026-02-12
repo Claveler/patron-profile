@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { formatDateTime } from '../../data/patrons'
 import { getFundNameById, getCampaignNameById, getAppealNameById, getStaffNameById, getStaffInitialsById } from '../../data/campaigns'
 import { getOpportunityById } from '../../data/opportunities'
+import { useEpicScope } from '../../hooks/useEpicScope'
 import './ActivityTimeline.css'
 
 // Activity type configurations
@@ -100,6 +101,7 @@ const formatDate = formatDateTime
 
 function ActivityTimeline({ gifts = [], activities = [], onAddActivity, onRecordGift, onGiftSelect, variant }) {
   const navigate = useNavigate()
+  const { show } = useEpicScope()
   const [expandedItems, setExpandedItems] = useState(new Set())
   const [filter, setFilter] = useState('all')
   const [searchQuery, setSearchQuery] = useState('')
@@ -116,6 +118,8 @@ function ActivityTimeline({ gifts = [], activities = [], onAddActivity, onRecord
   }
 
   // Convert gifts to activity format and merge with other activities
+  const showFund = show('timeline.fundAttribution')
+  const showCampaign = show('timeline.campaignAttribution')
   const giftActivities = gifts.map(gift => ({
     id: gift.id,
     type: getGiftActivityType(gift),
@@ -124,9 +128,9 @@ function ActivityTimeline({ gifts = [], activities = [], onAddActivity, onRecord
     amount: gift.amount,
     _originalGift: gift,
     details: {
-      fund: gift.fundId ? { id: gift.fundId, name: getFundNameById(gift.fundId) } : null,
-      campaign: gift.campaignId ? { id: gift.campaignId, name: getCampaignNameById(gift.campaignId) } : null,
-      appeal: gift.appealId ? { id: gift.appealId, name: getAppealNameById(gift.campaignId, gift.appealId) } : null,
+      fund: showFund && gift.fundId ? { id: gift.fundId, name: getFundNameById(gift.fundId) } : null,
+      campaign: showCampaign && gift.campaignId ? { id: gift.campaignId, name: getCampaignNameById(gift.campaignId) } : null,
+      appeal: showCampaign && gift.appealId ? { id: gift.appealId, name: getAppealNameById(gift.campaignId, gift.appealId) } : null,
       softCredits: gift.softCredits,
       deductible: gift.deductible,
       benefitsValue: gift.benefitsValue,
@@ -315,7 +319,7 @@ function ActivityTimeline({ gifts = [], activities = [], onAddActivity, onRecord
             const isLast = index === displayedActivities.length - 1
             const staffName = activity.staffId ? getStaffNameById(activity.staffId) : null
             const staffInitials = activity.staffId ? getStaffInitialsById(activity.staffId) : null
-            const linkedOpportunity = activity.opportunityId ? getOpportunityById(activity.opportunityId) : null
+            const linkedOpportunity = show('timeline.opportunityChip') && activity.opportunityId ? getOpportunityById(activity.opportunityId) : null
 
             return (
               <div 

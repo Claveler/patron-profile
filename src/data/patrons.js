@@ -1030,6 +1030,278 @@ export const patrons = [
   },
   
   // ============================================
+  // NON-ACTIVE PATRONS (archived, deceased, inactive)
+  // These patrons are hidden by default in the Patrons List
+  // unless the user switches the scope toggle to "All".
+  // ============================================
+
+  // Harold Fairfax - Paul Fairfax's deceased grandfather
+  {
+    id: '7962445',
+    firstName: 'Harold',
+    lastName: 'Fairfax',
+    prefix: 'Mr.',
+    suffix: 'Sr.',
+    preferredName: null,
+    gender: 'male',
+    dateOfBirth: '1935-07-19',
+    photo: null,
+    email: 'harold.fairfax@gmail.com',
+    phone: null,
+    addressStreet: '280 Cascade Dr',
+    addressCity: 'Mill Valley',
+    addressState: 'CA',
+    addressZip: '94941',
+    addressCountry: 'United States',
+    employer: 'Fairfax & Associates Law Firm (Retired)',
+    jobTitle: 'Founding Partner (Retired)',
+    communicationPreferences: {
+      preferredMethod: 'mail',
+      emailOptIn: false,
+      phoneOptIn: false,
+      mailOptIn: false,
+      doNotContact: true,
+    },
+    notes: 'Harold founded Fairfax & Associates in 1968 and was a founding patron of the museum. His legacy gift established the Fairfax Education Endowment. Grandson Paul continues the family tradition of giving.',
+    tags: ['major-donor'],
+    householdId: 'hh-fairfax',
+    engagement: {
+      level: 'cold',
+      visits: 0,
+      lastVisit: null,
+      activityHistory: []
+    },
+    giving: {
+      lifetimeValue: 25000,
+      totalGifts: 25000,
+      revenue: 0,
+      giftCount: 12,
+      averageGift: 2083,
+      lastGift: '2019-06-15',
+      byFund: { 'annual-operating': 15000, 'education-endowment': 10000 },
+      byCampaign: {},
+      byYear: { '2012': 2000, '2013': 3000, '2014': 5000, '2015': 2000, '2016': 2000, '2017': 2500, '2018': 3000, '2019': 5500 },
+      firstTransaction: { amount: 2000, date: '2012-06-15' },
+      lastTransaction: { amount: 5500, date: '2019-06-15' },
+      largestTransaction: { amount: 5500, date: '2019-06-15' }
+    },
+    address: '280 Cascade Dr, Mill Valley, CA 94941',
+    source: 'fever',
+    createdDate: '2012-06-15',
+    status: 'deceased',
+    deceasedDate: '2019-11-03',
+  },
+
+  // David Wilson - Mia Wilson's inactive husband
+  {
+    id: '7962446',
+    firstName: 'David',
+    lastName: 'Wilson',
+    prefix: 'Mr.',
+    suffix: null,
+    preferredName: 'Dave',
+    gender: 'male',
+    dateOfBirth: '1958-11-02',
+    photo: null,
+    email: 'david.r.wilson@gmail.com',
+    phone: '(555) 890-5678',
+    addressStreet: '112 Elm St',
+    addressCity: 'San Rafael',
+    addressState: 'CA',
+    addressZip: '94901',
+    addressCountry: 'United States',
+    employer: 'Bay Area Engineering Group',
+    jobTitle: 'Civil Engineer (Semi-Retired)',
+    communicationPreferences: {
+      preferredMethod: 'email',
+      emailOptIn: false,
+      phoneOptIn: false,
+      mailOptIn: false,
+      doNotContact: true,
+    },
+    notes: 'David prefers that all museum correspondence go through his wife Mia. Attended a few events in 2023–2024 but asked to be removed from direct outreach in mid-2025.',
+    tags: [],
+    householdId: 'hh-wilson',
+    engagement: {
+      level: 'cold',
+      visits: 4,
+      lastVisit: '2024-09-12',
+      activityHistory: []
+    },
+    giving: {
+      lifetimeValue: 500,
+      totalGifts: 500,
+      revenue: 0,
+      giftCount: 2,
+      averageGift: 250,
+      lastGift: '2024-06-20',
+      byFund: { 'annual-operating': 500 },
+      byCampaign: {},
+      byYear: { '2023': 250, '2024': 250 },
+      firstTransaction: { amount: 250, date: '2023-12-15' },
+      lastTransaction: { amount: 250, date: '2024-06-20' },
+      largestTransaction: { amount: 250, date: '2024-06-20' }
+    },
+    address: '112 Elm St, San Rafael, CA 94901',
+    source: 'import',
+    createdDate: '2023-08-20',
+    status: 'inactive',
+    inactiveDate: '2025-06-15',
+    inactiveReason: 'Requested removal from outreach',
+  },
+
+  // Marcus Davis - Ethan Davis's archived brother
+  {
+    id: '7962447',
+    firstName: 'Marcus',
+    lastName: 'Davis',
+    prefix: null,
+    suffix: null,
+    preferredName: null,
+    gender: 'male',
+    dateOfBirth: '1993-04-08',
+    photo: null,
+    email: 'marcus.davis92@yahoo.com',
+    phone: '(555) 012-9999',
+    addressStreet: '450 W Peachtree St NW',
+    addressCity: 'Atlanta',
+    addressState: 'GA',
+    addressZip: '30308',
+    addressCountry: 'United States',
+    employer: null,
+    jobTitle: null,
+    communicationPreferences: {
+      preferredMethod: 'email',
+      emailOptIn: true,
+      phoneOptIn: false,
+      mailOptIn: false,
+      doNotContact: false,
+    },
+    notes: 'Ethan\'s brother. Attended a few events while living locally. Relocated to Atlanta in mid-2025 and was archived as no longer in the service area.',
+    tags: [],
+    householdId: null,
+    engagement: {
+      level: 'cold',
+      visits: 3,
+      lastVisit: '2025-04-10',
+      activityHistory: []
+    },
+    giving: {
+      lifetimeValue: 150,
+      totalGifts: 0,
+      revenue: 150,
+      giftCount: 0,
+      averageGift: 0,
+      lastGift: null,
+      byFund: {},
+      byCampaign: {},
+      byYear: {},
+      firstTransaction: null,
+      lastTransaction: null,
+      largestTransaction: null
+    },
+    address: '450 W Peachtree St NW, Atlanta, GA 30308',
+    source: 'ticket',
+    createdDate: '2024-12-01',
+    status: 'archived',
+    archivedDate: '2025-09-01',
+    archivedReason: 'relocated',
+  },
+
+  // Vivienne Collingwood - Anderson & Eleanor's deceased paternal aunt
+  {
+    id: '7962448',
+    firstName: 'Vivienne',
+    lastName: 'Collingwood',
+    prefix: 'Ms.',
+    suffix: null,
+    preferredName: 'Viv',
+    gender: 'female',
+    dateOfBirth: '1942-03-28',
+    photo: null,
+    email: 'vivienne.collingwood@gmail.com',
+    phone: null,
+    addressStreet: '3200 Pacific Ave',
+    addressCity: 'San Francisco',
+    addressState: 'CA',
+    addressZip: '94115',
+    addressCountry: 'United States',
+    employer: 'Collingwood Properties LLC',
+    jobTitle: 'Founder (Retired)',
+    communicationPreferences: {
+      preferredMethod: 'mail',
+      emailOptIn: false,
+      phoneOptIn: false,
+      mailOptIn: false,
+      doNotContact: true,
+    },
+    notes: 'Vivienne was Anderson and Eleanor\'s paternal aunt — never married, no children. A pioneering real estate investor in San Francisco, she built Collingwood Properties LLC into a significant portfolio of commercial and residential holdings across the Bay Area. She was one of the museum\'s founding major donors, serving on the Board of Directors from 2016 to 2022. Upon her passing in September 2023, she left her entire estate to the Collingwood family, significantly boosting Anderson\'s philanthropic capacity. Her legacy gift of $50,000 established the Vivienne Collingwood Arts Education Fund.',
+    tags: ['major-donor', 'board-member'],
+    householdId: null,
+    engagement: {
+      level: 'cold',
+      visits: 0,
+      lastVisit: null,
+      activityHistory: []
+    },
+    giving: {
+      lifetimeValue: 152500,
+      totalGifts: 152500,
+      revenue: 0,
+      giftCount: 18,
+      averageGift: 8472,
+      lastGift: '2023-08-10',
+      byFund: {
+        'annual-operating': 52500,
+        'capital-building': 50000,
+        'education-endowment': 50000,
+      },
+      byCampaign: {
+        'annual-fund-2023': 7500,
+        'annual-fund-2022': 7500,
+        'capital-campaign': 50000,
+      },
+      byYear: {
+        '2016': 5000,
+        '2017': 5000,
+        '2018': 7500,
+        '2019': 7500,
+        '2020': 10000,
+        '2021': 10000,
+        '2022': 50000,
+        '2023': 57500,
+      },
+      firstTransaction: { amount: 5000, date: '2016-04-22' },
+      lastTransaction: { amount: 50000, date: '2023-08-10' },
+      largestTransaction: { amount: 50000, date: '2023-08-10' },
+    },
+    wealthInsights: {
+      propensityScore: null,
+      description: 'Deceased. Former major donor with significant real estate holdings. Estate transferred to the Collingwood family.',
+    },
+    taxDocuments: {
+      organization: 'Bay Area Museum of Art & Culture',
+      yearEndSummaries: [
+        { year: 2023, totalDeductible: 57500, totalNonDeductible: 0, dateIssued: '2024-01-15' },
+        { year: 2022, totalDeductible: 50000, totalNonDeductible: 0, dateIssued: '2023-01-15' },
+        { year: 2021, totalDeductible: 10000, totalNonDeductible: 0, dateIssued: '2022-01-15' },
+        { year: 2020, totalDeductible: 10000, totalNonDeductible: 0, dateIssued: '2021-01-15' },
+        { year: 2019, totalDeductible: 7500, totalNonDeductible: 0, dateIssued: '2020-01-15' },
+        { year: 2018, totalDeductible: 7500, totalNonDeductible: 0, dateIssued: '2019-01-15' },
+        { year: 2017, totalDeductible: 5000, totalNonDeductible: 0, dateIssued: '2018-01-15' },
+        { year: 2016, totalDeductible: 5000, totalNonDeductible: 0, dateIssued: '2017-01-15' },
+      ],
+      receipts: [],
+      inKindGifts: [],
+    },
+    address: '3200 Pacific Ave, San Francisco, CA 94115',
+    source: 'fever',
+    createdDate: '2016-01-15',
+    status: 'deceased',
+    deceasedDate: '2023-09-17',
+  },
+
+  // ============================================
   // BENEFICIARY PATRONS (Family members with own records)
   // ============================================
   
@@ -1920,8 +2192,8 @@ export const reactivatePatron = (patronId) => {
   })
 }
 
-// Get active patrons only (excludes archived and deceased)
-export const getActivePatrons = () => patrons.filter(p => p.status !== 'archived' && p.status !== 'deceased')
+// Get active patrons only (excludes archived, deceased, and inactive)
+export const getActivePatrons = () => patrons.filter(p => p.status !== 'archived' && p.status !== 'deceased' && p.status !== 'inactive')
 
 // Get contactable patrons (excludes archived, deceased, and do-not-contact)
 export const getContactablePatrons = () => patrons.filter(p => 
@@ -2806,6 +3078,24 @@ export const membershipUsage = [
 // =============================================================================
 
 export const GIFTS = [
+  // ── Donation Prompts (small checkout add-on gifts from ticketing funnel) ────
+  // These are the only gifts visible in Epic 1. Each aligns with a real ticket
+  // purchase date in the INTERACTIONS array for the same patron.
+
+  // Anderson Collingwood — 4 donation prompts
+  { id: 'gift-dp-001', patronId: '7962415', date: '2025-03-08', amount: 10.00, type: 'one-time', source: 'donation-prompt', description: 'Ticket checkout donation – Spring Gala', fundId: null, campaignId: null, appealId: null, deductible: 10.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-dp-002', patronId: '7962415', date: '2025-06-07', amount: 15.00, type: 'one-time', source: 'donation-prompt', description: 'Ticket checkout donation – Summer Exhibition', fundId: null, campaignId: null, appealId: null, deductible: 15.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-dp-003', patronId: '7962415', date: '2025-09-06', amount: 10.00, type: 'one-time', source: 'donation-prompt', description: 'Ticket checkout donation – Fall Exhibition', fundId: null, campaignId: null, appealId: null, deductible: 10.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-dp-004', patronId: '7962415', date: '2025-12-06', amount: 25.00, type: 'one-time', source: 'donation-prompt', description: 'Ticket checkout donation – Holiday Spectacular', fundId: null, campaignId: null, appealId: null, deductible: 25.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+
+  // Paul Fairfax — 2 donation prompts
+  { id: 'gift-dp-005', patronId: '7962416', date: '2025-06-15', amount: 10.00, type: 'one-time', source: 'donation-prompt', description: 'Ticket checkout donation – Spring Gala', fundId: null, campaignId: null, appealId: null, deductible: 10.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-dp-006', patronId: '7962416', date: '2025-09-10', amount: 15.00, type: 'one-time', source: 'donation-prompt', description: 'Ticket checkout donation – Website', fundId: null, campaignId: null, appealId: null, deductible: 15.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+
+  // Eleanor Whitfield — 2 donation prompts
+  { id: 'gift-dp-007', patronId: '7962432', date: '2025-02-14', amount: 10.00, type: 'one-time', source: 'donation-prompt', description: 'Ticket checkout donation – Valentine Art Night', fundId: null, campaignId: null, appealId: null, deductible: 10.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-dp-008', patronId: '7962432', date: '2025-03-22', amount: 15.00, type: 'one-time', source: 'donation-prompt', description: 'Ticket checkout donation – Photography Exhibition', fundId: null, campaignId: null, appealId: null, deductible: 15.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+
   // ── Anderson Collingwood (16 gifts: escalation arc from 2023 to 2026) ──────
 
   // 2023: First touch - joined as Silver member
@@ -2980,6 +3270,44 @@ export const GIFTS = [
 
   // ── Rachel Kim (1 gift: $100, recent donor) ────────────────────────────
   { id: 'gift-124', patronId: '7962426', date: '2025-12-18', amount: 100.00, type: 'one-time', description: 'Holiday Gift', fundId: 'annual-operating', campaignId: 'annual-2026', appealId: 'year-end-mailer', deductible: 100.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+
+  // ── Vivienne Collingwood (18 gifts: $152,500, deceased founding donor, 2016-2023) ──
+  { id: 'gift-v-001', patronId: '7962448', date: '2016-04-22', amount: 5000.00, type: 'one-time', description: 'Founding Donor Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 5000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-v-002', patronId: '7962448', date: '2017-05-15', amount: 5000.00, type: 'one-time', description: 'Annual Fund Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 5000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-v-003', patronId: '7962448', date: '2018-03-22', amount: 2500.00, type: 'one-time', description: 'Spring Annual Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 2500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-v-004', patronId: '7962448', date: '2018-06-15', amount: 2500.00, type: 'one-time', description: 'Summer Annual Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 2500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-v-005', patronId: '7962448', date: '2018-11-10', amount: 2500.00, type: 'one-time', description: 'Year-End Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 2500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-v-006', patronId: '7962448', date: '2019-03-20', amount: 2500.00, type: 'one-time', description: 'Spring Annual Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 2500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-v-007', patronId: '7962448', date: '2019-07-12', amount: 2500.00, type: 'one-time', description: 'Mid-Year Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 2500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-v-008', patronId: '7962448', date: '2019-10-25', amount: 2500.00, type: 'one-time', description: 'Fall Annual Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 2500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-v-009', patronId: '7962448', date: '2020-03-15', amount: 5000.00, type: 'one-time', description: 'Annual Fund Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 5000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-v-010', patronId: '7962448', date: '2020-09-20', amount: 5000.00, type: 'one-time', description: 'Capital Campaign Gift', fundId: 'capital-building', campaignId: 'capital-campaign', appealId: null, deductible: 5000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-v-011', patronId: '7962448', date: '2021-03-10', amount: 5000.00, type: 'one-time', description: 'Annual Fund Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 5000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-v-012', patronId: '7962448', date: '2021-09-15', amount: 5000.00, type: 'one-time', description: 'Capital Campaign Gift', fundId: 'capital-building', campaignId: 'capital-campaign', appealId: null, deductible: 5000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-v-013', patronId: '7962448', date: '2022-02-28', amount: 7500.00, type: 'one-time', description: 'Annual Fund Gift', fundId: 'annual-operating', campaignId: 'annual-fund-2022', appealId: null, deductible: 7500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-v-014', patronId: '7962448', date: '2022-06-12', amount: 2500.00, type: 'one-time', description: 'Mid-Year Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 2500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-v-015', patronId: '7962448', date: '2022-10-05', amount: 40000.00, type: 'one-time', description: 'Capital Campaign Major Gift', fundId: 'capital-building', campaignId: 'capital-campaign', appealId: null, deductible: 40000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-v-016', patronId: '7962448', date: '2023-02-15', amount: 5000.00, type: 'one-time', description: 'Annual Fund Gift', fundId: 'annual-operating', campaignId: 'annual-fund-2023', appealId: null, deductible: 5000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-v-017', patronId: '7962448', date: '2023-05-20', amount: 2500.00, type: 'one-time', description: 'Spring Gift', fundId: 'annual-operating', campaignId: 'annual-fund-2023', appealId: null, deductible: 2500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-v-018', patronId: '7962448', date: '2023-08-10', amount: 50000.00, type: 'one-time', description: 'Legacy Gift — Vivienne Collingwood Arts Education Fund', fundId: 'education-endowment', campaignId: null, appealId: null, deductible: 50000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+
+  // ── Harold Fairfax (12 gifts: $25,000, deceased founding patron, 2012-2019) ──
+  { id: 'gift-h-001', patronId: '7962445', date: '2012-06-15', amount: 2000.00, type: 'one-time', description: 'Annual Fund Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 2000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-h-002', patronId: '7962445', date: '2013-06-20', amount: 3000.00, type: 'one-time', description: 'Education Endowment Gift', fundId: 'education-endowment', campaignId: null, appealId: null, deductible: 3000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-h-003', patronId: '7962445', date: '2014-04-10', amount: 2000.00, type: 'one-time', description: 'Annual Fund Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 2000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-h-004', patronId: '7962445', date: '2014-09-22', amount: 3000.00, type: 'one-time', description: 'Education Endowment Gift', fundId: 'education-endowment', campaignId: null, appealId: null, deductible: 3000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-h-005', patronId: '7962445', date: '2015-03-10', amount: 2000.00, type: 'one-time', description: 'Annual Fund Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 2000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-h-006', patronId: '7962445', date: '2016-04-15', amount: 1000.00, type: 'one-time', description: 'Annual Fund Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 1000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-h-007', patronId: '7962445', date: '2016-09-20', amount: 1000.00, type: 'one-time', description: 'Education Fund Gift', fundId: 'education-endowment', campaignId: null, appealId: null, deductible: 1000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-h-008', patronId: '7962445', date: '2017-03-25', amount: 1500.00, type: 'one-time', description: 'Annual Fund Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 1500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-h-009', patronId: '7962445', date: '2017-10-15', amount: 1000.00, type: 'one-time', description: 'Education Fund Gift', fundId: 'education-endowment', campaignId: null, appealId: null, deductible: 1000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-h-010', patronId: '7962445', date: '2018-04-12', amount: 1000.00, type: 'one-time', description: 'Annual Fund Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 1000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-h-011', patronId: '7962445', date: '2018-09-18', amount: 2000.00, type: 'one-time', description: 'Education Endowment Gift', fundId: 'education-endowment', campaignId: null, appealId: null, deductible: 2000.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-h-012', patronId: '7962445', date: '2019-06-15', amount: 5500.00, type: 'one-time', description: 'Final Annual Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 5500.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+
+  // ── David Wilson (2 gifts: $500, inactive patron, 2023-2024) ─────────
+  { id: 'gift-dw-001', patronId: '7962446', date: '2023-12-15', amount: 250.00, type: 'one-time', description: 'Year-End Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 250.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
+  { id: 'gift-dw-002', patronId: '7962446', date: '2024-06-20', amount: 250.00, type: 'one-time', description: 'Online Gift', fundId: 'annual-operating', campaignId: null, appealId: null, deductible: 250.00, benefitsValue: 0, softCredits: [], pledgeId: null, recurringProfileId: null },
 ]
 
 // Get all gifts for a patron
@@ -3801,6 +4129,15 @@ export const HOUSEHOLDS = [
     primaryContactId: '7962432',
     verified: true,
     createdDate: '2025-06-01'
+  },
+  {
+    id: 'hh-wilson',
+    name: 'Wilson Family',
+    formalSalutation: 'Mrs. Mia & Mr. David Wilson',
+    informalSalutation: 'Mia & David',
+    primaryContactId: '7962423',
+    verified: true,
+    createdDate: '2023-08-20'
   }
 ]
 
@@ -3820,7 +4157,10 @@ export const HOUSEHOLD_MEMBERS = [
   { id: 'hhm-9', householdId: 'hh-taylor-thomas', patronId: '7962418', role: 'Spouse', isPrimary: false, joinedDate: '2025-03-20' },
   // Whitfield Family
   { id: 'hhm-10', householdId: 'hh-whitfield', patronId: '7962432', role: 'Head', isPrimary: true, joinedDate: '2022-06-15' },
-  { id: 'hhm-11', householdId: 'hh-whitfield', patronId: '7962444', role: 'Spouse', isPrimary: false, joinedDate: '2022-06-15' }
+  { id: 'hhm-11', householdId: 'hh-whitfield', patronId: '7962444', role: 'Spouse', isPrimary: false, joinedDate: '2022-06-15' },
+  // Wilson Family
+  { id: 'hhm-12', householdId: 'hh-wilson', patronId: '7962423', role: 'Head', isPrimary: true, joinedDate: '2023-08-20' },
+  { id: 'hhm-13', householdId: 'hh-wilson', patronId: '7962446', role: 'Spouse', isPrimary: false, joinedDate: '2023-08-20' }
 ]
 
 // Household helper functions
@@ -3856,7 +4196,14 @@ export const getHouseholdMembers = (householdId) => {
         lastName: patron.lastName,
         name: `${patron.firstName} ${patron.lastName}`,
         email: patron.email,
-        photo: patron.photo
+        photo: patron.photo,
+        giving: patron.giving || null,
+        status: patron.status || 'active',
+        deceasedDate: patron.deceasedDate || null,
+        inactiveDate: patron.inactiveDate || null,
+        inactiveReason: patron.inactiveReason || null,
+        archivedDate: patron.archivedDate || null,
+        archivedReason: patron.archivedReason || null,
       } : null
     }
   }).filter(m => m.patron !== null)
@@ -4212,6 +4559,136 @@ export const patronRelationships = [
     startDate: '2014-09-10',
     endDate: null,
     notes: 'Married 2014, divorced 2021. David introduced Samantha to the museum originally.'
+  },
+
+  // Paul Fairfax <-> Harold Fairfax (grandfather, deceased)
+  {
+    id: 'rel-grandfather-1',
+    fromPatronId: '7962416',
+    toPatronId: '7962445',
+    type: 'personal',
+    role: 'Grandfather',
+    reciprocalRole: 'Grandson',
+    isPrimary: false,
+    startDate: null,
+    endDate: null,
+    notes: 'Harold founded Fairfax & Associates and was a founding patron of the museum. Paul carries on his philanthropic legacy.'
+  },
+  {
+    id: 'rel-grandfather-2',
+    fromPatronId: '7962445',
+    toPatronId: '7962416',
+    type: 'personal',
+    role: 'Grandson',
+    reciprocalRole: 'Grandfather',
+    isPrimary: false,
+    startDate: null,
+    endDate: null,
+    notes: 'Harold founded Fairfax & Associates and was a founding patron of the museum. Paul carries on his philanthropic legacy.'
+  },
+
+  // Mia Wilson <-> David Wilson (husband, inactive)
+  {
+    id: 'rel-wilson-1',
+    fromPatronId: '7962423',
+    toPatronId: '7962446',
+    type: 'household',
+    role: 'Husband',
+    reciprocalRole: 'Wife',
+    isPrimary: false,
+    startDate: null,
+    endDate: null,
+    notes: 'David prefers all museum correspondence to go through Mia. Marked inactive at his request.'
+  },
+  {
+    id: 'rel-wilson-2',
+    fromPatronId: '7962446',
+    toPatronId: '7962423',
+    type: 'household',
+    role: 'Wife',
+    reciprocalRole: 'Husband',
+    isPrimary: true,
+    startDate: null,
+    endDate: null,
+    notes: 'David prefers all museum correspondence to go through Mia. Marked inactive at his request.'
+  },
+
+  // Ethan Davis <-> Marcus Davis (brother, archived)
+  {
+    id: 'rel-brothers-1',
+    fromPatronId: '7962425',
+    toPatronId: '7962447',
+    type: 'personal',
+    role: 'Brother',
+    reciprocalRole: 'Brother',
+    isPrimary: false,
+    startDate: null,
+    endDate: null,
+    notes: 'Marcus relocated to Atlanta in 2025. Ethan introduced him to the museum originally.'
+  },
+  {
+    id: 'rel-brothers-2',
+    fromPatronId: '7962447',
+    toPatronId: '7962425',
+    type: 'personal',
+    role: 'Brother',
+    reciprocalRole: 'Brother',
+    isPrimary: false,
+    startDate: null,
+    endDate: null,
+    notes: 'Marcus relocated to Atlanta in 2025. Ethan introduced him to the museum originally.'
+  },
+
+  // Anderson Collingwood <-> Vivienne Collingwood (paternal aunt, deceased)
+  {
+    id: 'rel-aunt-1',
+    fromPatronId: '7962415',
+    toPatronId: '7962448',
+    type: 'personal',
+    role: 'Aunt',
+    reciprocalRole: 'Nephew',
+    isPrimary: false,
+    startDate: null,
+    endDate: null,
+    notes: 'Vivienne was Anderson\'s paternal aunt. A founding museum donor, she left her entire estate to the Collingwood family upon her passing in 2023.'
+  },
+  {
+    id: 'rel-aunt-2',
+    fromPatronId: '7962448',
+    toPatronId: '7962415',
+    type: 'personal',
+    role: 'Nephew',
+    reciprocalRole: 'Aunt',
+    isPrimary: false,
+    startDate: null,
+    endDate: null,
+    notes: 'Vivienne was Anderson\'s paternal aunt. A founding museum donor, she left her entire estate to the Collingwood family upon her passing in 2023.'
+  },
+
+  // Eleanor Whitfield <-> Vivienne Collingwood (paternal aunt, deceased)
+  {
+    id: 'rel-aunt-3',
+    fromPatronId: '7962432',
+    toPatronId: '7962448',
+    type: 'personal',
+    role: 'Aunt',
+    reciprocalRole: 'Niece',
+    isPrimary: false,
+    startDate: null,
+    endDate: null,
+    notes: 'Vivienne was Eleanor\'s paternal aunt. Eleanor inherited a portion of Vivienne\'s art collection.'
+  },
+  {
+    id: 'rel-aunt-4',
+    fromPatronId: '7962448',
+    toPatronId: '7962432',
+    type: 'personal',
+    role: 'Niece',
+    reciprocalRole: 'Aunt',
+    isPrimary: false,
+    startDate: null,
+    endDate: null,
+    notes: 'Vivienne was Eleanor\'s paternal aunt. Eleanor inherited a portion of Vivienne\'s art collection.'
   }
 ]
 
@@ -4936,7 +5413,14 @@ export const getPatronRelationships = (patronId) => {
           name: `${patron.firstName} ${patron.lastName}`,
           email: patron.email,
           photo: patron.photo,
-          householdName: linkedHousehold?.name || null
+          householdName: linkedHousehold?.name || null,
+          giving: patron.giving || null,
+          status: patron.status || 'active',
+          deceasedDate: patron.deceasedDate || null,
+          inactiveDate: patron.inactiveDate || null,
+          inactiveReason: patron.inactiveReason || null,
+          archivedDate: patron.archivedDate || null,
+          archivedReason: patron.archivedReason || null,
         }
       }
     }

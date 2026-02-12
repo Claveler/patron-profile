@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo, useContext } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { GuideContext } from '../App'
 import { EPIC_SCOPE, isInScope } from '../data/epicScope'
+import { useEpicScope } from '../hooks/useEpicScope'
 import PatronInfoBox from '../components/PatronInfoBox/PatronInfoBox'
 import TabNavigation from '../components/TabNavigation/TabNavigation'
 import SummaryTab from '../components/Tabs/SummaryTab'
@@ -217,6 +218,8 @@ function PatronProfile() {
   const [activeTab, setActiveTab] = useState('summary')
   const [refreshKey, setRefreshKey] = useState(0)
   const { setGuideTab, activeEpic } = useContext(GuideContext)
+  const { show, filterGifts } = useEpicScope()
+  const showOpportunities = show('patronProfile.opportunityModal')
 
   // Filter tabs based on the active epic scope
   const visibleTabs = useMemo(() => {
@@ -430,8 +433,8 @@ function PatronProfile() {
         return (
           <SummaryTab 
             patron={patronData} 
-            onSelectOpportunity={handleNavigateToOpportunity}
-            onCreateOpportunity={handleCreateOpportunity}
+            onSelectOpportunity={showOpportunities ? handleNavigateToOpportunity : undefined}
+            onCreateOpportunity={showOpportunities ? handleCreateOpportunity : undefined}
             onRecordGift={handleRecordGift}
             onLogActivity={handleLogActivity}
             onNavigateToPatron={handleNavigateToPatron}
@@ -468,7 +471,7 @@ function PatronProfile() {
       case 'timeline':
         return (
           <ActivityTimeline
-            gifts={getGiftsByPatronId(patronData.id)}
+            gifts={filterGifts(getGiftsByPatronId(patronData.id))}
             activities={getInteractionsByPatronId(patronData.id)}
             onAddActivity={handleLogActivity}
             onRecordGift={handleRecordGift}
@@ -498,7 +501,7 @@ function PatronProfile() {
         return (
           <SummaryTab 
             patron={patronData}
-            onCreateOpportunity={handleCreateOpportunity}
+            onCreateOpportunity={showOpportunities ? handleCreateOpportunity : undefined}
             onRecordGift={handleRecordGift}
             onLogActivity={handleLogActivity}
             onNavigateToPatron={handleNavigateToPatron}
@@ -549,7 +552,7 @@ function PatronProfile() {
         <PatronInfoBox 
           patron={patronData} 
           isManaged={isManaged}
-          onCreateOpportunity={handleCreateOpportunity}
+          onCreateOpportunity={showOpportunities ? handleCreateOpportunity : undefined}
           onAddActivity={handleLogActivity}
           onRecordGift={handleRecordGift}
           onAssignToPortfolio={handleAssignToPortfolio}
@@ -576,14 +579,16 @@ function PatronProfile() {
       </div>
 
       {/* Modals - managed at profile level */}
-      <OpportunityModal
-        isOpen={showOpportunityModal}
-        onClose={() => setShowOpportunityModal(false)}
-        onSuccess={handleOpportunitySuccess}
-        patronId={patronData.id}
-        patronName={patronFullName}
-        defaultAssignedTo={patronData.assignedToId}
-      />
+      {showOpportunities && (
+        <OpportunityModal
+          isOpen={showOpportunityModal}
+          onClose={() => setShowOpportunityModal(false)}
+          onSuccess={handleOpportunitySuccess}
+          patronId={patronData.id}
+          patronName={patronFullName}
+          defaultAssignedTo={patronData.assignedToId}
+        />
+      )}
 
       <GiftModal
         isOpen={showGiftModal}

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { getActiveCampaigns, getFunds, getAppealsForCampaign, getAllStaff, GIFT_TYPES, getStaffNameById } from '../../data/campaigns'
 import { addGift } from '../../data/patrons'
+import { useEpicScope } from '../../hooks/useEpicScope'
 import './GiftModal.css'
 
 function GiftModal({ 
@@ -28,10 +29,14 @@ function GiftModal({
   const [errors, setErrors] = useState({})
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [showSoftCredits, setShowSoftCredits] = useState(false)
+  const { show } = useEpicScope()
+  const showFundField = show('giftModal.fundField')
+  const showCampaignField = show('giftModal.campaignField')
+  const showAppealField = show('giftModal.appealField')
   
   // Data for dropdowns
-  const funds = getFunds()
-  const campaigns = getActiveCampaigns()
+  const funds = showFundField ? getFunds() : []
+  const campaigns = showCampaignField ? getActiveCampaigns() : []
   const staff = getAllStaff()
   
   // Filter campaigns by selected fund
@@ -136,11 +141,11 @@ function GiftModal({
       newErrors.date = 'Date is required'
     }
     
-    if (!formData.fundId) {
+    if (showFundField && !formData.fundId) {
       newErrors.fundId = 'Please select a fund'
     }
     
-    if (!formData.campaignId) {
+    if (showCampaignField && !formData.campaignId) {
       newErrors.campaignId = 'Please select a campaign'
     }
     
@@ -299,7 +304,8 @@ function GiftModal({
             </div>
           </div>
           
-          {/* Fund */}
+          {/* Fund — hidden before DCAP epic */}
+          {showFundField && (
           <div className="gift-modal__field">
             <label className="gift-modal__label">
               Fund <span className="gift-modal__required">*</span>
@@ -317,28 +323,31 @@ function GiftModal({
             </select>
             {errors.fundId && <span className="gift-modal__error">{errors.fundId}</span>}
           </div>
+          )}
           
-          {/* Campaign */}
-          <div className="gift-modal__field">
-            <label className="gift-modal__label">
-              Campaign <span className="gift-modal__required">*</span>
-            </label>
-            <select
-              name="campaignId"
-              className={`gift-modal__select ${errors.campaignId ? 'gift-modal__select--error' : ''}`}
-              value={formData.campaignId}
-              onChange={handleInputChange}
-            >
-              <option value="">Select a campaign...</option>
-              {filteredCampaigns.map(campaign => (
-                <option key={campaign.id} value={campaign.id}>{campaign.name}</option>
-              ))}
-            </select>
-            {errors.campaignId && <span className="gift-modal__error">{errors.campaignId}</span>}
-          </div>
+          {/* Campaign — hidden before campaigns epic */}
+          {showCampaignField && (
+            <div className="gift-modal__field">
+              <label className="gift-modal__label">
+                Campaign <span className="gift-modal__required">*</span>
+              </label>
+              <select
+                name="campaignId"
+                className={`gift-modal__select ${errors.campaignId ? 'gift-modal__select--error' : ''}`}
+                value={formData.campaignId}
+                onChange={handleInputChange}
+              >
+                <option value="">Select a campaign...</option>
+                {filteredCampaigns.map(campaign => (
+                  <option key={campaign.id} value={campaign.id}>{campaign.name}</option>
+                ))}
+              </select>
+              {errors.campaignId && <span className="gift-modal__error">{errors.campaignId}</span>}
+            </div>
+          )}
           
-          {/* Appeal (optional) */}
-          {appeals.length > 0 && (
+          {/* Appeal (optional) — hidden before campaigns epic */}
+          {showAppealField && appeals.length > 0 && (
             <div className="gift-modal__field">
               <label className="gift-modal__label">Appeal (Optional)</label>
               <select

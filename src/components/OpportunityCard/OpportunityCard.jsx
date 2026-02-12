@@ -1,5 +1,6 @@
 import { formatDate, getPatronById, getPatronDisplayName } from '../../data/patrons'
 import { getStaffNameById, getStaffInitialsById, getCampaignNameById } from '../../data/campaigns'
+import { useEpicScope } from '../../hooks/useEpicScope'
 import './OpportunityCard.css'
 
 // Format currency
@@ -47,6 +48,8 @@ function OpportunityCard({
   showPatronName = true,
   className = ''
 }) {
+  const { show } = useEpicScope()
+
   if (!opportunity) return null
 
   const patron = getPatronById(opportunity.patronId)
@@ -143,7 +146,7 @@ function OpportunityCard({
           <span className="opportunity-card__assignee" data-tooltip={getStaffNameById(opportunity.assignedToId)}>
             {getStaffInitialsById(opportunity.assignedToId)}
           </span>
-          {opportunity.campaignId && (() => {
+          {show('opportunityCard.campaignName') && opportunity.campaignId && (() => {
             const campaignName = getCampaignNameById(opportunity.campaignId)
             return (
               <span className="opportunity-card__campaign" title={campaignName}>

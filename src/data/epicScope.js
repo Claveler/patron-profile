@@ -65,6 +65,51 @@ export const EPIC_SCOPE = {
     quickActions: 1,
     patronSummary: 1,
   },
+
+  /* ── Inline features (cross-epic references within components) ── */
+  inlineFeatures: {
+    // Epic 1 components leaking Epic 3 (Pipeline)
+    'timeline.opportunityChip':          3,
+    'timeline.staffAttribution':         3,
+    'activityModal.opportunityField':    3,
+    'alertBanner.pipelineAlert':         3,
+    'patronInfoBox.createOpportunity':   3,
+    'addToPortfolio.opportunityText':    3,
+    'assignPortfolio.createOpportunity': 3,
+    'patronProfile.opportunityModal':    3,
+
+    // Epic 1/2 components leaking Epic 4 (DCAP — Fund/Campaign/Appeal)
+    'timeline.fundAttribution':          4,
+    'timeline.campaignAttribution':      4,
+    'giftDetail.fundAttribution':        4,
+    'giftDetail.campaignAttribution':    4,
+    'givingSummary.byFund':              4,
+    'givingSummary.byCampaign':          4,
+    'giftHistory.fundColumn':            4,
+    'giftModal.fundField':               4,
+    'giftModal.campaignField':           4,
+    'giftModal.appealField':             4,
+    'taxSummary.campaignColumn':         4,
+    'recurringPanel.fundName':           4,
+    'recurringPanel.campaignName':       4,
+    'pledgesPanel.fundName':             4,
+    'pledgesPanel.campaignName':         4,
+    'giftsList.fundColumn':              4,
+    'giftsList.fundFilter':              4,
+    'opportunityDetail.fundName':        4,
+    'settings.fundMapping':              4,
+
+    // Epic 3 components leaking Epic 4 (Campaigns)
+    'opportunityCard.campaignName':      4,
+    'opportunityModal.campaignField':    4,
+    'closeWonModal.campaignInfo':        4,
+    'opportunityDetail.campaignName':    4,
+
+    // Text-only references
+    'statusChangeModal.campaignText':    4,
+    'compMembershipModal.campaignReason': 4,
+    'profileTab.solicitationLabel':      4,
+  },
 }
 
 /**

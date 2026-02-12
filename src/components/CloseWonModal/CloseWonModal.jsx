@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { getOpportunityById, closeOpportunityAsWon } from '../../data/opportunities'
 import { getPatronById, getPatronDisplayName, addGift } from '../../data/patrons'
 import { getCampaignById } from '../../data/campaigns'
+import { useEpicScope } from '../../hooks/useEpicScope'
 import './CloseWonModal.css'
 
 function CloseWonModal({ 
@@ -42,12 +43,17 @@ function CloseWonModal({
     return () => { document.body.style.overflow = '' }
   }, [isOpen])
   
+  const { show } = useEpicScope()
+  const showCampaignInfo = show('closeWonModal.campaignInfo')
+
   if (!isOpen || !opportunity) return null
   
   // Resolve campaign name from campaignId
-  const campaignName = opportunity.campaignId 
-    ? (getCampaignById(opportunity.campaignId)?.name || '—')
-    : (opportunity.campaign?.name || '—')
+  const campaignName = showCampaignInfo
+    ? (opportunity.campaignId 
+        ? (getCampaignById(opportunity.campaignId)?.name || '—')
+        : (opportunity.campaign?.name || '—'))
+    : null
   
   const handleBackdropClick = (e) => {
     if (e.target === e.currentTarget) onClose()
@@ -131,10 +137,12 @@ function CloseWonModal({
               <span className="close-won-modal__summary-label">Patron</span>
               <span className="close-won-modal__summary-value">{(() => { const p = getPatronById(opportunity.patronId); return p ? getPatronDisplayName(p) : 'Unknown' })()}</span>
             </div>
-            <div className="close-won-modal__summary-row">
-              <span className="close-won-modal__summary-label">Campaign</span>
-              <span className="close-won-modal__summary-value">{campaignName}</span>
-            </div>
+            {campaignName && (
+              <div className="close-won-modal__summary-row">
+                <span className="close-won-modal__summary-label">Campaign</span>
+                <span className="close-won-modal__summary-value">{campaignName}</span>
+              </div>
+            )}
             <div className="close-won-modal__summary-row">
               <span className="close-won-modal__summary-label">Original Ask</span>
               <span className="close-won-modal__summary-value close-won-modal__summary-value--amount">
@@ -183,7 +191,7 @@ function CloseWonModal({
           <div className="close-won-modal__info">
             <i className="fa-solid fa-info-circle"></i>
             <span>
-              This will create a gift record for {formatCurrency(actualAmount)} attributed to <strong>{campaignName}</strong> and move the opportunity to Stewardship.
+              This will create a gift record for {formatCurrency(actualAmount)}{campaignName ? <> attributed to <strong>{campaignName}</strong></> : ''} and move the opportunity to Stewardship.
             </span>
           </div>
           

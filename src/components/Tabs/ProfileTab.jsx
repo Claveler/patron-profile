@@ -2,6 +2,7 @@ import { useState, useCallback, useMemo, useRef } from 'react'
 import { patronSources, PATRON_STATUSES, updatePatron, getOrgRelationships } from '../../data/patrons'
 import StatusChangeModal from '../StatusChangeModal/StatusChangeModal'
 import { getInitials } from '../../utils/getInitials'
+import { useEpicScope } from '../../hooks/useEpicScope'
 import './ProfileTab.css'
 
 const PREFIX_OPTIONS = ['', 'Mr.', 'Mrs.', 'Ms.', 'Dr.', 'Rev.', 'Hon.', 'Prof.']
@@ -10,6 +11,7 @@ const GENDER_OPTIONS = ['', 'Male', 'Female', 'Non-binary', 'Prefer not to say']
 const MAX_PHOTO_SIZE = 2 * 1024 * 1024 // 2MB
 
 function ProfileTab({ patron, onPatronUpdate, onSwitchTab, onAddRelationship }) {
+  const { show } = useEpicScope()
   const [isEditing, setIsEditing] = useState(false)
   const [errors, setErrors] = useState({})
   const [saveSuccess, setSaveSuccess] = useState(false)
@@ -643,7 +645,7 @@ function ProfileTab({ patron, onPatronUpdate, onSwitchTab, onAddRelationship }) 
             </div>
             <div className="profile-tab__toggles">
               {renderToggle('emailOptIn', 'Email Communications', 'Receive emails including appeals, newsletters, and event invitations')}
-              {renderToggle('phoneOptIn', 'Phone Communications', 'Receive phone calls for solicitation and stewardship')}
+              {renderToggle('phoneOptIn', 'Phone Communications', show('profileTab.solicitationLabel') ? 'Receive phone calls for solicitation and stewardship' : 'Receive phone calls for stewardship')}
               {renderToggle('mailOptIn', 'Direct Mail', 'Receive printed materials, annual reports, and mailed appeals')}
               <div className="profile-tab__toggle-divider"></div>
               {renderToggle('doNotContact', 'Do Not Contact', 'Override all channels — patron will not be contacted through any method')}

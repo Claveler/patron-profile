@@ -1,5 +1,6 @@
 import { getPledgesByPatronId, getPaymentsForPledge, getPledgeBalance } from '../../data/patrons'
 import { getFundNameById, getCampaignNameById, getStaffNameById } from '../../data/campaigns'
+import { useEpicScope } from '../../hooks/useEpicScope'
 import './PledgesPanel.css'
 
 const formatCurrency = (amount) => {
@@ -27,6 +28,9 @@ const frequencyLabels = {
 }
 
 function PledgesPanel({ patronId }) {
+  const { show } = useEpicScope()
+  const showFund = show('pledgesPanel.fundName')
+  const showCampaign = show('pledgesPanel.campaignName')
   const pledges = getPledgesByPatronId(patronId)
 
   if (pledges.length === 0) {
@@ -80,8 +84,8 @@ function PledgesPanel({ patronId }) {
           const balance = getPledgeBalance(pledge.id)
           const progressPct = pledge.amount > 0 ? ((pledge.amount - balance) / pledge.amount) * 100 : 0
           const status = statusConfig[pledge.status] || statusConfig.active
-          const fundName = getFundNameById(pledge.fundId)
-          const campaignName = getCampaignNameById(pledge.campaignId)
+          const fundName = showFund ? getFundNameById(pledge.fundId) : null
+          const campaignName = showCampaign ? getCampaignNameById(pledge.campaignId) : null
           const assigneeName = pledge.assignedToId ? getStaffNameById(pledge.assignedToId) : null
 
           return (

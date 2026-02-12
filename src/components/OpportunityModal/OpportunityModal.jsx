@@ -3,6 +3,7 @@ import { PIPELINE_STAGES, PROBABILITY_OPTIONS, addOpportunity } from '../../data
 import { getActiveCampaigns, getAllStaff } from '../../data/campaigns'
 import { searchPatrons, getPatronById, getPatronDisplayName } from '../../data/patrons'
 import { getInitials } from '../../utils/getInitials'
+import { useEpicScope } from '../../hooks/useEpicScope'
 import './OpportunityModal.css'
 
 function OpportunityModal({ 
@@ -38,8 +39,11 @@ function OpportunityModal({
   const patronSearchRef = useRef(null)
   const patronDropdownRef = useRef(null)
   
+  const { show } = useEpicScope()
+  const showCampaignField = show('opportunityModal.campaignField')
+  
   // Data for dropdowns
-  const campaigns = getActiveCampaigns()
+  const campaigns = showCampaignField ? getActiveCampaigns() : []
   const staff = getAllStaff()
   const stages = PIPELINE_STAGES.filter(s => s.id !== 'stewardship') // Can't create in stewardship
   
@@ -173,7 +177,7 @@ function OpportunityModal({
       newErrors.askAmount = 'Ask amount must be greater than 0'
     }
     
-    if (!formData.campaignId) {
+    if (showCampaignField && !formData.campaignId) {
       newErrors.campaignId = 'Please select a campaign'
     }
     
@@ -400,27 +404,29 @@ function OpportunityModal({
             {errors.askAmount && <span className="opportunity-modal__error">{errors.askAmount}</span>}
           </div>
           
-          {/* Campaign */}
-          <div className="opportunity-modal__field">
-            <label className="opportunity-modal__label" htmlFor="opp-campaign">
-              Campaign <span className="opportunity-modal__required">*</span>
-            </label>
-            <select
-              id="opp-campaign"
-              name="campaignId"
-              className={`opportunity-modal__select ${errors.campaignId ? 'opportunity-modal__select--error' : ''}`}
-              value={formData.campaignId}
-              onChange={handleInputChange}
-            >
-              <option value="">Select a campaign...</option>
-              {campaigns.map(campaign => (
-                <option key={campaign.id} value={campaign.id}>
-                  {campaign.name} ({campaign.fund.name})
-                </option>
-              ))}
-            </select>
-            {errors.campaignId && <span className="opportunity-modal__error">{errors.campaignId}</span>}
-          </div>
+          {/* Campaign — hidden before campaigns epic */}
+          {showCampaignField && (
+            <div className="opportunity-modal__field">
+              <label className="opportunity-modal__label" htmlFor="opp-campaign">
+                Campaign <span className="opportunity-modal__required">*</span>
+              </label>
+              <select
+                id="opp-campaign"
+                name="campaignId"
+                className={`opportunity-modal__select ${errors.campaignId ? 'opportunity-modal__select--error' : ''}`}
+                value={formData.campaignId}
+                onChange={handleInputChange}
+              >
+                <option value="">Select a campaign...</option>
+                {campaigns.map(campaign => (
+                  <option key={campaign.id} value={campaign.id}>
+                    {campaign.name} ({campaign.fund.name})
+                  </option>
+                ))}
+              </select>
+              {errors.campaignId && <span className="opportunity-modal__error">{errors.campaignId}</span>}
+            </div>
+          )}
           
           {/* Two columns: Expected Close + Probability */}
           <div className="opportunity-modal__row">

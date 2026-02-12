@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { formatDate, getAcknowledgmentsByGiftId, PLEDGES, getPledgeBalance, RECURRING_PROFILES, getAllocationsForGift } from '../../data/patrons'
 import { getFundNameById, getCampaignNameById, getAppealNameById, getStaffNameById } from '../../data/campaigns'
+import { useEpicScope } from '../../hooks/useEpicScope'
 import './GiftDetailPanel.css'
 
 const formatCurrency = (amount) => {
@@ -41,12 +42,16 @@ function GiftDetailPanel({ gift, onClose }) {
     return () => { document.body.style.overflow = '' }
   }, [])
 
+  const { show } = useEpicScope()
+
   if (!gift) return null
 
   const type = typeConfig[gift.type] || typeConfig['one-time']
-  const fundName = getFundNameById(gift.fundId)
-  const campaignName = gift.campaignId ? getCampaignNameById(gift.campaignId) : null
-  const appealName = gift.campaignId && gift.appealId ? getAppealNameById(gift.campaignId, gift.appealId) : null
+  const showFundAttr = show('giftDetail.fundAttribution')
+  const fundName = showFundAttr ? getFundNameById(gift.fundId) : null
+  const showCampaignAttr = show('giftDetail.campaignAttribution')
+  const campaignName = showCampaignAttr && gift.campaignId ? getCampaignNameById(gift.campaignId) : null
+  const appealName = showCampaignAttr && gift.campaignId && gift.appealId ? getAppealNameById(gift.campaignId, gift.appealId) : null
   const acknowledgments = getAcknowledgmentsByGiftId(gift.id)
   const allocations = getAllocationsForGift(gift.id)
   const hasTaxInfo = gift.benefitsValue > 0
@@ -85,14 +90,17 @@ function GiftDetailPanel({ gift, onClose }) {
         {/* Scrollable body */}
         <div className="gift-detail-panel__body">
 
-          {/* Section: Attribution (DCAP) */}
+          {/* Section: Attribution (DCAP) — only visible when fund or campaign is in scope */}
+          {(showFundAttr || showCampaignAttr) && (
           <div className="gift-detail-panel__section">
             <h5 className="gift-detail-panel__section-title">Attribution</h5>
             <div className="gift-detail-panel__field-grid">
+              {fundName && (
               <div className="gift-detail-panel__field">
                 <span className="gift-detail-panel__label">Fund</span>
-                <span className="gift-detail-panel__value">{fundName || '—'}</span>
+                <span className="gift-detail-panel__value">{fundName}</span>
               </div>
+              )}
               {campaignName && (
                 <div className="gift-detail-panel__field">
                   <span className="gift-detail-panel__label">Campaign</span>
@@ -107,6 +115,7 @@ function GiftDetailPanel({ gift, onClose }) {
               )}
             </div>
           </div>
+          )}
 
           {/* Section: Tax Information */}
           {hasTaxInfo && (
@@ -188,7 +197,7 @@ function GiftDetailPanel({ gift, onClose }) {
                 </div>
               )}
 
-              {allocations.length > 0 && (
+              {showFundAttr && allocations.length > 0 && (
                 <div className="gift-detail-panel__allocations">
                   <span className="gift-detail-panel__alloc-label">Split Designations</span>
                   {allocations.map(alloc => (

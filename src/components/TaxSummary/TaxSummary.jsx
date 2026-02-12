@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { formatDate } from '../../data/patrons'
+import { useEpicScope } from '../../hooks/useEpicScope'
 import './TaxSummary.css'
 
 function TaxSummary({ 
@@ -13,6 +14,8 @@ function TaxSummary({
 }) {
   const [copied, setCopied] = useState(false)
   const [emailSent, setEmailSent] = useState(false)
+  const { show } = useEpicScope()
+  const showCampaignCol = show('taxSummary.campaignColumn')
 
   // Available years (current year and previous 3 years)
   const currentYear = new Date().getFullYear()
@@ -102,7 +105,7 @@ function TaxSummary({
                   <tr>
                     <th>Date</th>
                     <th>Description</th>
-                    <th>Campaign</th>
+                    {showCampaignCol && <th>Campaign</th>}
                     <th className="text-right">Amount</th>
                     <th className="text-right">Tax Deductible</th>
                   </tr>
@@ -117,14 +120,16 @@ function TaxSummary({
                         </span>
                         {receipt.description}
                       </td>
-                      <td>
-                        <div className="tax-summary__campaign-cell">
-                          <span className="tax-summary__campaign-name">{receipt.campaign || '—'}</span>
-                          {receipt.appeal && (
-                            <span className="tax-summary__appeal-name">{receipt.appeal}</span>
-                          )}
-                        </div>
-                      </td>
+                      {showCampaignCol && (
+                        <td>
+                          <div className="tax-summary__campaign-cell">
+                            <span className="tax-summary__campaign-name">{receipt.campaign || '—'}</span>
+                            {receipt.appeal && (
+                              <span className="tax-summary__appeal-name">{receipt.appeal}</span>
+                            )}
+                          </div>
+                        </td>
+                      )}
                       <td className="text-right">{formatCurrency(receipt.amount)}</td>
                       <td className="text-right">{formatCurrency(receipt.deductible)}</td>
                     </tr>
@@ -132,7 +137,7 @@ function TaxSummary({
                 </tbody>
                 <tfoot>
                   <tr>
-                    <td colSpan="3"><strong>Total</strong></td>
+                    <td colSpan={showCampaignCol ? 3 : 2}><strong>Total</strong></td>
                     <td className="text-right"><strong>{formatCurrency(totalAmount)}</strong></td>
                     <td className="text-right"><strong>{formatCurrency(totalDeductible)}</strong></td>
                   </tr>

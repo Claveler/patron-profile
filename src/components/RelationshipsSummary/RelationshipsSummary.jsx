@@ -10,6 +10,41 @@ const typeColors = {
   'organization': '#6f41d7',
 }
 
+// Status icon + tooltip for non-active patrons — mirrors RelationshipsTab
+const statusConfig = {
+  deceased: { icon: 'fa-solid fa-cross', label: 'Deceased' },
+  inactive: { icon: 'fa-solid fa-pause', label: 'Inactive' },
+  archived: { icon: 'fa-solid fa-box-archive', label: 'Archived' },
+}
+
+const getStatusTooltip = (patronData) => {
+  if (!patronData) return ''
+  const { status, deceasedDate, inactiveDate, inactiveReason, archivedDate, archivedReason } = patronData
+  if (status === 'deceased') return `Deceased${deceasedDate ? ` — ${deceasedDate}` : ''}`
+  if (status === 'inactive') return `Inactive${inactiveDate ? ` — ${inactiveDate}` : ''}${inactiveReason ? ` — ${inactiveReason}` : ''}`
+  if (status === 'archived') return `Archived${archivedDate ? ` — ${archivedDate}` : ''}${archivedReason ? ` — ${archivedReason}` : ''}`
+  return ''
+}
+
+const renderStatusIcon = (patronData) => {
+  if (!patronData) return null
+  const status = patronData.status || 'active'
+  const cfg = statusConfig[status]
+  if (!cfg) return null
+  return (
+    <i
+      className={`${cfg.icon} relationships-summary__status-icon`}
+      title={getStatusTooltip(patronData)}
+    ></i>
+  )
+}
+
+const isNonActive = (patronData) => {
+  if (!patronData) return false
+  const status = patronData.status || 'active'
+  return status === 'deceased' || status === 'inactive' || status === 'archived'
+}
+
 function RelationshipsSummary({ patronId, onNavigateToPatron, onViewRelationships }) {
   // Get household data
   const household = getHouseholdForPatron(patronId)
@@ -117,10 +152,12 @@ function RelationshipsSummary({ patronId, onNavigateToPatron, onViewRelationship
             </button>
           </div>
           <div className="relationships-summary__members">
-            {householdMembers.map((member, index) => (
+            {householdMembers.map((member, index) => {
+              const memberDimmed = isNonActive(member.patron)
+              return (
               <div key={member.id} className="relationships-summary__member-item">
                 <div 
-                  className={`relationships-summary__member-row ${member.patronId ? 'relationships-summary__member-row--clickable' : ''}`}
+                  className={`relationships-summary__member-row ${member.patronId ? 'relationships-summary__member-row--clickable' : ''} ${memberDimmed ? 'relationships-summary__member-row--inactive' : ''}`}
                   onClick={() => handleMemberClick(member.patronId)}
                   role={member.patronId ? 'button' : undefined}
                   tabIndex={member.patronId ? 0 : undefined}
@@ -141,7 +178,10 @@ function RelationshipsSummary({ patronId, onNavigateToPatron, onViewRelationship
                     )}
                   </div>
                   <div className="relationships-summary__member-info">
-                    <span className="relationships-summary__member-name">{member.patron?.name}</span>
+                    <span className="relationships-summary__member-name">
+                      {member.patron?.name}
+                      {renderStatusIcon(member.patron)}
+                    </span>
                     <div className="relationships-summary__tags-row">
                       <span
                         className="relationships-summary__tag relationships-summary__tag--household"
@@ -165,7 +205,8 @@ function RelationshipsSummary({ patronId, onNavigateToPatron, onViewRelationship
                   <div className="relationships-summary__divider"></div>
                 )}
               </div>
-            ))}
+              )
+            })}
           </div>
         </div>
       )}
@@ -178,10 +219,12 @@ function RelationshipsSummary({ patronId, onNavigateToPatron, onViewRelationship
             <span className="relationships-summary__group-label">Personal</span>
           </div>
           <div className="relationships-summary__members">
-            {familyRelationships.map((rel, index) => (
+            {familyRelationships.map((rel, index) => {
+              const relDimmed = isNonActive(rel.linkedPatron)
+              return (
               <div key={rel.id} className="relationships-summary__member-item">
                 <div
-                  className={`relationships-summary__member-row ${rel.linkedPatron ? 'relationships-summary__member-row--clickable' : ''}`}
+                  className={`relationships-summary__member-row ${rel.linkedPatron ? 'relationships-summary__member-row--clickable' : ''} ${relDimmed ? 'relationships-summary__member-row--inactive' : ''}`}
                   onClick={() => handleFamilyClick(rel)}
                   role={rel.linkedPatron ? 'button' : undefined}
                   tabIndex={rel.linkedPatron ? 0 : undefined}
@@ -202,9 +245,13 @@ function RelationshipsSummary({ patronId, onNavigateToPatron, onViewRelationship
                     )}
                   </div>
                   <div className="relationships-summary__member-info">
-                    <span className="relationships-summary__member-name">{rel.displayName}</span>
+                    <span className="relationships-summary__member-name">
+                      {rel.displayName}
+                      {renderStatusIcon(rel.linkedPatron)}
+                    </span>
                     {rel.linkedPatron?.householdName && (
                       <span className="relationships-summary__household-label">
+                        <i className="fa-solid fa-house-chimney relationships-summary__household-icon"></i>
                         {rel.linkedPatron.householdName}
                       </span>
                     )}
@@ -217,13 +264,19 @@ function RelationshipsSummary({ patronId, onNavigateToPatron, onViewRelationship
                   <div className="relationships-summary__divider"></div>
                 )}
               </div>
-            ))}
+              )
+            })}
           </div>
         </div>
       )}
 
       {/* Professional Section (includes bridging patrons with stacked badges) */}
-      {hasProfessional && (
+      {hasProfessional && (() => {
+        const allProfItems = [
+          ...professionalRelationships.map(rel => ({ kind: 'regular', rel })),
+          ...bridgingGroups.map(group => ({ kind: 'bridging', group })),
+        ]
+        return (
         <div className="relationships-summary__group">
           <div className="relationships-summary__group-header">
             <i className="fa-solid fa-city relationships-summary__group-icon"></i>
@@ -232,91 +285,107 @@ function RelationshipsSummary({ patronId, onNavigateToPatron, onViewRelationship
               <i className="fa-solid fa-arrow-up-right-from-square relationships-summary__external-icon"></i>
             </button>
           </div>
-          {professionalRelationships.map((rel) => (
-            <div 
-              key={rel.id} 
-              className={`relationships-summary__professional-card ${rel.linkedPatron ? 'relationships-summary__professional-card--clickable' : ''}`}
-              onClick={() => handleProfessionalClick(rel)}
-              role={rel.linkedPatron ? 'button' : undefined}
-              tabIndex={rel.linkedPatron ? 0 : undefined}
-              onKeyDown={(e) => {
-                if (rel.linkedPatron && (e.key === 'Enter' || e.key === ' ')) {
-                  e.preventDefault()
-                  handleProfessionalClick(rel)
-                }
-              }}
-            >
-              <div className="relationships-summary__member-row">
-                <div className={`relationships-summary__avatar ${rel.type === 'organization' ? 'relationships-summary__avatar--square' : 'relationships-summary__avatar--round'}`}>
-                  {rel.linkedPatron?.photo ? (
-                    <img src={rel.linkedPatron.photo} alt={rel.displayName} />
-                  ) : (
-                    <span className="relationships-summary__avatar-initials">
-                      {rel.initials}
-                    </span>
-                  )}
-                </div>
-                <div className="relationships-summary__member-info">
-                  <span className="relationships-summary__member-name relationships-summary__member-name--org">
-                    {rel.displayName}
-                  </span>
-                  <span className="relationships-summary__tag relationships-summary__tag--professional" title={rel.notes || ''}>
-                    {rel.externalContact?.title || rel.role}
-                  </span>
-                </div>
-              </div>
-            </div>
-          ))}
-          {/* Bridging patrons — stacked professional + personal badges */}
-          {bridgingGroups.map((group) => {
-            const { primaryRel, profRels, personalRels } = group
-            const allRels = [...profRels, ...personalRels]
-            return (
-              <div
-                key={`bridging-${group.patronId}`}
-                className={`relationships-summary__professional-card ${primaryRel.linkedPatron ? 'relationships-summary__professional-card--clickable' : ''}`}
-                onClick={() => handleProfessionalClick(primaryRel)}
-                role={primaryRel.linkedPatron ? 'button' : undefined}
-                tabIndex={primaryRel.linkedPatron ? 0 : undefined}
-                onKeyDown={(e) => {
-                  if (primaryRel.linkedPatron && (e.key === 'Enter' || e.key === ' ')) {
-                    e.preventDefault()
-                    handleProfessionalClick(primaryRel)
-                  }
-                }}
-              >
-                <div className="relationships-summary__member-row">
-                  <div className="relationships-summary__avatar relationships-summary__avatar--round">
-                    {primaryRel.linkedPatron?.photo ? (
-                      <img src={primaryRel.linkedPatron.photo} alt={primaryRel.displayName} />
-                    ) : (
-                      <span className="relationships-summary__avatar-initials">
-                        {primaryRel.initials}
-                      </span>
+          <div className="relationships-summary__members">
+            {allProfItems.map((item, index) => {
+              if (item.kind === 'regular') {
+                const rel = item.rel
+                const profDimmed = isNonActive(rel.linkedPatron)
+                return (
+                  <div key={rel.id} className="relationships-summary__member-item">
+                    <div 
+                      className={`relationships-summary__professional-card ${rel.linkedPatron ? 'relationships-summary__professional-card--clickable' : ''} ${profDimmed ? 'relationships-summary__professional-card--inactive' : ''}`}
+                      onClick={() => handleProfessionalClick(rel)}
+                      role={rel.linkedPatron ? 'button' : undefined}
+                      tabIndex={rel.linkedPatron ? 0 : undefined}
+                      onKeyDown={(e) => {
+                        if (rel.linkedPatron && (e.key === 'Enter' || e.key === ' ')) {
+                          e.preventDefault()
+                          handleProfessionalClick(rel)
+                        }
+                      }}
+                    >
+                      <div className="relationships-summary__member-row">
+                        <div className={`relationships-summary__avatar ${rel.type === 'organization' ? 'relationships-summary__avatar--square' : 'relationships-summary__avatar--round'}`}>
+                          {rel.linkedPatron?.photo ? (
+                            <img src={rel.linkedPatron.photo} alt={rel.displayName} />
+                          ) : (
+                            <span className="relationships-summary__avatar-initials">
+                              {rel.initials}
+                            </span>
+                          )}
+                        </div>
+                        <div className="relationships-summary__member-info">
+                          <span className="relationships-summary__member-name relationships-summary__member-name--org">
+                            {rel.displayName}
+                            {renderStatusIcon(rel.linkedPatron)}
+                          </span>
+                          <span className="relationships-summary__tag relationships-summary__tag--professional" title={rel.notes || ''}>
+                            {rel.externalContact?.title || rel.role}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    {index < allProfItems.length - 1 && (
+                      <div className="relationships-summary__divider"></div>
                     )}
                   </div>
-                  <div className="relationships-summary__member-info">
-                    <span className="relationships-summary__member-name relationships-summary__member-name--org">
-                      {primaryRel.displayName}
-                    </span>
-                    <div className="relationships-summary__tags-row">
-                      {allRels.map(rel => {
-                        const title = rel.type === 'personal' ? rel.role : (rel.externalContact?.title || rel.role)
-                        const color = typeColors[rel.type] || '#6f41d7'
-                        return (
-                          <span key={rel.id} className="relationships-summary__tag" style={{ color, borderColor: color }} title={rel.notes || ''}>
-                            {title}
+                )
+              }
+              // Bridging patron — stacked professional + personal badges
+              const { primaryRel, profRels, personalRels } = item.group
+              const allRels = [...profRels, ...personalRels]
+              return (
+                <div key={`bridging-${item.group.patronId}`} className="relationships-summary__member-item">
+                  <div
+                    className={`relationships-summary__professional-card ${primaryRel.linkedPatron ? 'relationships-summary__professional-card--clickable' : ''}`}
+                    onClick={() => handleProfessionalClick(primaryRel)}
+                    role={primaryRel.linkedPatron ? 'button' : undefined}
+                    tabIndex={primaryRel.linkedPatron ? 0 : undefined}
+                    onKeyDown={(e) => {
+                      if (primaryRel.linkedPatron && (e.key === 'Enter' || e.key === ' ')) {
+                        e.preventDefault()
+                        handleProfessionalClick(primaryRel)
+                      }
+                    }}
+                  >
+                    <div className="relationships-summary__member-row">
+                      <div className="relationships-summary__avatar relationships-summary__avatar--round">
+                        {primaryRel.linkedPatron?.photo ? (
+                          <img src={primaryRel.linkedPatron.photo} alt={primaryRel.displayName} />
+                        ) : (
+                          <span className="relationships-summary__avatar-initials">
+                            {primaryRel.initials}
                           </span>
-                        )
-                      })}
+                        )}
+                      </div>
+                      <div className="relationships-summary__member-info">
+                        <span className="relationships-summary__member-name relationships-summary__member-name--org">
+                          {primaryRel.displayName}
+                        </span>
+                        <div className="relationships-summary__tags-row">
+                          {allRels.map(rel => {
+                            const title = rel.type === 'personal' ? rel.role : (rel.externalContact?.title || rel.role)
+                            const color = typeColors[rel.type] || '#6f41d7'
+                            return (
+                              <span key={rel.id} className="relationships-summary__tag" style={{ color, borderColor: color }} title={rel.notes || ''}>
+                                {title}
+                              </span>
+                            )
+                          })}
+                        </div>
+                      </div>
                     </div>
                   </div>
+                  {index < allProfItems.length - 1 && (
+                    <div className="relationships-summary__divider"></div>
+                  )}
                 </div>
-              </div>
-            )
-          })}
+              )
+            })}
+          </div>
         </div>
-      )}
+        )
+      })()}
     </div>
   )
 }

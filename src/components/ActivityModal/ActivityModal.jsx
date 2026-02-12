@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { getOpenOpportunitiesForPatron, logContact } from '../../data/opportunities'
+import { useEpicScope } from '../../hooks/useEpicScope'
 import './ActivityModal.css'
 
 const ACTIVITY_TYPES = [
@@ -32,9 +33,10 @@ function ActivityModal({
   
   const [errors, setErrors] = useState({})
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const { show } = useEpicScope()
   
-  // Get opportunities for this patron (for dropdown)
-  const opportunities = patronId ? getOpenOpportunitiesForPatron(patronId) : []
+  // Get opportunities for this patron (for dropdown) — only when pipeline epic is in scope
+  const opportunities = show('activityModal.opportunityField') && patronId ? getOpenOpportunitiesForPatron(patronId) : []
   
   // Reset form when modal opens
   useEffect(() => {

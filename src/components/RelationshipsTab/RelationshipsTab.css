@@ -257,7 +257,7 @@
   border: 1px solid var(--color-border);
   border-radius: 8px;
   width: 343px;
-  overflow: hidden;
+  overflow: visible;
 }
 
 /* ============================================
@@ -266,6 +266,7 @@
    ============================================ */
 
 .relationships-tab__member {
+  position: relative;
   display: flex;
   align-items: center;
   gap: var(--space-2);
@@ -474,6 +475,7 @@
    ============================================ */
 
 .relationships-tab__org-card {
+  position: relative;
   display: flex;
   align-items: center;
   gap: var(--space-2);
@@ -533,9 +535,18 @@
 }
 
 .relationships-tab__org-household-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: -4px;
   font-size: var(--font-size-xs);
   color: var(--color-text-muted);
   line-height: 16px;
+}
+
+.relationships-tab__household-icon {
+  font-size: 10px;
+  color: var(--color-text-muted);
 }
 
 .relationships-tab__org-title-badge {
@@ -642,7 +653,7 @@
   cursor: pointer;
   border-radius: var(--radius-full);
   padding: 0;
-  opacity: 0.5;
+  opacity: 0.7;
   transition: all var(--transition-fast);
   flex-shrink: 0;
   margin-left: 2px;
@@ -793,4 +804,68 @@
   .relationships-tab__mobile-card-row .relationships-tab__org-card {
     width: 100%;
   }
+}
+
+/* ============================================
+   NON-ACTIVE PATRON STATUS (dimming + icons)
+   ============================================ */
+
+/* Non-active patrons (archived, deceased, inactive) — dashed border */
+.relationships-tab__org-card--inactive {
+  border-style: dashed;
+}
+
+/* Non-active household member row — dashed separator */
+.relationships-tab__member--inactive {
+  border-bottom-style: dashed;
+}
+
+/* Status icon — inline next to name */
+.relationships-tab__status-icon {
+  margin-left: var(--space-1);
+  font-size: 0.7em;
+  vertical-align: middle;
+}
+
+.relationships-tab__status-icon--deceased {
+  color: var(--color-text-muted);
+}
+
+.relationships-tab__status-icon--inactive {
+  color: var(--color-text-muted);
+}
+
+.relationships-tab__status-icon--archived {
+  color: var(--color-text-muted);
+}
+
+/* ============================================
+   LTV TIER BADGE ($/$$/$$$/$$$$ indicators)
+   ============================================ */
+
+.relationships-tab__ltv-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #1b7a2b;
+  background: #e6f4ea;
+  border: 1.5px solid #6fbf73;
+  border-radius: 10px;
+  padding: 1px 6px;
+  letter-spacing: 0.3px;
+  cursor: default;
+  pointer-events: auto;
+  z-index: 5;
+  line-height: 1.5;
+  white-space: nowrap;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Household member rows: align badge with the name text line
+   so it's clearly associated with that member. */
+.relationships-tab__member .relationships-tab__ltv-badge {
+  top: 14px;
+  right: -12px;
 }

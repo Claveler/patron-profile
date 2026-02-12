@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { patronTags, addCustomTag, updateTagLabel, deleteTag, getTagUsageCount, computedTagRules, updateComputedTagThreshold } from '../../data/patrons'
+import { useEpicScope } from '../../hooks/useEpicScope'
 import './Settings.css'
 
 // Import sources configuration
@@ -53,6 +54,9 @@ const DATA_CATEGORIES = [
 ]
 
 function Settings() {
+  const { show } = useEpicScope()
+  const showDCAP = show('settings.fundMapping')
+
   // Tags state
   const [editingTagId, setEditingTagId] = useState(null)
   const [editingLabel, setEditingLabel] = useState('')
@@ -589,7 +593,9 @@ function Settings() {
                       <span>Fever Field</span>
                       <span>Sample Data</span>
                     </div>
-                    {SAMPLE_MAPPINGS.map((mapping, index) => (
+                    {SAMPLE_MAPPINGS
+                      .filter(m => showDCAP || (m.feverField !== 'Fund' && m.feverField !== 'Campaign'))
+                      .map((mapping, index) => (
                       <div key={index} className="settings__mapping-row">
                         <span className="settings__mapping-source">{mapping.sourceField}</span>
                         <span className="settings__mapping-arrow">
@@ -605,8 +611,8 @@ function Settings() {
                           <option value="Address">Address</option>
                           <option value="Gift Amount">Gift Amount</option>
                           <option value="Gift Date">Gift Date</option>
-                          <option value="Fund">Fund</option>
-                          <option value="Campaign">Campaign</option>
+                          {showDCAP && <option value="Fund">Fund</option>}
+                          {showDCAP && <option value="Campaign">Campaign</option>}
                         </select>
                         <span className="settings__mapping-sample">{mapping.sample}</span>
                       </div>

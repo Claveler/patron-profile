@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react'
+import { useEpicScope } from '../../hooks/useEpicScope'
 import './GivingSummary.css'
 
 const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
@@ -43,6 +44,7 @@ function generateMonthRange(startKey, endKey) {
 }
 
 function GivingSummary({ giving, gifts = [], activityHistory = [] }) {
+  const { show } = useEpicScope()
   const [selectedPeriod, setSelectedPeriod] = useState('12-months')
   const [hoveredLine, setHoveredLine] = useState(null) // 'total' | 'revenue' | null
   const [hoveredPointIndex, setHoveredPointIndex] = useState(null)
@@ -563,13 +565,13 @@ function GivingSummary({ giving, gifts = [], activityHistory = [] }) {
         </div>
       )}
 
-      {/* Donation Attribution Section - Only show if we have attribution data */}
-      {(giving.byFund || giving.byCampaign) && (
+      {/* Donation Attribution Section - Only show if we have attribution data in scope */}
+      {((show('givingSummary.byFund') && giving.byFund) || (show('givingSummary.byCampaign') && giving.byCampaign)) && (
         <div className="giving-summary__attribution">
           <h4 className="giving-summary__attribution-header">Gift Attribution</h4>
           <div className="giving-summary__breakdowns">
-            {/* Fund Breakdown */}
-            {giving.byFund && Object.keys(giving.byFund).length > 0 && (
+            {/* Fund Breakdown — gated behind DCAP epic */}
+            {show('givingSummary.byFund') && giving.byFund && Object.keys(giving.byFund).length > 0 && (
               <div className="giving-summary__breakdown">
                 <h5 className="giving-summary__breakdown-title">By Fund</h5>
                 <div className="giving-summary__breakdown-list">
@@ -595,8 +597,8 @@ function GivingSummary({ giving, gifts = [], activityHistory = [] }) {
               </div>
             )}
 
-            {/* Campaign Breakdown */}
-            {giving.byCampaign && Object.keys(giving.byCampaign).length > 0 && (
+            {/* Campaign Breakdown — gated behind campaigns epic */}
+            {show('givingSummary.byCampaign') && giving.byCampaign && Object.keys(giving.byCampaign).length > 0 && (
               <div className="giving-summary__breakdown">
                 <h5 className="giving-summary__breakdown-title">By Campaign</h5>
                 <div className="giving-summary__breakdown-list">

@@ -8,7 +8,15 @@
  *   - product-management/DEMO_WALKTHROUGH.md
  *
  * Each entry is keyed by route (and optionally by tab for PatronProfile).
+ *
+ * IMPORTANT: All minEpic values are derived from EPIC_SCOPE (epicScope.js),
+ * not hardcoded. This ensures the Product Guide automatically stays in sync
+ * with the UI's epic filtering. If you change an epic assignment in
+ * epicScope.js, the guide picks it up automatically.
  */
+import { EPIC_SCOPE } from './epicScope'
+
+const S = EPIC_SCOPE // shorthand for readability
 
 const GUIDE_CONTENT = {
   /* ─────────────────────── Dashboard ─────────────────────── */
@@ -24,27 +32,44 @@ const GUIDE_CONTENT = {
       'The "Follow-ups Needed" panel showing 126+ days since last contact, highlighted in red. The system surfaces overdue relationships automatically — no one falls through the cracks.',
     components: [
       {
+        name: 'Quick Actions',
+        minEpic: S.dashboardWidgets.quickActions,
+        reasoning:
+          'Shortcut buttons for common daily tasks — add patron, record gift, log activity. Available from Epic 1 to provide utility even before the full dashboard is built.',
+      },
+      {
+        name: 'Patron Summary',
+        minEpic: S.dashboardWidgets.patronSummary,
+        reasoning:
+          'At-a-glance patron count and recent activity metrics. Gives development directors an instant sense of database size and momentum.',
+      },
+      {
         name: 'Quick Stats Cards',
+        minEpic: S.dashboardWidgets.quickStats,
         reasoning:
           'Four KPIs at a glance — open opportunities, pipeline value, weighted pipeline, managed prospects — give directors an instant health check without scrolling.',
       },
       {
         name: 'Pipeline Overview',
+        minEpic: S.dashboardWidgets.pipelineOverview,
         reasoning:
           'A stage-by-stage bar chart shows where dollar value concentrates. Healthy pipelines have value in Cultivation and Solicitation; heavy Identification signals prospecting needs.',
       },
       {
         name: 'Follow-ups Needed',
+        minEpic: S.dashboardWidgets.followUpsNeeded,
         reasoning:
           'Accountability engine. Displays opportunities with no contact in 14+ days, sorted by staleness. This is the #1 feature development directors asked for in user interviews.',
       },
       {
         name: 'Closing Soon',
+        minEpic: S.dashboardWidgets.closingSoon,
         reasoning:
           'Opportunities with expected close within 30 days. Forces attention on imminent asks so they don\'t slip.',
       },
       {
         name: 'Gift Officer Filter',
+        minEpic: S.dashboardWidgets.quickStats,
         reasoning:
           'Allows directors to see any gift officer\'s portfolio in isolation — critical for weekly 1:1 meetings.',
       },
@@ -65,31 +90,43 @@ const GUIDE_CONTENT = {
     components: [
       {
         name: 'Source Indicators',
+        minEpic: S.routes['/patrons'],
         reasoning:
           'The Fever-logo dot vs. edit-icon dot instantly tells staff which patrons were auto-created from transactions vs. manually entered. This is the core "Fever advantage" story.',
       },
       {
         name: 'Engagement Column',
+        minEpic: S.routes['/patrons'],
         reasoning:
           'Cold → On Fire engagement levels let gift officers spot cultivation-ready patrons at a glance. No competitor surfaces behavioral engagement in the list view.',
       },
       {
         name: 'Assign Button',
+        minEpic: S.routes['/patrons'],
         reasoning:
           'Unassigned patrons show a pill-style "Assign" button. This is the bridge between passive data (General Constituent) and active cultivation (Managed Prospect).',
       },
       {
         name: 'Tags Column',
+        minEpic: S.routes['/patrons'],
         reasoning:
           'Up to 2 tags visible + overflow. Tags replaced a single-category system for richer segmentation. The 3-tier tagging model (system + computed + custom) gives museums flexibility.',
       },
       {
+        name: 'Scope Toggle (Active / All)',
+        minEpic: S.routes['/patrons'],
+        reasoning:
+          'A segmented control in the toolbar lets staff switch between active-only and all patrons (including archived, deceased, and inactive). Elevated from a checkbox to a persistent, always-visible control because it changes the entire data universe — not just a facet filter.',
+      },
+      {
         name: 'Filter Panel',
+        minEpic: S.routes['/patrons'],
         reasoning:
           'Multi-facet filtering lets gift officers slice the database by Tags, Membership Tier, Engagement Level, Patron Type, Gift Officer, Source, Lifetime Value range, and Last Gift — including industry-standard LYBUNT/SYBUNT donor lapse segmentation. Combined with CSV export, this replaces the need for a separate report builder for most daily workflows.',
       },
       {
         name: 'Add New Patron Modal',
+        minEpic: S.routes['/patrons'],
         reasoning:
           'Includes duplicate prevention: email uniqueness check and fuzzy name suggestions. Reduces duplicates at the point of entry while preserving staff autonomy to override.',
       },
@@ -111,31 +148,53 @@ const GUIDE_CONTENT = {
         components: [
           {
             name: 'PatronInfoBox',
+            minEpic: S.patronTabs.summary,
             reasoning:
               'The header consolidates photo, contact info, patron ID, tags popover, membership badge with role, household popover, status banners, actions dropdown, and gift officer field. It adapts based on patron type: General Constituents see "Add to Portfolio," Managed Prospects see opportunity summary.',
           },
           {
             name: 'EngagementPanel',
+            minEpic: S.summaryComponents.EngagementPanel,
             reasoning:
               'Engagement scoring (Cold → On Fire) replaces gut feel with data. The 12-month activity heatmap visualizes seasonal patterns — a gift officer can see that Anderson visits heavily in fall/winter, making December the right time for an ask.',
           },
           {
+            name: 'GivingSummary',
+            minEpic: S.summaryComponents.GivingSummary,
+            reasoning: {
+              default: 'Lifetime value with donations/revenue split, average gift, and hybrid chart (cumulative area / nominal bars). The hybrid chart toggle was designed because directors think in cumulative growth while gift officers think in individual period amounts.',
+              1: 'Not yet available — full giving summary and charts arrive in Epic 2 alongside gift recording capabilities.',
+            },
+          },
+          {
             name: 'ActivityTimeline',
-            reasoning:
-              'Chronological log of every interaction — communications, earned revenue, contributed revenue, engagement. Multi-expand with staff attribution and direction indicators (inbound/outbound). Gift officers need this to prepare for calls: "Last time we spoke was about the gallery tour."',
+            minEpic: S.summaryComponents.ActivityTimeline,
+            reasoning: {
+              default: 'Chronological log of every interaction — communications, earned revenue, contributed revenue, engagement. Multi-expand with staff attribution, direction indicators (inbound/outbound), and linked opportunity chips. Gift officers need this to prepare for calls: "Last time we spoke was about the gallery tour."',
+              1: 'Chronological log of ticket purchases, donation prompts (small checkout add-on gifts from the ticketing funnel), communications, and engagement events. In Epic 1, the only "contributed revenue" entries are donation prompts — full gift recording starts in Epic 2. Gift officers use this to see recent patron activity.',
+            },
           },
           {
             name: 'RelationshipsSummary',
+            minEpic: S.summaryComponents.RelationshipsSummary,
             reasoning:
               'Shows household, personal, and professional relationships at a glance with consolidated entries. Bridging patrons (appearing in both personal and professional groups) are shown once under Professional with stacked badges. Household members with extra non-household relationships display inline badges on the household row. Professional badges use purple (#6f41d7), personal use pink — matching the graph tab\'s type-based color system. Cross-profile navigation lets gift officers understand the full relational context before a conversation.',
           },
           {
-            name: 'OpportunitiesPanel / AddToPortfolioBar',
+            name: 'AddToPortfolioBar',
+            minEpic: S.summaryComponents.AddToPortfolioBar,
             reasoning:
-              'These two components are mutually exclusive based on patron type. Managed Prospects see their active opportunities with pipeline value. General Constituents see a prompt to assign — this is the bridge between passive data and active cultivation. The two-speed system reflects how development teams actually operate.',
+              'Shown for General Constituents — a prompt to assign the patron to a gift officer\'s portfolio. This is the bridge between passive data and active cultivation.',
+          },
+          {
+            name: 'OpportunitiesPanel',
+            minEpic: S.summaryComponents.OpportunitiesPanel,
+            reasoning:
+              'Shown for Managed Prospects — displays active opportunities with pipeline value. The two-speed system (AddToPortfolioBar vs. OpportunitiesPanel) reflects how development teams actually operate.',
           },
           {
             name: 'WealthInsights / SmartTips',
+            minEpic: S.summaryComponents.WealthInsights,
             reasoning:
               'Post-MVP placeholders that demonstrate the product roadmap to stakeholders. Wealth screening (DonorSearch) and AI recommendations are Tier 4 features — important but not MVP. Showing the UI signals to prospects and the squad that we know where the product is going.',
           },
@@ -147,33 +206,42 @@ const GUIDE_CONTENT = {
         persona: 'Gift Officer',
         epic: 'Epic 2 — Giving & Membership Management',
         why:
-          'The Giving tab is the financial heart of the patron profile. Museums need to track every financial relationship — one-time gifts, pledges, recurring donations, and memberships — all with DCAP attribution (Fund/Campaign/Appeal). Without this, they cannot report to their boards or manage donor stewardship.',
+          'The Giving tab is the financial heart of the patron profile. Museums need to track every financial relationship — one-time gifts, pledges, recurring donations, and memberships. DCAP attribution (Fund/Campaign/Appeal) is introduced in Epic 4 when venues are ready for strategic campaign management.',
         competitive:
           'Raiser\'s Edge and Tessitura have strong giving history but require separate modules. Bloomerang has basic gift tracking but weak campaign attribution. Fever integrates giving with membership and revenue data on the same screen, eliminating the need for cross-system reconciliation.',
         wowMoment: null,
         components: [
           {
             name: 'GivingSummary',
-            reasoning:
-              'Lifetime value with donations/revenue split, average gift, hybrid chart (cumulative area / nominal bars), and attribution by Fund/Campaign/Year. The hybrid chart toggle was designed because directors think in cumulative growth while gift officers think in individual period amounts.',
+            minEpic: S.patronTabs.giving,
+            reasoning: {
+              default: 'Lifetime value with donations/revenue split, average gift, hybrid chart (cumulative area / nominal bars), and attribution by Fund/Campaign/Year. The hybrid chart toggle was designed because directors think in cumulative growth while gift officers think in individual period amounts.',
+              2: 'Lifetime value with donations/revenue split, average gift, and hybrid chart (cumulative area / nominal bars). The hybrid chart toggle was designed because directors think in cumulative growth while gift officers think in individual period amounts. Fund and Campaign attribution appear in Epic 4.',
+            },
           },
           {
             name: 'PledgesPanel',
+            minEpic: S.patronTabs.giving,
             reasoning:
               'Multi-year pledges are common in capital campaigns. Showing balance remaining, frequency, and next payment date helps gift officers manage pledge fulfillment and send timely reminders.',
           },
           {
             name: 'RecurringPanel',
+            minEpic: S.patronTabs.giving,
             reasoning:
               'Monthly/quarterly recurring gifts are the most reliable revenue stream. Tracking active profiles with start dates and next charge dates ensures no lapses go unnoticed.',
           },
           {
             name: 'GiftHistoryTable',
-            reasoning:
-              'Every gift with DCAP attribution, type badge, acknowledgment status, and soft credits. Clicking a row opens the GiftDetailPanel slide-out with full detail — the same panel is available from the Gifts list page for consistency.',
+            minEpic: S.patronTabs.giving,
+            reasoning: {
+              default: 'Every gift with DCAP attribution, type badge, acknowledgment status, and soft credits. Clicking a row opens the GiftDetailPanel slide-out with full detail — the same panel is available from the Gifts list page for consistency.',
+              2: 'Every gift with type badge, acknowledgment status, and soft credits. Clicking a row opens the GiftDetailPanel slide-out with full detail — the same panel is available from the Gifts list page for consistency. DCAP attribution columns appear in Epic 4.',
+            },
           },
           {
             name: 'AcknowledgmentsPanel',
+            minEpic: S.patronTabs.giving,
             reasoning:
               'Thank-you letters are legally required for gifts over $250 and best practice for all gifts. Tracking sent/pending status ensures compliance and donor stewardship. Museums report on acknowledgment turnaround time.',
           },
@@ -193,31 +261,37 @@ const GUIDE_CONTENT = {
         components: [
           {
             name: 'MembershipOverview (Card)',
+            minEpic: S.patronTabs.memberships,
             reasoning:
               'CR80-standard card with QR code, tier color, and tenure badge mirrors the physical membership card. The Key Stats Panel shows days to renewal with urgency warning, auto-renewal status, and payment method — all actionable data for retention conversations.',
           },
           {
             name: 'Benefits & Usage',
+            minEpic: S.patronTabs.memberships,
             reasoning:
               'Two-section approach: "Your Benefits" (categorized, scannable) and "Usage This Period" (trackable consumption with progress bars). This answers the staff question: "Is this member actually using their benefits?" Low usage = churn risk.',
           },
           {
             name: 'Beneficiaries',
+            minEpic: S.patronTabs.memberships,
             reasoning:
               'Family memberships are a major retention driver. The drag-and-drop reorder, role assignment, and the distinction between "membership beneficiary" and "household member" reflect how real institutions work — a daughter goes to college, you remove her from the membership but she stays in the household.',
           },
           {
             name: 'Upgrade Modal (Payment Link Workflow)',
+            minEpic: S.patronTabs.memberships,
             reasoning:
               'Because Fever Zone is partner-facing, upgrades use a payment link sent to the patron — not direct checkout. The modal shows tier comparison, new benefits, and price difference, then generates a shareable link. This respects the partner-staff boundary.',
           },
           {
             name: 'Empty State (No Membership)',
+            minEpic: S.patronTabs.memberships,
             reasoning:
               'Instead of a bland "No active membership," shows actionable tier cards with pricing and a behavioral nudge banner ("47 visits this year — membership would save them $X"). Powered by Fever\'s own engagement data, this is something no competitor can replicate.',
           },
           {
             name: 'MembershipActions',
+            minEpic: S.patronTabs.memberships,
             reasoning:
               'Grouped action panel covering the full membership lifecycle — Cancel, Pause, and Extend (lifecycle); Renew and Downgrade (tier changes); Transfer Primary (account). Each action opens a dedicated modal with multi-step confirmations, impact warnings (beneficiary effects, refund options, slot changes), and safety gates (e.g., "Type CANCEL to confirm"). Only visible to primary members, ensuring role-aware access control.',
           },
@@ -236,21 +310,25 @@ const GUIDE_CONTENT = {
         components: [
           {
             name: 'Photo Section',
+            minEpic: S.patronTabs.profile,
             reasoning:
               'Profile photos make patron records feel human. The 96px circular avatar with drag-and-drop upload, preview, and remove option follows modern UX patterns.',
           },
           {
             name: 'Professional Information (Read-Only)',
+            minEpic: S.patronTabs.profile,
             reasoning:
               'Employer and job title are derived from Relationship records, not flat fields. This eliminates data inconsistency — if an organization relationship changes, it updates everywhere. The "Manage" link navigates to the Relationships tab.',
           },
           {
             name: 'Communication Preferences',
+            minEpic: S.patronTabs.profile,
             reasoning:
               'GDPR/CCPA compliance requires tracking consent per channel. The "Do Not Contact" master override immediately disables all channels — a legal safeguard that must be prominent and impossible to miss.',
           },
           {
             name: 'StatusChangeModal',
+            minEpic: S.patronTabs.profile,
             reasoning:
               'A dedicated modal for the 4 lifecycle statuses (Active, Inactive, Deceased, Archived). Each status has conditional fields (e.g., Date of Death for Deceased). A 2-step flow with confirmation and impact warning prevents accidental status changes.',
           },
@@ -261,24 +339,31 @@ const GUIDE_CONTENT = {
         title: 'Patron Profile — Timeline',
         persona: 'Gift Officer',
         epic: 'Epic 1 — Patron Data Platform',
-        why:
-          'The Timeline tab is the complete, chronological, filterable log of all interactions. While the Summary tab shows a compact version, the full Timeline provides search, filters, and unlimited scroll — it\'s where gift officers do deep research before a meeting.',
+        why: {
+          default: 'The Timeline tab is the complete, chronological, filterable log of all interactions. While the Summary tab shows a compact version, the full Timeline provides search, filters, and unlimited scroll — it\'s where gift officers do deep research before a meeting.',
+          1: 'The Timeline tab is the complete, chronological, filterable log of all interactions. In Epic 1, gift entries are limited to donation prompts (small checkout add-ons from the ticketing funnel) — full gift recording starts in Epic 2. Search, filters, and unlimited scroll make this where gift officers do deep research before a meeting.',
+        },
         competitive:
           'Tessitura tracks interactions but separates them by module. Bloomerang has a good timeline but limited to donor-initiated actions. Fever\'s timeline uniquely blends staff actions (calls, meetings, emails) with system-tracked events (ticket purchases, F&B, attendance) because Fever already captures the transactional side.',
         wowMoment: null,
         components: [
           {
             name: 'Full Variant Layout',
+            minEpic: S.patronTabs.timeline,
             reasoning:
               'Search bar + Filters dropdown + "Add activity" button at the top. Loads 10 items initially, increments by 10. This matches the Figma design and handles patrons with hundreds of interactions.',
           },
           {
             name: 'Multi-Expand with Detail Context',
-            reasoning:
-              'Multiple timeline entries can be open simultaneously. Each expanded entry shows amount, staff attribution (initials badge), direction (inbound/outbound), opportunity chips, and order ID. This density is intentional — gift officers compare interactions side by side.',
+            minEpic: S.patronTabs.timeline,
+            reasoning: {
+              default: 'Multiple timeline entries can be open simultaneously. Each expanded entry shows amount, staff attribution (initials badge), direction (inbound/outbound), opportunity chips, and order ID. This density is intentional — gift officers compare interactions side by side.',
+              1: 'Multiple timeline entries can be open simultaneously. Each expanded entry shows amount, staff attribution (initials badge), direction (inbound/outbound), and order ID. This density is intentional — gift officers compare interactions side by side.',
+            },
           },
           {
             name: 'Activity Types',
+            minEpic: S.patronTabs.timeline,
             reasoning:
               '15 activity types across Communication, Earned Revenue, Contributed Revenue, and Engagement categories. Direction indicators (inbound/outbound) for communications distinguish "we called them" from "they called us" — critical for tracking cultivation cadence.',
           },
@@ -297,76 +382,97 @@ const GUIDE_CONTENT = {
         components: [
           {
             name: 'Household Section',
+            minEpic: S.patronTabs.relationships,
             reasoning:
               'Groups family members with head-of-household designation, verified badge, and cross-profile navigation. The household popover in PatronInfoBox is a compact version; this tab is the full management view with add/edit/end/move-out capabilities. The household card has its own "+ Add household member" CTA that opens a single-page form (skipping type selection) with three sections: Related individual, Relationship, and Household creation — separate from the toolbar\'s general "+ Add relationship" button which excludes the Household type when a household already exists. Adding a household relationship that matches an existing Personal relationship (same role) automatically absorbs the Personal one — and dissolving the household recreates it via fallback. Each non-current member row has two distinct actions: dismiss (x) to sever the bond entirely, and move-out (arrow) to remove from the household while preserving family ties as Personal connections.',
           },
           {
             name: 'Household Conflict Detection',
+            minEpic: S.patronTabs.relationships,
             reasoning:
               'When adding a household relationship via the single-page form, detects if the selected patron already belongs to another household. Shows an inline warning within the form (between the patron and role sections) with transfer or cancel options. If the departing patron is the Head and the old household has 3+ members, prompts the user to select a new Head before completing the transfer. Prevents silent data corruption — a patron cannot belong to two households, and no household is left without a Head.',
           },
           {
             name: 'Context-Aware End Relationship',
+            minEpic: S.patronTabs.relationships,
             reasoning:
               'End Relationship warnings adapt to household size: 2-member households show a dissolution warning, 3+ member households explain the cascade removal. Removing the Head of household triggers an additional warning. Cascade-ended relationships with other household members automatically get Personal-type fallbacks to preserve family connections.',
           },
           {
             name: 'Two-Option Household Dissolution',
+            minEpic: S.patronTabs.relationships,
             reasoning:
               'Delete household offers two distinct outcomes: "dissolve everything" ends all household relationships with no fallbacks — members vanish from the graph. "Dissolve grouping only" converts household relationships to personal type, preserving continuous history — members stay visible as Personal connections. The two options give gift officers explicit control over whether family bonds survive the dissolution.',
           },
           {
             name: 'Remove from Household',
+            minEpic: S.patronTabs.relationships,
             reasoning:
               'The move-out button (arrow icon) lets gift officers remove a member from the household unit without severing the family bond. All household relationships are soft-deleted and automatically recreated as Personal connections. Models real-world scenarios like a child leaving for college — they leave the address, not the family.',
           },
           {
             name: 'Undo / Redo',
+            minEpic: S.patronTabs.relationships,
             reasoning:
               'Snapshot-based undo/redo for all relationship actions — add, end, dissolve, transfer, move-out, and household edits. Appears as a compact toolbar in the top-left of the graph when history is available. Lets gift officers safely experiment with relationship changes and reverse mistakes without reloading.',
           },
           {
             name: 'Personal Relationships',
+            minEpic: S.patronTabs.relationships,
             reasoning:
               'Connects patrons through family bonds, friendships, mentorships, and other personal connections outside the household — e.g., siblings in separate families, friends, godparents, or neighbors. Uses pink/magenta badges and edges to visually differentiate from professional (purple) and household (blue) connections. Cross-household cards show the external patron\'s household name as a muted subtitle, giving gift officers at-a-glance context about which household unit the connected patron belongs to.',
           },
           {
             name: 'Professional & Organization Relationships',
+            minEpic: S.patronTabs.relationships,
             reasoning:
               'Financial advisors, attorneys, employers, and board affiliations use a distinct purple color scheme. Edge connector labels show the actual role name (e.g., "Client", "Managing Partner") instead of abstract categories, so the label on the connector matches the badge on the card — no cognitive overhead.',
           },
           {
             name: 'Bridging Relationship Consolidation',
+            minEpic: S.patronTabs.relationships,
             reasoning:
               'When a patron appears in both personal and professional relationship categories (e.g., Marcus Chen is both Anderson\'s friend and his financial advisory client), the graph consolidates them into a single card with stacked role badges and typed connector edges. Supports 2+ simultaneous relationships. The Summary sidebar also consolidates: Marcus appears once under Professional with both badges stacked.',
           },
           {
             name: 'Household Dual-Relationship Annotation',
+            minEpic: S.patronTabs.relationships,
             reasoning:
               'When a household member also has non-household relationships with the current patron (e.g., Marianne is both Spouse and Business Partner), the extra relationships appear as inline badges on the household member row in both the graph and the summary sidebar. No duplicate external card is created.',
           },
           {
             name: 'Unified Per-Badge Dismiss',
+            minEpic: S.patronTabs.relationships,
             reasoning:
               'Every relationship badge — on org cards, bridging cards, and household member rows — has an inline dismiss button. No card-level X buttons; the per-badge pattern is consistent everywhere. Type-scoped deletion lets a user end one relationship without affecting others on the same patron.',
           },
           {
             name: 'Type-Based Color System',
+            minEpic: S.patronTabs.relationships,
             reasoning:
               'A single getColorForType(type) function returns canonical colors from the Fever Ignite DS palette, chosen for colorblind safety: primary blue (#0089E3) for household, warning orange (#FF8C00) for personal, accent purple (#6f41d7) for professional and organization. The blue/orange/purple triad avoids the pink-vs-purple confusion problematic for deuteranopia/protanopia. Colors are consistent across badges, connector edges, connector labels, and the summary sidebar. A color legend in the bottom-right corner of the graph dynamically shows only the types present on the current patron\'s map.',
           },
           {
             name: 'Cross-Type Duplicate Guard',
+            minEpic: S.patronTabs.relationships,
             reasoning:
               'When adding a new relationship, the modal shows an informational callout if active relationships already exist between the two patrons (across all types). Non-blocking — the user can still proceed. Prevents accidental duplicates while supporting legitimate multi-type relationships.',
           },
           {
             name: 'Keyboard Accessibility',
+            minEpic: S.patronTabs.relationships,
             reasoning:
               'All clickable graph cards (org, bridging, household member rows) have role="button", tabIndex, and Enter/Space keyboard handlers, matching the pattern already used in RelationshipsSummary. Ensures gift officers can navigate the relationship map without a mouse.',
           },
           {
+            name: 'LTV Tier Indicators',
+            minEpic: S.patronTabs.relationships,
+            reasoning:
+              'Restaurant-style $/$$/$$$/$$$$ badges in the top-right corner of each relationship card show at-a-glance lifetime giving tiers ($ < $1K, $$ $1K–$10K, $$$ $10K–$50K, $$$$ $50K+). Hover for exact dollar amount tooltip. Hidden for contacts without giving data. Exclusive to the graph tab — kept off the Summary sidebar to avoid visual noise in the compact layout. Lets gift officers instantly see which connections carry financial weight without leaving the relationship map.',
+          },
+          {
             name: 'Relationship Notes',
+            minEpic: S.patronTabs.relationships,
             reasoning:
               'Optional notes field on every relationship. Input via the Add Relationship modal (textarea in both household and non-household form paths). Displayed as native title-attribute tooltips on relationship badges/tags — hover any badge to see notes like "Married 2015, divorced 2022" without cluttering the layout. Industry-standard feature found in Raiser\'s Edge and Tessitura.',
           },
@@ -574,11 +680,13 @@ const GUIDE_CONTENT = {
         components: [
           {
             name: 'TaxSummary',
+            minEpic: S.patronTabs.documents,
             reasoning:
               'Year-end summary generator with preview. Shows organization info (name, EIN), patron info, itemized contributions with type badges (Membership vs. Donation), and legal disclaimer. Actions: Copy Link, Download PDF, Send via Email.',
           },
           {
             name: 'DocumentHistory',
+            minEpic: S.patronTabs.documents,
             reasoning:
               'Chronological log of all documents generated for this patron with sent/not-sent status. Ensures compliance and prevents duplicate sends.',
           },
@@ -601,16 +709,21 @@ const GUIDE_CONTENT = {
     components: [
       {
         name: 'Summary Stats',
+        minEpic: S.routes['/gifts'],
         reasoning:
           'Total gifts count, total amount, and average gift update live as filters are applied. This provides instant feedback on any segment.',
       },
       {
         name: 'Filter System',
-        reasoning:
-          'Date range, gift type (multi-select), fund, campaign, amount range, and acknowledgment status. Filter chips show active filters with individual remove. Designed for ad-hoc reporting until a full reporting module is built.',
+        minEpic: S.routes['/gifts'],
+        reasoning: {
+          default: 'Date range, gift type (multi-select), fund, campaign, amount range, and acknowledgment status. Filter chips show active filters with individual remove. Designed for ad-hoc reporting until a full reporting module is built.',
+          2: 'Date range, gift type (multi-select), amount range, and acknowledgment status. Filter chips show active filters with individual remove. Designed for ad-hoc reporting until a full reporting module is built. Fund and campaign filters appear in Epic 4.',
+        },
       },
       {
         name: 'GiftDetailPanel',
+        minEpic: S.routes['/gifts'],
         reasoning:
           'The same slide-out panel used in the patron\'s Giving tab and Timeline tab. Consistency across contexts reduces cognitive load. Full DCAP attribution, tax breakdown, soft credits, linked pledges/recurring profiles, and acknowledgment status in one panel.',
       },
@@ -630,18 +743,25 @@ const GUIDE_CONTENT = {
     components: [
       {
         name: 'Kanban Board (Pipeline View)',
-        reasoning:
-          'Five stages: Identification, Qualification, Cultivation, Solicitation, Stewardship. Each card shows patron name, ask amount, next action, and contact staleness. Drag-and-drop between stages updates the opportunity record. Pipeline totals per stage and overall.',
+        minEpic: S.routes['/opportunities'],
+        reasoning: {
+          default: 'Five stages: Identification, Qualification, Cultivation, Solicitation, Stewardship. Each card shows patron name, ask amount, campaign name, next action, and contact staleness. Drag-and-drop between stages updates the opportunity record. Pipeline totals per stage and overall.',
+          3: 'Five stages: Identification, Qualification, Cultivation, Solicitation, Stewardship. Each card shows patron name, ask amount, next action, and contact staleness. Drag-and-drop between stages updates the opportunity record. Pipeline totals per stage and overall.',
+        },
       },
       {
         name: 'List View',
+        minEpic: S.routes['/opportunities'],
         reasoning:
           'Table format for filtering and sorting by stage, campaign, assignee, probability, and expected close date. Color-coded staleness indicators surface overdue contacts. Better for bulk review and reporting.',
       },
       {
         name: 'Campaign & Assigned To Filters',
-        reasoning:
-          'Directors filter by campaign to see pipeline health per initiative. Gift officers filter by their own name to see their portfolio. These two filters serve different personas on the same page.',
+        minEpic: S.routes['/opportunities'],
+        reasoning: {
+          default: 'Directors filter by campaign to see pipeline health per initiative. Gift officers filter by their own name to see their portfolio. These two filters serve different personas on the same page.',
+          3: 'Gift officers filter by their own name to see their portfolio. The assigned-to filter is the primary navigation tool for individual gift officers.',
+        },
       },
     ],
   },
@@ -660,16 +780,19 @@ const GUIDE_CONTENT = {
     components: [
       {
         name: 'Pipeline Stepper',
+        minEpic: S.routes['/opportunities/:oppId'],
         reasoning:
           'Visual progress indicator showing which of the 5 stages are complete. Gift officers can see at a glance whether an opportunity is early-stage or ready to close.',
       },
       {
         name: 'Close as Won / Close as Lost',
+        minEpic: S.routes['/opportunities/:oppId'],
         reasoning:
           '"Close as Won" creates a gift record with inherited DCAP attribution — the lifecycle from prospect identification to gift receipt is captured. "Close as Lost" preserves the opportunity for analysis (why did we lose it?) without creating a gift. Both are essential for pipeline reporting.',
       },
       {
         name: 'Contact Section',
+        minEpic: S.routes['/opportunities/:oppId'],
         reasoning:
           'Last contact date with staleness indicator. Every touchpoint (calls, meetings, emails) is logged. This keeps gift officers accountable and helps managers coach their teams.',
       },
@@ -690,16 +813,19 @@ const GUIDE_CONTENT = {
     components: [
       {
         name: 'Campaign Cards',
+        minEpic: S.routes['/campaigns'],
         reasoning:
           'Each card is self-contained: goal, progress bar, donor count, gift count, average gift, date range, and manager. Cards are the right abstraction because campaigns are discrete initiatives, not table rows.',
       },
       {
         name: 'Appeal ROI Breakdown',
+        minEpic: S.routes['/campaigns'],
         reasoning:
           'Expandable section on each card showing raised vs. cost for each appeal (Spring Gala, Year-End Mailer, etc.). This is the data directors use to decide "should we repeat this appeal next year?"',
       },
       {
         name: 'Aggregate Totals',
+        minEpic: S.routes['/campaigns'],
         reasoning:
           'Header shows total goal, total raised, and overall progress across all campaigns. Development directors use this for board presentations and quarterly reviews.',
       },
@@ -719,21 +845,25 @@ const GUIDE_CONTENT = {
     components: [
       {
         name: 'System Tags',
+        minEpic: S.routes['/settings'],
         reasoning:
           'Predefined tags (Prospect, Board Member, Volunteer, etc.) with usage counts. Labels are editable but tags can\'t be deleted — this prevents accidental loss of patron segmentation.',
       },
       {
         name: 'Computed Tags',
+        minEpic: S.routes['/settings'],
         reasoning:
           'Auto-derived from giving data: Donor (totalGifts > 0), Major Donor (totalGifts >= $10,000), Lapsed Donor (no gift in 18 months). Thresholds are configurable per organization — what counts as a "Major Donor" varies widely by institution size.',
       },
       {
         name: 'Custom Tags',
+        minEpic: S.routes['/settings'],
         reasoning:
           'Full CRUD for organization-specific tags ("Gala 2026 Prospect", "Museum Circle"). Delete confirmation warns if the tag is in use. Usage counts help admins audit before deleting.',
       },
       {
         name: 'Import Data Wizard (Mockup)',
+        minEpic: S.routes['/settings'],
         reasoning:
           'A 3-step wizard for importing from Blackbaud, Tessitura, or CSV. This is a UI mockup only — actual import is post-MVP. Showing it in the demo proves we understand the onboarding pain point and have a plan.',
       },

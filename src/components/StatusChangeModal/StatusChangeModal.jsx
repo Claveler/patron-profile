@@ -7,6 +7,7 @@ import {
   markPatronInactive, 
   reactivatePatron 
 } from '../../data/patrons'
+import { useEpicScope } from '../../hooks/useEpicScope'
 import './StatusChangeModal.css'
 
 const ARCHIVE_REASONS = [
@@ -18,6 +19,8 @@ const ARCHIVE_REASONS = [
 ]
 
 function StatusChangeModal({ patron, onClose, onStatusChange }) {
+  const { show } = useEpicScope()
+  const showCampaignText = show('statusChangeModal.campaignText')
   const currentStatus = patron.status || 'active'
   const [selectedStatus, setSelectedStatus] = useState(currentStatus)
   const [deceasedDate, setDeceasedDate] = useState('')
@@ -70,13 +73,19 @@ function StatusChangeModal({ patron, onClose, onStatusChange }) {
   const getImpactMessage = () => {
     switch (selectedStatus) {
       case 'active':
-        return 'This patron will be restored to full active status and included in all campaigns and communications.'
+        return showCampaignText
+          ? 'This patron will be restored to full active status and included in all campaigns and communications.'
+          : 'This patron will be restored to full active status and included in all communications.'
       case 'inactive':
         return 'This patron will be flagged for review. They will still appear in lists but will be highlighted as inactive.'
       case 'deceased':
-        return 'All outreach will stop immediately. The patron will be excluded from campaigns, renewals, and communications. Giving history will be preserved for reporting.'
+        return showCampaignText
+          ? 'All outreach will stop immediately. The patron will be excluded from campaigns, renewals, and communications. Giving history will be preserved for reporting.'
+          : 'All outreach will stop immediately. The patron will be excluded from renewals and communications. Giving history will be preserved for reporting.'
       case 'archived':
-        return 'This patron will be hidden from all active lists and excluded from campaigns. They can be restored later.'
+        return showCampaignText
+          ? 'This patron will be hidden from all active lists and excluded from campaigns. They can be restored later.'
+          : 'This patron will be hidden from all active lists. They can be restored later.'
       default:
         return ''
     }

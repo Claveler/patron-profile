@@ -1,4 +1,5 @@
 import { isManagedProspect, getPrimaryMembershipForPatron, getPendingAcknowledgments, getPledgesByPatronId } from '../../data/patrons'
+import { useEpicScope } from '../../hooks/useEpicScope'
 import './AlertBanner.css'
 
 // Calculate days since a date
@@ -25,9 +26,11 @@ function AlertBanner({ patron }) {
   const membership = getPrimaryMembershipForPatron(patron.id)
   const alerts = []
   const isManaged = isManagedProspect(patron)
+  const { show } = useEpicScope()
 
   // Check for contact overdue (prospect pipeline) - ONLY for Managed Prospects
-  if (isManaged && patron.prospect?.lastContact) {
+  // Gated behind pipeline epic scope
+  if (show('alertBanner.pipelineAlert') && isManaged && patron.prospect?.lastContact) {
     const daysSince = getDaysSince(patron.prospect.lastContact)
     if (daysSince >= 14) {
       alerts.push({

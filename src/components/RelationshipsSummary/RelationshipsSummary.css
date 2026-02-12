@@ -181,9 +181,17 @@
 
 /* Household label (muted subtitle for cross-household family connections) */
 .relationships-summary__household-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   font-size: var(--font-size-xs);
   color: var(--color-text-muted);
   line-height: 16px;
+}
+
+.relationships-summary__household-icon {
+  font-size: 10px;
+  color: var(--color-text-muted);
 }
 
 /* Tags */
@@ -252,3 +260,13 @@
 .relationships-summary__empty p {
   margin: 0;
 }
+
+/* Non-active patron status (icons only, no dimming) */
+
+.relationships-summary__status-icon {
+  margin-left: var(--space-1);
+  font-size: 0.7em;
+  vertical-align: middle;
+  color: var(--color-text-muted);
+}
+

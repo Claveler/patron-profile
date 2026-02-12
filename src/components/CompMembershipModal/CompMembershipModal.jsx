@@ -1,13 +1,14 @@
 import { useState } from 'react'
 import { compMembership, membershipPrograms, tierConfig } from '../../data/patrons'
+import { useEpicScope } from '../../hooks/useEpicScope'
 import './CompMembershipModal.css'
 
-const COMP_REASONS = [
+const ALL_COMP_REASONS = [
   { id: 'board_member', label: 'Board member' },
   { id: 'vip', label: 'VIP guest' },
   { id: 'staff', label: 'Staff' },
   { id: 'donor_cultivation', label: 'Donor cultivation' },
-  { id: 'promotion', label: 'Promotion / campaign' },
+  { id: 'promotion', label: 'Promotion / campaign', requiresCampaignEpic: true },
   { id: 'other', label: 'Other' }
 ]
 
@@ -24,6 +25,9 @@ const formatCurrency = (amount) => {
 }
 
 function CompMembershipModal({ patronId, patronName, onClose, onConfirm }) {
+  const { show } = useEpicScope()
+  const showCampaignReason = show('compMembershipModal.campaignReason')
+  const COMP_REASONS = ALL_COMP_REASONS.filter(r => !r.requiresCampaignEpic || showCampaignReason)
   const [selectedTier, setSelectedTier] = useState('Basic')
   const [durationMonths, setDurationMonths] = useState(12)
   const [reason, setReason] = useState('board_member')
