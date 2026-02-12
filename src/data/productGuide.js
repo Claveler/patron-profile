@@ -486,7 +486,7 @@ const GUIDE_CONTENT = {
                 {
                   title: 'Relationship Graph',
                   description:
-                    'The graph displays all relationship types color-coded: blue for Household, orange for Personal, purple for Professional/Organization. A legend in the bottom-right shows which types are present. The central patron sits inside the household card (showing member count, e.g., "Collingwood Family (3)"), with external connections branching outward. Two CTAs appear inside the household card: "+ Add household member" and "Edit household".',
+                    'The graph displays all relationship types color-coded: blue for Household, orange for Personal, purple for Professional/Organization. A legend in the bottom-right shows which types are present. The central patron sits inside the household card (showing member count, e.g., "Collingwood Family (3)"), with external connections branching outward. Green LTV badges ($/$$/$$$/$$$$) appear on each card showing lifetime giving tier. Non-active patrons (e.g., Vivienne Collingwood, deceased) display with dashed borders and a status icon.',
                   media: '/screenshots/relationships/09-graph-fitview.png',
                   mediaType: 'image',
                 },
@@ -502,6 +502,20 @@ const GUIDE_CONTENT = {
                   description:
                     'Connector edges display the role name (e.g., "Wife", "Sister", "Client") as an inline label, color-matched to the relationship type. This keeps the graph self-documenting — no need to hover or click to understand each connection.',
                   media: '/screenshots/relationships/14-edge-labels.png',
+                  mediaType: 'image',
+                },
+                {
+                  title: 'Lifetime Value Indicators',
+                  description:
+                    'Each relationship card displays a green LTV badge in the top-right corner using restaurant-style tiers: $ (under $1K), $$ ($1K–$10K), $$$ ($10K–$50K), $$$$ ($50K+). Hover the badge to see the exact formatted amount (e.g., "Lifetime Value: $12,500"). LTV badges appear on all external cards, bridging cards, and household member rows — but not on the current patron\'s own card. This gives gift officers instant context on each contact\'s giving capacity without leaving the relationship map.',
+                  media: '/screenshots/relationships/16-ltv-badges.png',
+                  mediaType: 'image',
+                },
+                {
+                  title: 'Non-Active Patrons',
+                  description:
+                    'Relationships with deceased, inactive, or archived patrons remain visible with visual indicators: dashed card borders, dashed connector edges, and a status icon next to the name — a cross (†) for Deceased, a pause icon for Inactive, and an archive box for Archived. Hovering the icon shows details (e.g., "Deceased — 2023-09-17"). Vivienne Collingwood (Anderson\'s deceased aunt) demonstrates this with her dashed orange card, $$$$  LTV badge, and dashed edge. Non-active patrons are fully interactive.',
+                  media: '/screenshots/relationships/17-deceased-patron.png',
                   mediaType: 'image',
                 },
                 {
@@ -582,7 +596,7 @@ const GUIDE_CONTENT = {
                 {
                   title: 'After Dissolve Everything',
                   description:
-                    'Result: the household card is gone. Marianne and Josiah are removed entirely. Anderson becomes a standalone node connected only to Eleanor, Marcus, and Collingwood Capital Partners. The legend no longer shows blue Household — only Personal (orange) and Professional (purple) remain. Undo/redo buttons appear.',
+                    'Result: the household card is gone. Marianne and Josiah are removed entirely. Anderson becomes a standalone node connected only to Eleanor, Vivienne (deceased, dashed card), Marcus, and Collingwood Capital Partners. The legend no longer shows blue Household — only Personal (orange) and Professional (purple) remain. Undo/redo buttons appear.',
                   media: '/screenshots/relationships/03b-after-dissolve-all.png',
                   mediaType: 'image',
                 },
