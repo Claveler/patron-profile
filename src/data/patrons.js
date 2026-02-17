@@ -3332,6 +3332,7 @@ export const addGift = (giftData) => {
     softCredits: giftData.softCredits || [],
     pledgeId: giftData.pledgeId || null,
     recurringProfileId: giftData.recurringProfileId || null,
+    source: giftData.source || 'manual',
   }
   GIFTS.push(newGift)
   return newGift

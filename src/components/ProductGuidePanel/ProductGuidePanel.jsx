@@ -335,7 +335,7 @@ function ProductGuidePanel() {
                                 {comp.name}
                                 {comp.minEpic && (
                                   <span className={`guide-panel__component-epic guide-panel__component-epic--${comp.minEpic >= 5 ? 'post' : `e${comp.minEpic}`}`}>
-                                    {comp.minEpic >= 5 ? 'Post-MVP' : `Epic ${comp.minEpic}`}
+                                    {comp.minEpic >= 5 ? 'Post-MVP' : `Phase ${comp.minEpic}`}
                                   </span>
                                 )}
                               </div>

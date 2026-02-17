@@ -25,8 +25,8 @@ function Header({ onToggleSidebar, onToggleGuide, guideOpen }) {
         </a>
       </div>
 
-      {/* Epic Scope Stepper */}
-      <nav className="header__stepper" aria-label="Epic scope selector">
+      {/* Phase Scope Stepper */}
+      <nav className="header__stepper" aria-label="Phase scope selector">
         {EPIC_LABELS.map((step) => {
           const isActive = activeEpic === step.value
           const isCompleted = step.value < activeEpic && !isActive

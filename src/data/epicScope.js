@@ -117,10 +117,10 @@ export const EPIC_SCOPE = {
  * value = Infinity means "show everything including post-MVP".
  */
 export const EPIC_LABELS = [
-  { value: 1, label: 'Epic 1', subtitle: 'Patron Data' },
-  { value: 2, label: 'Epic 2', subtitle: 'Giving' },
-  { value: 3, label: 'Epic 3', subtitle: 'Pipeline' },
-  { value: 4, label: 'Epic 4', subtitle: 'Campaigns' },
+  { value: 1, label: 'Phase 1', subtitle: 'Patron Data' },
+  { value: 2, label: 'Phase 2', subtitle: 'Giving' },
+  { value: 3, label: 'Phase 3', subtitle: 'Pipeline' },
+  { value: 4, label: 'Phase 4', subtitle: 'Campaigns' },
   { value: Infinity, label: 'All', subtitle: 'Full Vision' },
 ]
 

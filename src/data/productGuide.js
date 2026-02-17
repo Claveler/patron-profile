@@ -23,7 +23,7 @@ const GUIDE_CONTENT = {
   '/': {
     title: 'Dashboard',
     persona: 'Development Director',
-    epic: 'Epic 4 — Campaign Intelligence & Dashboard',
+    epic: 'Phase 4 — Campaign Intelligence & Dashboard',
     why:
       'The dashboard answers the daily question: "What needs my attention today?" It surfaces pipeline health, overdue follow-ups, and closing opportunities so nothing falls through the cracks. Development directors and VPs of Advancement need a single screen that replaces morning spreadsheet reviews.',
     competitive:
@@ -35,7 +35,7 @@ const GUIDE_CONTENT = {
         name: 'Quick Actions',
         minEpic: S.dashboardWidgets.quickActions,
         reasoning:
-          'Shortcut buttons for common daily tasks — add patron, record gift, log activity. Available from Epic 1 to provide utility even before the full dashboard is built.',
+          'Shortcut buttons for common daily tasks — add patron, record gift, log activity. Available from Phase 1 to provide utility even before the full dashboard is built.',
       },
       {
         name: 'Patron Summary',
@@ -80,7 +80,7 @@ const GUIDE_CONTENT = {
   '/patrons': {
     title: 'Patrons List',
     persona: 'Gift Officer',
-    epic: 'Epic 1 — Patron Data Platform',
+    epic: 'Phase 1 — Patron Data Platform',
     why:
       'The patrons list is the front door of the CRM. Gift officers start their day here: finding patrons, triaging unassigned prospects, and identifying high-potential donors. Every column was chosen to answer the question "Who should I focus on?"',
     competitive:
@@ -139,7 +139,7 @@ const GUIDE_CONTENT = {
       summary: {
         title: 'Patron Profile — Summary',
         persona: 'Gift Officer',
-        epic: 'Epic 1 — Patron Data Platform',
+        epic: 'Phase 1 — Patron Data Platform',
         why:
           'The Summary tab is the 360° patron view — the single most requested feature by museum development teams. It consolidates identity, engagement, activity, relationships, and pipeline into one screen so a gift officer can prepare for a call in 30 seconds.',
         competitive:
@@ -163,7 +163,7 @@ const GUIDE_CONTENT = {
             minEpic: S.summaryComponents.GivingSummary,
             reasoning: {
               default: 'Lifetime value with donations/revenue split, average gift, and hybrid chart (cumulative area / nominal bars). The hybrid chart toggle was designed because directors think in cumulative growth while gift officers think in individual period amounts.',
-              1: 'Not yet available — full giving summary and charts arrive in Epic 2 alongside gift recording capabilities.',
+              1: 'Not yet available — full giving summary and charts arrive in Phase 2 alongside gift recording capabilities.',
             },
           },
           {
@@ -171,7 +171,7 @@ const GUIDE_CONTENT = {
             minEpic: S.summaryComponents.ActivityTimeline,
             reasoning: {
               default: 'Chronological log of every interaction — communications, earned revenue, contributed revenue, engagement. Multi-expand with staff attribution, direction indicators (inbound/outbound), and linked opportunity chips. Gift officers need this to prepare for calls: "Last time we spoke was about the gallery tour."',
-              1: 'Chronological log of ticket purchases, donation prompts (small checkout add-on gifts from the ticketing funnel), communications, and engagement events. In Epic 1, the only "contributed revenue" entries are donation prompts — full gift recording starts in Epic 2. Gift officers use this to see recent patron activity.',
+              1: 'Chronological log of ticket purchases, donation prompts (small checkout add-on gifts from the ticketing funnel), communications, and engagement events. In Phase 1, the only "contributed revenue" entries are donation prompts — full gift recording starts in Phase 2. Gift officers use this to see recent patron activity.',
             },
           },
           {
@@ -204,9 +204,9 @@ const GUIDE_CONTENT = {
       giving: {
         title: 'Patron Profile — Giving',
         persona: 'Gift Officer',
-        epic: 'Epic 2 — Giving & Membership Management',
+        epic: 'Phase 2 — Giving & Membership Management',
         why:
-          'The Giving tab is the financial heart of the patron profile. Museums need to track every financial relationship — one-time gifts, pledges, recurring donations, and memberships. DCAP attribution (Fund/Campaign/Appeal) is introduced in Epic 4 when venues are ready for strategic campaign management.',
+          'The Giving tab is the financial heart of the patron profile. Museums need to track every financial relationship — one-time gifts, pledges, recurring donations, and memberships. DCAP attribution (Fund/Campaign/Appeal) is introduced in Phase 4 when venues are ready for strategic campaign management.',
         competitive:
           'Raiser\'s Edge and Tessitura have strong giving history but require separate modules. Bloomerang has basic gift tracking but weak campaign attribution. Fever integrates giving with membership and revenue data on the same screen, eliminating the need for cross-system reconciliation.',
         wowMoment: null,
@@ -216,7 +216,7 @@ const GUIDE_CONTENT = {
             minEpic: S.patronTabs.giving,
             reasoning: {
               default: 'Lifetime value with donations/revenue split, average gift, hybrid chart (cumulative area / nominal bars), and attribution by Fund/Campaign/Year. The hybrid chart toggle was designed because directors think in cumulative growth while gift officers think in individual period amounts.',
-              2: 'Lifetime value with donations/revenue split, average gift, and hybrid chart (cumulative area / nominal bars). The hybrid chart toggle was designed because directors think in cumulative growth while gift officers think in individual period amounts. Fund and Campaign attribution appear in Epic 4.',
+              2: 'Lifetime value with donations/revenue split, average gift, and hybrid chart (cumulative area / nominal bars). The hybrid chart toggle was designed because directors think in cumulative growth while gift officers think in individual period amounts. Fund and Campaign attribution appear in Phase 4.',
             },
           },
           {
@@ -236,7 +236,7 @@ const GUIDE_CONTENT = {
             minEpic: S.patronTabs.giving,
             reasoning: {
               default: 'Every gift with DCAP attribution, type badge, acknowledgment status, and soft credits. Clicking a row opens the GiftDetailPanel slide-out with full detail — the same panel is available from the Gifts list page for consistency.',
-              2: 'Every gift with type badge, acknowledgment status, and soft credits. Clicking a row opens the GiftDetailPanel slide-out with full detail — the same panel is available from the Gifts list page for consistency. DCAP attribution columns appear in Epic 4.',
+              2: 'Every gift with type badge, acknowledgment status, and soft credits. Clicking a row opens the GiftDetailPanel slide-out with full detail — the same panel is available from the Gifts list page for consistency. DCAP attribution columns appear in Phase 4.',
             },
           },
           {
@@ -251,7 +251,7 @@ const GUIDE_CONTENT = {
       memberships: {
         title: 'Patron Profile — Memberships',
         persona: 'Membership Coordinator',
-        epic: 'Epic 2 — Giving & Membership Management',
+        epic: 'Phase 2 — Giving & Membership Management',
         why:
           'Membership is the "top of funnel" for future major donors. The Memberships tab gives staff a complete picture of a patron\'s membership lifecycle — card, benefits, usage, beneficiaries, and upgrade eligibility. It was designed for partner employees, not patron self-service.',
         competitive:
@@ -301,7 +301,7 @@ const GUIDE_CONTENT = {
       profile: {
         title: 'Patron Profile — Profile',
         persona: 'Gift Officer / Development Coordinator',
-        epic: 'Epic 1 — Patron Data Platform',
+        epic: 'Phase 1 — Patron Data Platform',
         why:
           'The Profile tab is the full patron record editor. It supports an inline edit/save/cancel workflow with structured fields for personal information, contact details, professional relationships, communication preferences, and notes. The 4-status lifecycle (Active, Inactive, Deceased, Archived) with the Status Change modal handles real-world complexity.',
         competitive:
@@ -338,10 +338,10 @@ const GUIDE_CONTENT = {
       timeline: {
         title: 'Patron Profile — Timeline',
         persona: 'Gift Officer',
-        epic: 'Epic 1 — Patron Data Platform',
+        epic: 'Phase 1 — Patron Data Platform',
         why: {
           default: 'The Timeline tab is the complete, chronological, filterable log of all interactions. While the Summary tab shows a compact version, the full Timeline provides search, filters, and unlimited scroll — it\'s where gift officers do deep research before a meeting.',
-          1: 'The Timeline tab is the complete, chronological, filterable log of all interactions. In Epic 1, gift entries are limited to donation prompts (small checkout add-ons from the ticketing funnel) — full gift recording starts in Epic 2. Search, filters, and unlimited scroll make this where gift officers do deep research before a meeting.',
+          1: 'The Timeline tab is the complete, chronological, filterable log of all interactions. In Phase 1, gift entries are limited to donation prompts (small checkout add-ons from the ticketing funnel) — full gift recording starts in Phase 2. Search, filters, and unlimited scroll make this where gift officers do deep research before a meeting.',
         },
         competitive:
           'Tessitura tracks interactions but separates them by module. Bloomerang has a good timeline but limited to donor-initiated actions. Fever\'s timeline uniquely blends staff actions (calls, meetings, emails) with system-tracked events (ticket purchases, F&B, attendance) because Fever already captures the transactional side.',
@@ -373,7 +373,7 @@ const GUIDE_CONTENT = {
       relationships: {
         title: 'Patron Profile — Relationships',
         persona: 'Gift Officer',
-        epic: 'Epic 1 — Patron Data Platform',
+        epic: 'Phase 1 — Patron Data Platform',
         why:
           'Donors exist in networks. The Relationships tab maps household, personal, professional, and organization connections using a parsimonious category-based data model — each relationship is stored as a single record with a category key (e.g., "spouse", "parent-child", "friend"), and display labels are derived at render time from category + patron gender. The UI presents familiar gendered role labels (Wife, Father, Mentor) with auto-suggested reciprocals. Understanding that Anderson\'s sister Eleanor runs the Whitfield Gallery, or that his financial advisor is Marcus Chen, fundamentally changes the cultivation approach.',
         competitive:
@@ -685,7 +685,7 @@ const GUIDE_CONTENT = {
       documents: {
         title: 'Patron Profile — Documents',
         persona: 'Development Coordinator',
-        epic: 'Epic 2 — Giving & Membership Management',
+        epic: 'Phase 2 — Giving & Membership Management',
         why:
           'US nonprofits must provide year-end tax summaries to donors. The Documents tab generates consolidated tax documents with proper deductibility calculations (gift amount minus fair market value of benefits received). Come January, this saves hours of manual work.',
         competitive:
@@ -713,7 +713,7 @@ const GUIDE_CONTENT = {
   '/gifts': {
     title: 'Gifts',
     persona: 'Gift Officer / Development Director',
-    epic: 'Epic 2 — Giving & Membership Management',
+    epic: 'Phase 2 — Giving & Membership Management',
     why:
       'The Gifts page provides a cross-organization view of all giving. While the patron profile shows individual giving history, this page answers organization-wide questions: "How much did we raise this month?", "Which gifts are unacknowledged?", "What\'s our average gift size by campaign?"',
     competitive:
@@ -732,7 +732,7 @@ const GUIDE_CONTENT = {
         minEpic: S.routes['/gifts'],
         reasoning: {
           default: 'Date range, gift type (multi-select), fund, campaign, amount range, and acknowledgment status. Filter chips show active filters with individual remove. Designed for ad-hoc reporting until a full reporting module is built.',
-          2: 'Date range, gift type (multi-select), amount range, and acknowledgment status. Filter chips show active filters with individual remove. Designed for ad-hoc reporting until a full reporting module is built. Fund and campaign filters appear in Epic 4.',
+          2: 'Date range, gift type (multi-select), amount range, and acknowledgment status. Filter chips show active filters with individual remove. Designed for ad-hoc reporting until a full reporting module is built. Fund and campaign filters appear in Phase 4.',
         },
       },
       {
@@ -748,7 +748,7 @@ const GUIDE_CONTENT = {
   '/opportunities': {
     title: 'Opportunities (Pipeline)',
     persona: 'Major Gifts Manager',
-    epic: 'Epic 3 — Fundraising Pipeline',
+    epic: 'Phase 3 — Fundraising Pipeline',
     why:
       'The Opportunities page is the "Moves Management" pipeline — the structured process of cultivating major gifts. It tracks Opportunities (specific asks), not patrons directly. A single donor can have multiple active opportunities across different campaigns. The Kanban and List views serve different workflows: visual pipeline health vs. detailed filtering.',
     competitive:
@@ -784,7 +784,7 @@ const GUIDE_CONTENT = {
   '/opportunities/:oppId': {
     title: 'Opportunity Detail',
     persona: 'Major Gifts Manager',
-    epic: 'Epic 3 — Fundraising Pipeline',
+    epic: 'Phase 3 — Fundraising Pipeline',
     why:
       'Each opportunity represents a specific ask to a specific patron. The detail page shows everything needed to advance the cultivation: stage progress, ask/weighted amounts, contact history, and next action. The "Close as Won" workflow is the culmination of the pipeline — it creates a gift record and completes the lifecycle.',
     competitive:
@@ -817,7 +817,7 @@ const GUIDE_CONTENT = {
   '/campaigns': {
     title: 'Campaign Management',
     persona: 'Development Director / VP of Advancement',
-    epic: 'Epic 4 — Campaign Intelligence & Dashboard',
+    epic: 'Phase 4 — Campaign Intelligence & Dashboard',
     why:
       'Campaign dashboards answer the board-level question: "Are we on track?" Each campaign card shows goal progress, donor count, gift count, and average gift. The Appeal ROI breakdown (raised vs. cost) helps directors allocate marketing budget. Active vs. completed grouping provides both forward-looking and historical context.',
     competitive:
@@ -850,7 +850,7 @@ const GUIDE_CONTENT = {
   '/settings': {
     title: 'Settings',
     persona: 'Development Director / Admin',
-    epic: 'Epic 1 — Patron Data Platform',
+    epic: 'Phase 1 — Patron Data Platform',
     why:
       'The Settings page manages the global tag configuration that powers patron segmentation. The 3-tier tagging model (system tags, computed tags with configurable thresholds, and custom tags) gives museums flexibility while maintaining data integrity. The Import Data wizard (mockup) demonstrates the onboarding story.',
     competitive:

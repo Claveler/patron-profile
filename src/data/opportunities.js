@@ -522,7 +522,7 @@ export const closeOpportunityAsWon = (id, actualAmount = null, notes = null) => 
       fundId: opportunity.fundId,
       campaignId: opportunity.campaignId,
       opportunityId: id,
-      type: 'donation',
+      type: 'one-time',
     }
   }
 }
